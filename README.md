@@ -79,22 +79,22 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 ```
 ## Funcionalidades
 
-| Função | Contexto | Requer a Spider X API?
-| ------------ | --- | ---
-| Desligar o bot no grupo | Dono | ❌
-| Ligar o bot no grupo | Dono | ❌
-| Banir membros | Admin | ❌
-| Ligar/desligar auto responder | Admin | ❌
-| Ligar/desligar boas vindas | Admin | ❌
-| Busca CEP | Membro | ❌
-| Figurinha de texto animada | Membro | ❌
-| Geração de imagens com IA | Membro | ❌
-| GPT | Membro | ✅
-| Ping | Membro | ❌
-| Play áudio | Membro | ✅
-| Play vídeo | Membro | ✅
-| Sticker | Membro | ❌
-| Sticker para imagem | Membro | ❌
+| Função | Online? |Contexto | Requer a Spider X API?
+| ------------ | --- | --- | ---
+| Desligar o bot no grupo | ✅ | Dono | ❌
+| Ligar o bot no grupo | ✅ | Dono | ❌
+| Banir membros | ✅ | Admin | ❌
+| Ligar/desligar auto responder | ✅ | Admin | ❌
+| Ligar/desligar boas vindas | ✅ | Admin | ❌
+| Busca CEP | ✅ | Membro | ❌
+| Figurinha de texto animada | ✅ | Membro | ❌
+| Geração de imagens com IA | ✅ | Membro | ❌
+| GPT | ❌ | Membro | ✅
+| Ping | ✅ | Membro | ❌
+| Play áudio | ✅ | Membro | ✅
+| Play vídeo | ✅ | Membro | ✅
+| Sticker | ✅ | Membro | ❌
+| Sticker para imagem | ✅ | Membro | ❌
 
 ## Auto responder
 
