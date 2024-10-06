@@ -28,7 +28,7 @@
 - [Node.js 20.17.0](https://nodejs.org/en)
 - [Spider X API](https://api.spiderx.com.br)
 
-## Instalação no Termux
+## Instalação no Termux <a id="termux"></a>
 
 1 - Abra o Termux e execute os seguintes comandos. Não tem o Termux? [Clique aqui e baixe a última versão.](https://www.mediafire.com/file/082otphidepx7aq/Termux_0.119.1_aldebaran_dev.apk/file)
 ```
@@ -150,6 +150,15 @@ O Sky Bot possui um auto-responder embutido, edite o arquivo em `./assets/databa
 - 📝README.md ➔ _esta documentação_
 - 📝termux-start.sh ➔ _arquivo de inicialização do bot no Termux_
 
+## Erros comuns
+
+### Operação negada ao extrair a pasta
+
+O erro abaixo acontece em algumas versões do apk ZArchiver e também de celulares sem root.
+
+Para resolver, siga o [tutorial de instalação via git clone](#git-clone).
+
+![erro comum 1](./assets/images/erro-comum-1.jpg)
 
 ## Inscreva-se no canal!
 
