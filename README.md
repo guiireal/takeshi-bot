@@ -154,7 +154,7 @@ O Sky Bot possui um auto-responder embutido, edite o arquivo em `./assets/databa
 
 ### Operação negada ao extrair a pasta
 
-O erro abaixo acontece em algumas versões do apk ZArchiver e também de celulares sem root.
+O erro abaixo acontece quando é feito o download do arquivo ZIP direto no celular em algumas versões do apk ZArchiver e também de celulares sem root.
 
 Para resolver, siga o [tutorial de instalação via git clone](#git-clone).
 
