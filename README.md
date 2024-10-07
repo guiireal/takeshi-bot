@@ -64,7 +64,28 @@ sh termux-start.sh
 
 8 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
 
-9 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot e rode novamente o seguinte comando.
+9 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+
+10 - Configure o arquivo `config.js` que está dentro da pasta `src`.
+
+```js
+// Prefixo dos comandos
+exports.PREFIX = "/";
+
+// Emoji do bot (mude se preferir)
+exports.BOT_EMOJI = "🤖";
+
+// Nome do bot (mude se preferir)
+exports.BOT_NAME = "Sky Bot";
+
+// Número do bot. Coloque o número do bot (apenas números)
+exports.BOT_NUMBER = "5511920202020";
+
+// Número do dono do bot. Coloque o número do dono do bot (apenas números)
+exports.OWNER_NUMBER = "5511999999999";
+```
+
+11 - Inicie o bot novamente
 ```
 npm start
 ```
