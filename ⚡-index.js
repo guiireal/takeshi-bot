@@ -24,16 +24,16 @@
  * Depois, abra a pasta "commands"
  *
  * Perceba que dentro dela tem 3 pastas:
- * - admin
- * - member
- * - owner
+ * - 📁 admin
+ * - 📁 member
+ * - 📁 owner
  *
  * Dentro da pasta admin, tem comandos administrativos
  * Dentro da pasta member tem comandos para membros
  * E dento da pasta owner tem comandos que são acessados somente pelo dono do bot/grupo!
  *
  * Simples, não é mesmo? Ah, detalhe, não precisa colocar um "if" para saber se o comando é de admin ou de dono.
- * O bot já faz isso para você! basta colocar o comando na pasta correspondente ao seu cargo!
+ * O bot já faz isso para você! Basta colocar o comando na pasta correspondente!
  *
  * ---------------- 🤖 ONDE MODIFICO O MENU? 🤖 ----------------
  *
