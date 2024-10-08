@@ -6,7 +6,7 @@
  *
  * Imagina se vc cola sua "case" errado e esquece de fechar
  * ou abrir um parênteses, uma chave...
- * Você põe o bot pra rodar e dá vários erros e você não sabe resolver...
+ * Você põe o bot pra rodar, dá vários erros e você não sabe resolver...
  * Adivinha o que você faz?
  * Você volta "a index.js" pra que estava antes, não é verdade?
  *
@@ -15,7 +15,7 @@
  *
  * A partir de agora, vamos trocar a palavra "case" por "comando", ok? Vamos lá!
  *
- * ---------------- ONDE ESTÃO OS COMANDOS? ----------------
+ * ---------------- 🤖 ONDE ESTÃO OS COMANDOS? 🤖 ----------------
  *
  * Você encontra os comandos dentro da pasta "src/commands"
  * Não entendeu? Vamos lá:
@@ -24,18 +24,18 @@
  * Depois, abra a pasta "commands"
  *
  * Perceba que dentro dela tem 3 pastas:
- * - admin
- * - member
- * - owner
+ * - 📁 admin
+ * - 📁 member
+ * - 📁 owner
  *
  * Dentro da pasta admin, tem comandos administrativos
  * Dentro da pasta member tem comandos para membros
  * E dento da pasta owner tem comandos que são acessados somente pelo dono do bot/grupo!
  *
  * Simples, não é mesmo? Ah, detalhe, não precisa colocar um "if" para saber se o comando é de admin ou de dono.
- * O bot já faz isso para você! basta colocar o comando na pasta correspondente ao seu cargo!
+ * O bot já faz isso para você! Basta colocar o comando na pasta correspondente!
  *
- * ---------------- ONDE MODIFICO O MENU? ----------------
+ * ---------------- 🤖 ONDE MODIFICO O MENU? 🤖 ----------------
  *
  * Abra a pasta "src"
  * Vá no arquivo "messages.js" e edite o menu!
@@ -48,7 +48,7 @@
  *
  * Olá `tudo bem?` - Isso está ERRADO (veja que o "olá" está fora das crases) ❌
  *
- * ---------------- 🚀 ----------------
+ * ---------------- 🚀 IMPORTANTE 🚀 ----------------
  *
  * Leia o tutorial completo em: https://github.com/guiireal/sky-bot?tab=readme-ov-file#instala%C3%A7%C3%A3o-no-termux-
  *
