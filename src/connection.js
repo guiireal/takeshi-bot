@@ -5,8 +5,10 @@ const {
   DisconnectReason,
   useMultiFileAuthState,
   fetchLatestBaileysVersion,
+  isJidBroadcast,
+  isJidStatusBroadcast,
 } = require("@whiskeysockets/baileys");
-
+const NodeCache = require("node-cache");
 const pino = require("pino");
 const { load } = require("./loader");
 const {
@@ -17,6 +19,8 @@ const {
   successLog,
 } = require("./utils/logger");
 
+const msgRetryCounterCache = new NodeCache();
+
 async function connect() {
   const { state, saveCreds } = await useMultiFileAuthState(
     path.resolve(__dirname, "..", "assets", "auth", "baileys")
@@ -25,14 +29,15 @@ async function connect() {
   const { version } = await fetchLatestBaileysVersion();
 
   const socket = makeWASocket({
-    printQRInTerminal: false,
     version,
     logger: pino({ level: "error" }),
+    printQRInTerminal: false,
+    defaultQueryTimeoutMs: 60 * 1000,
     auth: state,
-    browser: ["Ubuntu", "Chrome", "20.0.04"],
-    defaultQueryTimeoutMs: undefined,
+    shouldIgnoreJid: (jid) => isJidBroadcast(jid) || isJidStatusBroadcast(jid),
+    keepAliveIntervalMs: 60 * 1000,
     markOnlineOnConnect: true,
-    qrTimeout: 180000,
+    msgRetryCounterCache,
   });
 
   if (!socket.authState.creds.registered) {
