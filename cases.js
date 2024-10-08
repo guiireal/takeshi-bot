@@ -5,16 +5,35 @@
  *
  * Nós criamos código para humanos, não para máquinas, então, quanto mais simples, melhor!
  *
- * Você encontra os comandos dentro de "src" e dentro dela, na pasta "commands"
+ * Você encontra os comandos dentro da pasta "src/commands"
+ * Não entendeu? Vamos lá:
  *
- * Perceba que tem 3 pastas:
+ * Abra a pasta "src"
+ * Depois, abra a pasta "commands"
+ *
+ * Perceba que dentro dela tem 3 pastas:
  * - admin
  * - member
  * - owner
  *
- * E adivinha? Isso mesmo! dentro da pasta admin, tem comandos administrativos
+ * Dentro da pasta admin, tem comandos administrativos
  * Dentro da pasta member tem comandos para membros
- * E dento da pasta owner tem comandos para quem, adivinha? O dono do grupo e o do bot!
+ * E dento da pasta owner tem comandos que são acessados somente pelo dono do bot/grupo!
+ *
+ * Simples, não é mesmo?
+ *
+ * Quer mudar o menu?
+ *
+ * Abra a pasta "src"
+ * Vá no arquivo "messages.js" e edite o menu!
+ * Só lembrando, faça tudo dentro das crases (`), pois é um template string!
+ *
+ * Não entendeu?
+ * Veja:
+ *
+ * `Olá tudo bem?` - Isso está CORRETO ✅
+ *
+ * Olá `tudo bem?` - Isso está ERRADO (veja que o "olá" está fora das crases) ❌
  *
  * Leia o tutorial completo em: https://github.com/guiireal/sky-bot?tab=readme-ov-file#instala%C3%A7%C3%A3o-no-termux-
  *
