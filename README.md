@@ -109,7 +109,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Ligar/desligar boas vindas | ✅ | Admin | ❌
 | Busca CEP | ✅ | Membro | ❌
 | Figurinha de texto animada | ✅ | Membro | ❌
-| Geração de imagens com IA | ❌ | Membro | ❌
+| Geração de imagens com IA | ✅ | Membro | ❌
 | GPT | ✅ | Membro | ✅
 | Ping | ✅ | Membro | ❌
 | Play áudio | ✅ | Membro | ✅
