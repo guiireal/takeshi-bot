@@ -1,9 +1,15 @@
 /*
  * Se você clicou aqui é porque provavelmente já usou um bot de "case" e com um "index.js" de 20 mil linhas... eu sei, eu entendo você!
  * Este bot não utiliza cases, pois prezamos por um código limpo, legível e de fácil manutenção.
- * O que é melhor? Se dar erro no seu play, você ir no arquivo "play.js" e corrigir, ou ir na linha 71023 do "index.js" e corrigir?
+ * O que é melhor? Se dar erro no seu play, você ir no arquivo "play.js" e corrigir
+ * ou ir na linha 71023 do "index.js" e corrigir?
+ *
+ * Imagina se vc cola sua "case" errado e esquece de fechar
+ * ou abrir um parênteses, uma chave, não é verdade?
  *
  * Nós criamos código para humanos, não para máquinas, então, quanto mais simples, melhor!
+ *
+ * A partir de agora, vamos trocar a palavra "case" por "comando", ok? Vamos lá!
  *
  * Você encontra os comandos dentro da pasta "src/commands"
  * Não entendeu? Vamos lá:
@@ -20,7 +26,7 @@
  * Dentro da pasta member tem comandos para membros
  * E dento da pasta owner tem comandos que são acessados somente pelo dono do bot/grupo!
  *
- * Simples, não é mesmo? Ah, detalhe, não precisa colocar um "if" para saber se o comando é de admin ou de dono
+ * Simples, não é mesmo? Ah, detalhe, não precisa colocar um "if" para saber se o comando é de admin ou de dono.
  * O bot já faz isso para você! basta colocar o comando na pasta correspondente ao seu cargo!
  *
  * Quer mudar o menu?
