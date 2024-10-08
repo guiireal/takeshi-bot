@@ -150,7 +150,7 @@ O Sky Bot possui um auto-responder embutido, edite o arquivo em `./assets/databa
 - 📁 node_modules ➔ _módulos do Node.js_
 - 📁 src ➔ _código fonte do bot (geralmente você mexerá mais aqui)_
     - 📁 commands ➔ _pasta onde ficam os comandos_
-        - 📁 admin ➔ _pasta onde ficam os comandos administrativos (somente admins poderão utilizar)_
+        - 📁 admin ➔ _pasta onde ficam os comandos administrativos_
         - 📁 member ➔ _pasta onde ficam os comandos gerais (todos poderão utilizar)_
         - 📁 owner ➔ _pasta onde ficam os comandos de dono (grupo e bot)_
         - 📝\_sample.js ➔ _arquivo de exemplo de como criar um comando_
