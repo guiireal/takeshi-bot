@@ -46,7 +46,7 @@
  *
  * `Olá tudo bem?` - Isto está CORRETO ✅
  *
- * Olá `tudo bem?` - Isto está ERRADO (veja que o "olá" está fora das crases) ❌
+ * Olá `tudo bem?` - Isto está ERRADO (veja que o "Olá" está fora das crases) ❌
  *
  * ---------------- 🚀 IMPORTANTE 🚀 ----------------
  *
