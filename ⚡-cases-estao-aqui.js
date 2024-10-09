@@ -1,7 +1,7 @@
 /*
  * Se você clicou aqui é porque provavelmente já usou um bot de "case" e com um "index.js" de 20 mil linhas...
  * Eu sei, eu entendo você!
- * O que é melhor? Se dar erro no seu play, você ir no arquivo "play.js" e corrigir
+ * O que é melhor? Dar erro no seu play, você ir no arquivo "play.js" e corrigir
  * ou ir na linha 71023 do "index.js" e corrigir?
  *
  * Imagina se vc cola sua "case" errado e esquece de fechar
@@ -30,7 +30,7 @@
  *
  * Dentro da pasta admin, tem comandos administrativos
  * Dentro da pasta member tem comandos para membros
- * E dento da pasta owner tem comandos que são acessados somente pelo dono do bot/grupo!
+ * Dentro da pasta owner tem comandos que são acessados somente pelo dono do bot/grupo!
  *
  * Simples, não é mesmo? Ah, detalhe, não precisa colocar um "if" para saber se o comando é de admin ou de dono.
  * O bot já faz isso para você! Basta colocar o comando na pasta correspondente!
@@ -44,9 +44,9 @@
  * Não entendeu?
  * Veja:
  *
- * `Olá tudo bem?` - Isso está CORRETO ✅
+ * `Olá tudo bem?` - Isto está CORRETO ✅
  *
- * Olá `tudo bem?` - Isso está ERRADO (veja que o "olá" está fora das crases) ❌
+ * Olá `tudo bem?` - Isto está ERRADO (veja que o "olá" está fora das crases) ❌
  *
  * ---------------- 🚀 IMPORTANTE 🚀 ----------------
  *
