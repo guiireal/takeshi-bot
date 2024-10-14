@@ -36,9 +36,16 @@ exports.loadCommomFunctions = ({ socket, webMessage }) => {
     return await download(webMessage, fileName, "video", "mp4");
   };
 
-  const sendText = async (text) => {
+  const sendText = async (text, mentions) => {
+    let optionalParams = {};
+
+    if (mentions?.length) {
+      optionalParams = { mentions };
+    }
+
     return await socket.sendMessage(remoteJid, {
       text: `${BOT_EMOJI} ${text}`,
+      ...optionalParams,
     });
   };
 

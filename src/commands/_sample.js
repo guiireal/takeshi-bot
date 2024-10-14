@@ -15,6 +15,7 @@
  * args           => Argumentos passados junto com o comando como um array: ["arg1", "arg2"]
  * commandName    => Nome do comando
  * fullArgs       => Argumentos passados junto com o comando como string só: "arg1 arg2"
+ * fullMessage    => Mensagem inteira incluindo o comando
  * isImage        => Se a mensagem é uma imagem
  * isReply        => Se a mensagem é uma resposta
  * isSticker      => Se a mensagem é um sticker

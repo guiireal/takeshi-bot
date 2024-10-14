@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/Projetos-Crescer/zig-app">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-1.5.1-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-1.6.0-blue">
     </a>
 </div>
 
@@ -100,13 +100,14 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 ```
 ## Funcionalidades
 
-| Função | Online? |Contexto | Requer a Spider X API?
+| Função | Online? | Contexto | Requer a Spider X API?
 | ------------ | --- | --- | ---
 | Desligar o bot no grupo | ✅ | Dono | ❌
 | Ligar o bot no grupo | ✅ | Dono | ❌
 | Banir membros | ✅ | Admin | ❌
 | Ligar/desligar auto responder | ✅ | Admin | ❌
 | Ligar/desligar boas vindas | ✅ | Admin | ❌
+| Marcar todos | ✅ | Admin | ❌
 | Busca CEP | ✅ | Membro | ❌
 | Figurinha de texto animada | ✅ | Membro | ❌
 | Geração de imagens com IA | ✅ | Membro | ❌
