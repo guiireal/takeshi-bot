@@ -71,8 +71,8 @@
  * sendSuccessReply()
  * => Enviar mensagem de sucesso como resposta
  *
- * sendText("texto")
- * => Enviar mensagem de texto
+ * sendText("texto", mentions)
+ * => Enviar mensagem de texto, opcionalmente mencionando usuários (mentions)
  *
  * sendVideoFromURL("https://teste.com/video.mp4")
  * => Enviar vídeo de uma URL
