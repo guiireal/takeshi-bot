@@ -9,7 +9,7 @@ module.exports = {
   usage: `${PREFIX}menu`,
   handle: async ({ sendImageFromFile }) => {
     await sendImageFromFile(
-      path.join(ASSETS_DIR, "images", "sky-bot.png"),
+      path.join(ASSETS_DIR, "images", "takeshi-bot.png"),
       `\n\n${menuMessage()}`
     );
   },

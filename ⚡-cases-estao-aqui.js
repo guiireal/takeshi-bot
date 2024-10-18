@@ -51,7 +51,7 @@
  *
  * ---------------- 🚀 IMPORTANTE 🚀 ----------------
  *
- * Leia o tutorial completo em: https://github.com/guiireal/sky-bot?tab=readme-ov-file#instala%C3%A7%C3%A3o-no-termux-
+ * Leia o tutorial completo em: https://github.com/guiireal/takeshi-bot?tab=readme-ov-file#instala%C3%A7%C3%A3o-no-termux-
  *
  * Não pule etapas! Leia-o completo, pois ele é muito importante para você entender como o bot funciona!
  *

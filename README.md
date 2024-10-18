@@ -52,7 +52,7 @@ git clone https://github.com/guiireal/takeshi-bot.git
 
 5 - Entre na pasta que foi clonada.
 ```
-cd sky-bot
+cd takeshi-bot
 ```
 
 6 - Execute o bot.
@@ -76,7 +76,7 @@ exports.PREFIX = "/";
 exports.BOT_EMOJI = "🤖";
 
 // Nome do bot (mude se preferir).
-exports.BOT_NAME = "Sky Bot";
+exports.BOT_NAME = "Takeshi Bot";
 
 // Número do bot. Coloque o número do bot (apenas números).
 exports.BOT_NUMBER = "5511920202020";
@@ -134,8 +134,8 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./assets/da
     },
     {
         "match": "Qual seu nome",
-        "answer": "Meu nome é Sky Bot"
-    }, // adicione uma vírgula após o fechamento da chave }, <- vírgula
+        "answer": "Meu nome é Taeshi Bot"
+    },
 
     // coloque mais objetos json
 ]
