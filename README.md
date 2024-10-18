@@ -18,7 +18,7 @@
 
 [CRIANDO UM BOT DE WHATSAPP DO ZERO (GUIA DEFINITIVO) - BASE COMPLETA + 6 COMANDOS - JAVASCRIPT](https://youtu.be/6zr2NYIYIyc)
 
-![](./assets/images/logger.png)
+![](./assets/images/takeshi-logger.png)
 
 ## Tecnologias envolvidas
 
