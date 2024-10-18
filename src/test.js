@@ -1,3 +1,20 @@
-const { bannerLog } = require("./utils/logger");
+const {
+  sayLog,
+  inputLog,
+  errorLog,
+  warningLog,
+  successLog,
+  bannerLog,
+  infoLog,
+} = require("./utils/logger");
 
-(async () => {})();
+(async () => {
+  bannerLog();
+  sayLog("Olá, eu sou o Takeshi Bot!");
+  inputLog("Digite algo para eu repetir:");
+  const message = "Olá, eu sou o Takeshi Bot!";
+  infoLog(message);
+  successLog(message);
+  errorLog(message);
+  warningLog(message);
+})();

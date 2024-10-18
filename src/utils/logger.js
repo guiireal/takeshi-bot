@@ -9,7 +9,7 @@ exports.inputLog = (message) => {
 };
 
 exports.infoLog = (message) => {
-  console.log("\x1b[34m[TAKESHI BOT | ⏩ ]\x1b[0m", message);
+  console.log("\x1b[34m[TAKESHI BOT | ℹ ]\x1b[0m", message);
 };
 
 exports.successLog = (message) => {
