@@ -47,7 +47,7 @@ cd storage
 
 4 - Clone o repositório.
 ```
-git clone https://github.com/guiireal/sky-bot.git
+git clone https://github.com/guiireal/takeshi-bot.git
 ```
 
 5 - Entre na pasta que foi clonada.
