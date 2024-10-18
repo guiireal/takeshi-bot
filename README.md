@@ -188,7 +188,7 @@ Para resolver, siga o [tutorial de instalação via git clone](#termux-setup).
 
 ## Licença
 
-[MIT](https://github.com/guiireal/sky-bot/blob/main/LICENSE)
+[MIT](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
 
 ## ⚠ Disclaimer
 
