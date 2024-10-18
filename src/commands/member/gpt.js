@@ -5,9 +5,9 @@ const { InvalidParameterError } = require("../../errors/InvalidParameterError");
 module.exports = {
   name: "gpt",
   description: "Comandos de inteligência artificial!",
-  commands: ["gpt", "skybot"],
+  commands: ["gpt", "takeshi"],
   usage: `${PREFIX}gpt com quantos paus se faz uma canoa?`,
-  handle: async ({ sendSuccessReply, sendErrorReply, sendWaitReply, args }) => {
+  handle: async ({ sendSuccessReply, sendWaitReply, args }) => {
     const text = args[0];
 
     if (!text) {
