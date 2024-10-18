@@ -1,14 +1,14 @@
-# 🤖 Sky Bot
+# 🤖 Takeshi Bot
 
 <div align="center">
-    <img src="./assets/images/sky-bot.png" width="300">
+    <img src="./assets/images/takeshi-bot.png" width="500">
 </div>
 
 <br />
 
 <div align="center">
     <a href="https://github.com/Projetos-Crescer/zig-app">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-1.6.0-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.0.0-blue">
     </a>
 </div>
 
