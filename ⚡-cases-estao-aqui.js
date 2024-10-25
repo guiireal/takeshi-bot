@@ -49,6 +49,13 @@
  *
  * Olá `tudo bem?` - Isto está ERRADO (veja que o "Olá" está fora das crases) ❌
  *
+ * ---------------- 🤖 COMO TROCO A FOTO DO BOT? 🤖 ----------------
+ *
+ * Abra a pasta "assets"
+ * Depois, abra a pasta "images"
+ * Substitua a imagem "takeshi-bot.png" por outra de sua preferência!
+ * Só não esqueça de manter o nome "takeshi-bot.png"
+ *
  * ---------------- 🚀 IMPORTANTE 🚀 ----------------
  *
  * Leia o tutorial completo em: https://github.com/guiireal/takeshi-bot?tab=readme-ov-file#instala%C3%A7%C3%A3o-no-termux-
