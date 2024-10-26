@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/Projetos-Crescer/zig-app">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.0.0-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.1.0-blue">
     </a>
 </div>
 
@@ -28,35 +28,83 @@
 - [Node.js 20.17.0](https://nodejs.org/en)
 - [Spider X API](https://api.spiderx.com.br)
 
-## Instalação no Termux <a id="termux-setup"></a>
+## Instalação no Termux (novo método)<a id="termux-new-setup"></a>
 
-1 - Abra o Termux e execute os seguintes comandos. Não tem o Termux? [Clique aqui e baixe a última versão.](https://www.mediafire.com/file/082otphidepx7aq/Termux_0.119.1_aldebaran_dev.apk/file)
+1 - Abra o Termux e execute os comandos abaixo.<br/>
+_Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/082otphidepx7aq/Termux_0.119.1_aldebaran_dev.apk)._
+
+2 - Cole o seguinte código:
+
+```sh
+curl -O https://spiderx.com.br/bot-termux.sh && sh bot-termux.sh
+```
+
+3 - Se não tiver dado a permissão pra ler as pastas do dispositivo pelo termux, aceite quando aparecer o pop-up na tela, caso contrário, pressione `y`
+
+4 - Quando finalizar tudo, informe seu número de telefone
+
+5 - Coloque o código de pareamento em "dispositivos conectados" no WhatsApp, conforme explicado [nessa parte do vídeo](https://youtu.be/lBhpGuq5ETQ?t=76).
+
+![phone termux](./assets/images/phone-termux.png)
+
+6 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+
+7 - Configure o arquivo `config.js` que está dentro da pasta `src`.
+
+```js
+// Prefixo dos comandos
+exports.PREFIX = "/";
+
+// Emoji do bot (mude se preferir).
+exports.BOT_EMOJI = "🤖";
+
+// Nome do bot (mude se preferir).
+exports.BOT_NAME = "Takeshi Bot";
+
+// Número do bot. Coloque o número do bot (apenas números).
+exports.BOT_NUMBER = "5511920202020";
+
+// Número do dono do bot. Coloque o número do dono do bot (apenas números).
+exports.OWNER_NUMBER = "5511999999999";
+```
+
+
+7 - Inicie o bot novamente, dentro da pasta `takeshi-bot`:
+```sh
+npm start
+```
+
+## Instalação no Termux (método antigo)<a id="termux-old-setup"></a>
+
+1 - Abra o Termux e execute os comandos abaixo.<br/>
+_Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/082otphidepx7aq/Termux_0.119.1_aldebaran_dev.apk)._
+
 ```
 pkg upgrade -y && pkg update -y && pkg install git -y
 ```
 
 2 - Habilite o acesso da pasta storage, no termux.
-```
+```sh
 termux-setup-storage
 ```
 
 3 - Entre na pasta storage (ou dê antes um `ls` e veja qual é o nome da pasta do seu cartão de memória e entre nela).
-```
+```sh
 cd storage
 ```
 
 4 - Clone o repositório.
-```
+```sh
 git clone https://github.com/guiireal/takeshi-bot.git
 ```
 
 5 - Entre na pasta que foi clonada.
-```
+```sh
 cd takeshi-bot
 ```
 
 6 - Execute o bot.
-```
+```sh
 sh termux-start.sh
 ```
 
@@ -86,7 +134,7 @@ exports.OWNER_NUMBER = "5511999999999";
 ```
 
 11 - Inicie o bot novamente
-```
+```sh
 npm start
 ```
 
@@ -178,7 +226,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./assets/da
 
 O erro abaixo acontece quando é feito o download do arquivo ZIP direto no celular em algumas versões do apk ZArchiver e também de celulares sem root.
 
-Para resolver, siga o [tutorial de instalação via git clone](#termux-setup).
+Para resolver, siga o [tutorial de instalação via git clone](#termux-new-setup).
 
 ![erro comum 1](./assets/images/erro-comum-1.jpg)
 

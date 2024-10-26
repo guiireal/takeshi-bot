@@ -7,7 +7,8 @@ const {
   fetchLatestBaileysVersion,
   isJidBroadcast,
   isJidStatusBroadcast,
-} = require("@whiskeysockets/baileys");
+  proto,
+} = require("baileys");
 const NodeCache = require("node-cache");
 const pino = require("pino");
 const { load } = require("./loader");
@@ -38,6 +39,7 @@ async function connect() {
     keepAliveIntervalMs: 60 * 1000,
     markOnlineOnConnect: true,
     msgRetryCounterCache,
+    getMessage: () => proto.Message.fromObject({}),
   });
 
   if (!socket.authState.creds.registered) {
