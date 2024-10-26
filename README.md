@@ -49,7 +49,7 @@ curl -O https://spiderx.com.br/bot-termux.sh && sh bot-termux.sh
 
 6 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
 
-7 - Configure o arquivo `config.js` que está dentro da pasta `src`.
+7 - Configure o arquivo `config.js` que está dentro da pasta `src`. O bot fica dentro da pasta `/sdcard/DevGui`
 
 ```js
 // Prefixo dos comandos
