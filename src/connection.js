@@ -8,6 +8,7 @@ const {
   isJidBroadcast,
   isJidStatusBroadcast,
   proto,
+  makeInMemoryStore,
 } = require("baileys");
 const NodeCache = require("node-cache");
 const pino = require("pino");
@@ -21,6 +22,14 @@ const {
 } = require("./utils/logger");
 
 const msgRetryCounterCache = new NodeCache();
+const store = makeInMemoryStore({logger: pino().child({ level: "silent", stream: "store" })});
+
+async function getMessage(key) {
+  if (!store) return proto.Message.fromObject({});
+
+  const msg = await store.loadMessage(key.remoteJid, key.id);
+  return msg ? msg.message : undefined;
+}
 
 async function connect() {
   const { state, saveCreds } = await useMultiFileAuthState(
@@ -39,7 +48,7 @@ async function connect() {
     keepAliveIntervalMs: 60 * 1000,
     markOnlineOnConnect: true,
     msgRetryCounterCache,
-    getMessage: () => proto.Message.fromObject({}),
+    getMessage,
   });
 
   if (!socket.authState.creds.registered) {
