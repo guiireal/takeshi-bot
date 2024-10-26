@@ -9,6 +9,7 @@ const {
   isJidStatusBroadcast,
   proto,
   makeInMemoryStore,
+  isJidNewsletter,
 } = require("baileys");
 const NodeCache = require("node-cache");
 const pino = require("pino");
@@ -44,7 +45,7 @@ async function connect() {
     printQRInTerminal: false,
     defaultQueryTimeoutMs: 60 * 1000,
     auth: state,
-    shouldIgnoreJid: (jid) => isJidBroadcast(jid) || isJidStatusBroadcast(jid),
+    shouldIgnoreJid: (jid) => isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
     keepAliveIntervalMs: 60 * 1000,
     markOnlineOnConnect: true,
     msgRetryCounterCache,
