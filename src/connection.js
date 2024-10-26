@@ -23,12 +23,18 @@ const {
 } = require("./utils/logger");
 
 const msgRetryCounterCache = new NodeCache();
-const store = makeInMemoryStore({logger: pino().child({ level: "silent", stream: "store" })});
+
+const store = makeInMemoryStore({
+  logger: pino().child({ level: "silent", stream: "store" }),
+});
 
 async function getMessage(key) {
-  if (!store) return proto.Message.fromObject({});
+  if (!store) {
+    return proto.Message.fromObject({});
+  }
 
   const msg = await store.loadMessage(key.remoteJid, key.id);
+
   return msg ? msg.message : undefined;
 }
 
@@ -45,7 +51,8 @@ async function connect() {
     printQRInTerminal: false,
     defaultQueryTimeoutMs: 60 * 1000,
     auth: state,
-    shouldIgnoreJid: (jid) => isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
+    shouldIgnoreJid: (jid) =>
+      isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
     keepAliveIntervalMs: 60 * 1000,
     markOnlineOnConnect: true,
     msgRetryCounterCache,
