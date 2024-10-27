@@ -168,7 +168,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
 ## Auto responder
 
-O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./assets/database/auto-responder.json`:
+O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/auto-responder.json`:
 
 ```json
 [
