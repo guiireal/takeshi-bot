@@ -39,9 +39,9 @@ _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafir
 curl -O https://spiderx.com.br/bot-termux.sh && sh bot-termux.sh
 ```
 
-3 - Se não tiver dado a permissão pra ler as pastas do dispositivo pelo termux, aceite quando aparecer o pop-up na tela, caso contrário, pressione `y`
+3 - Se não tiver dado a permissão pra ler as pastas do dispositivo pelo termux, aceite quando aparecer o pop-up na tela, caso contrário, pressione `y`.
 
-4 - Quando finalizar tudo, informe seu número de telefone
+4 - Quando finalizar tudo, informe seu número de telefone.
 
 5 - Coloque o código de pareamento em "dispositivos conectados" no WhatsApp, conforme explicado [nessa parte do vídeo](https://youtu.be/lBhpGuq5ETQ?t=76).
 
@@ -49,7 +49,7 @@ curl -O https://spiderx.com.br/bot-termux.sh && sh bot-termux.sh
 
 6 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
 
-7 - Configure o arquivo `config.js` que está dentro da pasta `src`. O bot fica dentro da pasta `/sdcard/DevGui`
+7 - Configure o arquivo `config.js` que está dentro da pasta `src`. O bot fica dentro da pasta `/sdcard/DevGui`.
 
 ```js
 // Prefixo dos comandos
@@ -133,7 +133,7 @@ exports.BOT_NUMBER = "5511920202020";
 exports.OWNER_NUMBER = "5511999999999";
 ```
 
-11 - Inicie o bot novamente
+11 - Inicie o bot novamente.
 ```sh
 npm start
 ```
@@ -229,6 +229,16 @@ O erro abaixo acontece quando é feito o download do arquivo ZIP direto no celul
 Para resolver, siga o [tutorial de instalação via git clone](#termux-new-setup).
 
 ![erro comum 1](./assets/images/erro-comum-1.jpg)
+
+## Remoção dos arquivos de sessão e conectar novamente
+
+Caso dê algum erro na conexão, você pode apagar os arquivos dentro da pasta: `/assets/auth/baileys`.
+
+```sh
+rm -rf ./asset/auth/baileys
+```
+
+Depois, remova o dispositivo do WhatsApp em "dispositivos conectados" e conecte-se novamente!
 
 ## Inscreva-se no canal!
 
