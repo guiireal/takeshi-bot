@@ -56,6 +56,7 @@ async function connect() {
     keepAliveIntervalMs: 60 * 1000,
     markOnlineOnConnect: true,
     msgRetryCounterCache,
+    shouldSyncHistoryMessage: () => false,
     getMessage,
   });
 
