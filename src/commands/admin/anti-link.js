@@ -17,16 +17,16 @@ module.exports = {
       );
     }
 
-    const autoResponder = args[0] === "1";
-    const notAutoResponder = args[0] === "0";
+    const antiLinkOn = args[0] === "1";
+    const antiLinkOff = args[0] === "0";
 
-    if (!autoResponder && !notAutoResponder) {
+    if (!antiLinkOn && !antiLinkOff) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
       );
     }
 
-    if (autoResponder) {
+    if (antiLinkOn) {
       activateAntiLinkGroup(remoteJid);
     } else {
       deactivateAntiLinkGroup(remoteJid);
@@ -34,7 +34,7 @@ module.exports = {
 
     await sendSuccessReact();
 
-    const context = autoResponder ? "ativado" : "desativado";
+    const context = antiLinkOn ? "ativado" : "desativado";
 
     await sendReply(`Recurso de anti-link ${context} com sucesso!`);
   },
