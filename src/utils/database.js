@@ -6,6 +6,7 @@ const databasePath = path.resolve(__dirname, "..", "..", "database");
 const INACTIVE_GROUPS_FILE = "inactive-groups";
 const NOT_WELCOME_GROUPS_FILE = "not-welcome-groups";
 const INACTIVE_AUTO_RESPONDER_GROUPS_FILE = "inactive-auto-responder-groups";
+const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 
 function createIfNotExists(fullPath) {
   if (!fs.existsSync(fullPath)) {
@@ -153,4 +154,40 @@ exports.isActiveAutoResponderGroup = (groupId) => {
   const inactiveAutoResponderGroups = readJSON(filename);
 
   return !inactiveAutoResponderGroups.includes(groupId);
+};
+
+exports.activateAntiLinkGroup = (groupId) => {
+  const filename = ANTI_LINK_GROUPS_FILE;
+
+  const antiLinkGroups = readJSON(filename);
+
+  if (!antiLinkGroups.includes(groupId)) {
+    antiLinkGroups.push(groupId);
+  }
+
+  writeJSON(filename, antiLinkGroups);
+};
+
+exports.deactivateAntiLinkGroup = (groupId) => {
+  const filename = ANTI_LINK_GROUPS_FILE;
+
+  const antiLinkGroups = readJSON(filename);
+
+  const index = antiLinkGroups.indexOf(groupId);
+
+  if (index === -1) {
+    return;
+  }
+
+  antiLinkGroups.splice(index, 1);
+
+  writeJSON(filename, antiLinkGroups);
+};
+
+exports.isActiveAntiLinkGroup = (groupId) => {
+  const filename = ANTI_LINK_GROUPS_FILE;
+
+  const antiLinkGroups = readJSON(filename);
+
+  return antiLinkGroups.includes(groupId);
 };

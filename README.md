@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/Projetos-Crescer/zig-app">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.1.0-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.2.0-blue">
     </a>
 </div>
 
@@ -152,6 +152,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | ------------ | --- | --- | ---
 | Desligar o bot no grupo | ✅ | Dono | ❌
 | Ligar o bot no grupo | ✅ | Dono | ❌
+| Anti link | ✅ | Admin | ❌
 | Banir membros | ✅ | Admin | ❌
 | Ligar/desligar auto responder | ✅ | Admin | ❌
 | Ligar/desligar boas vindas | ✅ | Admin | ❌

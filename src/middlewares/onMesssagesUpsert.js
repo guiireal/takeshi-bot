@@ -1,5 +1,5 @@
 const { dynamicCommand } = require("../utils/dynamicCommand");
-const { loadCommomFunctions } = require("../utils/loadCommomFunctions");
+const { loadCommonFunctions } = require("../utils/loadCommonFunctions");
 
 exports.onMessagesUpsert = async ({ socket, messages }) => {
   if (!messages.length) {
@@ -7,7 +7,7 @@ exports.onMessagesUpsert = async ({ socket, messages }) => {
   }
 
   for (const webMessage of messages) {
-    const commonFunctions = loadCommomFunctions({ socket, webMessage });
+    const commonFunctions = loadCommonFunctions({ socket, webMessage });
 
     if (!commonFunctions) {
       continue;

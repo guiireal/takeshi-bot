@@ -3,7 +3,7 @@ const { extractDataFromMessage, baileysIs, download } = require(".");
 const { waitMessage } = require("./messages");
 const fs = require("fs");
 
-exports.loadCommomFunctions = ({ socket, webMessage }) => {
+exports.loadCommonFunctions = ({ socket, webMessage }) => {
   const {
     args,
     commandName,
@@ -17,7 +17,7 @@ exports.loadCommomFunctions = ({ socket, webMessage }) => {
   } = extractDataFromMessage(webMessage);
 
   if (!remoteJid) {
-    return;
+    return null;
   }
 
   const isImage = baileysIs(webMessage, "image");

@@ -23,6 +23,7 @@ exports.menuMessage = () => {
 
 ╭━━⪩ ADMINS ⪨━━
 ▢
+▢ • ${PREFIX}anti-link (1/0)
 ▢ • ${PREFIX}auto-responder (1/0)
 ▢ • ${PREFIX}ban
 ▢ • ${PREFIX}hidetag
