@@ -232,7 +232,7 @@ Para resolver, siga o [tutorial de instalação via git clone](#termux-new-setup
 
 ## Remoção dos arquivos de sessão e conectar novamente
 
-Caso dê algum erro na conexão, você pode apagar os arquivos dentro da pasta: `/assets/auth/baileys`.
+Caso dê algum erro na conexão, você pode apagar os arquivos dentro da pasta `/assets/auth/baileys`.
 
 ```sh
 rm -rf ./asset/auth/baileys
