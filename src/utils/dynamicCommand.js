@@ -48,6 +48,8 @@ exports.dynamicCommand = async (paramsHandler) => {
           participant: webMessage.key.participant,
         },
       });
+
+      return;
     }
   }
 
