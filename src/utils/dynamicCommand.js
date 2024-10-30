@@ -2,7 +2,12 @@ const { DangerError } = require("../errors/DangerError");
 const { InvalidParameterError } = require("../errors/InvalidParameterError");
 const { WarningError } = require("../errors/WarningError");
 const { findCommandImport } = require(".");
-const { verifyPrefix, hasTypeOrCommand, isLink } = require("../middlewares");
+const {
+  verifyPrefix,
+  hasTypeOrCommand,
+  isLink,
+  isAdmin,
+} = require("../middlewares");
 const { checkPermission } = require("../middlewares/checkPermission");
 const {
   isActiveGroup,
@@ -28,17 +33,22 @@ exports.dynamicCommand = async (paramsHandler) => {
   } = paramsHandler;
 
   if (isActiveAntiLinkGroup(remoteJid) && isLink(fullMessage)) {
-    await socket.groupParticipantsUpdate(remoteJid, [userJid], "remove");
-    await sendReply("Anti-link ativado! Você foi removido por enviar um link!");
+    if (!(await isAdmin({ remoteJid, userJid, socket }))) {
+      await socket.groupParticipantsUpdate(remoteJid, [userJid], "remove");
 
-    await socket.sendMessage(remoteJid, {
-      delete: {
-        remoteJid,
-        fromMe: false,
-        id: webMessage.key.id,
-        participant: webMessage.key.participant,
-      },
-    });
+      await sendReply(
+        "Anti-link ativado! Você foi removido por enviar um link!"
+      );
+
+      await socket.sendMessage(remoteJid, {
+        delete: {
+          remoteJid,
+          fromMe: false,
+          id: webMessage.key.id,
+          participant: webMessage.key.participant,
+        },
+      });
+    }
   }
 
   const { type, command } = findCommandImport(commandName);
