@@ -63,4 +63,20 @@
  * Não pule etapas! Leia-o completo, pois ele é muito importante para você entender como o bot funciona!
  *
  * By: Dev Gui
+ *
+ * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
+const { connect } = require("./src/connection");
+const { load } = require("./src/loader");
+const { infoLog, bannerLog } = require("./src/utils/logger");
+
+async function start() {
+  bannerLog();
+  infoLog("Iniciando meus componentes internos...");
+
+  const socket = await connect();
+
+  load(socket);
+}
+
+start();
