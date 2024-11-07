@@ -5,30 +5,34 @@ exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
     return true;
   }
 
-  const { participants, owner } = await socket.groupMetadata(remoteJid);
+  try {
+    const { participants, owner } = await socket.groupMetadata(remoteJid);
 
-  const participant = participants.find(
-    (participant) => participant.id === userJid
-  );
+    const participant = participants.find(
+      (participant) => participant.id === userJid
+    );
 
-  if (!participant) {
+    if (!participant) {
+      return false;
+    }
+
+    const isOwner =
+      participant.id === owner || participant.admin === "superadmin";
+
+    const isAdmin = participant.admin === "admin";
+
+    const isBotOwner = userJid === `${OWNER_NUMBER}@s.whatsapp.net`;
+
+    if (type === "admin") {
+      return isOwner || isAdmin || isBotOwner;
+    }
+
+    if (type === "owner") {
+      return isOwner || isBotOwner;
+    }
+
+    return false;
+  } catch (error) {
     return false;
   }
-
-  const isOwner =
-    participant.id === owner || participant.admin === "superadmin";
-
-  const isAdmin = participant.admin === "admin";
-
-  const isBotOwner = userJid === `${OWNER_NUMBER}@s.whatsapp.net`;
-
-  if (type === "admin") {
-    return isOwner || isAdmin || isBotOwner;
-  }
-
-  if (type === "owner") {
-    return isOwner || isBotOwner;
-  }
-
-  return false;
 };
