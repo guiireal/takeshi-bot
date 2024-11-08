@@ -38,7 +38,7 @@ exports.playVideo = async (search) => {
   return data;
 };
 
-exports.gpt = async (text) => {
+exports.gpt4 = async (text) => {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -48,7 +48,7 @@ exports.gpt = async (text) => {
   }
 
   const { data } = await axios.post(
-    `${SPIDER_API_BASE_URL}/ai/gpt?api_key=${SPIDER_API_TOKEN}`,
+    `${SPIDER_API_BASE_URL}/ai/gpt-4?api_key=${SPIDER_API_TOKEN}`,
     {
       text,
     }
