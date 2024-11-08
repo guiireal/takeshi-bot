@@ -160,7 +160,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Busca CEP | ✅ | Membro | ❌
 | Figurinha de texto animada | ✅ | Membro | ✅
 | Geração de imagens com IA | ✅ | Membro | ❌
-| GPT | ✅ | Membro | ✅
+| GPT 4 | ✅ | Membro | ✅
 | Ping | ✅ | Membro | ❌
 | Play áudio | ✅ | Membro | ✅
 | Play vídeo | ✅ | Membro | ✅
