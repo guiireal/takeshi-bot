@@ -1,11 +1,11 @@
 const { PREFIX } = require("../../config");
-const { gpt } = require("../../services/spider-x-api");
+const { gpt4 } = require("../../services/spider-x-api");
 const { InvalidParameterError } = require("../../errors/InvalidParameterError");
 
 module.exports = {
-  name: "gpt",
+  name: "gpt-4",
   description: "Comandos de inteligência artificial!",
-  commands: ["gpt", "takeshi"],
+  commands: ["gpt-4", "gpt", "takeshi"],
   usage: `${PREFIX}gpt com quantos paus se faz uma canoa?`,
   handle: async ({ sendSuccessReply, sendWaitReply, args }) => {
     const text = args[0];
@@ -18,7 +18,7 @@ module.exports = {
 
     await sendWaitReply();
 
-    const responseText = await gpt(text);
+    const responseText = await gpt4(text);
 
     await sendSuccessReply(responseText);
   },
