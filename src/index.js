@@ -66,9 +66,9 @@
  *
  * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
-const { connect } = require("./src/connection");
-const { load } = require("./src/loader");
-const { infoLog, bannerLog } = require("./src/utils/logger");
+const { connect } = require("./connection");
+const { load } = require("./loader");
+const { infoLog, bannerLog } = require("./utils/logger");
 
 async function start() {
   try {
