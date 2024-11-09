@@ -71,12 +71,16 @@ const { load } = require("./src/loader");
 const { infoLog, bannerLog } = require("./src/utils/logger");
 
 async function start() {
-  bannerLog();
-  infoLog("Iniciando meus componentes internos...");
+  try {
+    bannerLog();
+    infoLog("Iniciando meus componentes internos...");
 
-  const socket = await connect();
+    const socket = await connect();
 
-  load(socket);
+    load(socket);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 start();
