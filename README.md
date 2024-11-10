@@ -14,7 +14,7 @@
 
 <br />
 
-## Bot de WhatsApp multi funções, desenvolvido no vídeo:
+## Bot de WhatsApp multifunções, desenvolvido no vídeo:
 
 [CRIANDO UM BOT DE WHATSAPP DO ZERO (GUIA DEFINITIVO) - BASE COMPLETA + 6 COMANDOS - JAVASCRIPT](https://youtu.be/6zr2NYIYIyc)
 
