@@ -7,7 +7,7 @@
 <br />
 
 <div align="center">
-    <a href="https://github.com/Projetos-Crescer/zig-app">
+    <a href="https://github.com/guiireal/takeshi-bot">
         <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.2.2-blue">
     </a>
 </div>
