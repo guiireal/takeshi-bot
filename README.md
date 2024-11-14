@@ -68,7 +68,6 @@ exports.BOT_NUMBER = "5511920202020";
 exports.OWNER_NUMBER = "5511999999999";
 ```
 
-
 7 - Inicie o bot novamente, dentro da pasta `takeshi-bot`:
 ```sh
 npm start
