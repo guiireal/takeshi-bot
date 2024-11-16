@@ -25,6 +25,7 @@
 - [Axios](https://axios-http.com/ptbr/docs/intro)
 - [Baileys](https://github.com/WhiskeySockets/Baileys)
 - [FFMPEG](https://ffmpeg.org/)
+- [Herc.ai](https://www.npmjs.com/package/hercai)
 - [Node.js 20.17.0](https://nodejs.org/en)
 - [Spider X API](https://api.spiderx.com.br)
 
