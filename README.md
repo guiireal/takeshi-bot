@@ -258,7 +258,7 @@ Depois, remova o dispositivo do WhatsApp em "dispositivos conectados" e conecte-
 
 ## Licença
 
-[MIT](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
+[GPL-3.0](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
 
 ## ⚠ Disclaimer
 
