@@ -35,6 +35,10 @@ Se você pagou por este código e não recebeu suporte da pessoa que te vendeu, 
 Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com terceiros e tenha pago por isso.
 Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso, nem prestamos suporte nessas condições.
 
+Caso seu bot seja o oficial da Bronxys, 
+interaja conosco e receba suporte através do grupo:
+[https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT](https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT)
+
 ## Instalação no Termux (novo método)<a id="termux-new-setup"></a>
 
 1 - Abra o Termux e execute os comandos abaixo.<br/>
