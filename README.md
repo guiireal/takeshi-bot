@@ -31,7 +31,7 @@
 
 ## ⚠ Atenção
 
-Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com terceiros e tenha pago por isso, solicite que **a pessoa que te vendeu, forneça suporte**.
+Nós não prestamos suporte gratuíto, caso você tenha adquirido esta base com terceiros e tenha pago por isso, solicite que **a pessoa que te vendeu, forneça suporte**.
 Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso, nem prestamos suporte nessas condições.
 
 Caso seu bot seja o oficial da Bronxys, 
