@@ -260,6 +260,20 @@ Depois, remova o dispositivo do WhatsApp em "dispositivos conectados" e conecte-
 
 [GPL-3.0](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
 
+Este projeto está licenciado sob a Licença Pública Geral GNU (GPL-3.0). 
+Isso significa que:
+
+- Você pode usar este código como quiser, seja para projetos pessoais ou comerciais.
+- Você pode modificar o código para adaptá-lo às suas necessidades.
+- Você pode compartilhar ou vender o código, mesmo modificado, mas precisa:
+- Manter os créditos ao autor original (Guilherme França).
+- Tornar o código modificado disponível sob a mesma licença GPL-3.0.
+
+O que você não pode fazer:
+
+- Não pode transformar este código em algo proprietário (fechado) e impedir outras pessoas de acessá-lo ou usá-lo.
+Esta licença garante que todos tenham acesso ao código-fonte e podem colaborar livremente, promovendo o compartilhamento e o aprimoramento do projeto.
+
 ## ⚠ Disclaimer
 
 Neste projeto, precisei hospedar a node_modules, para auxiliar quem está rodando o bot pelo celular, pois muitos deles podem não rodar o `npm install` pelo termux corretamente.
