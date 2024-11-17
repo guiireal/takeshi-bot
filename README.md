@@ -264,7 +264,7 @@ Isso significa que:
 - Você pode usar este código como quiser, seja para projetos pessoais ou comerciais.
 - Você pode modificar o código para adaptá-lo às suas necessidades.
 - Você pode compartilhar ou vender o código, mesmo modificado, mas precisa:
-- Manter os créditos ao autor original (Guilherme França).
+- Manter os créditos ao autor original (Guilherme França - Dev Gui).
 - Tornar o código modificado disponível sob a mesma licença GPL-3.0.
 
 O que você não pode fazer:
