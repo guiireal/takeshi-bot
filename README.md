@@ -260,7 +260,7 @@ Depois, remova o dispositivo do WhatsApp em "dispositivos conectados" e conecte-
 
 [GPL-3.0](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
 
-Este projeto está licenciado sob a Licença Pública Geral GNU (GPL-3.0). 
+Este projeto está licenciado sob a Licença Pública Geral GNU (GPL-3.0).<br/>
 Isso significa que:
 
 - Você pode usar este código como quiser, seja para projetos pessoais ou comerciais.
