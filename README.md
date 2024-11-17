@@ -32,8 +32,8 @@
 ## ⚠ Atenção
 
 Se você pagou por este código e não recebeu suporte da pessoa que te vendeu, saiba que você foi **roubado**.
-Nós não prestamos suporte gratuíto, caso você tenha adquirido esta base com terceiros e tenha pago por isso.
-Nós não temos vínculo nenhum com terceiros.
+Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com terceiros e tenha pago por isso.
+Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso, nem prestamos suporte nessas condições.
 
 ## Instalação no Termux (novo método)<a id="termux-new-setup"></a>
 
