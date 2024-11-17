@@ -29,6 +29,12 @@
 - [Node.js 20.17.0](https://nodejs.org/en)
 - [Spider X API](https://api.spiderx.com.br)
 
+## ⚠ Atenção
+
+Se você pagou por este código e não recebeu suporte da pessoa que te vendeu, saiba que você foi **roubado**.
+Nós não prestamos suporte gratuíto, caso você tenha adquirido esta base com terceiros e tenha pago por isso.
+Nós não temos vínculo nenhum com terceiros.
+
 ## Instalação no Termux (novo método)<a id="termux-new-setup"></a>
 
 1 - Abra o Termux e execute os comandos abaixo.<br/>
