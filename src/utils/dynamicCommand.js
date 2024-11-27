@@ -33,6 +33,8 @@ exports.dynamicCommand = async (paramsHandler) => {
   } = paramsHandler;
 
   if (isActiveAntiLinkGroup(remoteJid) && isLink(fullMessage)) {
+    if (!userJid) return
+    
     if (!(await isAdmin({ remoteJid, userJid, socket }))) {
       await socket.groupParticipantsUpdate(remoteJid, [userJid], "remove");
 
