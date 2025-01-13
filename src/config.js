@@ -11,7 +11,7 @@ exports.BOT_NAME = "Takeshi Bot";
 
 // Número do bot. Coloque o número do bot
 // (apenas números, exatamente como está no WhatsApp).
-exports.BOT_NUMBER = "55999999999";
+exports.BOT_NUMBER = "559999999999";
 
 // Número do dono do bot. Coloque o número do dono do bot
 // (apenas números, exatamente como está no WhatsApp).
