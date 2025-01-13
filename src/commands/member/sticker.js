@@ -44,9 +44,6 @@ module.exports = {
           await sendSuccessReact();
 
           await sendStickerFromFile(outputPath);
-
-          fs.unlinkSync(inputPath);
-          fs.unlinkSync(outputPath);
         }
       );
     } else {
@@ -83,9 +80,6 @@ Envie um vídeo menor!`);
 
           await sendSuccessReact();
           await sendStickerFromFile(outputPath);
-
-          fs.unlinkSync(inputPath);
-          fs.unlinkSync(outputPath);
         }
       );
     }

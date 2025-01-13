@@ -31,9 +31,6 @@ module.exports = {
       }
 
       await sendImageFromFile(outputPath);
-
-      fs.unlinkSync(inputPath);
-      fs.unlinkSync(outputPath);
     });
   },
 };
