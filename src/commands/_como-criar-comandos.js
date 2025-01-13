@@ -89,7 +89,7 @@
  * sendWarningReply("texto")
  * => Enviar mensagem de aviso como resposta
  */
-const { PREFIX } = require("../../config");
+const { PREFIX } = require(`${BASE_DIR}/config`);
 
 module.exports = {
   name: "comando",
