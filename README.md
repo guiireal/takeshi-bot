@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.2.2-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.3.0-blue">
     </a>
 </div>
 
@@ -39,58 +39,14 @@ Caso seu bot seja o oficial da Bronxys,
 interaja conosco e receba suporte através do grupo:
 [https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT](https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT)
 
-## Instalação no Termux (novo método)<a id="termux-new-setup"></a>
+## Instalação no Termux <a id="termux-old-setup"></a>
 
 1 - Abra o Termux e execute os comandos abaixo.<br/>
 _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/082otphidepx7aq/Termux_0.119.1_aldebaran_dev.apk)._
 
-2 - Cole o seguinte código:
-
 ```sh
-curl -O https://spiderx.com.br/bot-termux.sh && sh bot-termux.sh
-```
+pkg upgrade -y && pkg update -y && pkg install git -y && pkg install nodejs-lts -y && pkg install ffmpeg -y && npm install -g yarn
 
-3 - Se não tiver dado a permissão pra ler as pastas do dispositivo pelo termux, aceite quando aparecer o pop-up na tela, caso contrário, pressione `y`.
-
-4 - Quando finalizar tudo, informe seu número de telefone.
-
-5 - Coloque o código de pareamento em "dispositivos conectados" no WhatsApp, conforme explicado [nessa parte do vídeo](https://youtu.be/lBhpGuq5ETQ?t=76).
-
-![phone termux](./assets/images/phone-termux.png)
-
-6 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
-
-7 - Configure o arquivo `config.js` que está dentro da pasta `src`. O bot fica dentro da pasta `/sdcard/DevGui`.
-
-```js
-// Prefixo dos comandos
-exports.PREFIX = "/";
-
-// Emoji do bot (mude se preferir).
-exports.BOT_EMOJI = "🤖";
-
-// Nome do bot (mude se preferir).
-exports.BOT_NAME = "Takeshi Bot";
-
-// Número do bot. Coloque o número do bot (apenas números).
-exports.BOT_NUMBER = "5511920202020";
-
-// Número do dono do bot. Coloque o número do dono do bot (apenas números).
-exports.OWNER_NUMBER = "5511999999999";
-```
-
-7 - Inicie o bot novamente, dentro da pasta `takeshi-bot`:
-```sh
-npm start
-```
-
-## Instalação no Termux (método antigo)<a id="termux-old-setup"></a>
-
-1 - Abra o Termux e execute os comandos abaixo.<br/>
-_Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/082otphidepx7aq/Termux_0.119.1_aldebaran_dev.apk)._
-
-```
-pkg upgrade -y && pkg update -y && pkg install git -y
 ```
 
 2 - Habilite o acesso da pasta storage, no termux.
@@ -98,9 +54,9 @@ pkg upgrade -y && pkg update -y && pkg install git -y
 termux-setup-storage
 ```
 
-3 - Entre na pasta storage (ou dê antes um `ls` e veja qual é o nome da pasta do seu cartão de memória e entre nela).
+3 - Entre na pasta sdcard.
 ```sh
-cd storage
+cd /sdcard
 ```
 
 4 - Clone o repositório.
@@ -145,12 +101,18 @@ exports.OWNER_NUMBER = "5511999999999";
 
 11 - Inicie o bot novamente.
 ```sh
+yarn start
+```
+
+ou
+
+```sh
 npm start
 ```
 
 ## Alguns comandos necessitam de API
 
-Edite a linha `34` do arquivo `./src/config.js` e cole sua api key da plataforma Spider X API.<br/>
+Edite a linha `34` do arquivo `config.js` que está dentro da pasta `src` e cole sua api key da plataforma Spider X API.<br/>
 Para obter seu token, acesse: [https://api.spiderx.com.br](https://api.spiderx.com.br) e crie sua conta gratuitamente!
 
 ```js
@@ -213,7 +175,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
         - 📁 admin ➔ _pasta onde ficam os comandos administrativos_
         - 📁 member ➔ _pasta onde ficam os comandos gerais (todos poderão utilizar)_
         - 📁 owner ➔ _pasta onde ficam os comandos de dono (grupo e bot)_
-        - 📝\_sample.js ➔ _arquivo de exemplo de como criar um comando_
+        - 📝_como-criar-comandos.js ➔ _arquivo de exemplo de como criar um comando_
     - 📁 errors ➔ _classes de erros usadas nos comandos_
     - 📁 middlewares ➔ _interceptadores de requisições_
     - 📁 services ➔ _serviços diversos_
@@ -223,6 +185,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     - 📝 index.js ➔ _script ponto de entrada do Bot_
     - 📝 loader.js ➔ _script de carga de funções_
     - 📝 test.js ➔ _script de testes_
+- 📝 index.js ➔ _script ponto de entrada do Bot para hospedagem_
 - 📝.gitignore ➔ _arquivo para não subir certas pastas no GitHub_
 - 📝LICENSE ➔ _arquivo de licença_
 - 📝linux-start.sh ➔ _arquivo de inicialização do bot no Linux_
@@ -241,7 +204,7 @@ Para resolver, siga o [tutorial de instalação via git clone](#termux-new-setup
 
 ![erro comum 1](./assets/images/erro-comum-1.jpg)
 
-## Remoção dos arquivos de sessão e conectar novamente
+### Remoção dos arquivos de sessão e conectar novamente
 
 Caso dê algum erro na conexão, você pode apagar os arquivos dentro da pasta `/assets/auth/baileys`.
 
@@ -249,7 +212,18 @@ Caso dê algum erro na conexão, você pode apagar os arquivos dentro da pasta `
 rm -rf ./asset/auth/baileys
 ```
 
-Depois, remova o dispositivo do WhatsApp em "dispositivos conectados" e conecte-se novamente!
+Depois, remova o dispositivo do WhatsApp indo nas configurações do WhatsApp em "dispositivos conectados".
+
+Adicione novamente um novo dispositivo.
+
+### Permission denied (permissão negada) ao acessar `cd /sdcard`
+
+<br/>
+
+![erro comum 2](./assets/images/erro-comum-2.png)
+
+
+Abra o termux, digite `termux-setup-storage` e depois, aceite as permissões
 
 ## Inscreva-se no canal!
 

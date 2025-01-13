@@ -1,4 +1,4 @@
-const { PREFIX } = require("../../config");
+const { PREFIX } = require(`${BASE_DIR}/config`);
 
 module.exports = {
   name: "ping",

@@ -1,7 +1,9 @@
-const { PREFIX, BOT_NUMBER } = require("../../config");
-const { DangerError } = require("../../errors/DangerError");
-const { InvalidParameterError } = require("../../errors/InvalidParameterError");
-const { toUserJid, onlyNumbers } = require("../../utils");
+const { PREFIX, BOT_NUMBER } = require(`${BASE_DIR}/config`);
+const { DangerError } = require(`${BASE_DIR}/errors/DangerError`);
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { toUserJid, onlyNumbers } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
   name: "banir",

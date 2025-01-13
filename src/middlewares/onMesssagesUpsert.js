@@ -1,3 +1,9 @@
+/**
+ * Evento chamado quando uma mensagem
+ * é enviada para o grupo do WhatsApp
+ *
+ * @author Dev Gui
+ */
 const { dynamicCommand } = require("../utils/dynamicCommand");
 const { loadCommonFunctions } = require("../utils/loadCommonFunctions");
 

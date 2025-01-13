@@ -1,6 +1,6 @@
-const { PREFIX } = require("../../config");
+const { PREFIX } = require(`${BASE_DIR}/config`);
 const { Hercai } = require("hercai");
-const { WarningError } = require("../../errors/WarningError");
+const { WarningError } = require(`${BASE_DIR}/errors/WarningError`);
 
 module.exports = {
   name: "image",

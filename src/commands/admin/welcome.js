@@ -1,9 +1,11 @@
-const { PREFIX } = require("../../config");
-const { InvalidParameterError } = require("../../errors/InvalidParameterError");
+const { PREFIX } = require(`${BASE_DIR}/config`);
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
 const {
   activateWelcomeGroup,
   deactivateWelcomeGroup,
-} = require("../../utils/database");
+} = require(`${BASE_DIR}/utils/database`);
 
 module.exports = {
   name: "welcome",

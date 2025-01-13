@@ -1,5 +1,7 @@
-const { PREFIX, TEMP_DIR } = require("../../config");
-const { InvalidParameterError } = require("../../errors/InvalidParameterError");
+const { PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
 const path = require("path");
 const fs = require("fs");
 const { exec } = require("child_process");

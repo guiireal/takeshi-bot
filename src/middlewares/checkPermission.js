@@ -1,3 +1,9 @@
+/**
+ * Interceptadores de validação
+ * de permissões de usuários.
+ *
+ * @author Dev Gui
+ */
 const { OWNER_NUMBER } = require("../config");
 
 exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {

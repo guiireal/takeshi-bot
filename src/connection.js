@@ -1,3 +1,20 @@
+/**
+ * Script de
+ * inicialização do bot.
+ *
+ * Este script é
+ * responsável por
+ * iniciar a conexão
+ * com o WhatsApp.
+ *
+ * Não é recomendado alterar
+ * este arquivo,
+ * a menos que você saiba
+ * o que está fazendo.
+ *
+ * @author Dev Gui
+ */
+
 const path = require("path");
 const { question, onlyNumbers } = require("./utils");
 const {
@@ -63,9 +80,9 @@ async function connect() {
   if (!socket.authState.creds.registered) {
     warningLog("Credenciais ainda não configuradas!");
 
-    infoLog('Informe o seu número de telefone (exemplo: "5511920202020"):');
+    infoLog('Informe o número de telefone do bot (exemplo: "5511920202020"):');
 
-    const phoneNumber = await question("Informe o seu número de telefone: ");
+    const phoneNumber = await question("Informe o número de telefone do bot: ");
 
     if (!phoneNumber) {
       errorLog(

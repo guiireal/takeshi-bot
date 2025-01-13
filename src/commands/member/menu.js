@@ -1,5 +1,5 @@
-const { PREFIX, ASSETS_DIR } = require("../../config");
-const { menuMessage } = require("../../utils/messages");
+const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
+const { menuMessage } = require(`${BASE_DIR}/utils/messages`);
 const path = require("path");
 
 module.exports = {

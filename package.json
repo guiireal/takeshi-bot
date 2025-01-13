@@ -1,6 +1,6 @@
 {
   "name": "takeshi-bot",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Um bot de WhatsApp multifunções.",
   "main": "./src/index.js",
   "scripts": {
@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "baileys": "github:WhiskeySockets/Baileys",
     "axios": "^1.7.7",
+    "baileys": "github:WhiskeySockets/Baileys",
     "correios-brasil": "^3.0.6",
     "hercai": "^12.4.0",
     "pino": "^9.5.0",

@@ -1,3 +1,8 @@
+/**
+ * Interceptadores diversos.
+ *
+ * @author Dev Gui
+ */
 const { PREFIX, OWNER_NUMBER } = require("../config");
 const { toUserJid } = require("../utils");
 

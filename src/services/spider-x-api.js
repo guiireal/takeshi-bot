@@ -1,3 +1,9 @@
+/**
+ * Funções de comunicação
+ * com a API do Spider X.
+ *
+ * @author Dev Gui
+ */
 const axios = require("axios");
 
 const { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = require("../config");

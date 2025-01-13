@@ -1,3 +1,8 @@
+/**
+ * Funções diversas.
+ *
+ * @author Dev Gui
+ */
 const { downloadContentFromMessage } = require("baileys");
 const { PREFIX, COMMANDS_DIR, TEMP_DIR } = require("../config");
 const path = require("path");
@@ -134,6 +139,25 @@ exports.download = async (webMessage, fileName, context, extension) => {
   return filePath;
 };
 
+function readDirectoryRecursive(dir) {
+  const results = [];
+  const list = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const item of list) {
+    const itemPath = path.join(dir, item.name);
+    if (item.isDirectory()) {
+      results.push(...readDirectoryRecursive(itemPath));
+    } else if (
+      !item.name.startsWith("_") &&
+      (item.name.endsWith(".js") || item.name.endsWith(".ts"))
+    ) {
+      results.push(itemPath);
+    }
+  }
+
+  return results;
+}
+
 exports.findCommandImport = (commandName) => {
   const command = this.readCommandImports();
 
@@ -172,14 +196,17 @@ exports.readCommandImports = () => {
 
   for (const subdir of subdirectories) {
     const subdirectoryPath = path.join(COMMANDS_DIR, subdir);
-    const files = fs
-      .readdirSync(subdirectoryPath)
-      .filter(
-        (file) =>
-          !file.startsWith("_") &&
-          (file.endsWith(".js") || file.endsWith(".ts"))
-      )
-      .map((file) => require(path.join(subdirectoryPath, file)));
+
+    const files = readDirectoryRecursive(subdirectoryPath)
+      .map((filePath) => {
+        try {
+          return require(filePath);
+        } catch (err) {
+          console.error(`Erro ao importar ${filePath}:`, err);
+          return null;
+        }
+      })
+      .filter(Boolean);
 
     commandImports[subdir] = files;
   }

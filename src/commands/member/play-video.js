@@ -1,6 +1,8 @@
-const { PREFIX } = require("../../config");
-const { playAudio, playVideo } = require("../../services/spider-x-api");
-const { InvalidParameterError } = require("../../errors/InvalidParameterError");
+const { PREFIX } = require(`${BASE_DIR}/config`);
+const { playAudio, playVideo } = require(`${BASE_DIR}/services/spider-x-api`);
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
 
 module.exports = {
   name: "play-video",

@@ -1,8 +1,10 @@
-const { PREFIX, TEMP_DIR } = require("../../config");
+const { PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
 const fs = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
-const { InvalidParameterError } = require("../../errors/InvalidParameterError");
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
 
 module.exports = {
   name: "toimage",

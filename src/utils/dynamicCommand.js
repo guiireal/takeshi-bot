@@ -1,3 +1,9 @@
+/**
+ * Direcionador
+ * de comandos.
+ *
+ * @author Dev Gui
+ */
 const { DangerError } = require("../errors/DangerError");
 const { InvalidParameterError } = require("../errors/InvalidParameterError");
 const { WarningError } = require("../errors/WarningError");
@@ -33,8 +39,8 @@ exports.dynamicCommand = async (paramsHandler) => {
   } = paramsHandler;
 
   if (isActiveAntiLinkGroup(remoteJid) && isLink(fullMessage)) {
-    if (!userJid) return
-    
+    if (!userJid) return;
+
     if (!(await isAdmin({ remoteJid, userJid, socket }))) {
       await socket.groupParticipantsUpdate(remoteJid, [userJid], "remove");
 

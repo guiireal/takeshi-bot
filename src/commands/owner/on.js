@@ -1,5 +1,5 @@
-const { PREFIX } = require("../../config");
-const { activateGroup } = require("../../utils/database");
+const { PREFIX } = require(`${BASE_DIR}/config`);
+const { activateGroup } = require(`${BASE_DIR}/utils/database`);
 
 module.exports = {
   name: "on",

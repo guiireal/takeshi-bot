@@ -1,3 +1,8 @@
+/**
+ * Mensagens do bot
+ *
+ * @author Dev Gui
+ */
 const { BOT_NAME, PREFIX } = require("../config");
 
 exports.waitMessage = "Carregando dados...";

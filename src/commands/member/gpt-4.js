@@ -1,6 +1,8 @@
-const { PREFIX } = require("../../config");
-const { gpt4 } = require("../../services/spider-x-api");
-const { InvalidParameterError } = require("../../errors/InvalidParameterError");
+const { PREFIX } = require(`${BASE_DIR}/config`);
+const { gpt4 } = require(`${BASE_DIR}/services/spider-x-api`);
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
 
 module.exports = {
   name: "gpt-4",

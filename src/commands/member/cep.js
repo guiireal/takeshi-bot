@@ -1,5 +1,7 @@
-const { PREFIX } = require("../../config");
-const { InvalidParameterError } = require("../../errors/InvalidParameterError");
+const { PREFIX } = require(`${BASE_DIR}/config`);
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
 const { consultarCep } = require("correios-brasil");
 
 module.exports = {

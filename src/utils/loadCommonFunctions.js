@@ -1,3 +1,11 @@
+/**
+ * Funções comuns de uso geral
+ * do bot. Não há
+ * necessidade de modificar
+ * este arquivo.
+ *
+ * @author Dev Gui
+ */
 const { BOT_EMOJI } = require("../config");
 const { extractDataFromMessage, baileysIs, download } = require(".");
 const { waitMessage } = require("./messages");
