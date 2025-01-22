@@ -39,7 +39,7 @@ Caso seu bot seja o oficial da Bronxys,
 interaja conosco e receba suporte através do grupo:
 [https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT](https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT)
 
-## Instalação no Termux <a id="termux-old-setup"></a>
+## Instalação no Termux
 
 1 - Abra o Termux e execute os comandos abaixo.<br/>
 _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/082otphidepx7aq/Termux_0.119.1_aldebaran_dev.apk)._
