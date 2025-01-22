@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.3.0-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.4.0-blue">
     </a>
 </div>
 
@@ -45,42 +45,52 @@ interaja conosco e receba suporte através do grupo:
 _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/082otphidepx7aq/Termux_0.119.1_aldebaran_dev.apk)._
 
 ```sh
-pkg upgrade -y && pkg update -y && pkg install git -y && pkg install nodejs-lts -y && pkg install ffmpeg -y && npm install -g yarn
-
+pkg upgrade -y && pkg update -y && pkg install git -y && pkg install nodejs-lts -y && pkg install ffmpeg -y
 ```
 
 2 - Habilite o acesso da pasta storage, no termux.
+
 ```sh
 termux-setup-storage
 ```
 
 3 - Entre na pasta sdcard.
+
 ```sh
 cd /sdcard
 ```
 
 4 - Clone o repositório.
+
 ```sh
 git clone https://github.com/guiireal/takeshi-bot.git
 ```
 
 5 - Entre na pasta que foi clonada.
+
 ```sh
 cd takeshi-bot
 ```
 
-6 - Execute o bot.
+6 - Habilite permissões de leitura e escrita (faça apenas 1x esse passo).
+
 ```sh
-sh termux-start.sh
+chmod -R 755 ./*
 ```
 
-7 - Insira o número de telefone e pressione `enter`.
+7 - Execute o bot.
 
-8 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
+```sh
+npm start
+```
 
-9 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+8 - Insira o número de telefone e pressione `enter`.
 
-10 - Configure o arquivo `config.js` que está dentro da pasta `src`.
+9 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
+
+10 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+
+11 - Configure o arquivo `config.js` que está dentro da pasta `src`.
 
 ```js
 // Prefixo dos comandos
@@ -99,12 +109,7 @@ exports.BOT_NUMBER = "5511920202020";
 exports.OWNER_NUMBER = "5511999999999";
 ```
 
-11 - Inicie o bot novamente.
-```sh
-yarn start
-```
-
-ou
+12 - Inicie o bot novamente.
 
 ```sh
 npm start

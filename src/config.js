@@ -11,11 +11,11 @@ exports.BOT_NAME = "Takeshi Bot";
 
 // Número do bot. Coloque o número do bot
 // (apenas números, exatamente como está no WhatsApp).
-exports.BOT_NUMBER = "559999999999";
+exports.BOT_NUMBER = "6283159159861";
 
 // Número do dono do bot. Coloque o número do dono do bot
 // (apenas números, exatamente como está no WhatsApp).
-exports.OWNER_NUMBER = "559999999999";
+exports.OWNER_NUMBER = "5511996122025";
 
 // Diretório dos comandos
 exports.COMMANDS_DIR = path.join(__dirname, "commands");
