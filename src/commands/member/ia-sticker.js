@@ -1,5 +1,6 @@
+const { stableDiffusion } = require("../../services/spider-x-api");
+
 const { PREFIX, SPIDER_API_TOKEN } = require(`${BASE_DIR}/config`);
-const fetch = require('node-fetch');
 
 module.exports = {
   name: "ia-sticker",
@@ -12,31 +13,25 @@ module.exports = {
     sendWarningReply,
     sendStickerFromURL,
     sendSuccessReact,
-    sendErrorReply
+    fullArgs,
   }) => {
     if (!args[0]) {
-      return sendWarningReply("Você precisa fornecer uma descrição para a imagem.");
+      return sendWarningReply(
+        "Você precisa fornecer uma descrição para a imagem."
+      );
     }
 
-    const descricao = args[0];
+    await sendWaitReply("Gerando figurinha...");
 
-    const apiUrl = `https://api.spiderx.com.br/api/ai/stable-diffusion-turbo?search=${encodeURIComponent(descricao)}&api_key=${SPIDER_API_TOKEN}`;
+    const data = await stableDiffusion(fullArgs);
 
-        sendWaitReply("Gerando figurinha...");
-
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-
-      if (data.image) {
-        sendStickerFromURL(data.image);
-        sendSuccessReact();
-      } else {
-        sendWarningReply("Não foi possível gerar a figurinha. Tente novamente mais tarde.");
-      }
-    } catch (error) {
-      console.log(error);
-      sendErrorReply("Houve um erro ao tentar gerar a imagem. Verifique sua conexão ou tente mais tarde.");
+    if (data.image) {
+      await sendStickerFromURL(data.image);
+      await sendSuccessReact();
+    } else {
+      await sendWarningReply(
+        "Não foi possível gerar a figurinha. Tente novamente mais tarde."
+      );
     }
   },
 };

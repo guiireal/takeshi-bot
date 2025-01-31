@@ -142,6 +142,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Play áudio | ✅ | Membro | ✅
 | Play vídeo | ✅ | Membro | ✅
 | Sticker | ✅ | Membro | ❌
+| Sticker IA | ✅ | Membro | ✅
 | Sticker para imagem | ✅ | Membro | ❌
 
 ## Auto responder
