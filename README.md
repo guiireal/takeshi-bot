@@ -161,7 +161,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     },
     {
         "match": "Qual seu nome",
-        "answer": "Meu nome é Taeshi Bot"
+        "answer": "Meu nome é Takeshi Bot"
     },
 
     // coloque mais objetos json
