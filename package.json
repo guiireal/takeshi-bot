@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.7.7",
-    "baileys": "github:WhiskeySockets/Baileys",
+    "baileys": "6.7.16",
     "correios-brasil": "^3.0.6",
     "hercai": "^12.4.0",
     "pino": "^9.5.0",
