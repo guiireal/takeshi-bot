@@ -8,7 +8,7 @@ const { PREFIX, COMMANDS_DIR, TEMP_DIR } = require("../config");
 const path = require("path");
 const fs = require("fs");
 const { writeFile } = require("fs/promises");
-const readline = require("readline");
+const readline = require("node:readline");
 const axios = require("axios");
 
 exports.question = (message) => {

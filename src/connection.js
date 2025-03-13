@@ -28,7 +28,7 @@ const {
   makeInMemoryStore,
   isJidNewsletter,
 } = require("baileys");
-const NodeCache = require("node-cache");
+const { NodeCache } = require("@cacheable/node-cache");
 const pino = require("pino");
 const { load } = require("./loader");
 const {
