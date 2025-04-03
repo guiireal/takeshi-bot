@@ -28,7 +28,6 @@ const {
   makeInMemoryStore,
   isJidNewsletter,
 } = require("baileys");
-const { NodeCache } = require("@cacheable/node-cache");
 const pino = require("pino");
 const { load } = require("./loader");
 const {
@@ -38,8 +37,6 @@ const {
   sayLog,
   successLog,
 } = require("./utils/logger");
-
-const msgRetryCounterCache = new NodeCache();
 
 const store = makeInMemoryStore({
   logger: pino().child({ level: "silent", stream: "store" }),
@@ -72,7 +69,8 @@ async function connect() {
       isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
     keepAliveIntervalMs: 60 * 1000,
     markOnlineOnConnect: true,
-    msgRetryCounterCache,
+    syncFullHistory: false,
+    maxMsgRetryCount: 2,
     shouldSyncHistoryMessage: () => false,
     getMessage,
   });
