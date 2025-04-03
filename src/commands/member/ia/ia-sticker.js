@@ -1,12 +1,12 @@
-const { stableDiffusion } = require("../../services/spider-x-api");
+const { imageAI } = require(`${BASE_DIR}/services/spider-x-api`);
 
-const { PREFIX, SPIDER_API_TOKEN } = require(`${BASE_DIR}/config`);
+const { PREFIX } = require(`${BASE_DIR}/config`);
 
 module.exports = {
   name: "ia-sticker",
-  description: "cria uma figurinha com base em uma descrição",
+  description: "Cria uma figurinha com base em uma descrição",
   commands: ["ia-sticker", "ia-fig"],
-  usage: `${PREFIX}ia-sticker <descrição>`,
+  usage: `${PREFIX}ia-sticker descrição`,
   handle: async ({
     args,
     sendWaitReply,
@@ -21,9 +21,9 @@ module.exports = {
       );
     }
 
-    await sendWaitReply("Gerando figurinha...");
+    await sendWaitReply("gerando figurinha...");
 
-    const data = await stableDiffusion(fullArgs);
+    const data = await imageAI("stable-diffusion-turbo", fullArgs);
 
     if (data.image) {
       await sendStickerFromURL(data.image);

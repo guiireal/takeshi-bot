@@ -10,6 +10,7 @@ const fs = require("fs");
 const { writeFile } = require("fs/promises");
 const readline = require("node:readline");
 const axios = require("axios");
+const { errorLog } = require("./logger");
 
 exports.question = (message) => {
   const rl = readline.createInterface({
@@ -255,4 +256,32 @@ exports.getRandomName = (extension) => {
   }
 
   return `${fileName}.${extension}`;
+};
+
+exports.getImageBuffer = async (url, options = {}) => {
+  try {
+    const defaultOptions = {
+      method: "GET",
+      headers: {
+        Accept: "image/*",
+      },
+    };
+
+    const fetchOptions = { ...defaultOptions, ...options };
+
+    const response = await fetch(url, fetchOptions);
+
+    if (!response.ok) {
+      throw new Error(
+        `Falha ao obter imagem: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const buffer = await response.arrayBuffer();
+
+    return buffer;
+  } catch (error) {
+    errorLog(`Erro ao obter o buffer da imagem: ${error.message}`);
+    throw error;
+  }
 };

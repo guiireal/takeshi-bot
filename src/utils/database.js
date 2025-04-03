@@ -11,6 +11,7 @@ const databasePath = path.resolve(__dirname, "..", "..", "database");
 
 const INACTIVE_GROUPS_FILE = "inactive-groups";
 const NOT_WELCOME_GROUPS_FILE = "not-welcome-groups";
+const NOT_EXIT_GROUPS_FILE = "not-exit-groups";
 const INACTIVE_AUTO_RESPONDER_GROUPS_FILE = "inactive-auto-responder-groups";
 const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 
@@ -196,4 +197,40 @@ exports.isActiveAntiLinkGroup = (groupId) => {
   const antiLinkGroups = readJSON(filename);
 
   return antiLinkGroups.includes(groupId);
+};
+
+exports.activateExitGroup = (groupId) => {
+  const filename = NOT_EXIT_GROUPS_FILE;
+
+  const notExitGroups = readJSON(filename);
+
+  const index = notExitGroups.indexOf(groupId);
+
+  if (index === -1) {
+    return;
+  }
+
+  notExitGroups.splice(index, 1);
+
+  writeJSON(filename, notExitGroups);
+};
+
+exports.deactivateExitGroup = (groupId) => {
+  const filename = NOT_EXIT_GROUPS_FILE;
+
+  const notExitGroups = readJSON(filename);
+
+  if (!notExitGroups.includes(groupId)) {
+    notExitGroups.push(groupId);
+  }
+
+  writeJSON(filename, notExitGroups);
+};
+
+exports.isActiveExitGroup = (groupId) => {
+  const filename = NOT_EXIT_GROUPS_FILE;
+
+  const notExitGroups = readJSON(filename);
+
+  return !notExitGroups.includes(groupId);
 };

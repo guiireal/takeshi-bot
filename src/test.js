@@ -4,6 +4,4 @@
  *
  * @author Dev Gui
  */
-(async () => {
-  console.log("Apenas testando");
-})();
+(async () => {})();

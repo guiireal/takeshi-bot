@@ -31,23 +31,50 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}anti-link (1/0)
 ▢ • ${PREFIX}auto-responder (1/0)
 ▢ • ${PREFIX}ban
+▢ • ${PREFIX}exit (1/0)
 ▢ • ${PREFIX}hidetag
 ▢ • ${PREFIX}welcome (1/0)
 ▢
 ╰━━─「⭐」─━━
 
-╭━━⪩ MENU ⪨━━
+╭━━⪩ PRINCIPAL ⪨━━
 ▢
 ▢ • ${PREFIX}attp
 ▢ • ${PREFIX}cep
-▢ • ${PREFIX}gpt-4
-▢ • ${PREFIX}ia-sticker
-▢ • ${PREFIX}image
+▢ • ${PREFIX}google-search
 ▢ • ${PREFIX}ping
-▢ • ${PREFIX}play-audio
-▢ • ${PREFIX}play-video
 ▢ • ${PREFIX}sticker
 ▢ • ${PREFIX}to-image
+▢ • ${PREFIX}ttp
+▢ • ${PREFIX}yt-search
 ▢
-╰━━─「🚀」─━━`;
+╰━━─「🚀」─━━
+
+╭━━⪩ DOWNLOADS ⪨━━
+▢
+▢ • ${PREFIX}play-audio
+▢ • ${PREFIX}play-video
+▢ • ${PREFIX}tik-tok
+▢ • ${PREFIX}yt-mp3
+▢ • ${PREFIX}yt-mp4
+▢
+╰━━─「🎶」─━━
+
+╭━━⪩ IA ⪨━━
+▢
+▢ • ${PREFIX}gpt-4
+▢ • ${PREFIX}ia-sticker
+▢ • ${PREFIX}pixart
+▢ • ${PREFIX}stablle-diffusion-turbo
+▢
+╰━━─「🚀」─━━
+
+╭━━⪩ CANVAS ⪨━━
+▢
+▢ • ${PREFIX}bolsonaro
+▢ • ${PREFIX}cadeia
+▢ • ${PREFIX}inverter
+▢ • ${PREFIX}rip
+▢
+╰━━─「❇」─━━`;
 };

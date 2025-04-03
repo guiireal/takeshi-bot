@@ -1,14 +1,14 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { attp } = require(`${BASE_DIR}/services/spider-x-api`);
+const { ttp } = require(`${BASE_DIR}/services/spider-x-api`);
 const {
   InvalidParameterError,
 } = require(`${BASE_DIR}/errors/InvalidParameterError`);
 
 module.exports = {
-  name: "attp",
-  description: "Faz figurinhas animadas de texto.",
-  commands: ["attp"],
-  usage: `${PREFIX}attp teste`,
+  name: "ttp",
+  description: "Faz figurinhas de texto.",
+  commands: ["ttp"],
+  usage: `${PREFIX}ttp teste`,
   handle: async ({
     sendWaitReact,
     args,
@@ -23,7 +23,7 @@ module.exports = {
 
     await sendWaitReact();
 
-    const url = await attp(args[0].trim());
+    const url = await ttp(args[0].trim());
 
     await sendSuccessReact();
 

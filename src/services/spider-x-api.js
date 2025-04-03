@@ -8,17 +8,23 @@ const axios = require("axios");
 
 const { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = require("../config");
 
-exports.playAudio = async (search) => {
+function spiderAPITokenConfigured() {
+  return SPIDER_API_TOKEN && SPIDER_API_TOKEN !== "seu_token_aqui";
+}
+
+exports.spiderAPITokenConfigured = spiderAPITokenConfigured;
+
+exports.play = async (type, search) => {
   if (!search) {
     throw new Error("Você precisa informar o que deseja buscar!");
   }
 
-  if (!SPIDER_API_TOKEN || SPIDER_API_TOKEN === "seu_token_aqui") {
+  if (!spiderAPITokenConfigured()) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
   const { data } = await axios.get(
-    `${SPIDER_API_BASE_URL}/downloads/play-audio?search=${encodeURIComponent(
+    `${SPIDER_API_BASE_URL}/downloads/play-${type}?search=${encodeURIComponent(
       search
     )}&api_key=${SPIDER_API_TOKEN}`
   );
@@ -26,18 +32,20 @@ exports.playAudio = async (search) => {
   return data;
 };
 
-exports.playVideo = async (search) => {
-  if (!search) {
-    throw new Error("Você precisa informar o que deseja buscar!");
+exports.download = async (type, url) => {
+  if (!url) {
+    throw new Error(
+      "Você precisa informar uma URL do YouTube do que deseja buscar!"
+    );
   }
 
-  if (!SPIDER_API_TOKEN || SPIDER_API_TOKEN === "seu_token_aqui") {
+  if (!spiderAPITokenConfigured()) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
   const { data } = await axios.get(
-    `${SPIDER_API_BASE_URL}/downloads/play-video?search=${encodeURIComponent(
-      search
+    `${SPIDER_API_BASE_URL}/downloads/${type}?url=${encodeURIComponent(
+      url
     )}&api_key=${SPIDER_API_TOKEN}`
   );
 
@@ -49,7 +57,7 @@ exports.gpt4 = async (text) => {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
 
-  if (!SPIDER_API_TOKEN || SPIDER_API_TOKEN === "seu_token_aqui") {
+  if (!spiderAPITokenConfigured()) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -68,7 +76,7 @@ exports.attp = async (text) => {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
 
-  if (!SPIDER_API_TOKEN || SPIDER_API_TOKEN === "seu_token_aqui") {
+  if (!spiderAPITokenConfigured()) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -77,38 +85,122 @@ exports.attp = async (text) => {
   )}&api_key=${SPIDER_API_TOKEN}`;
 };
 
-exports.welcome = async (text, description, imageURL) => {
-  if (!text || !description || !imageURL) {
-    throw new Error(
-      "Você precisa informar o texto, descrição e URL da imagem!"
-    );
+exports.ttp = async (text) => {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
   }
 
-  if (!SPIDER_API_TOKEN || SPIDER_API_TOKEN === "seu_token_aqui") {
+  if (!spiderAPITokenConfigured()) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
-  return `${SPIDER_API_BASE_URL}/canvas/welcome?text=${encodeURIComponent(
+  return `${SPIDER_API_BASE_URL}/stickers/ttp?text=${encodeURIComponent(
     text
+  )}&api_key=${SPIDER_API_TOKEN}`;
+};
+
+exports.googleSearch = async (search) => {
+  if (!search) {
+    throw new Error("Você precisa informar o parâmetro de pesquisa!");
+  }
+
+  if (!spiderAPITokenConfigured()) {
+    throw new Error("Token da API do Spider X não configurado");
+  }
+
+  const { data } = await axios.get(
+    `${SPIDER_API_BASE_URL}/search/google?search=${encodeURIComponent(
+      search
+    )}&api_key=${SPIDER_API_TOKEN}`
+  );
+
+  return data;
+};
+
+exports.youtubeSearch = async (search) => {
+  if (!search) {
+    throw new Error("Você precisa informar o parâmetro de pesquisa!");
+  }
+
+  if (!spiderAPITokenConfigured()) {
+    throw new Error("Token da API do Spider X não configurado");
+  }
+
+  const { data } = await axios.get(
+    `${SPIDER_API_BASE_URL}/search/youtube?search=${encodeURIComponent(
+      search
+    )}&api_key=${SPIDER_API_TOKEN}`
+  );
+
+  return data;
+};
+
+exports.welcome = (title, description, imageURL) => {
+  if (!title || !description || !imageURL) {
+    throw new Error(
+      "Você precisa informar o título, descrição e URL da imagem!"
+    );
+  }
+
+  if (!spiderAPITokenConfigured()) {
+    throw new Error("Token da API do Spider X não configurado");
+  }
+
+  return `${SPIDER_API_BASE_URL}/canvas/welcome?title=${encodeURIComponent(
+    title
   )}&description=${encodeURIComponent(
     description
   )}&image_url=${encodeURIComponent(imageURL)}&api_key=${SPIDER_API_TOKEN}`;
 };
 
-exports.stableDiffusion = async (description) => {
+exports.exit = (title, description, imageURL) => {
+  if (!title || !description || !imageURL) {
+    throw new Error(
+      "Você precisa informar o título, descrição e URL da imagem!"
+    );
+  }
+
+  if (!spiderAPITokenConfigured()) {
+    throw new Error("Token da API do Spider X não configurado");
+  }
+
+  return `${SPIDER_API_BASE_URL}/canvas/goodbye?title=${encodeURIComponent(
+    title
+  )}&description=${encodeURIComponent(
+    description
+  )}&image_url=${encodeURIComponent(imageURL)}&api_key=${SPIDER_API_TOKEN}`;
+};
+
+exports.imageAI = async (type, description) => {
   if (!description) {
     throw new Error("Você precisa informar a descrição da imagem!");
   }
 
-  if (!SPIDER_API_TOKEN || SPIDER_API_TOKEN === "seu_token_aqui") {
+  if (!spiderAPITokenConfigured()) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
+  const paramSearch = type === "stable-diffusion-turbo" ? "search" : "text";
+
   const { data } = await axios.get(
-    `${SPIDER_API_BASE_URL}/ai/stable-diffusion-turbo?search=${encodeURIComponent(
+    `${SPIDER_API_BASE_URL}/ai/${type}?${paramSearch}=${encodeURIComponent(
       description
     )}&api_key=${SPIDER_API_TOKEN}`
   );
 
   return data;
+};
+
+exports.canvas = (type, imageURL) => {
+  if (!imageURL) {
+    throw new Error("Você precisa informar a URL da imagem!");
+  }
+
+  if (!spiderAPITokenConfigured()) {
+    throw new Error("Token da API do Spider X não configurado");
+  }
+
+  return `${SPIDER_API_BASE_URL}/canvas/${type}?image_url=${encodeURIComponent(
+    imageURL
+  )}&api_key=${SPIDER_API_TOKEN}`;
 };

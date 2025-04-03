@@ -7,7 +7,9 @@ module.exports = {
   description: "Menu de comandos",
   commands: ["menu", "help"],
   usage: `${PREFIX}menu`,
-  handle: async ({ sendImageFromFile }) => {
+  handle: async ({ sendImageFromFile, sendSuccessReact }) => {
+    await sendSuccessReact();
+
     await sendImageFromFile(
       path.join(ASSETS_DIR, "images", "takeshi-bot.png"),
       `\n\n${menuMessage()}`

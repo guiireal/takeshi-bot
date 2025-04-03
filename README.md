@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-2.4.1-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-3.0.0-blue">
     </a>
 </div>
 
@@ -133,17 +133,30 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Banir membros | ✅ | Admin | ❌
 | Ligar/desligar auto responder | ✅ | Admin | ❌
 | Ligar/desligar boas vindas | ✅ | Admin | ❌
+| Ligar/desligar saída de grupo | ✅ | Admin | ❌
 | Marcar todos | ✅ | Admin | ❌
 | Busca CEP | ✅ | Membro | ❌
+| Canvas Bolsonaro | ✅ | Membro | ✅
+| Canvas cadeia | ✅ | Membro | ✅
+| Canvas inverter | ✅ | Membro | ✅
+| Canvas RIP | ✅ | Membro | ✅
 | Figurinha de texto animada | ✅ | Membro | ✅
 | Geração de imagens com IA | ✅ | Membro | ❌
+| Google search | ✅ | Membro | ✅
 | GPT 4 | ✅ | Membro | ✅
+| Imagem IA PixArt | ✅ | Membro | ✅
+| Imagem IA Stable Diffusion Turbo | ✅ | Membro | ✅
 | Ping | ✅ | Membro | ❌
 | Play áudio | ✅ | Membro | ✅
 | Play vídeo | ✅ | Membro | ✅
 | Sticker | ✅ | Membro | ❌
 | Sticker IA | ✅ | Membro | ✅
 | Sticker para imagem | ✅ | Membro | ❌
+| TikTok video download | ✅ | Membro | ✅
+| YT MP3 | ✅ | Membro | ✅
+| YT MP4 | ✅ | Membro | ✅
+| YT MP4 | ✅ | Membro | ✅
+| YT search | ✅ | Membro | ✅
 
 ## Auto responder
 

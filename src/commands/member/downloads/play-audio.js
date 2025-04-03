@@ -1,16 +1,17 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { playAudio, playVideo } = require(`${BASE_DIR}/services/spider-x-api`);
+const { play } = require(`${BASE_DIR}/services/spider-x-api`);
 const {
   InvalidParameterError,
 } = require(`${BASE_DIR}/errors/InvalidParameterError`);
 
 module.exports = {
-  name: "play-video",
-  description: "Faço o download de vídeos",
-  commands: ["play-video", "pv"],
-  usage: `${PREFIX}play-video MC Hariel`,
+  name: "play-audio",
+  description: "Faço o download de músicas",
+  commands: ["play-audio", "play", "pa"],
+  usage: `${PREFIX}play-audio MC Hariel`,
   handle: async ({
-    sendVideoFromURL,
+    sendAudioFromURL,
+    sendImageFromURL,
     args,
     sendWaitReact,
     sendSuccessReact,
@@ -25,7 +26,7 @@ module.exports = {
     await sendWaitReact();
 
     try {
-      const data = await playVideo(args[0]);
+      const data = await play("audio", args[0]);
 
       if (!data) {
         await sendErrorReply("Nenhum resultado encontrado!");
@@ -34,10 +35,19 @@ module.exports = {
 
       await sendSuccessReact();
 
-      await sendVideoFromURL(data.url);
+      await sendImageFromURL(
+        data.thumbnail,
+        `*Título*: ${data.title}
+        
+*Descrição*: ${data.description}
+*Duração em segundos*: ${data.total_duration_in_seconds}
+*Canal*: ${data.channel.name}`
+      );
+
+      await sendAudioFromURL(data.url);
     } catch (error) {
       console.log(error);
-      await sendErrorReply(JSON.stringify(error.message));
+      await sendErrorReply(error.message);
     }
   },
 };
