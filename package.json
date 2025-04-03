@@ -1,6 +1,6 @@
 {
   "name": "takeshi-bot",
-  "version": "2.4.1",
+  "version": "3.0.0",
   "description": "Um bot de WhatsApp multifunções.",
   "main": "./src/index.js",
   "scripts": {
@@ -15,7 +15,6 @@
     "axios": "^1.7.7",
     "baileys": "6.7.16",
     "correios-brasil": "^3.0.6",
-    "hercai": "^12.4.0",
     "pino": "^9.5.0"
   }
 }
