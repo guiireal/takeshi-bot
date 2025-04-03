@@ -40,8 +40,8 @@ module.exports = {
     for (const item of data) {
       text += `Título: *${item.title}*\n\n`;
       text += `Duração: ${item.duration}\n\n`;
-      text += `Publicado em: ${item.views}\n\n`;
-      text += `Views: ${item.published_at}\n\n`;
+      text += `Publicado em: ${item.published_at}\n\n`;
+      text += `Views: ${item.views}\n\n`;
       text += `URL: ${item.url}\n\n-----\n\n`;
     }
 
