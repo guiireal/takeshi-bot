@@ -37,10 +37,13 @@ const {
   sayLog,
   successLog,
 } = require("./utils/logger");
+const NodeCache = require("node-cache");
 
 const store = makeInMemoryStore({
   logger: pino().child({ level: "silent", stream: "store" }),
 });
+
+const msgRetryCounterCache = new NodeCache();
 
 async function getMessage(key) {
   if (!store) {
@@ -71,6 +74,7 @@ async function connect() {
     markOnlineOnConnect: true,
     syncFullHistory: false,
     maxMsgRetryCount: 2,
+    msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
     getMessage,
   });
@@ -99,8 +103,7 @@ async function connect() {
     const { connection, lastDisconnect } = update;
 
     if (connection === "close") {
-      const statusCode =
-        lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut;
+      const statusCode = lastDisconnect.error?.output?.statusCode;
 
       if (statusCode === DisconnectReason.loggedOut) {
         errorLog("Bot desconectado!");

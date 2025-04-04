@@ -15,6 +15,7 @@
     "axios": "^1.7.7",
     "baileys": "6.7.16",
     "correios-brasil": "^3.0.6",
+    "node-cache": "^5.1.2",
     "pino": "^9.5.0"
   }
 }
