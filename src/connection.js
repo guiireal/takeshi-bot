@@ -23,6 +23,7 @@ const {
   useMultiFileAuthState,
   fetchLatestBaileysVersion,
   isJidBroadcast,
+  makeCacheableSignalKeyStore,
   isJidStatusBroadcast,
   proto,
   makeInMemoryStore,
@@ -38,12 +39,20 @@ const {
   successLog,
 } = require("./utils/logger");
 const NodeCache = require("node-cache");
+const { TEMP_DIR } = require("./config");
 
 const store = makeInMemoryStore({
   logger: pino().child({ level: "silent", stream: "store" }),
 });
 
 const msgRetryCounterCache = new NodeCache();
+
+const logger = pino(
+  { timestamp: () => `,"time":"${new Date().toJSON()}"` },
+  pino.destination(path.join(TEMP_DIR, "wa-logs.txt"))
+);
+
+logger.level = "error";
 
 async function getMessage(key) {
   if (!store) {
@@ -55,28 +64,37 @@ async function getMessage(key) {
   return msg ? msg.message : undefined;
 }
 
-async function connect() {
-  const { state, saveCreds } = await useMultiFileAuthState(
-    path.resolve(__dirname, "..", "assets", "auth", "baileys")
+async function connect(groupCache) {
+  const baileysFolder = path.resolve(
+    __dirname,
+    "..",
+    "assets",
+    "auth",
+    "baileys"
   );
+
+  const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
 
   const { version } = await fetchLatestBaileysVersion();
 
   const socket = makeWASocket({
     version,
-    logger: pino({ level: "error" }),
+    logger,
     printQRInTerminal: false,
     defaultQueryTimeoutMs: 60 * 1000,
-    auth: state,
+    auth: {
+      creds: state.creds,
+      keys: makeCacheableSignalKeyStore(state.keys, logger),
+    },
     shouldIgnoreJid: (jid) =>
       isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
     keepAliveIntervalMs: 60 * 1000,
     markOnlineOnConnect: true,
     syncFullHistory: false,
-    maxMsgRetryCount: 2,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
     getMessage,
+    cachedGroupMetadata: async (jid) => groupCache.get(jid),
   });
 
   if (!socket.authState.creds.registered) {
@@ -135,8 +153,8 @@ async function connect() {
             break;
         }
 
-        const newSocket = await connect();
-        load(newSocket);
+        const newSocket = await connect(groupCache);
+        load(newSocket, groupCache);
       }
     } else if (connection === "open") {
       successLog("Fui conectado com sucesso!");

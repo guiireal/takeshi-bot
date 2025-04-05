@@ -12,21 +12,27 @@ module.exports = {
   handle: async ({
     sendAudioFromURL,
     sendImageFromURL,
-    args,
+    fullArgs,
     sendWaitReact,
     sendSuccessReact,
     sendErrorReply,
   }) => {
-    if (!args.length) {
+    if (!fullArgs.length) {
       throw new InvalidParameterError(
         "Você precisa me dizer o que deseja buscar!"
+      );
+    }
+
+    if (fullArgs.includes("http://") || fullArgs.includes("https://")) {
+      throw new InvalidParameterError(
+        `Você não pode usar links para baixar músicas! Use ${PREFIX}yt-mp3 link`
       );
     }
 
     await sendWaitReact();
 
     try {
-      const data = await play("audio", args[0]);
+      const data = await play("audio", fullArgs);
 
       if (!data) {
         await sendErrorReply("Nenhum resultado encontrado!");

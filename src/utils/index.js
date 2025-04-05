@@ -3,10 +3,10 @@
  *
  * @author Dev Gui
  */
-const { downloadContentFromMessage } = require("baileys");
-const { PREFIX, COMMANDS_DIR, TEMP_DIR } = require("../config");
-const path = require("path");
-const fs = require("fs");
+const { downloadContentFromMessage, delay } = require("baileys");
+const { PREFIX, COMMANDS_DIR, TEMP_DIR, ASSETS_DIR } = require("../config");
+const path = require("node:path");
+const fs = require("node:fs");
 const { writeFile } = require("fs/promises");
 const readline = require("node:readline");
 const axios = require("axios");
@@ -285,3 +285,33 @@ exports.getImageBuffer = async (url, options = {}) => {
     throw error;
   }
 };
+
+exports.randomDelay = async () => {
+  const values = [1000, 2000, 3000];
+  return await delay(values[getRandomNumber(0, values.length - 1)]);
+};
+
+exports.isAtLeastMinutesInPast = (timestamp, minimumMinutes = 5) => {
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+
+  const diffInSeconds = currentTimestamp - timestamp;
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+
+  return diffInMinutes >= minimumMinutes;
+};
+
+exports.getLastTimestampCreds = () => {
+  const credsJson = JSON.parse(
+    fs.readFileSync(
+      path.resolve(ASSETS_DIR, "auth", "baileys", "creds.json"),
+      "utf-8"
+    )
+  );
+
+  return credsJson.lastAccountSyncTimestamp;
+};
+
+exports.GROUP_PARTICIPANT_ADD = 27;
+exports.GROUP_PARTICIPANT_LEAVE = 32;
+exports.isAddOrLeave = [27, 32];

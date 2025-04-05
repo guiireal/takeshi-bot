@@ -8,27 +8,40 @@
  */
 const { TIMEOUT_IN_MILLISECONDS_BY_EVENT } = require("./config");
 const { onMessagesUpsert } = require("./middlewares/onMesssagesUpsert");
-const {
-  onGroupParticipantsUpdate,
-} = require("./middlewares/onGroupParticipantsUpdate");
 const path = require("path");
+const { errorLog } = require("./utils/logger");
 
-exports.load = (socket) => {
+exports.load = (socket, groupCache) => {
   global.BASE_DIR = path.resolve(__dirname);
 
-  socket.ev.on("messages.upsert", async ({ messages }) => {
+  const safeEventHandler = async (callback, data, eventName) => {
+    try {
+      await callback(data);
+    } catch (error) {
+      errorLog(`Erro ao processar evento ${eventName}: ${error.message}`);
+    }
+  };
+
+  socket.ev.on("messages.upsert", async (data) => {
     setTimeout(() => {
-      onMessagesUpsert({ socket, messages });
+      safeEventHandler(
+        () =>
+          onMessagesUpsert({
+            socket,
+            messages: data.messages,
+            groupCache,
+          }),
+        data,
+        "messages.upsert"
+      );
     }, TIMEOUT_IN_MILLISECONDS_BY_EVENT);
   });
 
-  socket.ev.on("group-participants.update", async (data) => {
-    setTimeout(() => {
-      try {
-        onGroupParticipantsUpdate({ socket, groupParticipantsUpdate: data });
-      } catch (error) {
-        console.error(error);
-      }
-    }, TIMEOUT_IN_MILLISECONDS_BY_EVENT);
+  process.on("uncaughtException", (error) => {
+    errorLog(`Erro não capturado: ${error.message}`);
+  });
+
+  process.on("unhandledRejection", (reason, promise) => {
+    errorLog(`Promessa rejeitada não tratada: ${reason}`);
   });
 };

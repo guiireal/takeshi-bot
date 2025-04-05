@@ -12,21 +12,27 @@ module.exports = {
   handle: async ({
     sendVideoFromURL,
     sendImageFromURL,
-    args,
+    fullArgs,
     sendWaitReact,
     sendSuccessReact,
     sendErrorReply,
   }) => {
-    if (!args.length) {
+    if (!fullArgs.length) {
       throw new InvalidParameterError(
         "Você precisa me dizer o que deseja buscar!"
+      );
+    }
+
+    if (fullArgs.includes("http://") || fullArgs.includes("https://")) {
+      throw new InvalidParameterError(
+        `Você não pode usar links para baixar vídeos! Use ${PREFIX}yt-mp4 link`
       );
     }
 
     await sendWaitReact();
 
     try {
-      const data = await play("video", args[0]);
+      const data = await play("video", fullArgs);
 
       if (!data) {
         await sendErrorReply("Nenhum resultado encontrado!");
