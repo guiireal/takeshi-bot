@@ -33,6 +33,10 @@ exports.onGroupParticipantsUpdate = async ({
 
     await randomDelay();
 
+    if (!remoteJid.endsWith("@g.us")) {
+      return;
+    }
+
     if (action === "add") {
       const { buffer, profileImage } = await getProfileImageData(
         socket,
