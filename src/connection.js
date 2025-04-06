@@ -81,14 +81,14 @@ async function connect(groupCache) {
     version,
     logger,
     printQRInTerminal: false,
-    defaultQueryTimeoutMs: 60 * 1000,
+    defaultQueryTimeoutMs: undefined,
     auth: {
       creds: state.creds,
       keys: makeCacheableSignalKeyStore(state.keys, logger),
     },
     shouldIgnoreJid: (jid) =>
       isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
-    keepAliveIntervalMs: 60 * 1000,
+    keepAliveIntervalMs: 30 * 1000,
     markOnlineOnConnect: true,
     syncFullHistory: false,
     msgRetryCounterCache,
