@@ -1,3 +1,5 @@
+const { OWNER_NUMBER } = require("../../config");
+
 const { PREFIX, BOT_NUMBER } = require(`${BASE_DIR}/config`);
 const { DangerError } = require(`${BASE_DIR}/errors/DangerError`);
 const {
@@ -39,6 +41,10 @@ ${PREFIX}ban (mencionando uma mensagem)`,
 
     if (memberToRemoveJid === userJid) {
       throw new DangerError("Você não pode remover você mesmo!");
+    }
+
+    if (onlyNumbers(memberToRemoveJid) === OWNER_NUMBER) {
+      throw new DangerError("Você não pode remover o dono do bot!");
     }
 
     const botJid = toUserJid(BOT_NUMBER);
