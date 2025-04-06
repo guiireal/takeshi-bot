@@ -43,7 +43,7 @@ ${PREFIX}ban (mencionando uma mensagem)`,
       throw new DangerError("Você não pode remover você mesmo!");
     }
 
-    if (onlyNumbers(memberToRemoveJid) === OWNER_NUMBER) {
+    if (memberToRemoveNumber === OWNER_NUMBER) {
       throw new DangerError("Você não pode remover o dono do bot!");
     }
 
