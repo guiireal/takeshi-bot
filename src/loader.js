@@ -41,7 +41,7 @@ exports.load = (socket, groupCache) => {
     errorLog(`Erro não capturado: ${error.message}`);
   });
 
-  process.on("unhandledRejection", (reason, promise) => {
+  process.on("unhandledRejection", (reason) => {
     errorLog(`Promessa rejeitada não tratada: ${reason}`);
   });
 };
