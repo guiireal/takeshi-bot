@@ -16,6 +16,7 @@
     "baileys": "6.7.16",
     "correios-brasil": "^3.0.6",
     "node-cache": "^5.1.2",
+    "node-catbox": "^3.3.0",
     "pino": "^9.5.0"
   }
 }
