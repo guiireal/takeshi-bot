@@ -140,87 +140,93 @@ sudo apt install git
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 ```
 
-5 - Instale a versão 22 mais recente do node.js.
+5 - Atualize o source do seu ambiente
+
+```sh
+source ~/.bashrc
+```
+
+6 - Instale a versão 22 mais recente do node.js.
 
 ```sh
 nvm install 22
 ```
 
-6 - Verifique se a versão foi instalada e está ativa.
+7 - Verifique se a versão foi instalada e está ativa.
 
 ```sh
 node -v # Deve exibir a versão 22
 ```
 
-7 - Verifique se o npm foi instalado junto.
+8 - Verifique se o npm foi instalado junto.
 
 ```sh
 npm -v # Deverá exibir a versão do npm
 ```
 
-8 - Instale o PM2 (recomendado).
+9 - Instale o PM2 (recomendado).
 
 ```sh
 npm install pm2 -g
 ```
 
-8 - Clone o repositório do bot onde você desejar.
+10 - Clone o repositório do bot onde você desejar.
 
 ```sh
 git clone https://github.com/guiireal/takeshi-bot.git
 ```
 
-9 - Entre na pasta clonada.
+11 - Entre na pasta clonada.
 
 ```sh
 cd takeshi-bot
 ```
 
-10 - Digite o seguinte comando.
+12 - Digite o seguinte comando.
 
 ```sh
 npm start
 ```
 
-11 - O bot vai solicitar que você digite seu número de telefone.<br/>
+13 - O bot vai solicitar que você digite seu número de telefone.<br/>
 Digite **exatamente** como está no WhatsApp e apenas números.
 
 Não adicione o 9º dígito em números que não sejam de SP ou RJ.
 
 ![tutorial-vps-1](./assets/images/tutorial-vps-1.png)
 
-12 - Conecte o bot no PM2
+14 - Conecte o bot no PM2
 
 ```sh
 pm2 start npm --name "takeshi-bot" -- start
 ```
-13 - O bot exibirá um **código de pareamento** que deve ser colocado em `dispositivos conectados` no seu WhatsApp.
+15 - O bot exibirá um **código de pareamento** que deve ser colocado em `dispositivos conectados` no seu WhatsApp.
 
 ![tutorial-vps-2](./assets/images/tutorial-vps-2.png)
 
-14 - Vá em `dispositivos conectados` no seu WhatsApp.
+16 - Vá em `dispositivos conectados` no seu WhatsApp.
 
 ![tutorial-vps-3](./assets/images/tutorial-vps-3.png)
 
-15 - Clique em `conectar dispositivo`
+17 - Clique em `conectar dispositivo`
 
 ![tutorial-vps-4](./assets/images/tutorial-vps-4.png)
 
-16 - No canto inferior, clique em `Conectar com número de telefone`
+18 - No canto inferior, clique em `Conectar com número de telefone`
 
 ![tutorial-vps-5](./assets/images/tutorial-vps-5.png)
 
-17 - Coloque o **código de pareamento** que você recebeu no terminal, que foi feito no passo `13`.
+19 - Coloque o **código de pareamento** que você recebeu no terminal, que foi feito no passo `15`.
 
 ![tutorial-vps-6](./assets/images/tutorial-vps-6.png)
 
-18 - Após isso, no terminal que ficou parado, ele deve exibir que **foi conectado com sucesso**
+20 - Após isso, no terminal que ficou parado, ele deve exibir que **foi conectado com sucesso**
 
 ![tutorial-vps-7](./assets/images/tutorial-vps-7.png)
 
-19 - Digite `CTRL + C` para parar o bot.
+21 - Digite `CTRL + C` para parar o bot.
 
-20 - Agora inicie ele pelo `PM2`, executando o seguinte código abaixo.
+22 - Agora inicie ele pelo `PM2`, executando o seguinte código abaixo.
 
 ```sh
 pm2 start npm --name "takeshi-bot" -- start
@@ -228,7 +234,7 @@ pm2 start npm --name "takeshi-bot" -- start
 
 ![tutorial-vps-8](./assets/images/tutorial-vps-8.png)
 
-21 - Configure o arquivo `config.js` que está dentro da pasta `src`.
+23 - Configure o arquivo `config.js` que está dentro da pasta `src`.
 
 ```js
 // Prefixo dos comandos
@@ -247,7 +253,7 @@ exports.BOT_NUMBER = "5511920202020";
 exports.OWNER_NUMBER = "5511999999999";
 ```
 
-22 - Por fim, teste o bot!
+24 - Por fim, teste o bot!
 
 ![tutorial-vps-9](./assets/images/tutorial-vps-9.png)
 
