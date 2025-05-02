@@ -44,19 +44,28 @@ exports.onGroupParticipantsUpdate = async ({
       );
 
       if (spiderAPITokenConfigured()) {
-        const link = await catBoxUpload(buffer);
+        try {
+          const link = await catBoxUpload(buffer);
 
-        const url = welcome(
-          "Membro",
-          "Você é o mais novo membro do grupo!",
-          link
-        );
+          const url = welcome(
+            "Membro",
+            "Você é o mais novo membro do grupo!",
+            link
+          );
 
-        await socket.sendMessage(remoteJid, {
-          image: { url },
-          caption: `Seja bem vindo ao nosso grupo, @${onlyNumbers(userJid)}!`,
-          mentions: [userJid],
-        });
+          await socket.sendMessage(remoteJid, {
+            image: { url },
+            caption: `Seja bem vindo ao nosso grupo, @${onlyNumbers(userJid)}!`,
+            mentions: [userJid],
+          });
+        } catch (error) {
+          console.error("Erro ao fazer upload da imagem:", error);
+          await socket.sendMessage(remoteJid, {
+            image: buffer,
+            caption: `Seja bem vindo ao nosso grupo, @${onlyNumbers(userJid)}!`,
+            mentions: [userJid],
+          });
+        }
       } else {
         await socket.sendMessage(remoteJid, {
           image: buffer,
@@ -78,14 +87,23 @@ exports.onGroupParticipantsUpdate = async ({
       );
 
       if (spiderAPITokenConfigured()) {
-        const link = await catBoxUpload(buffer);
-        const url = exit("Adeus!", "Você foi um bom membro", link);
+        try {
+          const link = await catBoxUpload(buffer);
+          const url = exit("Adeus!", "Você foi um bom membro", link);
 
-        await socket.sendMessage(remoteJid, {
-          image: { url },
-          caption: `Tchau, @${onlyNumbers(userJid)}!`,
-          mentions: [userJid],
-        });
+          await socket.sendMessage(remoteJid, {
+            image: { url },
+            caption: `Tchau, @${onlyNumbers(userJid)}!`,
+            mentions: [userJid],
+          });
+        } catch (error) {
+          console.error("Erro ao fazer upload da imagem:", error);
+          await socket.sendMessage(remoteJid, {
+            image: buffer,
+            caption: `Tchau, @${onlyNumbers(userJid)}!`,
+            mentions: [userJid],
+          });
+        }
       } else {
         await socket.sendMessage(remoteJid, {
           image: buffer,
