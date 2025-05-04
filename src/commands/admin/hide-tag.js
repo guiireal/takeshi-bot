@@ -5,6 +5,10 @@ module.exports = {
   description: "Este comando marcará todos do grupo",
   commands: ["hide-tag", "to-tag"],
   usage: `${PREFIX}hidetag motivo`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ fullArgs, sendText, socket, remoteJid, sendReact }) => {
     const { participants } = await socket.groupMetadata(remoteJid);
 

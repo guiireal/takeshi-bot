@@ -6,6 +6,10 @@ module.exports = {
   description: "Ativa o bot no grupo",
   commands: ["on"],
   usage: `${PREFIX}on`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ sendSuccessReply, remoteJid }) => {
     activateGroup(remoteJid);
 

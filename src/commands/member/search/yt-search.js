@@ -5,17 +5,21 @@ const {
 
 const { WarningError } = require(`${BASE_DIR}/errors/WarningError`);
 
-const { googleSearch } = require(`${BASE_DIR}/services/spider-x-api`);
+const { search } = require(`${BASE_DIR}/services/spider-x-api`);
 
 module.exports = {
-  name: "google-search",
+  name: "yt-search",
   description: "Consulta Google",
-  commands: ["google-search", "g-search"],
-  usage: `${PREFIX}google-search segunda guerra mundial`,
+  commands: ["yt-search", "youtube-search"],
+  usage: `${PREFIX}yt-search MC Hariel`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ fullArgs, sendSuccessReply }) => {
     if (fullArgs.length <= 1) {
       throw new InvalidParameterError(
-        "Você precisa fornecer uma pesquisa para o Google."
+        "Você precisa fornecer uma pesquisa para o YouTube."
       );
     }
 
@@ -27,7 +31,7 @@ module.exports = {
       );
     }
 
-    const data = await googleSearch(fullArgs);
+    const data = await search("youtube", fullArgs);
 
     if (!data) {
       throw new WarningError(
@@ -39,7 +43,9 @@ module.exports = {
 
     for (const item of data) {
       text += `Título: *${item.title}*\n\n`;
-      text += `Descrição: ${item.description}\n\n`;
+      text += `Duração: ${item.duration}\n\n`;
+      text += `Publicado em: ${item.published_at}\n\n`;
+      text += `Views: ${item.views}\n\n`;
       text += `URL: ${item.url}\n\n-----\n\n`;
     }
 

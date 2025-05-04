@@ -13,6 +13,10 @@ module.exports = {
     "Gero uma montagem estilo cova de cemitério com a imagem que você enviar",
   commands: ["rip"],
   usage: `${PREFIX}rip (marque a imagem) ou ${PREFIX}rip (responda a imagem)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     isImage,
     downloadImage,

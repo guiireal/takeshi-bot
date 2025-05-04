@@ -7,6 +7,10 @@ module.exports = {
   description: "Cria uma imagem usando a IA Pixart",
   commands: ["pixart"],
   usage: `${PREFIX}pixart descrição`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     args,
     sendWaitReply,

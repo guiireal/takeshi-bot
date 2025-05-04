@@ -12,6 +12,10 @@ module.exports = {
   description: "Transformo figurinhas estáticas em imagem",
   commands: ["toimage", "toimg"],
   usage: `${PREFIX}toimage (marque a figurinha) ou ${PREFIX}toimage (responda a figurinha)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     isSticker,
     downloadSticker,

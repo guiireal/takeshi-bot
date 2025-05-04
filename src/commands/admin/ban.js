@@ -16,6 +16,10 @@ module.exports = {
 ou 
 
 ${PREFIX}ban (mencionando uma mensagem)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     args,
     isReply,

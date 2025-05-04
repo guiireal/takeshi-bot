@@ -16,6 +16,10 @@ module.exports = {
     "stable-difusion",
   ],
   usage: `${PREFIX}stable-diffusion-turbo descrição`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     args,
     sendWaitReply,

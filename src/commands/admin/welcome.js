@@ -21,6 +21,10 @@ module.exports = {
     "welkon",
   ],
   usage: `${PREFIX}welcome (1/0)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
       throw new InvalidParameterError(

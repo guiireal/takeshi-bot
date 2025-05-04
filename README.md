@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-3.4.1-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-3.5.0-blue">
     </a>
 </div>
 
@@ -294,6 +294,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Sticker | ✅ | Membro | ❌
 | Sticker IA | ✅ | Membro | ✅
 | Sticker para imagem | ✅ | Membro | ❌
+| TikTok search | ✅ | Membro | ✅
 | TikTok video download | ✅ | Membro | ✅
 | YT MP3 | ✅ | Membro | ✅
 | YT MP4 | ✅ | Membro | ✅
@@ -332,6 +333,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
 - 📁 database ➔ _arquivos de dados_
 - 📁 node_modules ➔ _módulos do Node.js_
 - 📁 src ➔ _código fonte do bot (geralmente você mexerá mais aqui)_
+    - 📁 @types ➔ _pasta onde fica as definições de tipos_
     - 📁 commands ➔ _pasta onde ficam os comandos_
         - 📁 admin ➔ _pasta onde ficam os comandos administrativos_
         - 📁 member ➔ _pasta onde ficam os comandos gerais (todos poderão utilizar)_

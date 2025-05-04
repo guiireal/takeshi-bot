@@ -9,6 +9,10 @@ module.exports = {
   description: "Comandos de inteligência artificial!",
   commands: ["gpt-4", "gpt", "takeshi"],
   usage: `${PREFIX}gpt com quantos paus se faz uma canoa?`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ sendSuccessReply, sendWaitReply, args }) => {
     const text = args[0];
 

@@ -13,6 +13,10 @@ module.exports = {
     "Ativo/desativo o recurso de envio de mensagem quando alguém sai do grupo.",
   commands: ["exit", "saida"],
   usage: `${PREFIX}exit (1/0)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
       throw new InvalidParameterError(

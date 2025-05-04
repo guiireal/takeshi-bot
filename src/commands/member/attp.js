@@ -9,6 +9,10 @@ module.exports = {
   description: "Faz figurinhas animadas de texto.",
   commands: ["attp"],
   usage: `${PREFIX}attp teste`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     sendWaitReact,
     args,

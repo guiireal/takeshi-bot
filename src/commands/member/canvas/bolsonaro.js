@@ -2,6 +2,7 @@ const { PREFIX } = require(`${BASE_DIR}/config`);
 const {
   InvalidParameterError,
 } = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { DangerError } = require(`${BASE_DIR}/errors/DangerError`);
 const fs = require("fs");
 const { canvas } = require(`${BASE_DIR}/services/spider-x-api`);
 const { catBoxUpload } = require(`${BASE_DIR}/services/catbox`);
@@ -12,6 +13,10 @@ module.exports = {
   description: "Gero uma montagem do Bolsonaro com a imagem que você enviar",
   commands: ["bolsonaro"],
   usage: `${PREFIX}bolsonaro (marque a imagem) ou ${PREFIX}bolsonaro (responda a imagem)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     isImage,
     downloadImage,
@@ -35,6 +40,13 @@ module.exports = {
 
     const buffer = fs.readFileSync(filePath);
     const link = await catBoxUpload(buffer);
+
+    if (!link) {
+      throw new DangerError(
+        "Não consegui fazer o upload da imagem, tente novamente mais tarde!"
+      );
+    }
+
     const url = canvas("bolsonaro", link);
 
     await sendSuccessReact();

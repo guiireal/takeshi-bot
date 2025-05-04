@@ -13,6 +13,10 @@ module.exports = {
     "Gero uma montagem com cores invertidas com a imagem que você enviar",
   commands: ["invert", "inverter"],
   usage: `${PREFIX}inverter (marque a imagem) ou ${PREFIX}inverter (responda a imagem)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     isImage,
     downloadImage,

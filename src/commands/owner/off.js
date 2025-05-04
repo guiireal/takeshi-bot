@@ -6,6 +6,10 @@ module.exports = {
   description: "Desativa o bot no grupo",
   commands: ["off"],
   usage: `${PREFIX}off`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ sendSuccessReply, remoteJid }) => {
     deactivateGroup(remoteJid);
 

@@ -9,6 +9,10 @@ module.exports = {
   description: "Consulta CEP",
   commands: ["cep"],
   usage: `${PREFIX}cep 01001-001`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ args, sendWarningReply, sendSuccessReply }) => {
     const cep = args[0];
 

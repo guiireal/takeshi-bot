@@ -7,6 +7,10 @@ module.exports = {
   description: "Menu de comandos",
   commands: ["menu", "help"],
   usage: `${PREFIX}menu`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ sendImageFromFile, sendSuccessReact }) => {
     await sendSuccessReact();
 

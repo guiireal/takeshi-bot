@@ -7,6 +7,10 @@ module.exports = {
   description: "Cria uma figurinha com base em uma descrição",
   commands: ["ia-sticker", "ia-fig"],
   usage: `${PREFIX}ia-sticker descrição`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     args,
     sendWaitReply,

@@ -12,6 +12,10 @@ module.exports = {
   description: "Faço figurinhas de imagem/gif/vídeo",
   commands: ["s", "sticker", "fig", "f"],
   usage: `${PREFIX}sticker (marque a imagem/gif/vídeo) ou ${PREFIX}sticker (responda a imagem/gif/vídeo)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     isImage,
     isVideo,

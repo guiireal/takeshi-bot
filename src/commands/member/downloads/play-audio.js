@@ -9,6 +9,10 @@ module.exports = {
   description: "Faço o download de músicas",
   commands: ["play-audio", "play", "pa"],
   usage: `${PREFIX}play-audio MC Hariel`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     sendAudioFromURL,
     sendImageFromURL,
