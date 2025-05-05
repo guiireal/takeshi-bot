@@ -1,5 +1,5 @@
 declare global {
-  /** Caminho base do projeto, usado para imports */
+  /** Caminho base do projeto, usado para imports. */
   const BASE_DIR: string;
 
   /**
@@ -14,7 +14,8 @@ declare global {
    */
   interface CommandHandleProps {
     /**
-     * Argumentos passados junto com o comando como um array
+     * Argumentos passados junto com o comando como um array, o que separa
+     * os argumentos são as barras / | ou \
      * Exemplo: ["arg1", "arg2"]
      */
     args: string[];
@@ -25,86 +26,86 @@ declare global {
     commandName: string;
 
     /**
-     * Argumentos passados junto com o comando como string única
-     * Exemplo: "arg1 arg2"
+     * Argumentos passados junto com o comando como string única.
+     * Exemplo: "arg1 / arg2"
      */
     fullArgs: string;
 
     /**
-     * Mensagem inteira incluindo o comando
+     * Mensagem inteira incluindo o comando.
      */
     fullMessage: string;
 
     /**
-     * Se a mensagem é uma imagem
+     * Se a mensagem é uma imagem.
      */
     isImage: boolean;
 
     /**
-     * Se a mensagem é uma resposta a outra mensagem
+     * Se a mensagem é uma resposta a outra mensagem.
      */
     isReply: boolean;
 
     /**
-     * Se a mensagem é um sticker
+     * Se a mensagem é um sticker.
      */
     isSticker: boolean;
 
     /**
-     * Se a mensagem é um vídeo
+     * Se a mensagem é um vídeo.
      */
     isVideo: boolean;
 
     /**
-     * Prefixo do bot configurado
+     * Prefixo do bot configurado.
      */
     prefix: string;
 
     /**
-     * ID do grupo/usuário que está recebendo a mensagem
+     * ID do grupo/usuário que está recebendo a mensagem.
      */
     remoteJid: string;
 
     /**
-     * ID da mensagem que está sendo respondida
+     * ID da mensagem que está sendo respondida.
      */
     replyJid: string;
 
     /**
-     * Socket do baileys para operações avançadas
+     * Socket do baileys para operações avançadas.
      */
     socket: any;
 
     /**
-     * ID do usuário que está mandando a mensagem
+     * ID do usuário que está mandando a mensagem.
      */
     userJid: string;
 
     /**
-     * Informações detalhadas da mensagem do WhatsApp
+     * Informações detalhadas da mensagem do WhatsApp.
      */
     webMessageInfo: any;
 
     /**
-     * Faz download de uma imagem da mensagem atual
+     * Faz download de uma imagem da mensagem atual.
      * @returns Promise com o buffer da imagem
      */
     downloadImage(): Promise<Buffer>;
 
     /**
-     * Faz download de um sticker da mensagem atual
+     * Faz download de um sticker da mensagem atual.
      * @returns Promise com o buffer do sticker
      */
     downloadSticker(): Promise<Buffer>;
 
     /**
-     * Faz download de um vídeo da mensagem atual
+     * Faz download de um vídeo da mensagem atual.
      * @returns Promise com o buffer do vídeo
      */
     downloadVideo(): Promise<Buffer>;
 
     /**
-     * Envia um áudio a partir de uma URL
+     * Envia um áudio a partir de uma URL.
      * Exemplo:
      * ```javascript
      * await sendAudioFromURL("https://exemplo.com/audio.mp3");
@@ -114,12 +115,12 @@ declare global {
     sendAudioFromURL(url: string): Promise<void>;
 
     /**
-     * Envia uma reação de erro (emoji ❌) na mensagem
+     * Envia uma reação de erro (emoji ❌) na mensagem.
      */
     sendErrorReact(): Promise<void>;
 
     /**
-     * Envia uma mensagem de erro como resposta
+     * Envia uma mensagem de erro como resposta.
      * Exemplo:
      * ```javascript
      * await sendErrorReply("Não foi possível encontrar resultados!");
@@ -129,7 +130,7 @@ declare global {
     sendErrorReply(text: string): Promise<void>;
 
     /**
-     * Envia uma imagem a partir de um arquivo local
+     * Envia uma imagem a partir de um arquivo local.
      * Exemplo:
      * ```javascript
      * await sendImageFromFile("./assets/image.png");
@@ -139,7 +140,7 @@ declare global {
     sendImageFromFile(path: string): Promise<void>;
 
     /**
-     * Envia uma imagem a partir de uma URL
+     * Envia uma imagem a partir de uma URL.
      * Exemplo:
      * ```javascript
      * await sendImageFromURL("https://exemplo.com/imagem.png");
@@ -149,7 +150,7 @@ declare global {
     sendImageFromURL(url: string): Promise<void>;
 
     /**
-     * Envia uma reação (emoji) na mensagem
+     * Envia uma reação (emoji) na mensagem.
      * Exemplo:
      * ```javascript
      * await sendReact("👍");
@@ -159,7 +160,7 @@ declare global {
     sendReact(emoji: string): Promise<void>;
 
     /**
-     * Envia uma mensagem como resposta
+     * Envia uma mensagem como resposta.
      * Exemplo:
      * ```javascript
      * await sendReply("Aqui está sua resposta!");
@@ -169,7 +170,7 @@ declare global {
     sendReply(text: string): Promise<void>;
 
     /**
-     * Envia um sticker a partir de um arquivo local
+     * Envia um sticker a partir de um arquivo local.
      * Exemplo:
      * ```javascript
      * await sendStickerFromFile("./assets/sticker.webp");
@@ -179,7 +180,7 @@ declare global {
     sendStickerFromFile(path: string): Promise<void>;
 
     /**
-     * Envia um sticker a partir de uma URL
+     * Envia um sticker a partir de uma URL.
      * Exemplo:
      * ```javascript
      * await sendStickerFromURL("https://exemplo.com/sticker.webp");
@@ -194,12 +195,12 @@ declare global {
     sendSuccessReact(): Promise<void>;
 
     /**
-     * Envia uma mensagem de sucesso como resposta
+     * Envia uma mensagem de sucesso como resposta.
      */
     sendSuccessReply(): Promise<void>;
 
     /**
-     * Envia uma mensagem de texto, opcionalmente mencionando usuários
+     * Envia uma mensagem de texto, opcionalmente mencionando usuários.
      * Exemplo:
      * ```javascript
      * await sendText("Olá @usuário!", ["123456789@s.whatsapp.net"]);
@@ -210,7 +211,7 @@ declare global {
     sendText(text: string, mentions?: string[]): Promise<void>;
 
     /**
-     * Envia um vídeo a partir de uma URL
+     * Envia um vídeo a partir de uma URL.
      * Exemplo:
      * ```javascript
      * await sendVideoFromURL("https://exemplo.com/video.mp4");
@@ -220,7 +221,7 @@ declare global {
     sendVideoFromURL(url: string): Promise<void>;
 
     /**
-     * Envia uma reação de espera (emoji ⏳) na mensagem
+     * Envia uma reação de espera (emoji ⏳) na mensagem.
      */
     sendWaitReact(): Promise<void>;
 
@@ -230,12 +231,12 @@ declare global {
     sendWaitReply(): Promise<void>;
 
     /**
-     * Envia uma reação de aviso (emoji ⚠️) na mensagem
+     * Envia uma reação de aviso (emoji ⚠️) na mensagem.
      */
     sendWarningReact(): Promise<void>;
 
     /**
-     * Envia uma mensagem de aviso como resposta
+     * Envia uma mensagem de aviso como resposta.
      * Exemplo:
      * ```javascript
      * await sendWarningReply("Cuidado! Esta operação pode levar alguns minutos.");
