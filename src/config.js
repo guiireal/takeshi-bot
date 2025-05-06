@@ -25,6 +25,7 @@ exports.COMMANDS_DIR = path.join(__dirname, "commands");
 // Diretório de arquivos de mídia.
 exports.DATABASE_DIR = path.resolve(__dirname, "..", "database");
 
+// Diretório de arquivos de mídia.
 exports.ASSETS_DIR = path.resolve(__dirname, "..", "assets");
 
 // Diretório de arquivos temporários.
