@@ -173,6 +173,10 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     );
   };
 
+  const isGroup = (remoteJid) => {
+    return remoteJid.endsWith("@g.us");
+  };  
+
   return {
     args,
     commandName,
@@ -183,6 +187,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     isSticker,
     isVideo,
     prefix,
+    isGroup,
     remoteJid,
     replyJid,
     socket,

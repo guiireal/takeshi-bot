@@ -272,6 +272,8 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Desligar o bot no grupo | ✅ | Dono | ❌
 | Ligar o bot no grupo | ✅ | Dono | ❌
 | Anti link | ✅ | Admin | ❌
+| Promover membros | ✅ | Admin | ❌
+| Rebaixar administradores | ✅ | Admin | ❌
 | Banir membros | ✅ | Admin | ❌
 | Ligar/desligar auto responder | ✅ | Admin | ❌
 | Ligar/desligar boas vindas | ✅ | Admin | ❌
@@ -289,6 +291,8 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Imagem IA PixArt | ✅ | Membro | ✅
 | Imagem IA Stable Diffusion Turbo | ✅ | Membro | ✅
 | Ping | ✅ | Membro | ❌
+| Perfil | ✅ | Membro | ❌
+| Gerar link | ✅ | Membro | ❌
 | Play áudio | ✅ | Membro | ✅
 | Play vídeo | ✅ | Membro | ✅
 | Sticker | ✅ | Membro | ❌
