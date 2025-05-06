@@ -33,6 +33,8 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}ban
 ▢ • ${PREFIX}exit (1/0)
 ▢ • ${PREFIX}hidetag
+▢ • ${PREFIX}promover
+▢ • ${PREFIX}rebaixar
 ▢ • ${PREFIX}welcome (1/0)
 ▢
 ╰━━─「⭐」─━━
@@ -42,8 +44,10 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}attp
 ▢ • ${PREFIX}cep
 ▢ • ${PREFIX}google-search
+▢ • ${PREFIX}perfil
 ▢ • ${PREFIX}ping
 ▢ • ${PREFIX}sticker
+▢ • ${PREFIX}tik-tok-search
 ▢ • ${PREFIX}to-image
 ▢ • ${PREFIX}ttp
 ▢ • ${PREFIX}yt-search

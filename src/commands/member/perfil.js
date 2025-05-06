@@ -1,22 +1,24 @@
-const fs = require("fs");
-const path = require("path");
+const { isGroup } = require(`${BASE_DIR}/utils`);
+const { errorLog } = require(`${BASE_DIR}/utils/logger`);
+
 const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(
-  `${BASE_DIR}/errors/InvalidParameterError`,
-);
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
 const { getProfileImageData } = require(`${BASE_DIR}/services/baileys`);
 
 module.exports = {
   name: "perfil",
   description: "Mostra informações de um usuário",
   commands: ["perfil", "profile"],
-  usage: `${PREFIX}perfil ou
-
-perfil @usuario`,
+  usage: `${PREFIX}perfil ou perfil @usuario`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     args,
     socket,
-    isGroup,
     remoteJid,
     userJid,
     sendErrorReply,
@@ -25,7 +27,7 @@ perfil @usuario`,
   }) => {
     if (!isGroup(remoteJid)) {
       throw new InvalidParameterError(
-        "Este comando só pode ser usado em grupo.",
+        "Este comando só pode ser usado em grupo."
       );
     }
 
@@ -41,26 +43,28 @@ perfil @usuario`,
       let userRole = "Membro";
 
       try {
-        const { buffer, profileImage } = await getProfileImageData(
-          socket,
-          targetJid,
-        );
+        const { profileImage } = await getProfileImageData(socket, targetJid);
         profilePicUrl = profileImage || `${ASSETS_DIR}/images/default-user.png`;
 
         const contactInfo = await socket.onWhatsApp(targetJid);
         userName = contactInfo[0]?.name || "Usuário Desconhecido";
       } catch (error) {
-        console.log(
-          `Erro ao tentar pegar dados do usuário ${targetJid}:`,
-          error,
+        errorLog(
+          `Erro ao tentar pegar dados do usuário ${targetJid}: ${JSON.stringify(
+            error,
+            null,
+            2
+          )}`
         );
         profilePicUrl = `${ASSETS_DIR}/images/default-user.png`;
       }
 
       const groupMetadata = await socket.groupMetadata(remoteJid);
+
       const participant = groupMetadata.participants.find(
-        (p) => p.id === targetJid,
+        (participant) => participant.id === targetJid
       );
+
       if (participant?.admin) {
         userRole = "Administrador";
       }
@@ -75,18 +79,17 @@ perfil @usuario`,
 🌚 *Programa:* R$ ${programPrice}\n
 🐮 *Gado:* ${randomPercent + 7 || 5}%\n
 🎱 *Passiva:* ${randomPercent + 5 || 10}%\n
-✨ *Beleza:* ${beautyLevel}%\n
-`;
+✨ *Beleza:* ${beautyLevel}%`;
 
       const mentions = [targetJid];
+
+      await sendSuccessReact();
 
       await socket.sendMessage(remoteJid, {
         image: { url: profilePicUrl },
         caption: mensagem,
         mentions: mentions,
       });
-
-      sendSuccessReact();
     } catch (error) {
       console.error(error);
       sendErrorReply("Ocorreu um erro ao tentar verificar o perfil.");

@@ -272,13 +272,13 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Desligar o bot no grupo | ✅ | Dono | ❌
 | Ligar o bot no grupo | ✅ | Dono | ❌
 | Anti link | ✅ | Admin | ❌
-| Promover membros | ✅ | Admin | ❌
-| Rebaixar administradores | ✅ | Admin | ❌
 | Banir membros | ✅ | Admin | ❌
 | Ligar/desligar auto responder | ✅ | Admin | ❌
 | Ligar/desligar boas vindas | ✅ | Admin | ❌
 | Ligar/desligar saída de grupo | ✅ | Admin | ❌
 | Marcar todos | ✅ | Admin | ❌
+| Promover membros | ✅ | Admin | ❌
+| Rebaixar administradores | ✅ | Admin | ❌
 | Busca CEP | ✅ | Membro | ❌
 | Canvas Bolsonaro | ✅ | Membro | ✅
 | Canvas cadeia | ✅ | Membro | ✅

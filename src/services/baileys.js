@@ -5,8 +5,8 @@
  * @author Dev Gui
  */
 const { getBuffer, getRandomName } = require("../utils");
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const { TEMP_DIR, ASSETS_DIR } = require("../config");
 
 exports.getProfileImageData = async (socket, userJid) => {

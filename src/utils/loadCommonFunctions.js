@@ -9,7 +9,7 @@
 const { BOT_EMOJI } = require("../config");
 const { extractDataFromMessage, baileysIs, download } = require(".");
 const { waitMessage } = require("./messages");
-const fs = require("fs");
+const fs = require("node:fs");
 
 exports.loadCommonFunctions = ({ socket, webMessage }) => {
   const {
@@ -173,10 +173,6 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     );
   };
 
-  const isGroup = (remoteJid) => {
-    return remoteJid.endsWith("@g.us");
-  };  
-
   return {
     args,
     commandName,
@@ -187,7 +183,6 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     isSticker,
     isVideo,
     prefix,
-    isGroup,
     remoteJid,
     replyJid,
     socket,

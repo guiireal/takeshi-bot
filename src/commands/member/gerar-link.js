@@ -1,8 +1,8 @@
-const fs = require("fs");
+const fs = require("node:fs");
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(
-  `${BASE_DIR}/errors/InvalidParameterError`,
-);
+const {
+  InvalidParameterError,
+} = require(`${BASE_DIR}/errors/InvalidParameterError`);
 const { catBoxUpload } = require(`${BASE_DIR}/services/catbox`);
 const { getRandomNumber } = require(`${BASE_DIR}/utils`);
 
@@ -11,6 +11,10 @@ module.exports = {
   description: "Faço upload da imagens",
   commands: ["to-link", "up", "upload", "gera-link", "gerar-link"],
   usage: `${PREFIX}gerar-link (marque a imagem) ou ${PREFIX}gerar-link (responda a imagem)`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({
     isImage,
     downloadImage,
@@ -21,7 +25,7 @@ module.exports = {
   }) => {
     if (!isImage) {
       throw new InvalidParameterError(
-        "Você deve marcar ou responder uma image !",
+        "Você deve marcar ou responder uma imagem!"
       );
     }
 
@@ -29,7 +33,7 @@ module.exports = {
 
     const filePath = await downloadImage(
       webMessage,
-      `${getRandomNumber(10_000, 99_999)}`,
+      `${getRandomNumber(10_000, 99_999)}`
     );
 
     const buffer = fs.readFileSync(filePath);

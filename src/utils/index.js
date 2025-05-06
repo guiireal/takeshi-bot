@@ -95,6 +95,10 @@ exports.formatCommand = (text) => {
   );
 };
 
+exports.isGroup = (remoteJid) => {
+  return remoteJid.endsWith("@g.us");
+};
+
 exports.onlyLettersAndNumbers = (text) => {
   return text.replace(/[^a-zA-Z0-9]/g, "");
 };
