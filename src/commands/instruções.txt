@@ -1,0 +1,116 @@
+===========================================
+ COMANDOS MODULARES PARA BOT DE WHATSAPP
+ USANDO INTELIGÊNCIA ARTIFICIAL (IA)
+===========================================
+
+Este arquivo ensina como você pode pedir corretamente para uma IA gerar comandos prontos para seu bot de WhatsApp com estrutura modular, baseado na biblioteca Baileys.
+
+------------------------------
+ ESTRUTURA DO SEU BOT
+------------------------------
+Organize seus comandos em pastas conforme o nível de permissão:
+
+/commands
+  /owner   -> comandos exclusivos do dono
+  /admin   -> comandos para administradores de grupo
+  /member  -> comandos liberados para qualquer membro
+
+Cada comando é um arquivo `.js` separado.
+
+Exemplo:
+commands/member/ajuda.js
+
+------------------------------
+ MODELO 1 - COMANDO LIMPO
+------------------------------
+
+const { PREFIX } = require(`${BASE_DIR}/config`);
+
+module.exports = {
+  name: "comando",
+  description: "Descrição do comando",
+  commands: ["comando1", "comando2"],
+  usage: `${PREFIX}comando`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
+  handle: async ({}) => {
+    // código do comando
+  },
+};
+
+------------------------------
+ MODELO 2 - COMENTADO E EXPLICADO
+------------------------------
+
+/**
+ * Este é um modelo de comando.
+ * Copie e cole este arquivo para criar um novo comando em uma das pastas: admin, member ou owner
+ * Você deve renomeá-lo para ficar de fácil identificação na pasta destino.
+ *
+ * Pasta owner: Comandos que só podem ser executados pelo dono do grupo/bot
+ * Pasta admin: Comandos que só podem ser executados por administradores do grupo
+ * Pasta member: Comandos que podem ser executados por qualquer membro do grupo
+ *
+ * Funções e variáveis que podem ser extraídas do handle em "handle: async ({ aqui })"
+ * Cuidado, respeite letras maiúsculas e minúsculas!
+ */
+const { PREFIX } = require(`${BASE_DIR}/config`);
+
+module.exports = {
+  name: "comando",
+  description: "Descrição do comando",
+  commands: ["comando1", "comando2"],
+  usage: `${PREFIX}comando`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
+  handle: async ({}) => {
+    // código do comando
+  },
+};
+
+------------------------------
+ COMO PEDIR PARA A IA CRIAR
+------------------------------
+
+Use o seguinte modelo de prompt:
+
+=== PROMPT MODELO ===
+"Crie um comando modular para meu bot de WhatsApp usando a biblioteca Baileys. 
+O comando deve se chamar 'nomeDoComando', estar na categoria 'member', 
+ter uma descrição curta, um uso simples e seguir a estrutura padrão com PREFIX, usage, commands e função handle({ ... })."
+
+Exemplo:
+"Crie um comando chamado 'clima' que retorne a previsão do tempo de uma cidade usando uma API pública. 
+Estrutura modular compatível com bot Baileys."
+
+------------------------------
+ DICAS PARA MELHOR RESULTADO
+------------------------------
+- Informe sempre a biblioteca usada (ex: Baileys).
+- Especifique a categoria do comando (owner, admin, member).
+- Diga exatamente o que o comando deve fazer.
+- Peça para seguir o modelo com `PREFIX`, `usage`, `commands`, e `handle`.
+
+------------------------------
+ EXEMPLO DE PEDIDO AVANÇADO
+------------------------------
+
+"Crie um comando modular para meu bot de WhatsApp que envie uma mensagem privada para todos os membros do grupo. 
+Categoria: admin. Estrutura compatível com Baileys, com suporte a menções e função handle completa."
+
+------------------------------
+ OBSERVAÇÃO IMPORTANTE
+------------------------------
+Apesar da IA ser uma excelente ferramenta de apoio, é altamente recomendado que você estude lógica de programação, JavaScript e o funcionamento da biblioteca Baileys. 
+
+Entender o código que você usa é essencial para criar bots mais seguros, personalizados e eficientes.
+
+**NÃO DEPENDA 100% DE INTELIGÊNCIA ARTIFICIAL. USE-A COMO SUPORTE.**
+
+------------------------------
+ FIM
+------------------------------

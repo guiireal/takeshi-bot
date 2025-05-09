@@ -32,8 +32,7 @@ exports.dynamicCommand = async (paramsHandler) => {
     sendErrorReply,
     remoteJid,
     sendReply,
-    socket,
-    userJid,
+    socket,                                                                                 userJid,
     fullMessage,
     webMessage,
   } = paramsHandler;
@@ -62,6 +61,10 @@ exports.dynamicCommand = async (paramsHandler) => {
   }
 
   const { type, command } = findCommandImport(commandName);
+
+  if (verifyPrefix(prefix) && !command) {
+        return sendWarningReply(`O comando "${commandName}" não foi encontrado !`)
+  }
 
   if (ONLY_GROUP_ID && ONLY_GROUP_ID !== remoteJid) {
     return;
@@ -108,7 +111,7 @@ exports.dynamicCommand = async (paramsHandler) => {
       errorLog("Erro ao executar comando", error);
       await sendErrorReply(
         `Ocorreu um erro ao executar o comando ${command.name}! O desenvolvedor foi notificado!
-      
+
 📄 *Detalhes*: ${error.message}`
       );
     }
