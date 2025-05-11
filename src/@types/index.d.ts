@@ -1,3 +1,4 @@
+export {};
 declare global {
   /** Caminho base do projeto, usado para imports. */
   const BASE_DIR: string;
@@ -35,6 +36,11 @@ declare global {
      * Mensagem inteira incluindo o comando.
      */
     fullMessage: string;
+
+    /**
+     * Se a mensagem veio de um grupo.
+     */
+    isGroup: boolean;
 
     /**
      * Se a mensagem é uma imagem.
@@ -106,6 +112,7 @@ declare global {
 
     /**
      * Envia um áudio a partir de uma URL.
+     *
      * Exemplo:
      * ```javascript
      * await sendAudioFromURL("https://exemplo.com/audio.mp3");
@@ -121,6 +128,7 @@ declare global {
 
     /**
      * Envia uma mensagem de erro como resposta.
+     *
      * Exemplo:
      * ```javascript
      * await sendErrorReply("Não foi possível encontrar resultados!");
@@ -130,17 +138,37 @@ declare global {
     sendErrorReply(text: string): Promise<void>;
 
     /**
-     * Envia uma imagem a partir de um arquivo local.
+     * Envia um gif a partir de um arquivo local.
+     *
      * Exemplo:
      * ```javascript
-     * await sendImageFromFile("./assets/image.png");
+     * await sendGifFromFile("./assets/alguma-coisa.gif", "Aqui está seu gif @5511920202020", ["5511920202020@s.whatsapp.net"]);
      * ```
-     * @param path Caminho do arquivo no servidor
+     * @param file Caminho do arquivo no servidor
+     * @param caption Texto da mensagem
+     * @param mentions Array opcional de JIDs de usuários para mencionar.
      */
-    sendImageFromFile(path: string): Promise<void>;
+    sendGifFromFile(
+      file: string,
+      caption: string,
+      mentions?: string[]
+    ): Promise<void>;
+
+    /**
+     * Envia uma imagem a partir de um arquivo local.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendImageFromFile("./assets/image.png", "Aqui está sua imagem!");
+     * ```
+     * @param file Caminho do arquivo no servidor
+     * @param caption Texto da mensagem
+     */
+    sendImageFromFile(file: string, caption: string): Promise<void>;
 
     /**
      * Envia uma imagem a partir de uma URL.
+     *
      * Exemplo:
      * ```javascript
      * await sendImageFromURL("https://exemplo.com/imagem.png");
@@ -151,6 +179,7 @@ declare global {
 
     /**
      * Envia uma reação (emoji) na mensagem.
+     *
      * Exemplo:
      * ```javascript
      * await sendReact("👍");
@@ -161,6 +190,7 @@ declare global {
 
     /**
      * Envia uma mensagem como resposta.
+     *
      * Exemplo:
      * ```javascript
      * await sendReply("Aqui está sua resposta!");
@@ -171,6 +201,7 @@ declare global {
 
     /**
      * Envia um sticker a partir de um arquivo local.
+     *
      * Exemplo:
      * ```javascript
      * await sendStickerFromFile("./assets/sticker.webp");
@@ -181,6 +212,7 @@ declare global {
 
     /**
      * Envia um sticker a partir de uma URL.
+     *
      * Exemplo:
      * ```javascript
      * await sendStickerFromURL("https://exemplo.com/sticker.webp");
@@ -196,11 +228,18 @@ declare global {
 
     /**
      * Envia uma mensagem de sucesso como resposta.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendSuccessReply("Operação concluída com sucesso!");
+     * ```
+     * @param text Texto da mensagem de sucesso
      */
-    sendSuccessReply(): Promise<void>;
+    sendSuccessReply(text: string): Promise<void>;
 
     /**
      * Envia uma mensagem de texto, opcionalmente mencionando usuários.
+     *
      * Exemplo:
      * ```javascript
      * await sendText("Olá @usuário!", ["123456789@s.whatsapp.net"]);
@@ -211,7 +250,20 @@ declare global {
     sendText(text: string, mentions?: string[]): Promise<void>;
 
     /**
+     * Envia um vídeo a partir de um arquivo local.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendVideoFromFile("./assets/video.mp4", "Aqui está seu vídeo!");
+     * ```
+     * @param file Caminho do arquivo no servidor
+     * @param caption Texto da mensagem
+     */
+    sendVideoFromFile(file: string, caption: string): Promise<void>;
+
+    /**
      * Envia um vídeo a partir de uma URL.
+     *
      * Exemplo:
      * ```javascript
      * await sendVideoFromURL("https://exemplo.com/video.mp4");
@@ -227,8 +279,14 @@ declare global {
 
     /**
      * Envia uma mensagem de espera como resposta
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendWaitReply("Aguarde um momento, estou processando sua solicitação.");
+     * ```
+     * @param text Texto da mensagem de espera
      */
-    sendWaitReply(): Promise<void>;
+    sendWaitReply(text: string): Promise<void>;
 
     /**
      * Envia uma reação de aviso (emoji ⚠️) na mensagem.
@@ -237,6 +295,7 @@ declare global {
 
     /**
      * Envia uma mensagem de aviso como resposta.
+     *
      * Exemplo:
      * ```javascript
      * await sendWarningReply("Cuidado! Esta operação pode levar alguns minutos.");

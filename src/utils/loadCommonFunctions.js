@@ -141,6 +141,17 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     );
   };
 
+  const sendVideoFromFile = async (file, caption = "") => {
+    return await socket.sendMessage(
+      remoteJid,
+      {
+        video: fs.readFileSync(file),
+        caption: caption ? `${BOT_EMOJI} ${caption}` : "",
+      },
+      { quoted: webMessage }
+    );
+  };
+
   const sendImageFromURL = async (url, caption = "") => {
     return await socket.sendMessage(
       remoteJid,
@@ -173,11 +184,23 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     );
   };
 
+  const sendGifFromFile = async (file, caption, mentions) => {
+    return await socket.sendMessage(remoteJid, {
+      video: fs.readFileSync(file),
+      caption,
+      gifPlayback: true,
+      mentions,
+    });
+  };
+
+  const isGroup = !!remoteJid?.endsWith("@g.us");
+
   return {
     args,
     commandName,
     fullArgs,
     fullMessage,
+    isGroup,
     isImage,
     isReply,
     isSticker,
@@ -194,6 +217,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     sendAudioFromURL,
     sendErrorReact,
     sendErrorReply,
+    sendGifFromFile,
     sendImageFromFile,
     sendImageFromURL,
     sendReact,
@@ -203,6 +227,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     sendSuccessReact,
     sendSuccessReply,
     sendText,
+    sendVideoFromFile,
     sendVideoFromURL,
     sendWaitReact,
     sendWaitReply,

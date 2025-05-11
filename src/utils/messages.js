@@ -21,6 +21,7 @@ exports.menuMessage = () => {
 
 ╭━━⪩ DONO ⪨━━
 ▢
+▢ • ${PREFIX}get-id
 ▢ • ${PREFIX}off
 ▢ • ${PREFIX}on
 ▢
@@ -33,8 +34,10 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}ban
 ▢ • ${PREFIX}exit (1/0)
 ▢ • ${PREFIX}hidetag
+▢ • ${PREFIX}limpar
 ▢ • ${PREFIX}promover
 ▢ • ${PREFIX}rebaixar
+▢ • ${PREFIX}revelar
 ▢ • ${PREFIX}welcome (1/0)
 ▢
 ╰━━─「⭐」─━━
@@ -63,6 +66,17 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}yt-mp4
 ▢
 ╰━━─「🎶」─━━
+
+╭━━⪩ BRINCADEIRAS ⪨━━
+▢
+▢ • ${PREFIX}abracar
+▢ • ${PREFIX}beijar
+▢ • ${PREFIX}jantar
+▢ • ${PREFIX}lutar
+▢ • ${PREFIX}matar
+▢ • ${PREFIX}socar
+▢
+╰━━─「🎡」─━━
 
 ╭━━⪩ IA ⪨━━
 ▢

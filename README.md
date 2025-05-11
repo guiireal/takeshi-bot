@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-3.6.1-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-3.7.0-blue">
     </a>
 </div>
 
@@ -277,8 +277,6 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Ligar/desligar boas vindas | ✅ | Admin | ❌
 | Ligar/desligar saída de grupo | ✅ | Admin | ❌
 | Marcar todos | ✅ | Admin | ❌
-| Promover membros | ✅ | Admin | ❌
-| Rebaixar administradores | ✅ | Admin | ❌
 | Busca CEP | ✅ | Membro | ❌
 | Canvas Bolsonaro | ✅ | Membro | ✅
 | Canvas cadeia | ✅ | Membro | ✅
@@ -291,8 +289,6 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Imagem IA PixArt | ✅ | Membro | ✅
 | Imagem IA Stable Diffusion Turbo | ✅ | Membro | ✅
 | Ping | ✅ | Membro | ❌
-| Perfil | ✅ | Membro | ❌
-| Gerar link | ✅ | Membro | ❌
 | Play áudio | ✅ | Membro | ✅
 | Play vídeo | ✅ | Membro | ✅
 | Sticker | ✅ | Membro | ❌
