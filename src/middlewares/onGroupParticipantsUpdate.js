@@ -47,6 +47,10 @@ exports.onGroupParticipantsUpdate = async ({
         try {
           const link = await catBoxUpload(buffer);
 
+          if (!link) {
+            throw new Error("Link inválido");
+          }
+
           const url = welcome(
             "Membro",
             "Você é o mais novo membro do grupo!",
@@ -89,6 +93,11 @@ exports.onGroupParticipantsUpdate = async ({
       if (spiderAPITokenConfigured()) {
         try {
           const link = await catBoxUpload(buffer);
+
+          if (!link) {
+            throw new Error("Link inválido");
+          }
+
           const url = exit("Adeus!", "Você foi um bom membro", link);
 
           await socket.sendMessage(remoteJid, {
