@@ -187,7 +187,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
   const sendGifFromFile = async (file, caption, mentions) => {
     return await socket.sendMessage(remoteJid, {
       video: fs.readFileSync(file),
-      caption,
+      caption: caption ? `${BOT_EMOJI} ${caption}` : "",
       gifPlayback: true,
       mentions,
     });
