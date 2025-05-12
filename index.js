@@ -67,9 +67,14 @@
  * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
 const NodeCache = require("node-cache");
-const { connect } = require("./connection");
-const { load } = require("./loader");
-const { infoLog, bannerLog, errorLog, warningLog } = require("./utils/logger");
+const { connect } = require("./src/connection");
+const { load } = require("./src/loader");
+const {
+  infoLog,
+  bannerLog,
+  errorLog,
+  warningLog,
+} = require("./src/utils/logger");
 
 const safeLoad = async (socket, groupCache, retryCount = 0) => {
   const MAX_RETRIES = 5;

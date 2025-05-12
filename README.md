@@ -334,6 +334,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
 - 📁 assets ➔ _arquivos de mídia_
     - 📁 auth ➔ _arquivos da conexão do bot_
     - 📁 images ➔ _arquivos de imagem_
+        - 📁 funny ➔ _gifs de comandos de diversão_
     - 📁 temp ➔ _arquivos temporários_
 - 📁 database ➔ _arquivos de dados_
 - 📁 node_modules ➔ _módulos do Node.js_
@@ -343,7 +344,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
         - 📁 admin ➔ _pasta onde ficam os comandos administrativos_
         - 📁 member ➔ _pasta onde ficam os comandos gerais (todos poderão utilizar)_
         - 📁 owner ➔ _pasta onde ficam os comandos de dono (grupo e bot)_
-        - 📝_como-criar-comandos.js ➔ _arquivo de exemplo de como criar um comando_
+        - 📝🤖-como-criar-comandos.js ➔ _arquivo de exemplo de como criar um comando_
     - 📁 errors ➔ _classes de erros usadas nos comandos_
     - 📁 middlewares ➔ _interceptadores de requisições_
     - 📁 services ➔ _serviços diversos_
@@ -353,14 +354,13 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     - 📝 index.js ➔ _script ponto de entrada do Bot_
     - 📝 loader.js ➔ _script de carga de funções_
     - 📝 test.js ➔ _script de testes_
+- ⚡-cases-estao-aqui ➔ _easter egg_ 
 - 📝 index.js ➔ _script ponto de entrada do Bot para hospedagem_
 - 📝.gitignore ➔ _arquivo para não subir certas pastas no GitHub_
 - 📝LICENSE ➔ _arquivo de licença_
-- 📝linux-start.sh ➔ _arquivo de inicialização do bot no Linux_
 - 📝package-lock.json ➔ _arquivo de cache das dependências do Bot_
 - 📝package.json ➔ _arquivo de definição das dependências do Bot_
 - 📝README.md ➔ _esta documentação_
-- 📝termux-start.sh ➔ _arquivo de inicialização do bot no Termux_
 
 ## Erros comuns
 
