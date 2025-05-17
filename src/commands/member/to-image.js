@@ -2,9 +2,7 @@ const { PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
 const fs = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const { getRandomNumber } = require(`${BASE_DIR}/utils`);
 
 module.exports = {

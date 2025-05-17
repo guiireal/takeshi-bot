@@ -1,9 +1,5 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
-
-const { WarningError } = require(`${BASE_DIR}/errors/WarningError`);
+const { InvalidParameterError, WarningError } = require(`${BASE_DIR}/errors`);
 
 const { search } = require(`${BASE_DIR}/services/spider-x-api`);
 

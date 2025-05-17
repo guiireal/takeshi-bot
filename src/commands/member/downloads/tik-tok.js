@@ -1,9 +1,6 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { download } = require(`${BASE_DIR}/services/spider-x-api`);
-const { WarningError } = require(`${BASE_DIR}/errors/WarningError`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { WarningError, InvalidParameterError } = require(`${BASE_DIR}/errors`);
 
 module.exports = {
   name: "tik-tok",

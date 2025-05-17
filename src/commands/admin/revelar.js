@@ -1,7 +1,5 @@
 const { DEFAULT_PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const path = require("node:path");
 const fs = require("node:fs");
 const ffmpeg = require("fluent-ffmpeg");

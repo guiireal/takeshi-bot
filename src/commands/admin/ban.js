@@ -1,10 +1,7 @@
 const { OWNER_NUMBER } = require("../../config");
 
 const { PREFIX, BOT_NUMBER } = require(`${BASE_DIR}/config`);
-const { DangerError } = require(`${BASE_DIR}/errors/DangerError`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { DangerError, InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const { toUserJid, onlyNumbers } = require(`${BASE_DIR}/utils`);
 
 module.exports = {

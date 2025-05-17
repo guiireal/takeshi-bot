@@ -1,9 +1,7 @@
 const { errorLog } = require(`${BASE_DIR}/utils/logger`);
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
-const { WarningError } = require(`${BASE_DIR}/errors/WarningError`);
+const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+const { WarningError } = require(`${BASE_DIR}/errors`);
 
 module.exports = {
   name: "set-name",

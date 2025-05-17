@@ -2,7 +2,7 @@ const { delay } = require("baileys");
 const { BOT_EMOJI } = require(`${BASE_DIR}/config`);
 
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { WarningError } = require(`${BASE_DIR}/errors/WarningError`);
+const { WarningError } = require(`${BASE_DIR}/errors`);
 
 module.exports = {
   name: "limpar",

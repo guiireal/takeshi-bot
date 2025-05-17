@@ -1,5 +1,5 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { WarningError } = require(`${BASE_DIR}/errors/WarningError`);
+const { WarningError } = require(`${BASE_DIR}/errors`);
 
 module.exports = {
   name: "get-id",

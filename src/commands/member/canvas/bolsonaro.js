@@ -1,8 +1,6 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
-const { DangerError } = require(`${BASE_DIR}/errors/DangerError`);
+const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+const { DangerError } = require(`${BASE_DIR}/errors`);
 const fs = require("fs");
 const { canvas } = require(`${BASE_DIR}/services/spider-x-api`);
 const { catBoxUpload } = require(`${BASE_DIR}/services/catbox`);

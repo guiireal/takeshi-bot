@@ -4,9 +4,11 @@
  *
  * @author Dev Gui
  */
-const { DangerError } = require("../errors/DangerError");
-const { InvalidParameterError } = require("../errors/InvalidParameterError");
-const { WarningError } = require("../errors/WarningError");
+const {
+  DangerError,
+  WarningError,
+  InvalidParameterError,
+} = require("../errors");
 const { findCommandImport } = require(".");
 const {
   verifyPrefix,

@@ -174,14 +174,28 @@ exports.findCommandImport = (commandName) => {
       continue;
     }
 
-    const targetCommand = commands.find((cmd) =>
-      cmd.commands.map((cmd) => this.formatCommand(cmd)).includes(commandName)
-    );
+    try {
+      const targetCommand = commands.find((cmd) => {
+        if (!cmd?.commands || !Array.isArray(cmd.commands)) {
+          errorLog(
+            `Erro no comando do tipo "${type}": A propriedade "commands" precisa existir ser um ["array"] com os nomes dos comandos! Arquivo errado: ${cmd.name}.js`
+          );
 
-    if (targetCommand) {
-      typeReturn = type;
-      targetCommandReturn = targetCommand;
-      break;
+          return false;
+        }
+
+        return cmd.commands
+          .map((cmdName) => this.formatCommand(cmdName))
+          .includes(commandName);
+      });
+
+      if (targetCommand) {
+        typeReturn = type;
+        targetCommandReturn = targetCommand;
+        break;
+      }
+    } catch (error) {
+      console.error(`Erro ao processar comandos do tipo "${type}":`, error);
     }
   }
 

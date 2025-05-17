@@ -1,8 +1,6 @@
 const fs = require("node:fs");
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const { catBoxUpload } = require(`${BASE_DIR}/services/catbox`);
 const { getRandomNumber } = require(`${BASE_DIR}/utils`);
 

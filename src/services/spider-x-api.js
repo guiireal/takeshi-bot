@@ -8,6 +8,9 @@ const axios = require("axios");
 
 const { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = require("../config");
 
+/**
+ * Não configure o token da Spider X API aqui, configure em: src/config.js
+ */
 function spiderAPITokenConfigured() {
   return SPIDER_API_TOKEN && SPIDER_API_TOKEN !== "seu_token_aqui";
 }
@@ -99,7 +102,7 @@ exports.ttp = async (text) => {
   )}&api_key=${SPIDER_API_TOKEN}`;
 };
 
-exports.googleSearch = async (search) => {
+exports.search = async (type, search) => {
   if (!search) {
     throw new Error("Você precisa informar o parâmetro de pesquisa!");
   }
@@ -109,25 +112,7 @@ exports.googleSearch = async (search) => {
   }
 
   const { data } = await axios.get(
-    `${SPIDER_API_BASE_URL}/search/google?search=${encodeURIComponent(
-      search
-    )}&api_key=${SPIDER_API_TOKEN}`
-  );
-
-  return data;
-};
-
-exports.youtubeSearch = async (search) => {
-  if (!search) {
-    throw new Error("Você precisa informar o parâmetro de pesquisa!");
-  }
-
-  if (!spiderAPITokenConfigured()) {
-    throw new Error("Token da API do Spider X não configurado");
-  }
-
-  const { data } = await axios.get(
-    `${SPIDER_API_BASE_URL}/search/youtube?search=${encodeURIComponent(
+    `${SPIDER_API_BASE_URL}/search/${type}?search=${encodeURIComponent(
       search
     )}&api_key=${SPIDER_API_TOKEN}`
   );

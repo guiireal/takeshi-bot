@@ -1,8 +1,6 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { ttp } = require(`${BASE_DIR}/services/spider-x-api`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 
 module.exports = {
   name: "ttp",

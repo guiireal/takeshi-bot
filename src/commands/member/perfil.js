@@ -2,9 +2,7 @@ const { isGroup } = require(`${BASE_DIR}/utils`);
 const { errorLog } = require(`${BASE_DIR}/utils/logger`);
 
 const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const {
-  InvalidParameterError,
-} = require(`${BASE_DIR}/errors/InvalidParameterError`);
+const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const { getProfileImageData } = require(`${BASE_DIR}/services/baileys`);
 
 module.exports = {
@@ -74,11 +72,12 @@ module.exports = {
       const beautyLevel = Math.floor(Math.random() * 100) + 1;
 
       const mensagem = `
-👤 *Nome:* @${targetJid.split("@")[0]}\n
-🎖️ *Cargo:* ${userRole}\n
-🌚 *Programa:* R$ ${programPrice}\n
-🐮 *Gado:* ${randomPercent + 7 || 5}%\n
-🎱 *Passiva:* ${randomPercent + 5 || 10}%\n
+👤 *Nome:* @${targetJid.split("@")[0]}
+🎖️ *Cargo:* ${userRole}
+
+🌚 *Programa:* R$ ${programPrice}
+🐮 *Gado:* ${randomPercent + 7 || 5}%
+🎱 *Passiva:* ${randomPercent + 5 || 10}%
 ✨ *Beleza:* ${beautyLevel}%`;
 
       const mentions = [targetJid];
