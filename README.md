@@ -272,8 +272,10 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Desligar o bot no grupo | ✅ | Dono | ❌
 | Ligar o bot no grupo | ✅ | Dono | ❌
 | Obter o ID do grupo | ✅ | Dono | ❌
+| Abrir grupo | ✅ | Admin | ❌
 | Anti link | ✅ | Admin | ❌
 | Banir membros | ✅ | Admin | ❌
+| Fechar grupo | ✅ | Admin | ❌
 | Ligar/desligar auto responder | ✅ | Admin | ❌
 | Ligar/desligar boas vindas | ✅ | Admin | ❌
 | Ligar/desligar saída de grupo | ✅ | Admin | ❌
@@ -299,7 +301,6 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Sticker | ✅ | Membro | ❌
 | Sticker IA | ✅ | Membro | ✅
 | Sticker para imagem | ✅ | Membro | ❌
-| TikTok search | ✅ | Membro | ✅
 | TikTok video download | ✅ | Membro | ✅
 | YT MP3 | ✅ | Membro | ✅
 | YT MP4 | ✅ | Membro | ✅
