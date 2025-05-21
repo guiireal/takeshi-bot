@@ -1,4 +1,7 @@
 /*
+ * Este arquivo index.js é o mesmo existente em "src/index.js", ele só está aqui
+ * para facilitar a execução do bot em algumas hosts.
+ *
  * Se você clicou aqui é porque provavelmente já usou um bot de "case" e com um "index.js" de 20 mil linhas...
  * Eu sei, eu entendo você!
  * O que é melhor? Dar erro no seu play, você ir no arquivo "play.js" e corrigir

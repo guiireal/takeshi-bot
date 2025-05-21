@@ -29,10 +29,12 @@ exports.menuMessage = () => {
 
 ╭━━⪩ ADMINS ⪨━━
 ▢
+▢ • ${PREFIX}abrir
 ▢ • ${PREFIX}anti-link (1/0)
 ▢ • ${PREFIX}auto-responder (1/0)
 ▢ • ${PREFIX}ban
 ▢ • ${PREFIX}exit (1/0)
+▢ • ${PREFIX}fechar
 ▢ • ${PREFIX}hidetag
 ▢ • ${PREFIX}limpar
 ▢ • ${PREFIX}promover
@@ -50,7 +52,6 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}perfil
 ▢ • ${PREFIX}ping
 ▢ • ${PREFIX}sticker
-▢ • ${PREFIX}tik-tok-search
 ▢ • ${PREFIX}to-image
 ▢ • ${PREFIX}ttp
 ▢ • ${PREFIX}yt-search
