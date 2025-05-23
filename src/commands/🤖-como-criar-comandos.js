@@ -8,6 +8,7 @@
  * Pasta member: Comandos que podem ser executados por qualquer membro do grupo
  *
  * Funções e variáveis que podem ser extraídas do handle em "handle: async ({ aqui })"
+ * O que você pode extrair do handle está definido em src/@types/index.d.ts
  * Cuidado, respeite letras maiúsculas e minúsculas!
  */
 const { PREFIX } = require(`${BASE_DIR}/config`);
