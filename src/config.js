@@ -53,4 +53,4 @@ exports.PROXY_PROTOCOL = "http";
 exports.PROXY_HOST = "ip";
 exports.PROXY_PORT = "porta";
 exports.PROXY_USERNAME = "usuário";
-exports.PROXY_PASSWORD = "seha";
+exports.PROXY_PASSWORD = "senha";
