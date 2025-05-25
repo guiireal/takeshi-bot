@@ -39,14 +39,14 @@ const {
 const NodeCache = require("node-cache");
 const { TEMP_DIR } = require("./config");
 
-const msgRetryCounterCache = new NodeCache();
-
 const logger = pino(
   { timestamp: () => `,"time":"${new Date().toJSON()}"` },
   pino.destination(path.join(TEMP_DIR, "wa-logs.txt"))
 );
 
 logger.level = "error";
+
+const msgRetryCounterCache = new NodeCache();
 
 async function connect(groupCache) {
   const baileysFolder = path.resolve(
@@ -64,20 +64,21 @@ async function connect(groupCache) {
   const socket = makeWASocket({
     version,
     logger,
-    printQRInTerminal: false,
     defaultQueryTimeoutMs: undefined,
+    retryRequestDelayMs: 600 * 1000,
     auth: {
       creds: state.creds,
       keys: makeCacheableSignalKeyStore(state.keys, logger),
     },
     shouldIgnoreJid: (jid) =>
       isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
-    keepAliveIntervalMs: 30 * 1000,
+    keepAliveIntervalMs: 60 * 1000,
+    maxMsgRetryCount: 5,
     markOnlineOnConnect: true,
     syncFullHistory: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
-    cachedGroupMetadata: async (jid) => groupCache.get(jid),
+    cachedGroupMetadata: (jid) => groupCache.get(jid),
   });
 
   if (!socket.authState.creds.registered) {

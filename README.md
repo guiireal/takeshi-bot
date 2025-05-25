@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-3.8.0-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-4.0.0-blue">
     </a>
 </div>
 
@@ -265,7 +265,8 @@ Para obter seu token, acesse: [https://api.spiderx.com.br](https://api.spiderx.c
 ```js
 exports.SPIDER_API_TOKEN = "seu_token_aqui";
 ```
-## Funcionalidades
+
+## Funcionalidades Gerais
 
 | Função | Online? | Contexto | Requer a Spider X API?
 | ------------ | --- | --- | ---
@@ -304,8 +305,85 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | TikTok video download | ✅ | Membro | ✅
 | YT MP3 | ✅ | Membro | ✅
 | YT MP4 | ✅ | Membro | ✅
-| YT MP4 | ✅ | Membro | ✅
 | YT search | ✅ | Membro | ✅
+
+## Funcionalidades de Envio (Exemplos)
+
+### 🎵 Exemplos de áudio
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-audio-de-arquivo` | Enviar áudio de arquivo | Demonstra envio de arquivos de áudio do armazenamento local | Opção de mensagem de voz, resposta citada |
+| `/enviar-audio-de-url` | Enviar áudio de URL | Demonstra envio de arquivos de áudio de URLs externas | Opção de mensagem de voz, resposta citada |
+| `/enviar-audio-de-buffer` | Enviar áudio de buffer | Demonstra envio de arquivos de áudio de buffers de memória | Opção de mensagem de voz, resposta citada, buffer de arquivo ou URL |
+
+### 🖼️ Exemplos de imagem
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-imagem-de-arquivo` | Enviar imagem de arquivo | Demonstra envio de arquivos de imagem do armazenamento local | Suporte a legenda personalizada, menções, resposta citada |
+| `/enviar-imagem-de-url` | Enviar imagem de URL | Demonstra envio de arquivos de imagem de URLs externas | Envio direto de URL, suporte a menções, resposta citada |
+| `/enviar-imagem-de-buffer` | Enviar imagem de buffer | Demonstra envio de arquivos de imagem de buffers de memória | Buffer de arquivo ou URL, legenda opcional, menções, resposta citada |
+
+### 🎬 Exemplos de vídeo
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-video-de-arquivo` | Enviar vídeo de arquivo | Demonstra envio de arquivos de vídeo do armazenamento local | Suporte a legenda personalizada, menções, resposta citada |
+| `/enviar-video-de-url` | Enviar vídeo de URL | Demonstra envio de arquivos de vídeo de URLs externas | Envio direto de URL, suporte a menções, resposta citada |
+| `/enviar-video-de-buffer` | Enviar vídeo de buffer | Demonstra envio de arquivos de vídeo de buffers de memória | Buffer de arquivo ou URL, legenda opcional, menções, resposta citada |
+
+### 🎞️ Exemplos de GIF
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-gif-de-arquivo` | Enviar GIF de arquivo | Demonstra envio de arquivos GIF do armazenamento local | Suporte a legenda, menções, resposta citada |
+| `/enviar-gif-de-url` | Enviar GIF de URL | Demonstra envio de arquivos GIF de URLs externas | Suporte a legenda, menções, resposta citada |
+| `/enviar-gif-de-buffer` | Enviar GIF de buffer | Demonstra envio de arquivos GIF de buffers de memória | Buffer de arquivo ou URL, legenda, menções, resposta citada |
+
+### 🎭 Exemplos de sticker
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-sticker-de-arquivo` | Enviar sticker de arquivo | Demonstra envio de arquivos sticker do armazenamento local | Formato WebP |
+| `/enviar-sticker-de-url` | Enviar sticker de URL | Demonstra envio de arquivos sticker de URLs externas | Formato WebP |
+| `/enviar-sticker-de-buffer` | Enviar sticker de buffer | Demonstra envio de arquivos sticker de buffers de memória | Buffer de arquivo ou URL |
+
+### 📊 Exemplos de enquete/votação
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-enquete` | Enviar enquete | Demonstra como criar e enviar enquetes/votações em grupos | Suporte a escolha única ou múltipla escolha |
+
+### 📄 Exemplos de documento
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-documento-de-arquivo` | Enviar documento de arquivo | Demonstra envio de arquivos de documento do armazenamento local | Especificação de tipo MIME, nome de arquivo personalizado |
+| `/enviar-documento-de-url` | Enviar documento de URL | Demonstra envio de arquivos de documento de URLs externas | Especificação de tipo MIME, nome de arquivo personalizado |
+| `/enviar-documento-de-buffer` | Enviar documento de buffer | Demonstra envio de arquivos de documento de buffers de memória | Buffer de arquivo ou URL, tipo MIME, nome de arquivo personalizado |
+
+### 💬 Exemplos de mensagem
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-texto` | Enviar texto | Demonstra envio de mensagens de texto simples | Suporte a menções |
+| `/enviar-resposta` | Enviar resposta | Demonstra envio de mensagens de resposta | Respostas de sucesso/erro/aviso |
+| `/enviar-reacoes` | Enviar reações | Demonstra envio de emojis de reação | Várias reações emoji, reações de sucesso/erro/aviso |
+
+### 📊 Exemplos de metadados
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/obter-metadados-mensagem` | Obter metadados da mensagem | Demonstra extração avançada de metadados de mensagem ou mensagem citada | Análise detalhada, suporte a resposta de mensagens, informações técnicas, menções automáticas |
+| `/obter-dados-grupo` | Obter dados do grupo | Demonstra extração de informações do grupo | Metadados do grupo, lista de participantes, informações de admin |
+| `/funcoes-grupo` | Funções do grupo | Demonstra uso de funções utilitárias do grupo | Extração de nome, dono, admins, participantes do grupo |
+
+### 🎯 Central de exemplos
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/exemplos-baileys` | Central de exemplos | Central com lista de todos os exemplos disponíveis | Menu interativo, acesso direto a todos os exemplos |
 
 ## Auto responder
 
@@ -324,11 +402,111 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     {
         "match": "Qual seu nome",
         "answer": "Meu nome é Takeshi Bot"
-    },
-
-    // coloque mais objetos json
+    }
 ]
 ```
+
+## Implementação técnica dos exemplos
+
+### 📁 Localização dos comandos de exemplo
+Todos os comandos de exemplo estão localizados em: `src/commands/member/exemplos/`
+
+### 🛠️ Funções disponíveis
+Todos os comandos de exemplo utilizam funções de `src/utils/loadCommonFunctions.js`:
+
+#### Funções de áudio
+- `sendAudioFromFile(filePath, asVoice, quoted)`
+- `sendAudioFromURL(url, asVoice, quoted)`
+- `sendAudioFromBuffer(buffer, asVoice, quoted)`
+
+#### Funções de imagem
+- `sendImageFromFile(filePath, caption, mentions, quoted)`
+- `sendImageFromURL(url, caption, mentions, quoted)`
+- `sendImageFromBuffer(buffer, caption, mentions, quoted)`
+
+#### Funções de Vídeo
+- `sendVideoFromFile(filePath, caption, mentions, quoted)`
+- `sendVideoFromURL(url, caption, mentions, quoted)`
+- `sendVideoFromBuffer(buffer, caption, mentions, quoted)`
+
+#### Funções de GIF
+- `sendGifFromFile(file, caption, mentions, quoted)`
+- `sendGifFromURL(url, caption, mentions, quoted)`
+- `sendGifFromBuffer(buffer, caption, mentions, quoted)`
+
+#### Funções de sticker
+- `sendStickerFromFile(filePath, quoted)`
+- `sendStickerFromURL(url, quoted)`
+- `sendStickerFromBuffer(buffer, quoted)`
+
+#### Funções de documento
+- `sendDocumentFromFile(filePath, mimetype, fileName, quoted)`
+- `sendDocumentFromURL(url, mimetype, fileName, quoted)`
+- `sendDocumentFromBuffer(buffer, mimetype, fileName, quoted)`
+
+#### Funções de mensagem
+- `sendText(text, mentions)`
+- `sendReply(text)`
+- `sendReact(emoji)`
+- `sendSuccessReply(text)`, `sendErrorReply(text)`, `sendWarningReply(text)`
+- `sendSuccessReact()`, `sendErrorReact()`, `sendWarningReact()`
+
+#### Funções Utilitárias de Grupo
+- `getGroupMetadata()` - Obter metadados completos do grupo
+- `getGroupName()` - Obter apenas o nome do grupo
+- `getGroupOwner()` - Obter informações do dono do grupo
+- `getGroupParticipants()` - Obter todos os participantes do grupo
+- `getGroupAdmins()` - Obter administradores do grupo
+
+### 🎯 Exemplos de Uso com Menções
+
+#### Enviar imagem com menções
+```javascript
+await sendImageFromFile("./assets/image.jpg", "Olá @5511999999999!", ["5511999999999@s.whatsapp.net"]);
+
+await sendImageFromURL(
+  "https://exemplo.com/imagem.png", 
+  "Olá @5511999999999 e @5511888888888!", 
+  ["5511999999999@s.whatsapp.net", "5511888888888@s.whatsapp.net"]
+);
+```
+
+#### Enviar vídeo com menções
+```javascript
+await sendVideoFromFile("./assets/video.mp4", "Confira este vídeo @5511999999999!", ["5511999999999@s.whatsapp.net"]);
+
+const buffer = fs.readFileSync("./video.mp4");
+await sendVideoFromBuffer(
+  buffer, 
+  "Vídeo especial para @5511999999999 e @5511888888888!", 
+  ["5511999999999@s.whatsapp.net", "5511888888888@s.whatsapp.net"]
+);
+```
+
+#### Enviar GIF com menções
+```javascript
+await sendGifFromFile(
+  "./assets/gif.mp4", 
+  "Tá ai @5511999999999!", 
+  ["5511999999999@s.whatsapp.net"]
+);
+```
+
+### 🎯 Suporte TypeScript
+Definições completas do TypeScript estão disponíveis em `src/@types/index.d.ts` com:
+- Assinaturas de função detalhadas
+- Descrições de parâmetros
+- Exemplos de uso
+- Especificações de tipo de retorno
+
+### 📁 Arquivos de exemplo
+Todos os arquivos de exemplo são armazenados em `assets/samples/`:
+- `sample-audio.mp3` - Arquivo de áudio para teste
+- `sample-document.pdf` - Documento PDF para teste
+- `sample-document.txt` - Documento de texto para teste
+- `sample-image.jpg` - Arquivo de imagem para teste
+- `sample-sticker.webp` - Arquivo de sticker para teste
+- `sample-video.mp4` - Arquivo de vídeo para teste
 
 ## Estrutura de pastas
 
@@ -336,6 +514,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     - 📁 auth ➔ _arquivos da conexão do bot_
     - 📁 images ➔ _arquivos de imagem_
         - 📁 funny ➔ _gifs de comandos de diversão_
+    - 📁 samples ➔ _arquivos de exemplo para testes_
     - 📁 temp ➔ _arquivos temporários_
 - 📁 database ➔ _arquivos de dados_
 - 📁 node_modules ➔ _módulos do Node.js_
@@ -344,6 +523,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     - 📁 commands ➔ _pasta onde ficam os comandos_
         - 📁 admin ➔ _pasta onde ficam os comandos administrativos_
         - 📁 member ➔ _pasta onde ficam os comandos gerais (todos poderão utilizar)_
+            - 📁 exemplos ➔ _pasta com 24 comandos de exemplo_
         - 📁 owner ➔ _pasta onde ficam os comandos de dono (grupo e bot)_
         - 📝🤖-como-criar-comandos.js ➔ _arquivo de exemplo de como criar um comando_
     - 📁 errors ➔ _classes de erros usadas nos comandos_
@@ -391,7 +571,6 @@ Adicione novamente um novo dispositivo.
 
 ![erro comum 2](./assets/images/erro-comum-2.png)
 
-
 Abra o termux, digite `termux-setup-storage` e depois, aceite as permissões
 
 ## Inscreva-se no canal!
@@ -414,6 +593,7 @@ Isso significa que:
 O que você não pode fazer:
 
 - Não pode transformar este código em algo proprietário (fechado) e impedir outras pessoas de acessá-lo ou usá-lo.
+
 Esta licença garante que todos tenham acesso ao código-fonte e podem colaborar livremente, promovendo o compartilhamento e o aprimoramento do projeto.
 
 ## ⚠ Disclaimer

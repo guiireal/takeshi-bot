@@ -1,0 +1,18 @@
+Este é um arquivo de texto de exemplo criado para demonstrar 
+o envio de documentos via WhatsApp Bot usando Baileys.
+
+Conteúdo do arquivo:
+- Data de criação: 2025-05-25
+- Tipo: Arquivo de texto simples
+- Uso: Exemplo para testes de envio de documentos
+- Encoding: UTF-8
+
+Este arquivo pode ser usado nos exemplos:
+1. enviar-documento-de-arquivo
+2. enviar-documento-de-buffer 
+3. Como base para outros exemplos
+
+O arquivo contém texto em português para testar a codificação
+e pode ser usado para demonstrar diferentes tipos de documentos.
+
+Fim do arquivo de exemplo.

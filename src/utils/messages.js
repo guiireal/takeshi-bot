@@ -4,6 +4,7 @@
  * @author Dev Gui
  */
 const { BOT_NAME, PREFIX } = require("../config");
+const packageInfo = require("../../package.json");
 
 exports.waitMessage = "Carregando dados...";
 
@@ -16,6 +17,7 @@ exports.menuMessage = () => {
 ▢ • Data: ${date.toLocaleDateString("pt-br")}
 ▢ • Hora: ${date.toLocaleTimeString("pt-br")}
 ▢ • Prefixo: ${PREFIX}
+▢ • Versão: ${packageInfo.version}
 ▢
 ╰━━─「🪐」─━━
 
@@ -48,9 +50,11 @@ exports.menuMessage = () => {
 ▢
 ▢ • ${PREFIX}attp
 ▢ • ${PREFIX}cep
+▢ • ${PREFIX}exemplos-de-mensagens
 ▢ • ${PREFIX}google-search
 ▢ • ${PREFIX}perfil
 ▢ • ${PREFIX}ping
+▢ • ${PREFIX}raw-message
 ▢ • ${PREFIX}sticker
 ▢ • ${PREFIX}to-image
 ▢ • ${PREFIX}ttp

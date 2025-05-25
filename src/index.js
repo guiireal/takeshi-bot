@@ -104,6 +104,9 @@ const safeLoad = async (socket, groupCache, retryCount = 0) => {
 
 async function start() {
   try {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    process.setMaxListeners(1500);
+
     bannerLog();
     infoLog("Iniciando meus componentes internos...");
 

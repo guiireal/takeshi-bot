@@ -47,3 +47,10 @@ exports.ONLY_GROUP_ID = "";
 
 // Diretório base do projeto.
 exports.BASE_DIR = path.resolve(__dirname);
+
+// Caso queira usar proxy.
+exports.PROXY_PROTOCOL = "http";
+exports.PROXY_HOST = "ip";
+exports.PROXY_PORT = "porta";
+exports.PROXY_USERNAME = "usuário";
+exports.PROXY_PASSWORD = "seha";
