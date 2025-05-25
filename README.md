@@ -266,7 +266,7 @@ Para obter seu token, acesse: [https://api.spiderx.com.br](https://api.spiderx.c
 exports.SPIDER_API_TOKEN = "seu_token_aqui";
 ```
 
-## Funcionalidades Gerais
+## Funcionalidades gerais
 
 | Função | Online? | Contexto | Requer a Spider X API?
 | ------------ | --- | --- | ---
@@ -307,7 +307,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | YT MP4 | ✅ | Membro | ✅
 | YT search | ✅ | Membro | ✅
 
-## Funcionalidades de Envio (Exemplos)
+## Funcionalidades de envio (Exemplos)
 
 ### 🎵 Exemplos de áudio
 
