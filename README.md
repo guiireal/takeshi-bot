@@ -38,6 +38,12 @@ Caso seu bot seja o oficial da Bronxys,
 interaja conosco e receba suporte através do grupo:
 [https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT](https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT)
 
+## Sobre este projeto
+
+Este projeto não possui qualquer vínculo oficial com o WhatsApp. Ele foi desenvolvido de forma independente para interações automatizadas por meio da plataforma.
+
+Não nos responsabilizamos por qualquer uso indevido deste bot. É de responsabilidade exclusiva do usuário garantir que sua utilização esteja em conformidade com os termos de uso do WhatsApp e a legislação vigente.
+
 ## Instalação no Termux
 
 1 - Abra o Termux e execute os comandos abaixo.<br/>
