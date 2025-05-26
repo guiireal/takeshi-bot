@@ -457,14 +457,14 @@ Todos os comandos de exemplo utilizam funções de `src/utils/loadCommonFunction
 - `sendSuccessReply(text)`, `sendErrorReply(text)`, `sendWarningReply(text)`
 - `sendSuccessReact()`, `sendErrorReact()`, `sendWarningReact()`
 
-#### Funções Utilitárias de Grupo
+#### Funções utilitárias de grupo
 - `getGroupMetadata()` - Obter metadados completos do grupo
 - `getGroupName()` - Obter apenas o nome do grupo
 - `getGroupOwner()` - Obter informações do dono do grupo
 - `getGroupParticipants()` - Obter todos os participantes do grupo
 - `getGroupAdmins()` - Obter administradores do grupo
 
-### 🎯 Exemplos de Uso com Menções
+### 🎯 Exemplos de uso com menções
 
 #### Enviar imagem com menções
 ```javascript
