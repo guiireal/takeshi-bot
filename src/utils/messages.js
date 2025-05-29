@@ -51,6 +51,7 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}attp
 ▢ • ${PREFIX}cep
 ▢ • ${PREFIX}exemplos-de-mensagens
+▢ • ${PREFIX}get-lid
 ▢ • ${PREFIX}google-search
 ▢ • ${PREFIX}perfil
 ▢ • ${PREFIX}ping

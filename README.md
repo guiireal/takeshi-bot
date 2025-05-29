@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-4.0.0-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-4.1.0-blue">
     </a>
 </div>
 
@@ -107,11 +107,19 @@ exports.BOT_EMOJI = "🤖";
 // Nome do bot (mude se preferir).
 exports.BOT_NAME = "Takeshi Bot";
 
-// Número do bot. Coloque o número do bot (apenas números).
+// Número do bot. Coloque o número do bot
+// (apenas números, exatamente como está no WhatsApp).
+// Se o seu DDD não for de SP ou do RJ, não coloque o 9 antes do número.
 exports.BOT_NUMBER = "5511920202020";
 
-// Número do dono do bot. Coloque o número do dono do bot (apenas números).
+// Número do dono do bot. Coloque o número do dono do bot
+// (apenas números, exatamente como está no WhatsApp).
+// Se o seu DDD não for de SP ou do RJ, não coloque o 9 antes do número.
 exports.OWNER_NUMBER = "5511999999999";
+
+// LID do dono do bot.
+// Para obter o LID do dono do bot, use o comando <prefixo>get-lid @marca ou +telefone do dono
+exports.OWNER_LID = "219999999999999@lid";
 ```
 
 12 - Inicie o bot novamente.
