@@ -1,5 +1,6 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+const { onlyNumbers } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
   name: "get-lid",
@@ -17,16 +18,11 @@ module.exports = {
       );
     }
 
-    const [result] = await socket.onWhatsApp(args[0].trim());
+    const [result] = await socket.onWhatsApp(onlyNumbers(args[0]));
 
-    const onWhatsApp = result.exists;
     const jid = result.jid;
     const lid = result?.lid;
 
-    await sendSuccessReply(
-      `O número ${args[0]} ${onWhatsApp ? "possui" : "não possui"} WhatsApp.
-
-JID: ${jid}${lid ? `\nLID: ${lid}` : ""}`
-    );
+    await sendSuccessReply(`JID: ${jid}${lid ? `\nLID: ${lid}` : ""}`);
   },
 };
