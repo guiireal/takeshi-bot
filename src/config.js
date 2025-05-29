@@ -20,7 +20,7 @@ exports.BOT_NUMBER = "558112345678";
 exports.OWNER_NUMBER = "5521950502020";
 
 // LID do dono do bot.
-// Para obter o LID do dono do bot, use o comando <prefixo>get-lid @marca ou +telefone do dono
+// Para obter o LID do dono do bot, use o comando <prefixo>get-lid @marca ou +telefone do dono.
 exports.OWNER_LID = "219999999999999@lid";
 
 // Diretório dos comandos
