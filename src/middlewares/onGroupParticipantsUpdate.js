@@ -98,7 +98,7 @@ exports.onGroupParticipantsUpdate = async ({
             throw new Error("Link inválido");
           }
 
-          const url = exit("Adeus!", "Você foi um bom membro", link);
+          const url = exit("membro", "Você foi um bom membro", link);
 
           await socket.sendMessage(remoteJid, {
             image: { url },
