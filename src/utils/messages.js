@@ -86,7 +86,7 @@ exports.menuMessage = () => {
 
 ╭━━⪩ IA ⪨━━
 ▢
-▢ • ${PREFIX}gpt-4
+▢ • ${PREFIX}gemini
 ▢ • ${PREFIX}ia-sticker
 ▢ • ${PREFIX}pixart
 ▢ • ${PREFIX}stable-diffusion-turbo
