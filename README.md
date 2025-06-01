@@ -306,8 +306,8 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Comandos de diversão/brincadeiras | ✅ | Membro | ✅
 | Figurinha de texto animada | ✅ | Membro | ✅
 | Geração de imagens com IA | ✅ | Membro | ❌
+| Google Gemini | ✅ | Membro | ✅
 | Google search | ✅ | Membro | ✅
-| GPT 4 | ✅ | Membro | ✅
 | Imagem IA PixArt | ✅ | Membro | ✅
 | Imagem IA Stable Diffusion Turbo | ✅ | Membro | ✅
 | Ping | ✅ | Membro | ❌
