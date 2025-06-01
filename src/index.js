@@ -138,7 +138,7 @@ async function startBot() {
           `BadMacHandler stats: ${currentStats.errorCount}/${currentStats.maxRetries} erros`
         );
       }
-    }, 300000);
+    }, 300_000);
   } catch (error) {
     if (badMacHandler.handleError(error, "bot-startup")) {
       warningLog("Erro Bad MAC durante inicialização, tentando novamente...");
