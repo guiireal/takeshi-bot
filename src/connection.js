@@ -15,7 +15,7 @@
  * @author Dev Gui
  */
 
-const path = require("path");
+const path = require("node:path");
 const { question, onlyNumbers } = require("./utils");
 const {
   default: makeWASocket,
@@ -38,6 +38,7 @@ const {
 } = require("./utils/logger");
 const NodeCache = require("node-cache");
 const { TEMP_DIR } = require("./config");
+const { badMacHandler } = require("./utils/badMacHandler");
 
 const logger = pino(
   { timestamp: () => `,"time":"${new Date().toJSON()}"` },
@@ -105,14 +106,48 @@ async function connect(groupCache) {
     const { connection, lastDisconnect } = update;
 
     if (connection === "close") {
-      const statusCode = lastDisconnect.error?.output?.statusCode;
+      const error = lastDisconnect?.error;
+      const statusCode = error?.output?.statusCode;
+
+      if (
+        error?.message?.includes("Bad MAC") ||
+        error?.toString()?.includes("Bad MAC")
+      ) {
+        errorLog("Bad MAC error na desconexão detectado");
+
+        if (badMacHandler.handleError(error, "connection.update")) {
+          if (badMacHandler.hasReachedLimit()) {
+            warningLog(
+              "Limite de erros Bad MAC atingido. Limpando arquivos de sessão problemáticos..."
+            );
+            badMacHandler.clearProblematicSessionFiles();
+            badMacHandler.resetErrorCount();
+
+            const newSocket = await connect(groupCache);
+            load(newSocket, groupCache);
+            return;
+          }
+        }
+      }
 
       if (statusCode === DisconnectReason.loggedOut) {
         errorLog("Bot desconectado!");
+        badMacErrorCount = 0;
       } else {
         switch (statusCode) {
           case DisconnectReason.badSession:
             warningLog("Sessão inválida!");
+
+            const sessionError = new Error("Bad session detected");
+            if (badMacHandler.handleError(sessionError, "badSession")) {
+              if (badMacHandler.hasReachedLimit()) {
+                warningLog(
+                  "Limite de erros de sessão atingido. Limpando arquivos de sessão..."
+                );
+                badMacHandler.clearProblematicSessionFiles();
+                badMacHandler.resetErrorCount();
+              }
+            }
             break;
           case DisconnectReason.connectionClosed:
             warningLog("Conexão fechada!");
@@ -142,6 +177,8 @@ async function connect(groupCache) {
       }
     } else if (connection === "open") {
       successLog("Fui conectado com sucesso!");
+      badMacErrorCount = 0;
+      badMacHandler.resetErrorCount();
     } else {
       infoLog("Atualizando conexão...");
     }

@@ -55,7 +55,7 @@ exports.download = async (type, url) => {
   return data;
 };
 
-exports.gpt4 = async (text) => {
+exports.gemini = async (text) => {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -65,7 +65,7 @@ exports.gpt4 = async (text) => {
   }
 
   const { data } = await axios.post(
-    `${SPIDER_API_BASE_URL}/ai/gpt-4?api_key=${SPIDER_API_TOKEN}`,
+    `${SPIDER_API_BASE_URL}/ai/gemini?api_key=${SPIDER_API_TOKEN}`,
     {
       text,
     }

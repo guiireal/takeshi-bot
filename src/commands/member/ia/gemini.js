@@ -1,12 +1,12 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { gpt4 } = require(`${BASE_DIR}/services/spider-x-api`);
+const { gemini } = require(`${BASE_DIR}/services/spider-x-api`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 
 module.exports = {
-  name: "gpt-4",
-  description: "Comandos de inteligência artificial!",
-  commands: ["gpt-4", "gpt", "takeshi"],
-  usage: `${PREFIX}gpt com quantos paus se faz uma canoa?`,
+  name: "gemini",
+  description: "Use a inteligência artificial da Google Gemini!",
+  commands: ["gemini", "takeshi"],
+  usage: `${PREFIX}gemini com quantos paus se faz uma canoa?`,
   /**
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
@@ -22,7 +22,7 @@ module.exports = {
 
     await sendWaitReply();
 
-    const responseText = await gpt4(text);
+    const responseText = await gemini(text);
 
     await sendSuccessReply(responseText);
   },

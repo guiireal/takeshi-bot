@@ -69,48 +69,48 @@
  *
  * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
-const NodeCache = require("node-cache");
 const { connect } = require("./src/connection");
 const { load } = require("./src/loader");
+const { badMacHandler } = require("./src/utils/badMacHandler");
 const {
-  infoLog,
-  bannerLog,
+  successLog,
   errorLog,
   warningLog,
+  bannerLog,
+  infoLog,
 } = require("./src/utils/logger");
+const NodeCache = require("node-cache");
 
-const safeLoad = async (socket, groupCache, retryCount = 0) => {
-  const MAX_RETRIES = 5;
-  const RETRY_DELAY = 10000;
+const groupCache = new NodeCache({
+  stdTTL: 3600,
+  checkperiod: 600,
+});
 
-  try {
-    load(socket, groupCache);
-    return true;
-  } catch (error) {
-    errorLog(`Erro ao carregar o bot: ${error.message}`);
-
-    if (retryCount < MAX_RETRIES) {
-      warningLog(
-        `Tentativa ${retryCount + 1}/${MAX_RETRIES} - Recriando conexão em ${
-          RETRY_DELAY / 1000
-        } segundos...`
-      );
-
-      await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
-
-      const newSocket = await connect(groupCache);
-
-      return await safeLoad(newSocket, groupCache, retryCount + 1);
-    } else {
-      errorLog(
-        `Número máximo de tentativas (${MAX_RETRIES}) atingido. O bot será encerrado.`
-      );
-      return false;
-    }
+process.on("uncaughtException", (error) => {
+  if (badMacHandler.handleError(error, "uncaughtException")) {
+    return;
   }
-};
 
-async function start() {
+  errorLog(`Erro crítico não capturado: ${error.message}`);
+  errorLog(error.stack);
+
+  if (
+    !error.message.includes("ENOTFOUND") &&
+    !error.message.includes("timeout")
+  ) {
+    process.exit(1);
+  }
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  if (badMacHandler.handleError(reason, "unhandledRejection")) {
+    return;
+  }
+
+  errorLog(`Promessa rejeitada não tratada:`, reason);
+});
+
+async function startBot() {
   try {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     process.setMaxListeners(1500);
@@ -118,18 +118,41 @@ async function start() {
     bannerLog();
     infoLog("Iniciando meus componentes internos...");
 
-    const groupCache = new NodeCache({ stdTTL: 5 * 60, useClones: false });
+    const stats = badMacHandler.getStats();
+    if (stats.errorCount > 0) {
+      warningLog(
+        `BadMacHandler stats: ${stats.errorCount}/${stats.maxRetries} erros`
+      );
+    }
+
     const socket = await connect(groupCache);
 
-    const loadSuccess = await safeLoad(socket, groupCache);
+    load(socket, groupCache);
 
-    if (!loadSuccess) {
-      errorLog("Não foi possível iniciar o bot após múltiplas tentativas.");
-    }
+    successLog("✅ Bot iniciado com sucesso!");
+
+    setInterval(() => {
+      const currentStats = badMacHandler.getStats();
+      if (currentStats.errorCount > 0) {
+        warningLog(
+          `BadMacHandler stats: ${currentStats.errorCount}/${currentStats.maxRetries} erros`
+        );
+      }
+    }, 300000);
   } catch (error) {
-    errorLog(`Erro fatal: ${error.message}`);
-    console.error(error);
+    if (badMacHandler.handleError(error, "bot-startup")) {
+      warningLog("Erro Bad MAC durante inicialização, tentando novamente...");
+
+      setTimeout(() => {
+        startBot();
+      }, 5000);
+      return;
+    }
+
+    errorLog(`Erro ao iniciar o bot: ${error.message}`);
+    errorLog(error.stack);
+    process.exit(1);
   }
 }
 
-start();
+startBot();
