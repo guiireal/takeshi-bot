@@ -66,14 +66,14 @@ async function connect(groupCache) {
     version,
     logger,
     defaultQueryTimeoutMs: undefined,
-    retryRequestDelayMs: 600 * 1000,
+    retryRequestDelayMs: 5000,
     auth: {
       creds: state.creds,
       keys: makeCacheableSignalKeyStore(state.keys, logger),
     },
     shouldIgnoreJid: (jid) =>
       isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
-    keepAliveIntervalMs: 60 * 1000,
+    keepAliveIntervalMs: 30_000,
     maxMsgRetryCount: 5,
     markOnlineOnConnect: true,
     syncFullHistory: false,
