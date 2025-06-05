@@ -471,10 +471,10 @@ Todos os comandos de exemplo utilizam funções de `src/utils/loadCommonFunction
 
 #### Funções de mensagem
 - `sendText(text, mentions)`
-- `sendReply(text)`
+- `sendReply(text, mentions)`
 - `sendReact(emoji)`
-- `sendSuccessReply(text)`, `sendErrorReply(text)`, `sendWarningReply(text)`
-- `sendSuccessReact()`, `sendErrorReact()`, `sendWarningReact()`
+- `sendSuccessReply(text, mentions)`, `sendErrorReply(text, mentions)`, `sendWarningReply(text, mentions)`, `sendWaitReply(text, mentions)`
+- `sendSuccessReact()`, `sendErrorReact()`, `sendWarningReact()`, `sendWaitReact()`
 
 #### Funções utilitárias de grupo
 - `getGroupMetadata()` - Obter metadados completos do grupo
