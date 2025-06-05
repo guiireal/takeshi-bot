@@ -30,35 +30,30 @@ module.exports = {
     isGroupWithLid,
     socket,
   }) => {
-    try {
-      if (!isGroup) {
-        throw new DangerError("Este comando só pode ser usado em grupos.");
-      }
-
-      if (!args.length) {
-        throw new DangerError(
-          `Você precisa mencionar um usuário para desmutar.\n\nExemplo: ${PREFIX}unmute @fulano`
-        );
-      }
-
-      const targetUserNumber = onlyNumbers(args[0]);
-      let targetUserJid = toUserJid(targetUserNumber);
-
-      if (isGroupWithLid) {
-        const [result] = await socket.onWhatsApp(targetUserNumber);
-        targetUserJid = result?.lid;
-      }
-
-      if (!checkIfMemberIsMuted(remoteJid, targetUserJid)) {
-        throw new WarningError("Este usuário não está silenciado!");
-      }
-
-      unmuteMember(remoteJid, targetUserJid);
-
-      await sendSuccessReply("Usuário desmutado com sucesso.");
-    } catch (error) {
-      console.error("Erro ao tentar desmutar o usuário:", error.message);
-      throw new DangerError("Ocorreu um erro ao tentar desmutar o usuário!");
+    if (!isGroup) {
+      throw new DangerError("Este comando só pode ser usado em grupos.");
     }
+
+    if (!args.length) {
+      throw new DangerError(
+        `Você precisa mencionar um usuário para desmutar.\n\nExemplo: ${PREFIX}unmute @fulano`
+      );
+    }
+
+    const targetUserNumber = onlyNumbers(args[0]);
+    let targetUserJid = toUserJid(targetUserNumber);
+
+    if (isGroupWithLid) {
+      const [result] = await socket.onWhatsApp(targetUserNumber);
+      targetUserJid = result?.lid;
+    }
+
+    if (!checkIfMemberIsMuted(remoteJid, targetUserJid)) {
+      throw new WarningError("Este usuário não está silenciado!");
+    }
+
+    unmuteMember(remoteJid, targetUserJid);
+
+    await sendSuccessReply("Usuário desmutado com sucesso.");
   },
 };

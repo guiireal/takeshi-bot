@@ -279,5 +279,5 @@ exports.checkIfMemberIsMuted = (groupId, memberId) => {
     return false;
   }
 
-  return mutedMembers[groupId].includes(memberId);
+  return mutedMembers[groupId]?.includes(memberId);
 };
