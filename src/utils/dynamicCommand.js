@@ -25,8 +25,9 @@ const {
 } = require("./database");
 const { errorLog } = require("../utils/logger");
 const { ONLY_GROUP_ID } = require("../config");
+const { badMacHandler } = require("./badMacHandler");
 
-exports.dynamicCommand = async (paramsHandler) => {
+exports.dynamicCommand = async (paramsHandler, startProcess) => {
   const {
     commandName,
     prefix,
@@ -98,8 +99,26 @@ exports.dynamicCommand = async (paramsHandler) => {
     await command.handle({
       ...paramsHandler,
       type,
+      startProcess,
     });
   } catch (error) {
+    if (badMacHandler.handleError(error, `command:${command.name}`)) {
+      await sendWarningReply(
+        "Erro temporário de sincronização. Tente novamente em alguns segundos."
+      );
+      return;
+    }
+
+    if (badMacHandler.isSessionError(error)) {
+      errorLog(
+        `Erro de sessão durante execução de comando ${command.name}: ${error.message}`
+      );
+      await sendWarningReply(
+        "Erro de comunicação. Tente executar o comando novamente."
+      );
+      return;
+    }
+
     if (error instanceof InvalidParameterError) {
       await sendWarningReply(`Parâmetros inválidos! ${error.message}`);
     } else if (error instanceof WarningError) {

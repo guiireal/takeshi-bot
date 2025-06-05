@@ -6,10 +6,10 @@
  *
  * @author Dev Gui
  */
-const { BOT_EMOJI } = require("../config");
+const { BOT_EMOJI, TIMEOUT_IN_MILLISECONDS_BY_EVENT } = require("../config");
 const { extractDataFromMessage, baileysIs, download } = require(".");
-const { waitMessage } = require("./messages");
 const fs = require("node:fs");
+const { delay } = require("baileys");
 
 exports.loadCommonFunctions = ({ socket, webMessage }) => {
   const {
@@ -32,6 +32,22 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
   const isVideo = baileysIs(webMessage, "video");
   const isSticker = baileysIs(webMessage, "sticker");
 
+  const sendTypingState = async (anotherJid = "") => {
+    const sendToJid = anotherJid || remoteJid;
+
+    await socket.sendPresenceUpdate("composing", sendToJid);
+
+    await delay(TIMEOUT_IN_MILLISECONDS_BY_EVENT);
+  };
+
+  const sendRecordState = async (anotherJid = "") => {
+    const sendToJid = anotherJid || remoteJid;
+
+    await socket.sendPresenceUpdate("recording", sendToJid);
+
+    await delay(TIMEOUT_IN_MILLISECONDS_BY_EVENT);
+  };
+
   const downloadImage = async (webMessage, fileName) => {
     return await download(webMessage, fileName, "image", "png");
   };
@@ -45,6 +61,8 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
   };
 
   const sendText = async (text, mentions) => {
+    await sendTypingState();
+
     let optionalParams = {};
 
     if (mentions?.length) {
@@ -57,10 +75,18 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     });
   };
 
-  const sendReply = async (text) => {
+  const sendReply = async (text, mentions) => {
+    await sendTypingState();
+
+    let optionalParams = {};
+
+    if (mentions?.length) {
+      optionalParams = { mentions };
+    }
+
     return await socket.sendMessage(
       remoteJid,
-      { text: `${BOT_EMOJI} ${text}` },
+      { text: `${BOT_EMOJI} ${text}`, ...optionalParams },
       { quoted: webMessage }
     );
   };
@@ -90,24 +116,27 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     return await sendReact("❌");
   };
 
-  const sendSuccessReply = async (text) => {
+  const sendSuccessReply = async (text, mentions) => {
     await sendSuccessReact();
-    return await sendReply(`✅ ${text}`);
+    return await sendReply(`✅ ${text}`, mentions);
   };
 
-  const sendWaitReply = async (text) => {
+  const sendWaitReply = async (text, mentions) => {
     await sendWaitReact();
-    return await sendReply(`⏳ Aguarde! ${text || waitMessage}`);
+    return await sendReply(
+      `⏳ Aguarde! ${text || "Carregando dados..."}`,
+      mentions
+    );
   };
 
-  const sendWarningReply = async (text) => {
+  const sendWarningReply = async (text, mentions) => {
     await sendWarningReact();
-    return await sendReply(`⚠️ Atenção! ${text}`);
+    return await sendReply(`⚠️ Atenção! ${text}`, mentions);
   };
 
-  const sendErrorReply = async (text) => {
+  const sendErrorReply = async (text, mentions) => {
     await sendErrorReact();
-    return await sendReply(`❌ Erro! ${text}`);
+    return await sendReply(`❌ Erro! ${text}`, mentions);
   };
 
   const sendStickerFromFile = async (file, quoted = true) => {
@@ -218,7 +247,10 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     asVoice = false,
     quoted = true
   ) => {
+    await sendRecordState();
+
     const quotedObject = quoted ? { quoted: webMessage } : {};
+
     return await socket.sendMessage(
       remoteJid,
       {
@@ -237,7 +269,10 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     asVoice = false,
     quoted = true
   ) => {
+    await sendRecordState();
+
     const quotedObject = quoted ? { quoted: webMessage } : {};
+
     return await socket.sendMessage(
       remoteJid,
       {
@@ -252,7 +287,10 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
   };
 
   const sendAudioFromURL = async (url, asVoice = false, quoted = true) => {
+    await sendRecordState();
+
     const quotedObject = quoted ? { quoted: webMessage } : {};
+
     return await socket.sendMessage(
       remoteJid,
       {
@@ -505,6 +543,20 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
   };
 
   const isGroup = !!remoteJid?.endsWith("@g.us");
+  const isGroupWithLid = !!userJid?.endsWith("@lid");
+
+  const deleteMessage = async (key) => {
+    const { id, remoteJid, participant } = key;
+
+    const deleteKey = {
+      remoteJid,
+      fromMe: false,
+      id,
+      participant,
+    };
+
+    await socket.sendMessage(remoteJid, { delete: deleteKey });
+  };
 
   const getGroupMetadata = async (groupJid = remoteJid) => {
     if (!groupJid.endsWith("@g.us")) {
@@ -558,6 +610,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     fullArgs,
     fullMessage,
     isGroup,
+    isGroupWithLid,
     isImage,
     isReply,
     isSticker,
@@ -568,6 +621,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     socket,
     userJid,
     webMessage,
+    deleteMessage,
     downloadImage,
     downloadSticker,
     downloadVideo,
@@ -590,15 +644,17 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     sendImageFromBuffer,
     sendImageFromFile,
     sendImageFromURL,
-    sendReact,
-    sendReply,
     sendPoll,
+    sendReact,
+    sendRecordState,
+    sendReply,
     sendStickerFromBuffer,
     sendStickerFromFile,
     sendStickerFromURL,
     sendSuccessReact,
     sendSuccessReply,
     sendText,
+    sendTypingState,
     sendVideoFromBuffer,
     sendVideoFromFile,
     sendVideoFromURL,

@@ -14,25 +14,26 @@ const NOT_WELCOME_GROUPS_FILE = "not-welcome-groups";
 const NOT_EXIT_GROUPS_FILE = "not-exit-groups";
 const INACTIVE_AUTO_RESPONDER_GROUPS_FILE = "inactive-auto-responder-groups";
 const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
+const MUTE_FILE = "muted";
 
-function createIfNotExists(fullPath) {
+function createIfNotExists(fullPath, formatIfNotExists = []) {
   if (!fs.existsSync(fullPath)) {
-    fs.writeFileSync(fullPath, JSON.stringify([]));
+    fs.writeFileSync(fullPath, JSON.stringify(formatIfNotExists));
   }
 }
 
-function readJSON(jsonFile) {
+function readJSON(jsonFile, formatIfNotExists = []) {
   const fullPath = path.resolve(databasePath, `${jsonFile}.json`);
 
-  createIfNotExists(fullPath);
+  createIfNotExists(fullPath, formatIfNotExists);
 
   return JSON.parse(fs.readFileSync(fullPath, "utf8"));
 }
 
-function writeJSON(jsonFile, data) {
+function writeJSON(jsonFile, data, formatIfNotExists = []) {
   const fullPath = path.resolve(databasePath, `${jsonFile}.json`);
 
-  createIfNotExists(fullPath);
+  createIfNotExists(fullPath, formatIfNotExists);
 
   fs.writeFileSync(fullPath, JSON.stringify(data));
 }
@@ -233,4 +234,50 @@ exports.isActiveExitGroup = (groupId) => {
   const notExitGroups = readJSON(filename);
 
   return !notExitGroups.includes(groupId);
+};
+
+exports.muteMember = (groupId, memberId) => {
+  const filename = MUTE_FILE;
+
+  const mutedMembers = readJSON(filename, "{}");
+
+  if (!mutedMembers[groupId]) {
+    mutedMembers[groupId] = [];
+  }
+
+  if (!mutedMembers[groupId].includes(memberId)) {
+    mutedMembers[groupId].push(memberId);
+  }
+
+  writeJSON(filename, mutedMembers);
+};
+
+exports.unmuteMember = (groupId, memberId) => {
+  const filename = MUTE_FILE;
+
+  const mutedMembers = readJSON(filename, "{}");
+
+  if (!mutedMembers[groupId]) {
+    return;
+  }
+
+  const index = mutedMembers[groupId].indexOf(memberId);
+
+  if (index !== -1) {
+    mutedMembers[groupId].splice(index, 1);
+  }
+
+  writeJSON(filename, mutedMembers);
+};
+
+exports.checkIfMemberIsMuted = (groupId, memberId) => {
+  const filename = MUTE_FILE;
+
+  const mutedMembers = readJSON(filename, "{}");
+
+  if (!mutedMembers[groupId]) {
+    return false;
+  }
+
+  return mutedMembers[groupId].includes(memberId);
 };

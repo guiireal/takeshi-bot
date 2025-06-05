@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const { catBoxUpload } = require(`${BASE_DIR}/services/catbox`);
+const { imgbbUpload } = require(`${BASE_DIR}/services/img-bb`);
 const { getRandomNumber } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
@@ -35,7 +36,17 @@ module.exports = {
     );
 
     const buffer = fs.readFileSync(filePath);
-    const link = await catBoxUpload(buffer);
+
+    let link = null;
+
+    try {
+      link = await catBoxUpload(buffer);
+    } catch (error) {
+      console.log(error);
+      link = await imgbbUpload(buffer, {
+        name: `upload-${getRandomNumber(1000, 9999)}`,
+      });
+    }
 
     await sendSuccessReact();
 

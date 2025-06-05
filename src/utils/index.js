@@ -239,6 +239,8 @@ exports.onlyNumbers = onlyNumbers;
 
 exports.toUserJid = (number) => `${onlyNumbers(number)}@s.whatsapp.net`;
 
+exports.toUserLid = (value) => `${onlyNumbers(value)}@lid`;
+
 exports.getBuffer = (url, options) => {
   return new Promise((resolve, reject) => {
     axios({
@@ -263,6 +265,11 @@ exports.getBuffer = (url, options) => {
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+exports.readMore = () => {
+  const invisibleBreak = "\u200B".repeat(950);
+  return invisibleBreak;
+};
 
 exports.getRandomNumber = getRandomNumber;
 

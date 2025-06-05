@@ -11,6 +11,8 @@ module.exports = {
     "help-exemplos",
     "exemplo-de-mensagem",
     "exemplo-de-mensagens",
+    "enviar-exemplos",
+    "enviar-exemplo",
   ],
   usage: `${PREFIX}exemplos-de-mensagens`,
   /**

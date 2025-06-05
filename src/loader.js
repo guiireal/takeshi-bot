@@ -31,6 +31,7 @@ exports.load = (socket, groupCache) => {
   };
 
   socket.ev.on("messages.upsert", async (data) => {
+    const startProcess = Date.now();
     setTimeout(() => {
       safeEventHandler(
         () =>
@@ -38,24 +39,12 @@ exports.load = (socket, groupCache) => {
             socket,
             messages: data.messages,
             groupCache,
+            startProcess,
           }),
         data,
         "messages.upsert"
       );
     }, TIMEOUT_IN_MILLISECONDS_BY_EVENT);
-  });
-
-  socket.ev.on("creds.update", async (creds) => {
-    try {
-    } catch (error) {
-      if (error.message && error.message.includes("Bad MAC")) {
-        errorLog(
-          "Bad MAC error durante atualização de credenciais, ignorando..."
-        );
-        return;
-      }
-      errorLog(`Erro ao atualizar credenciais: ${error.message}`);
-    }
   });
 
   process.on("uncaughtException", (error) => {

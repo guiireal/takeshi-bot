@@ -1,15 +1,21 @@
-const { PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
+/**
+ * Desenvolvido por: Dev Gui
+ * Implementação dos metadados feita por: MRX
+ *
+ * @author Dev Gui
+ */
+const { getRandomName } = require(`${BASE_DIR}/utils`);
+const { PREFIX, BOT_NAME } = require(`${BASE_DIR}/config`);
+const { addStickerMetadata } = require(`${BASE_DIR}/services/sticker`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const path = require("path");
-const fs = require("fs");
-const { exec } = require("child_process");
-const { getRandomNumber } = require(`${BASE_DIR}/utils`);
+const fs = require("node:fs");
+const ffmpeg = require("fluent-ffmpeg");
 
 module.exports = {
   name: "sticker",
-  description: "Faço figurinhas de imagem/gif/vídeo",
-  commands: ["s", "sticker", "fig", "f"],
-  usage: `${PREFIX}sticker (marque a imagem/gif/vídeo) ou ${PREFIX}sticker (responda a imagem/gif/vídeo)`,
+  description: "Cria figurinhas de imagem, gif ou vídeo (máximo 10 segundos).",
+  commands: ["f", "s", "sticker", "fig"],
+  usage: `${PREFIX}sticker (marque ou responda uma imagem/gif/vídeo)`,
   /**
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
@@ -21,76 +27,94 @@ module.exports = {
     downloadVideo,
     webMessage,
     sendErrorReply,
-    sendSuccessReact,
     sendWaitReact,
+    sendSuccessReact,
     sendStickerFromFile,
+    userJid,
   }) => {
     if (!isImage && !isVideo) {
       throw new InvalidParameterError(
-        "Você precisa marcar uma imagem/gif/vídeo ou responder a uma imagem/gif/vídeo"
+        `Você precisa marcar ou responder a uma imagem/gif/vídeo!`
       );
     }
 
     await sendWaitReact();
 
-    const outputPath = path.resolve(
-      TEMP_DIR,
-      `${getRandomNumber(10_000, 99_999)}.webp`
-    );
+    const username =
+      webMessage.pushName ||
+      webMessage.notifyName ||
+      userJid.replace(/@s.whatsapp.net/, "");
 
-    if (isImage) {
-      const inputPath = await downloadImage(webMessage, "input");
+    const metadata = {
+      username: username,
+      botName: `🤖 ${BOT_NAME}`,
+    };
 
-      exec(
-        `ffmpeg -i ${inputPath} -vf scale=512:512 ${outputPath}`,
-        async (error) => {
-          if (error) {
-            console.log(error);
-            fs.unlinkSync(inputPath);
-            throw new Error(error);
-          }
+    const outputPath = getRandomName("webp");
 
-          await sendSuccessReact();
+    try {
+      if (isImage) {
+        const inputPath = await downloadImage(webMessage, "input");
 
-          await sendStickerFromFile(outputPath);
-        }
-      );
-    } else {
-      const inputPath = await downloadVideo(webMessage, "input");
+        await new Promise((resolve, reject) => {
+          ffmpeg(inputPath)
+            .size("512x512")
+            .output(outputPath)
+            .on("end", resolve)
+            .on("error", reject)
+            .run();
+        });
 
-      const sizeInSeconds = 10;
-
-      const seconds =
-        webMessage.message?.videoMessage?.seconds ||
-        webMessage.message?.extendedTextMessage?.contextInfo?.quotedMessage
-          ?.videoMessage?.seconds;
-
-      const haveSecondsRule = seconds <= sizeInSeconds;
-
-      if (!haveSecondsRule) {
         fs.unlinkSync(inputPath);
+      } else {
+        const inputPath = await downloadVideo(webMessage, "input");
 
-        await sendErrorReply(`O vídeo que você enviou tem mais de ${sizeInSeconds} segundos!
+        const maxDuration = 10;
+        const seconds =
+          webMessage.message?.videoMessage?.seconds ||
+          webMessage.message?.extendedTextMessage?.contextInfo?.quotedMessage
+            ?.videoMessage?.seconds;
 
-Envie um vídeo menor!`);
+        if (!seconds || seconds > maxDuration) {
+          fs.unlinkSync(inputPath);
+          return sendErrorReply(
+            `O vídeo enviado tem mais de ${maxDuration} segundos! Envie um vídeo menor.`
+          );
+        }
 
-        return;
+        await new Promise((resolve, reject) => {
+          ffmpeg(inputPath)
+            .videoCodec("libwebp")
+            .size("512x512")
+            .fps(12)
+            .outputOptions([
+              "-fs 0.99M",
+              "-filter_complex [0:v] scale=512:512,fps=12,pad=512:512:-1:-1:color=white@0.0,split[a][b];[a]palettegen=reserve_transparent=on:transparency_color=ffffff[p];[b][p]paletteuse",
+            ])
+            .format("webp")
+            .output(outputPath)
+            .on("end", resolve)
+            .on("error", reject)
+            .run();
+        });
+
+        fs.unlinkSync(inputPath);
       }
 
-      exec(
-        `ffmpeg -i ${inputPath} -y -vcodec libwebp -fs 0.99M -filter_complex "[0:v] scale=512:512,fps=12,pad=512:512:-1:-1:color=white@0.0,split[a][b];[a]palettegen=reserve_transparent=on:transparency_color=ffffff[p];[b][p]paletteuse" -f webp ${outputPath}`,
-        async (error) => {
-          if (error) {
-            console.log(error);
-            fs.unlinkSync(inputPath);
-
-            throw new Error(error);
-          }
-
-          await sendSuccessReact();
-          await sendStickerFromFile(outputPath);
-        }
+      const stickerPath = await addStickerMetadata(
+        await fs.promises.readFile(outputPath),
+        metadata
       );
+
+      await sendSuccessReact();
+
+      await sendStickerFromFile(stickerPath);
+
+      fs.unlinkSync(outputPath);
+      fs.unlinkSync(stickerPath);
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Erro ao processar a figurinha: ${error.message}`);
     }
   },
 };

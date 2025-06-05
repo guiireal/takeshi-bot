@@ -4,7 +4,8 @@
  *
  * @author Dev Gui
  */
-const { OWNER_NUMBER } = require("../config");
+const { OWNER_NUMBER, OWNER_LID } = require("../config");
+const { toUserJid, toUserLid } = require("../utils");
 
 exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
   if (type === "member") {
@@ -27,7 +28,8 @@ exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
 
     const isAdmin = participant.admin === "admin";
 
-    const isBotOwner = userJid === `${OWNER_NUMBER}@s.whatsapp.net`;
+    const isBotOwner =
+      userJid === toUserJid(OWNER_NUMBER) || userJid === OWNER_LID;
 
     if (type === "admin") {
       return isOwner || isAdmin || isBotOwner;

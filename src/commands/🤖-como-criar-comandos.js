@@ -10,6 +10,8 @@
  * Funções e variáveis que podem ser extraídas do handle em "handle: async ({ aqui })"
  * O que você pode extrair do handle está definido em src/@types/index.d.ts
  * Cuidado, respeite letras maiúsculas e minúsculas!
+ *
+ * @author Dev Gui
  */
 const { PREFIX } = require(`${BASE_DIR}/config`);
 

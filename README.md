@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-4.2.0-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.0.0-blue">
     </a>
 </div>
 
@@ -23,7 +23,7 @@
 ## Tecnologias envolvidas
 
 - [Axios](https://axios-http.com/ptbr/docs/intro)
-- [Baileys 6.7.16](https://github.com/WhiskeySockets/Baileys)
+- [Baileys 6.7.18](https://github.com/WhiskeySockets/Baileys)
 - [FFMPEG](https://ffmpeg.org/)
 - [Node.js >= 22.14.0](https://nodejs.org/en)
 - [Spider X API](https://api.spiderx.com.br)
@@ -282,44 +282,55 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
 ## Funcionalidades gerais
 
-| Função | Online? | Contexto | Requer a Spider X API?
+| Função | Contexto | Requer a Spider X API?
 | ------------ | --- | --- | ---
-| Desligar o bot no grupo | ✅ | Dono | ❌
-| Ligar o bot no grupo | ✅ | Dono | ❌
-| Obter o ID do grupo | ✅ | Dono | ❌
-| Abrir grupo | ✅ | Admin | ❌
-| Anti link | ✅ | Admin | ❌
-| Banir membros | ✅ | Admin | ❌
-| Fechar grupo | ✅ | Admin | ❌
-| Ligar/desligar auto responder | ✅ | Admin | ❌
-| Ligar/desligar boas vindas | ✅ | Admin | ❌
-| Ligar/desligar saída de grupo | ✅ | Admin | ❌
-| Limpar chat | ✅ | Admin | ❌
-| Marcar todos | ✅ | Admin | ❌
-| Mudar nome do grupo | ✅ | Admin | ❌
-| Revelar | ✅ | Admin | ❌
-| Busca CEP | ✅ | Membro | ❌
-| Canvas Bolsonaro | ✅ | Membro | ✅
-| Canvas cadeia | ✅ | Membro | ✅
-| Canvas inverter | ✅ | Membro | ✅
-| Canvas RIP | ✅ | Membro | ✅
-| Comandos de diversão/brincadeiras | ✅ | Membro | ✅
-| Figurinha de texto animada | ✅ | Membro | ✅
-| Geração de imagens com IA | ✅ | Membro | ❌
-| Google Gemini | ✅ | Membro | ✅
-| Google search | ✅ | Membro | ✅
-| Imagem IA PixArt | ✅ | Membro | ✅
-| Imagem IA Stable Diffusion Turbo | ✅ | Membro | ✅
-| Ping | ✅ | Membro | ❌
-| Play áudio | ✅ | Membro | ✅
-| Play vídeo | ✅ | Membro | ✅
-| Sticker | ✅ | Membro | ❌
-| Sticker IA | ✅ | Membro | ✅
-| Sticker para imagem | ✅ | Membro | ❌
-| TikTok video download | ✅ | Membro | ✅
-| YT MP3 | ✅ | Membro | ✅
-| YT MP4 | ✅ | Membro | ✅
-| YT search | ✅ | Membro | ✅
+| Desligar o bot no grupo | Dono | ❌
+| Executar comandos de infra | Dono | ❌
+| Ligar o bot no grupo | Dono | ❌
+| Obter o ID do grupo | Dono | ❌
+| Abrir grupo | Admin | ❌
+| Agendar mensagem | Admin | ❌
+| Anti link | Admin | ❌
+| Banir membros | Admin | ❌
+| Fechar grupo | Admin | ❌
+| Ligar/desligar auto responder | Admin | ❌
+| Ligar/desligar boas vindas | Admin | ❌
+| Ligar/desligar saída de grupo | Admin | ❌
+| Limpar chat | Admin | ❌
+| Marcar todos | Admin | ❌
+| Mudar nome do grupo | Admin | ❌
+| Mute/unmute | Admin | ❌
+| Revelar | Admin | ❌
+| Borrar imagem | Membro | ❌
+| Busca CEP | Membro | ❌
+| Canvas Bolsonaro | Membro | ✅
+| Canvas cadeia | Membro | ✅
+| Canvas inverter | Membro | ✅
+| Canvas RIP | Membro | ✅
+| Comandos de diversão/brincadeiras | Membro |❌
+| Espelhar imagem | Membro | ❌
+| Fake chat | Membro | ❌
+| Figurinha de texto animada | Membro | ✅
+| Geração de imagens com IA | Membro | ✅
+| Gerar link | Membro | ❌
+| Google Gemini | Membro | ✅
+| Google search | Membro | ✅
+| Imagem com contraste | Membro | ❌
+| Imagem IA PixArt | Membro | ✅
+| Imagem IA Stable Diffusion Turbo | Membro | ✅
+| Imagem pixelada | Membro | ❌
+| Imagem preto/branco | Membro | ❌
+| Ping | Membro | ❌
+| Play áudio | Membro | ✅
+| Play vídeo | Membro | ✅
+| Renomear figurinha | Membro | ❌
+| Sticker | Membro | ❌
+| Sticker IA  | Membro | ✅
+| Sticker para imagem | Membro | ❌
+| TikTok video download | Membro | ✅
+| YT MP3 | Membro | ✅
+| YT MP4 | Membro | ✅
+| YT search | Membro | ✅
 
 ## Funcionalidades de envio (Exemplos)
 
@@ -544,17 +555,18 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
     - 📁 middlewares ➔ _interceptadores de requisições_
     - 📁 services ➔ _serviços diversos_
     - 📁 utils ➔ _utilitários_
-    - 📝 config.js ➔ _arquivo de configurações do Bot_
-    - 📝 connection.js ➔ _script de conexão do Bot com a biblioteca Baileys_
-    - 📝 index.js ➔ _script ponto de entrada do Bot_
+    - 📝 config.js ➔ _arquivo de configurações do bot_
+    - 📝 connection.js ➔ _script de conexão do bot com a biblioteca Baileys_
+    - 📝 index.js ➔ _script ponto de entrada do bot_
     - 📝 loader.js ➔ _script de carga de funções_
+    - 📝 menu.js ➔ _menu do bot_
     - 📝 test.js ➔ _script de testes_
 - ⚡-cases-estao-aqui ➔ _easter egg_ 
-- 📝 index.js ➔ _script ponto de entrada do Bot para hospedagem_
+- 📝 index.js ➔ _script ponto de entrada do bot para hospedagem_
 - 📝.gitignore ➔ _arquivo para não subir certas pastas no GitHub_
 - 📝LICENSE ➔ _arquivo de licença_
-- 📝package-lock.json ➔ _arquivo de cache das dependências do Bot_
-- 📝package.json ➔ _arquivo de definição das dependências do Bot_
+- 📝package-lock.json ➔ _arquivo de cache das dependências do bot_
+- 📝package.json ➔ _arquivo de definição das dependências do bot_
 - 📝README.md ➔ _esta documentação_
 
 ## Erros comuns

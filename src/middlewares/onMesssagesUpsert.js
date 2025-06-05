@@ -15,8 +15,14 @@ const { loadCommonFunctions } = require("../utils/loadCommonFunctions");
 const { onGroupParticipantsUpdate } = require("./onGroupParticipantsUpdate");
 const { errorLog } = require("../utils/logger");
 const { badMacHandler } = require("../utils/badMacHandler");
+const { checkIfMemberIsMuted } = require("../utils/database");
 
-exports.onMessagesUpsert = async ({ socket, messages, groupCache }) => {
+exports.onMessagesUpsert = async ({
+  socket,
+  messages,
+  groupCache,
+  startProcess,
+}) => {
   if (!messages.length) {
     return;
   }
@@ -51,7 +57,24 @@ exports.onMessagesUpsert = async ({ socket, messages, groupCache }) => {
           continue;
         }
 
-        await dynamicCommand(commonFunctions);
+        if (
+          checkIfMemberIsMuted(
+            commonFunctions.remoteJid,
+            commonFunctions.userJid
+          )
+        ) {
+          try {
+            await commonFunctions.deleteMessage(webMessage.key);
+          } catch (error) {
+            errorLog(
+              `Erro ao deletar mensagem de membro silenciado, provavelmente o bot não é administrador do grupo! ${error.message}`
+            );
+          }
+
+          return;
+        }
+
+        await dynamicCommand(commonFunctions, startProcess);
       }
     } catch (error) {
       if (badMacHandler.handleError(error, "message-processing")) {

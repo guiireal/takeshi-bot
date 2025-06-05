@@ -42,6 +42,11 @@ declare global {
     isGroup: boolean;
 
     /**
+     * Se a mensagem veio de um grupo cujos participantes possuem LID.
+     */
+    isGroupWithLid: boolean;
+
+    /**
      * Se a mensagem é uma imagem.
      */
     isImage: boolean;
@@ -82,6 +87,16 @@ declare global {
     socket: any;
 
     /**
+     * Timestamp em que o comando foi iniciado.
+     */
+    startProcess: number;
+
+    /**
+     * Tipo de comando por cargo, se é "admin", "owner" ou "member".
+     */
+    type: string;
+
+    /**
      * ID do usuário que está mandando a mensagem.
      */
     userJid: string;
@@ -90,6 +105,23 @@ declare global {
      * Informações detalhadas da mensagem do WhatsApp.
      */
     webMessage: any;
+
+    /**
+     * Exclui uma mensagem de um participante do WhatsApp.
+     * Precisa ser administrador do grupo para excluir mensagens de outros participantes.
+     *
+     *  Exemplo:
+     * ```javascript
+     * await deleteMessage(webMessage.key);
+     * ```
+     * @param key Chave de identificação da mensagem a ser deletada.
+     */
+    deleteMessage(key: {
+      remoteJid: string;
+      fromMe: boolean;
+      id: string;
+      participant: string;
+    }): Promise<void>;
 
     /**
      * Faz download de uma imagem da mensagem atual.
@@ -126,8 +158,8 @@ declare global {
      */
     sendAudioFromFile(
       filePath: string,
-      asVoice: boolean = false,
-      quoted: boolean = true
+      asVoice: boolean,
+      quoted: boolean
     ): Promise<void>;
 
     /**
@@ -151,8 +183,8 @@ declare global {
      */
     sendAudioFromBuffer(
       buffer: Buffer,
-      asVoice: boolean = false,
-      quoted: boolean = true
+      asVoice: boolean,
+      quoted: boolean
     ): Promise<void>;
 
     /**
@@ -168,25 +200,9 @@ declare global {
      */
     sendAudioFromURL(
       url: string,
-      asVoice: boolean = false,
-      quoted: boolean = true
+      asVoice: boolean,
+      quoted: boolean
     ): Promise<void>;
-
-    /**
-     * Envia uma reação de erro (emoji ❌) na mensagem.
-     */
-    sendErrorReact(): Promise<void>;
-
-    /**
-     * Envia uma mensagem de erro como resposta.
-     *
-     * Exemplo:
-     * ```javascript
-     * await sendErrorReply("Não foi possível encontrar resultados!");
-     * ```
-     * @param text Texto da mensagem de erro
-     */
-    sendErrorReply(text: string): Promise<void>;
 
     /**
      * Envia um gif a partir de um arquivo local.
@@ -328,15 +344,98 @@ declare global {
     sendReact(emoji: string): Promise<void>;
 
     /**
+     * Simula uma ação de gravação de áudio, enviando uma mensagem de estado.
+     *
+     * @param anotherJid ID de outro grupo/usuário para enviar o estado (opcional)
+     */
+    sendRecordState(anotherJid?: string): Promise<void>;
+
+    /**
+     * Envia uma reação de sucesso (emoji ✅) na mensagem
+     */
+    sendSuccessReact(): Promise<void>;
+
+    /**
+     * Simula uma ação de digitação, enviando uma mensagem de estado.
+     *
+     * @param anotherJid ID de outro grupo/usuário para enviar o estado (opcional)
+     */
+    sendTypingState(anotherJid?: string): Promise<void>;
+
+    /**
+     * Envia uma reação de erro (emoji ⏳) na mensagem.
+     */
+    sendWaitReact(): Promise<void>;
+
+    /**
+     * Envia uma reação de erro (emoji ⚠️) na mensagem.
+     */
+    sendWarningReact(): Promise<void>;
+
+    /**
+     * Envia uma reação de erro (emoji ❌) na mensagem.
+     */
+    sendErrorReact(): Promise<void>;
+
+    /**
      * Envia uma mensagem como resposta.
      *
      * Exemplo:
      * ```javascript
-     * await sendReply("Aqui está sua resposta!");
+     * await sendReply("Aqui está sua resposta!", [mentions]);
      * ```
      * @param text Texto da mensagem
+     * @param mentions Array opcional de IDs de usuários para mencionar
      */
-    sendReply(text: string): Promise<void>;
+    sendReply(text: string, mentions?: string[]): Promise<void>;
+
+    /**
+     * Envia uma mensagem de sucesso como resposta.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendSuccessReply("Operação concluída com sucesso!");
+     * ```
+     * @param text Texto da mensagem de sucesso
+     * @param mentions Array opcional de IDs de usuários para mencionar
+     */
+    sendSuccessReply(text: string, mentions?: string[]): Promise<void>;
+
+    /**
+     * Envia uma mensagem de atenção como resposta.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendWarningReply("Atenção! Algo não está certo.");
+     * ```
+     * @param text Texto da mensagem de erro
+     * @param mentions Array opcional de IDs de usuários para mencionar
+     */
+    sendWarningReply(text: string, mentions?: string[]): Promise<void>;
+
+    /**
+     * Envia uma mensagem de aguarde como resposta.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendWaitReply("Aguarde, estou processando sua solicitação...");
+     * ```
+     * @param text Texto da mensagem de erro
+     * @param mentions Array opcional de IDs de usuários para mencionar
+     */
+    sendWaitReply(text: string, mentions?: string[]): Promise<void>;
+
+    /**
+     * Envia uma mensagem de erro como resposta.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendErrorReply("Não foi possível encontrar resultados!");
+     * ```
+     * @param text Texto da mensagem de erro
+     * @param mentions Array opcional de IDs de usuários para mencionar
+     */
+    sendErrorReply(text: string, mentions?: string[]): Promise<void>;
 
     /**
      * Envia um sticker a partir de um arquivo local.
@@ -381,22 +480,6 @@ declare global {
      * @param quoted Se a mensagem deve ser enviada mencionando outra mensagem (true ou false)
      */
     sendStickerFromBuffer(buffer: Buffer, quoted?: boolean): Promise<void>;
-
-    /**
-     * Envia uma reação de sucesso (emoji ✅) na mensagem
-     */
-    sendSuccessReact(): Promise<void>;
-
-    /**
-     * Envia uma mensagem de sucesso como resposta.
-     *
-     * Exemplo:
-     * ```javascript
-     * await sendSuccessReply("Operação concluída com sucesso!");
-     * ```
-     * @param text Texto da mensagem de sucesso
-     */
-    sendSuccessReply(text: string): Promise<void>;
 
     /**
      * Envia uma mensagem de texto, opcionalmente mencionando usuários.
