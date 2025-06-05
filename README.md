@@ -283,7 +283,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 ## Funcionalidades gerais
 
 | Função | Contexto | Requer a Spider X API?
-| ------------ | --- | --- | ---
+| ------------ | --- | ---
 | Desligar o bot no grupo | Dono | ❌
 | Executar comandos de infra | Dono | ❌
 | Ligar o bot no grupo | Dono | ❌
