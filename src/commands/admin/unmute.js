@@ -54,6 +54,6 @@ module.exports = {
 
     unmuteMember(remoteJid, targetUserJid);
 
-    await sendSuccessReply("Usuário desmutado com sucesso.");
+    await sendSuccessReply("Usuário desmutado com sucesso!");
   },
 };
