@@ -88,8 +88,17 @@ module.exports = {
             .size("512x512")
             .fps(12)
             .outputOptions([
-              "-fs 0.99M",
-              "-filter_complex [0:v] scale=512:512,fps=12,pad=512:512:-1:-1:color=white@0.0,split[a][b];[a]palettegen=reserve_transparent=on:transparency_color=ffffff[p];[b][p]paletteuse",
+              "-fs",
+              "0.99M",
+              "-vf",
+              "scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:-1:-1:color=white@0.0",
+              "-loop",
+              "0",
+              "-preset",
+              "default",
+              "-an",
+              "-vsync",
+              "0",
             ])
             .format("webp")
             .output(outputPath)
