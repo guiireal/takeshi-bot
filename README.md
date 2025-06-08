@@ -36,7 +36,7 @@ Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por i
 
 Caso seu bot seja o oficial da Bronxys, 
 interaja conosco e receba suporte através do grupo:
-[https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT](https://chat.whatsapp.com/CaOn8owxr4zICaLkZdtyDT)
+[https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM)
 
 ## Sobre este projeto
 
