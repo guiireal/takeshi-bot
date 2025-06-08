@@ -82,10 +82,10 @@ exports.menuMessage = () => {
 ▢
 ▢ • ${PREFIX}abracar
 ▢ • ${PREFIX}beijar
+▢ • ${PREFIX}dado
 ▢ • ${PREFIX}jantar
 ▢ • ${PREFIX}lutar
 ▢ • ${PREFIX}matar
-▢ • ${PREFIX}rolar-dado
 ▢ • ${PREFIX}socar
 ▢
 ╰━━─「🎡」─━━
