@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
+    "dev": "node --watch ./src/index.js",
     "test": "node ./src/test.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL",
   "dependencies": {
     "@cacheable/node-cache": "^1.5.5",
     "axios": "^1.9.0",

@@ -4,9 +4,9 @@
  *
  * @author Dev Gui
  */
-const { getProfileImageData } = require("../services/baileys");
-const fs = require("fs");
+const fs = require("node:fs");
 const { onlyNumbers, randomDelay } = require("../utils");
+const { getProfileImageData } = require("../services/baileys");
 const {
   isActiveWelcomeGroup,
   isActiveExitGroup,
@@ -36,7 +36,7 @@ exports.onGroupParticipantsUpdate = async ({
     if (!remoteJid.endsWith("@g.us")) {
       return;
     }
-
+    
     if (action === "add") {
       const { buffer, profileImage } = await getProfileImageData(
         socket,

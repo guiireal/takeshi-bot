@@ -286,6 +286,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | ------------ | --- | ---
 | Desligar o bot no grupo | Dono | ❌
 | Executar comandos de infra | Dono | ❌
+| Mudar foto do menu | Dono | ❌
 | Ligar o bot no grupo | Dono | ❌
 | Obter o ID do grupo | Dono | ❌
 | Abrir grupo | Admin | ❌

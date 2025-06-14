@@ -1,7 +1,7 @@
 /**
  * Serviços de processamento de imagens usando ffmpeg.
  *
- * @author Mkg & MRX
+ * @author MRX
  */
 const fs = require("node:fs");
 const path = require("node:path");

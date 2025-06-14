@@ -1,5 +1,6 @@
 /**
- * Desenvolvido por: Mkg
+ * Desenvolvido por: MRX
+ * Adicionado por: Mkg
  * Refatorado por: Dev Gui
  *
  * @author Dev Gui

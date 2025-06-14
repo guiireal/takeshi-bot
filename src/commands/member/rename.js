@@ -1,3 +1,10 @@
+/**
+ * Desenvolvido por: MRX
+ * Refatorado por: Dev Gui
+ *
+ * @author Dev Gui
+ */
+
 const fs = require("node:fs");
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { InvalidParameterError, DangerError } = require(`${BASE_DIR}/errors`);

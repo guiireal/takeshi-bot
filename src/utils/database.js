@@ -12,272 +12,344 @@ const databasePath = path.resolve(__dirname, "..", "..", "database");
 const INACTIVE_GROUPS_FILE = "inactive-groups";
 const NOT_WELCOME_GROUPS_FILE = "not-welcome-groups";
 const NOT_EXIT_GROUPS_FILE = "not-exit-groups";
+const GROUP_MESSAGES_DATA_FILE = "groupMessagesData";
 const INACTIVE_AUTO_RESPONDER_GROUPS_FILE = "inactive-auto-responder-groups";
 const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const MUTE_FILE = "muted";
 
 function createIfNotExists(fullPath, formatIfNotExists = []) {
-  if (!fs.existsSync(fullPath)) {
-    fs.writeFileSync(fullPath, JSON.stringify(formatIfNotExists));
-  }
+    if (!fs.existsSync(fullPath)) {
+        fs.writeFileSync(fullPath, JSON.stringify(formatIfNotExists));
+    }
 }
 
 function readJSON(jsonFile, formatIfNotExists = []) {
-  const fullPath = path.resolve(databasePath, `${jsonFile}.json`);
+    const fullPath = path.resolve(databasePath, `${jsonFile}.json`);
 
-  createIfNotExists(fullPath, formatIfNotExists);
+    createIfNotExists(fullPath, formatIfNotExists);
 
-  return JSON.parse(fs.readFileSync(fullPath, "utf8"));
+    return JSON.parse(fs.readFileSync(fullPath, "utf8"));
 }
 
 function writeJSON(jsonFile, data, formatIfNotExists = []) {
-  const fullPath = path.resolve(databasePath, `${jsonFile}.json`);
+    const fullPath = path.resolve(databasePath, `${jsonFile}.json`);
 
-  createIfNotExists(fullPath, formatIfNotExists);
+    createIfNotExists(fullPath, formatIfNotExists);
 
-  fs.writeFileSync(fullPath, JSON.stringify(data));
+    fs.writeFileSync(fullPath, JSON.stringify(data));
 }
 
-exports.activateGroup = (groupId) => {
-  const filename = INACTIVE_GROUPS_FILE;
+exports.activateGroup = groupId => {
+    const filename = INACTIVE_GROUPS_FILE;
 
-  const inactiveGroups = readJSON(filename);
+    const inactiveGroups = readJSON(filename);
 
-  const index = inactiveGroups.indexOf(groupId);
+    const index = inactiveGroups.indexOf(groupId);
 
-  if (index === -1) {
-    return;
-  }
+    if (index === -1) {
+        return;
+    }
 
-  inactiveGroups.splice(index, 1);
+    inactiveGroups.splice(index, 1);
 
-  writeJSON(filename, inactiveGroups);
+    writeJSON(filename, inactiveGroups);
 };
 
-exports.deactivateGroup = (groupId) => {
-  const filename = INACTIVE_GROUPS_FILE;
+exports.deactivateGroup = groupId => {
+    const filename = INACTIVE_GROUPS_FILE;
 
-  const inactiveGroups = readJSON(filename);
+    const inactiveGroups = readJSON(filename);
 
-  if (!inactiveGroups.includes(groupId)) {
-    inactiveGroups.push(groupId);
-  }
+    if (!inactiveGroups.includes(groupId)) {
+        inactiveGroups.push(groupId);
+    }
 
-  writeJSON(filename, inactiveGroups);
+    writeJSON(filename, inactiveGroups);
 };
 
-exports.isActiveGroup = (groupId) => {
-  const filename = INACTIVE_GROUPS_FILE;
+exports.isActiveGroup = groupId => {
+    const filename = INACTIVE_GROUPS_FILE;
 
-  const inactiveGroups = readJSON(filename);
+    const inactiveGroups = readJSON(filename);
 
-  return !inactiveGroups.includes(groupId);
+    return !inactiveGroups.includes(groupId);
 };
 
-exports.activateWelcomeGroup = (groupId) => {
-  const filename = NOT_WELCOME_GROUPS_FILE;
+exports.activateWelcomeGroup = groupId => {
+    const filename = NOT_WELCOME_GROUPS_FILE;
 
-  const notWelcomeGroups = readJSON(filename);
+    const notWelcomeGroups = readJSON(filename);
 
-  const index = notWelcomeGroups.indexOf(groupId);
+    const index = notWelcomeGroups.indexOf(groupId);
 
-  if (index === -1) {
-    return;
-  }
+    if (index === -1) {
+        return;
+    }
 
-  notWelcomeGroups.splice(index, 1);
+    notWelcomeGroups.splice(index, 1);
 
-  writeJSON(filename, notWelcomeGroups);
+    writeJSON(filename, notWelcomeGroups);
 };
 
-exports.deactivateWelcomeGroup = (groupId) => {
-  const filename = NOT_WELCOME_GROUPS_FILE;
+exports.deactivateWelcomeGroup = groupId => {
+    const filename = NOT_WELCOME_GROUPS_FILE;
 
-  const notWelcomeGroups = readJSON(filename);
+    const notWelcomeGroups = readJSON(filename);
 
-  if (!notWelcomeGroups.includes(groupId)) {
-    notWelcomeGroups.push(groupId);
-  }
+    if (!notWelcomeGroups.includes(groupId)) {
+        notWelcomeGroups.push(groupId);
+    }
 
-  writeJSON(filename, notWelcomeGroups);
+    writeJSON(filename, notWelcomeGroups);
 };
 
-exports.isActiveWelcomeGroup = (groupId) => {
-  const filename = NOT_WELCOME_GROUPS_FILE;
+exports.isActiveWelcomeGroup = groupId => {
+    const filename = NOT_WELCOME_GROUPS_FILE;
 
-  const notWelcomeGroups = readJSON(filename);
+    const notWelcomeGroups = readJSON(filename);
 
-  return !notWelcomeGroups.includes(groupId);
+    return !notWelcomeGroups.includes(groupId);
 };
 
-exports.getAutoResponderResponse = (match) => {
-  const filename = "auto-responder";
+exports.getAutoResponderResponse = match => {
+    const filename = "auto-responder";
 
-  const responses = readJSON(filename);
+    const responses = readJSON(filename);
 
-  const matchUpperCase = match.toLocaleUpperCase();
+    const matchUpperCase = match.toLocaleUpperCase();
 
-  const data = responses.find(
-    (response) => response.match.toLocaleUpperCase() === matchUpperCase
-  );
+    const data = responses.find(
+        response => response.match.toLocaleUpperCase() === matchUpperCase
+    );
 
-  if (!data) {
-    return null;
-  }
+    if (!data) {
+        return null;
+    }
 
-  return data.answer;
+    return data.answer;
 };
 
-exports.activateAutoResponderGroup = (groupId) => {
-  const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
+exports.activateAutoResponderGroup = groupId => {
+    const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
 
-  const inactiveAutoResponderGroups = readJSON(filename);
+    const inactiveAutoResponderGroups = readJSON(filename);
 
-  const index = inactiveAutoResponderGroups.indexOf(groupId);
+    const index = inactiveAutoResponderGroups.indexOf(groupId);
 
-  if (index === -1) {
-    return;
-  }
+    if (index === -1) {
+        return;
+    }
 
-  inactiveAutoResponderGroups.splice(index, 1);
+    inactiveAutoResponderGroups.splice(index, 1);
 
-  writeJSON(filename, inactiveAutoResponderGroups);
+    writeJSON(filename, inactiveAutoResponderGroups);
 };
 
-exports.deactivateAutoResponderGroup = (groupId) => {
-  const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
+exports.deactivateAutoResponderGroup = groupId => {
+    const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
 
-  const inactiveAutoResponderGroups = readJSON(filename);
+    const inactiveAutoResponderGroups = readJSON(filename);
 
-  if (!inactiveAutoResponderGroups.includes(groupId)) {
-    inactiveAutoResponderGroups.push(groupId);
-  }
+    if (!inactiveAutoResponderGroups.includes(groupId)) {
+        inactiveAutoResponderGroups.push(groupId);
+    }
 
-  writeJSON(filename, inactiveAutoResponderGroups);
+    writeJSON(filename, inactiveAutoResponderGroups);
 };
 
-exports.isActiveAutoResponderGroup = (groupId) => {
-  const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
+exports.isActiveAutoResponderGroup = groupId => {
+    const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
 
-  const inactiveAutoResponderGroups = readJSON(filename);
+    const inactiveAutoResponderGroups = readJSON(filename);
 
-  return !inactiveAutoResponderGroups.includes(groupId);
+    return !inactiveAutoResponderGroups.includes(groupId);
 };
 
-exports.activateAntiLinkGroup = (groupId) => {
-  const filename = ANTI_LINK_GROUPS_FILE;
+exports.activateAntiLinkGroup = groupId => {
+    const filename = ANTI_LINK_GROUPS_FILE;
 
-  const antiLinkGroups = readJSON(filename);
+    const antiLinkGroups = readJSON(filename);
 
-  if (!antiLinkGroups.includes(groupId)) {
-    antiLinkGroups.push(groupId);
-  }
+    if (!antiLinkGroups.includes(groupId)) {
+        antiLinkGroups.push(groupId);
+    }
 
-  writeJSON(filename, antiLinkGroups);
+    writeJSON(filename, antiLinkGroups);
 };
 
-exports.deactivateAntiLinkGroup = (groupId) => {
-  const filename = ANTI_LINK_GROUPS_FILE;
+exports.deactivateAntiLinkGroup = groupId => {
+    const filename = ANTI_LINK_GROUPS_FILE;
 
-  const antiLinkGroups = readJSON(filename);
+    const antiLinkGroups = readJSON(filename);
 
-  const index = antiLinkGroups.indexOf(groupId);
+    const index = antiLinkGroups.indexOf(groupId);
 
-  if (index === -1) {
-    return;
-  }
+    if (index === -1) {
+        return;
+    }
 
-  antiLinkGroups.splice(index, 1);
+    antiLinkGroups.splice(index, 1);
 
-  writeJSON(filename, antiLinkGroups);
+    writeJSON(filename, antiLinkGroups);
 };
 
-exports.isActiveAntiLinkGroup = (groupId) => {
-  const filename = ANTI_LINK_GROUPS_FILE;
+exports.isActiveAntiLinkGroup = groupId => {
+    const filename = ANTI_LINK_GROUPS_FILE;
 
-  const antiLinkGroups = readJSON(filename);
+    const antiLinkGroups = readJSON(filename);
 
-  return antiLinkGroups.includes(groupId);
+    return antiLinkGroups.includes(groupId);
 };
 
-exports.activateExitGroup = (groupId) => {
-  const filename = NOT_EXIT_GROUPS_FILE;
+exports.activateExitGroup = groupId => {
+    const filename = NOT_EXIT_GROUPS_FILE;
 
-  const notExitGroups = readJSON(filename);
+    const notExitGroups = readJSON(filename);
 
-  const index = notExitGroups.indexOf(groupId);
+    const index = notExitGroups.indexOf(groupId);
 
-  if (index === -1) {
-    return;
-  }
+    if (index === -1) {
+        return;
+    }
 
-  notExitGroups.splice(index, 1);
+    notExitGroups.splice(index, 1);
 
-  writeJSON(filename, notExitGroups);
+    writeJSON(filename, notExitGroups);
 };
 
-exports.deactivateExitGroup = (groupId) => {
-  const filename = NOT_EXIT_GROUPS_FILE;
+exports.deactivateExitGroup = groupId => {
+    const filename = NOT_EXIT_GROUPS_FILE;
 
-  const notExitGroups = readJSON(filename);
+    const notExitGroups = readJSON(filename);
 
-  if (!notExitGroups.includes(groupId)) {
-    notExitGroups.push(groupId);
-  }
+    if (!notExitGroups.includes(groupId)) {
+        notExitGroups.push(groupId);
+    }
 
-  writeJSON(filename, notExitGroups);
+    writeJSON(filename, notExitGroups);
 };
 
-exports.isActiveExitGroup = (groupId) => {
-  const filename = NOT_EXIT_GROUPS_FILE;
+exports.isActiveExitGroup = groupId => {
+    const filename = NOT_EXIT_GROUPS_FILE;
 
-  const notExitGroups = readJSON(filename);
+    const notExitGroups = readJSON(filename);
 
-  return !notExitGroups.includes(groupId);
+    return !notExitGroups.includes(groupId);
 };
 
 exports.muteMember = (groupId, memberId) => {
-  const filename = MUTE_FILE;
+    const filename = MUTE_FILE;
 
-  const mutedMembers = readJSON(filename, "{}");
+    const mutedMembers = readJSON(filename, "{}");
 
-  if (!mutedMembers[groupId]) {
-    mutedMembers[groupId] = [];
-  }
+    if (!mutedMembers[groupId]) {
+        mutedMembers[groupId] = [];
+    }
 
-  if (!mutedMembers[groupId].includes(memberId)) {
-    mutedMembers[groupId].push(memberId);
-  }
+    if (!mutedMembers[groupId].includes(memberId)) {
+        mutedMembers[groupId].push(memberId);
+    }
 
-  writeJSON(filename, mutedMembers);
+    writeJSON(filename, mutedMembers);
 };
 
 exports.unmuteMember = (groupId, memberId) => {
-  const filename = MUTE_FILE;
+    const filename = MUTE_FILE;
 
-  const mutedMembers = readJSON(filename, "{}");
+    const mutedMembers = readJSON(filename, "{}");
 
-  if (!mutedMembers[groupId]) {
-    return;
-  }
+    if (!mutedMembers[groupId]) {
+        return;
+    }
 
-  const index = mutedMembers[groupId].indexOf(memberId);
+    const index = mutedMembers[groupId].indexOf(memberId);
 
-  if (index !== -1) {
-    mutedMembers[groupId].splice(index, 1);
-  }
+    if (index !== -1) {
+        mutedMembers[groupId].splice(index, 1);
+    }
 
-  writeJSON(filename, mutedMembers);
+    writeJSON(filename, mutedMembers);
 };
 
 exports.checkIfMemberIsMuted = (groupId, memberId) => {
-  const filename = MUTE_FILE;
+    const filename = MUTE_FILE;
 
-  const mutedMembers = readJSON(filename, "{}");
+    const mutedMembers = readJSON(filename, "{}");
 
-  if (!mutedMembers[groupId]) {
-    return false;
-  }
+    if (!mutedMembers[groupId]) {
+        return false;
+    }
 
-  return mutedMembers[groupId]?.includes(memberId);
+    return mutedMembers[groupId]?.includes(memberId);
+};
+
+exports.incrementMemberMessageCount = (groupId, memberId ) => {
+    const filename = GROUP_MESSAGES_DATA_FILE;
+
+    const groupMessageData = readJSON(filename, {});
+
+    if (!groupMessageData[groupId]) {
+        groupMessageData[groupId] = {};
+    }
+
+    if (!groupMessageData[groupId][memberId]) {
+        groupMessageData[groupId][memberId] = 1;
+    } else {
+        groupMessageData[groupId][memberId]++;
+    }
+
+    writeJSON(filename, groupMessageData);
+};
+
+exports.getMemberMessageCount = (groupId, memberId) => {
+    const filename = GROUP_MESSAGES_DATA_FILE;
+
+    const groupMessageData = readJSON(filename, {});
+
+    if (!groupMessageData[groupId] || !groupMessageData[groupId][memberId]) {
+        return 0;
+    }
+
+    return groupMessageData[groupId][memberId];
+};
+
+exports.getGroupMessageData = groupId => {
+    const filename = GROUP_MESSAGES_DATA_FILE;
+
+    const groupMessageData = readJSON(filename, {});
+
+    return groupMessageData[groupId] || {};
+};
+
+exports.getAllGroupMessageData = () => {
+    const filename = GROUP_MESSAGES_DATA_FILE;
+
+    return readJSON(filename, {});
+};
+
+exports.removeMemberMessageData = (groupId, memberId) => {
+    const filename = GROUP_MESSAGES_DATA_FILE;
+
+    const groupMessageData = readJSON(filename, {});
+
+    if (groupMessageData[groupId] && groupMessageData[groupId][memberId]) {
+        delete groupMessageData[groupId][memberId];
+
+        if (Object.keys(groupMessageData[groupId]).length === 0) {
+            delete groupMessageData[groupId];
+        }
+
+        writeJSON(filename, groupMessageData);
+    }
+};
+
+exports.removeGroupMessageData = groupId => {
+    const filename = GROUP_MESSAGES_DATA_FILE;
+
+    const groupMessageData = readJSON(filename, {});
+
+    if (groupMessageData[groupId]) {
+        delete groupMessageData[groupId];
+        writeJSON(filename, groupMessageData);
+    }
 };
