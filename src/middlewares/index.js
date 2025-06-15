@@ -37,28 +37,3 @@ exports.isAdmin = async ({ remoteJid, userJid, socket }) => {
 
   return isOwner || isAdmin;
 };
-
-exports.isBotAdmin = async ({ remoteJid, socket }) => {
-  try {
-    const { participants } = await socket.groupMetadata(remoteJid);
-
-    const botParticipant = participants.find(
-      (participant) => participant.id === botId
-    );
-
-    if (!botParticipant) {
-      return false;
-    }
-
-    const isBotAdmin =
-      botParticipant.admin === "admin" || botParticipant.admin === "superadmin";
-
-    return isBotAdmin;
-  } catch (error) {
-    errorLog(
-      `Erro ao verificar se o bot é administrador no grupo ${remoteJid}: ${error.message}`
-    );
-
-    return false;
-  }
-};

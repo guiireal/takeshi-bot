@@ -17,12 +17,7 @@ const { errorLog } = require("../utils/logger");
 const { badMacHandler } = require("../utils/badMacHandler");
 const { checkIfMemberIsMuted } = require("../utils/database");
 
-exports.onMessagesUpsert = async ({
-  socket,
-  messages,
-  groupCache,
-  startProcess,
-}) => {
+exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
   if (!messages.length) {
     return;
   }
@@ -47,7 +42,6 @@ exports.onMessagesUpsert = async ({
           userJid: webMessage.messageStubParameters[0],
           remoteJid: webMessage.key.remoteJid,
           socket,
-          groupCache,
           action,
         });
       } else {

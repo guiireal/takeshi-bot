@@ -1,5 +1,4 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { isBotAdmin } = require(`${BASE_DIR}/middlewares`);
 const { isGroup } = require(`${BASE_DIR}/utils`);
 const { errorLog } = require(`${BASE_DIR}/utils/logger`);
 
@@ -28,12 +27,6 @@ module.exports = {
       return sendWarningReply("Por favor, marque um usuário para promover.");
     }
 
-    if (!(await isBotAdmin({ remoteJid, socket }))) {
-      return sendWarningReply(
-        "Eu preciso ser administrador do grupo para promover outros membros !"
-      );
-    }
-
     const userId = args[0].replace("@", "") + "@s.whatsapp.net";
 
     try {
@@ -41,7 +34,9 @@ module.exports = {
       await sendSuccessReply("Usuário promovido com sucesso!");
     } catch (error) {
       errorLog(`Erro ao promover usuário: ${error.message}`);
-      await sendErrorReply("Ocorreu um erro ao tentar promover o usuário.");
+      await sendErrorReply(
+        "Ocorreu um erro ao tentar promover o usuário. Eu preciso ser administrador do grupo para promover outros usuários!"
+      );
     }
   },
 };

@@ -1,12 +1,12 @@
+const { PREFIX } = require(`${BASE_DIR}/config`);
 const { isGroup } = require(`${BASE_DIR}/utils`);
-const { DEFAULT_PREFIX } = require(`${BASE_DIR}/config`);
-const { isBotAdmin } = require(`${BASE_DIR}/middlewares`);
+const { errorLog } = require(`${BASE_DIR}/utils/logger`);
 
 module.exports = {
   name: "rebaixar",
   description: "Rebaixa um administrador para membro comum",
   commands: ["rebaixar", "rebaixa", "demote"],
-  usage: `${DEFAULT_PREFIX}rebaixar @usuario`,
+  usage: `${PREFIX}rebaixar @usuario`,
   /**
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
@@ -29,20 +29,16 @@ module.exports = {
       );
     }
 
-    if (!(await isBotAdmin({ remoteJid, socket }))) {
-      return sendWarningReply(
-        "Eu preciso ser administrador do grupo para rebaixar outros administradores !"
-      );
-    }
-
     const userId = args[0].replace("@", "") + "@s.whatsapp.net";
 
     try {
       await socket.groupParticipantsUpdate(remoteJid, [userId], "demote");
-      sendSuccessReply("Usuário rebaixado com sucesso!");
+      await sendSuccessReply("Usuário rebaixado com sucesso!");
     } catch (error) {
-      console.error(error);
-      sendErrorReply("Ocorreu um erro ao tentar rebaixar o usuário.");
+      errorLog(`Erro ao rebaixar administrador: ${error.message}`);
+      await sendErrorReply(
+        "Ocorreu um erro ao tentar rebaixar o usuário. Eu preciso ser administrador do grupo para rebaixar outros administradores!"
+      );
     }
   },
 };

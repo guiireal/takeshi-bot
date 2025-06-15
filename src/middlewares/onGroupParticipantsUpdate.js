@@ -23,7 +23,6 @@ exports.onGroupParticipantsUpdate = async ({
   userJid,
   remoteJid,
   socket,
-  groupCache,
   action,
 }) => {
   try {
@@ -77,9 +76,6 @@ exports.onGroupParticipantsUpdate = async ({
           mentions: [userJid],
         });
       }
-
-      const metadata = await socket.groupMetadata(remoteJid);
-      groupCache.set(remoteJid, metadata);
 
       if (!profileImage.includes("default-user")) {
         fs.unlinkSync(profileImage);

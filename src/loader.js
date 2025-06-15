@@ -12,7 +12,7 @@ const path = require("node:path");
 const { errorLog } = require("./utils/logger");
 const { badMacHandler } = require("./utils/badMacHandler");
 
-exports.load = (socket, groupCache) => {
+exports.load = (socket) => {
   global.BASE_DIR = path.resolve(__dirname);
   const safeEventHandler = async (callback, data, eventName) => {
     try {
@@ -38,7 +38,6 @@ exports.load = (socket, groupCache) => {
           onMessagesUpsert({
             socket,
             messages: data.messages,
-            groupCache,
             startProcess,
           }),
         data,

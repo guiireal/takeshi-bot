@@ -79,12 +79,6 @@ const {
   bannerLog,
   infoLog,
 } = require("./src/utils/logger");
-const NodeCache = require("node-cache");
-
-const groupCache = new NodeCache({
-  stdTTL: 3600,
-  checkperiod: 600,
-});
 
 process.on("uncaughtException", (error) => {
   if (badMacHandler.handleError(error, "uncaughtException")) {
@@ -125,9 +119,9 @@ async function startBot() {
       );
     }
 
-    const socket = await connect(groupCache);
+    const socket = await connect();
 
-    load(socket, groupCache);
+    load(socket);
 
     successLog("✅ Bot iniciado com sucesso!");
 

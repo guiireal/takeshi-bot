@@ -49,7 +49,7 @@ logger.level = "error";
 
 const msgRetryCounterCache = new NodeCache();
 
-async function connect(groupCache) {
+async function connect() {
   const baileysFolder = path.resolve(
     __dirname,
     "..",
@@ -79,7 +79,6 @@ async function connect(groupCache) {
     syncFullHistory: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
-    cachedGroupMetadata: (jid) => groupCache.get(jid),
   });
 
   if (!socket.authState.creds.registered) {
@@ -123,8 +122,8 @@ async function connect(groupCache) {
             badMacHandler.clearProblematicSessionFiles();
             badMacHandler.resetErrorCount();
 
-            const newSocket = await connect(groupCache);
-            load(newSocket, groupCache);
+            const newSocket = await connect();
+            load(newSocket);
             return;
           }
         }
@@ -172,8 +171,8 @@ async function connect(groupCache) {
             break;
         }
 
-        const newSocket = await connect(groupCache);
-        load(newSocket, groupCache);
+        const newSocket = await connect();
+        load(newSocket);
       }
     } else if (connection === "open") {
       successLog("Fui conectado com sucesso!");
