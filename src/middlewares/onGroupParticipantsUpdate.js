@@ -43,7 +43,7 @@ exports.onGroupParticipantsUpdate = async ({
         userJid
       );
 
-      if (spiderAPITokenConfigured()) {
+      if (spiderAPITokenConfigured) {
         try {
           const link = await catBoxUpload(buffer);
 
@@ -90,7 +90,7 @@ exports.onGroupParticipantsUpdate = async ({
         userJid
       );
 
-      if (spiderAPITokenConfigured()) {
+      if (spiderAPITokenConfigured) {
         try {
           const link = await catBoxUpload(buffer);
 
