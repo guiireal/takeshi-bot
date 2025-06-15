@@ -11,9 +11,8 @@ const { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = require("../config");
 /**
  * Não configure o token da Spider X API aqui, configure em: src/config.js
  */
-function spiderAPITokenConfigured() {
-  return SPIDER_API_TOKEN && SPIDER_API_TOKEN !== "seu_token_aqui";
-}
+const spiderAPITokenConfigured =
+  SPIDER_API_TOKEN && SPIDER_API_TOKEN !== "seu_token_aqui";
 
 exports.spiderAPITokenConfigured = spiderAPITokenConfigured;
 
@@ -22,7 +21,7 @@ exports.play = async (type, search) => {
     throw new Error("Você precisa informar o que deseja buscar!");
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -42,7 +41,7 @@ exports.download = async (type, url) => {
     );
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -60,7 +59,7 @@ exports.gemini = async (text) => {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -79,7 +78,7 @@ exports.attp = async (text) => {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -93,7 +92,7 @@ exports.ttp = async (text) => {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -107,7 +106,7 @@ exports.search = async (type, search) => {
     throw new Error("Você precisa informar o parâmetro de pesquisa!");
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -127,7 +126,7 @@ exports.welcome = (title, description, imageURL) => {
     );
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -145,7 +144,7 @@ exports.exit = (title, description, imageURL) => {
     );
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -161,7 +160,7 @@ exports.imageAI = async (type, description) => {
     throw new Error("Você precisa informar a descrição da imagem!");
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
@@ -181,7 +180,7 @@ exports.canvas = (type, imageURL) => {
     throw new Error("Você precisa informar a URL da imagem!");
   }
 
-  if (!spiderAPITokenConfigured()) {
+  if (!spiderAPITokenConfigured) {
     throw new Error("Token da API do Spider X não configurado");
   }
 
