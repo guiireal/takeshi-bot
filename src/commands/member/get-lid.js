@@ -1,5 +1,5 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+const { InvalidParameterError, WarningError } = require(`${BASE_DIR}/errors`);
 const { onlyNumbers } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
@@ -20,7 +20,13 @@ module.exports = {
 
     const [result] = await socket.onWhatsApp(onlyNumbers(args[0]));
 
-    const jid = result.jid;
+    if (!result) {
+      throw new WarningError(
+        "O número informado não está registrado no WhatsApp!"
+      );
+    }
+
+    const jid = result?.jid;
     const lid = result?.lid;
 
     await sendSuccessReply(`JID: ${jid}${lid ? `\nLID: ${lid}` : ""}`);
