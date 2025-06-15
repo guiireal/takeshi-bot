@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.0.3-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.1.0-blue">
     </a>
 </div>
 
@@ -284,6 +284,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
 | Função | Contexto | Requer a Spider X API?
 | ------------ | --- | ---
+| Alterar imagem do bot | Dono | ❌
 | Desligar o bot no grupo | Dono | ❌
 | Executar comandos de infra | Dono | ❌
 | Ligar o bot no grupo | Dono | ❌

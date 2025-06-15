@@ -1,7 +1,7 @@
 /**
  * Serviço de upload de imagens para o ImgBB
  *
- * @author Mkg & MRX
+ * @author MRX
  */
 const { errorLog } = require("../utils/logger");
 const axios = require("axios");

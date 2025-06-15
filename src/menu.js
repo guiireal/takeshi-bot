@@ -26,6 +26,7 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}get-id
 ▢ • ${PREFIX}off
 ▢ • ${PREFIX}on
+▢ • ${PREFIX}set-menu-image
 ▢
 ╰━━─「🌌」─━━
 
