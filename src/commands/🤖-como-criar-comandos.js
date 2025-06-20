@@ -24,7 +24,7 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({}) => {
+  handle: async ({ sendAudioFromBuffer }) => {
     // código do comando
   },
 };
