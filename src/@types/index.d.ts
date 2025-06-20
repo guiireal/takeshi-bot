@@ -125,21 +125,21 @@ declare global {
 
     /**
      * Faz download de uma imagem da mensagem atual.
-     * @returns Promise com o buffer da imagem
+     * @returns Promise com o caminho da imagem
      */
-    downloadImage(): Promise<Buffer>;
+    downloadImage(): Promise<string>;
 
     /**
      * Faz download de um sticker da mensagem atual.
-     * @returns Promise com o buffer do sticker
+     * @returns Promise com o caminho do sticker
      */
-    downloadSticker(): Promise<Buffer>;
+    downloadSticker(): Promise<string>;
 
     /**
      * Faz download de um vídeo da mensagem atual.
-     * @returns Promise com o buffer do vídeo
+     * @returns Promise com o caminho do vídeo
      */
-    downloadVideo(): Promise<Buffer>;
+    downloadVideo(): Promise<string>;
 
     /**
      * Envia um áudio a partir de um arquivo.
