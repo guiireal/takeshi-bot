@@ -1,4 +1,4 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
+const { PREFIX } = require(`${BASE_DIR}/config`);
 const { delay } = require("baileys");
 
 module.exports = {
