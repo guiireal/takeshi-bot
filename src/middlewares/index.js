@@ -3,18 +3,26 @@
  *
  * @author Dev Gui
  */
-const { PREFIX, BOT_NUMBER, OWNER_NUMBER } = require("../config");
+const { PREFIX, OWNER_NUMBER } = require("../config");
 const { toUserJid } = require("../utils");
-const { errorLog } = require("../utils/logger");
-
-const botId = `${BOT_NUMBER}@s.whatsapp.net`;
 
 exports.verifyPrefix = (prefix) => PREFIX === prefix;
 exports.hasTypeOrCommand = ({ type, command }) => type && command;
 
 exports.isLink = (text) => {
-  const regex = /(https?:\/\/(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\/\S*)?)/g;
-  return regex.test(text);
+  const cleanText = text.trim();
+
+  try {
+    const url = new URL(cleanText);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch (error) {
+    try {
+      const url = new URL("https://" + cleanText);
+      return url.hostname.includes(".");
+    } catch (error) {
+      return false;
+    }
+  }
 };
 
 exports.isAdmin = async ({ remoteJid, userJid, socket }) => {
