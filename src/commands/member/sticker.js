@@ -123,7 +123,7 @@ module.exports = {
         await new Promise((resolve, reject) => {
           const { exec } = require("child_process");
 
-          const cmd = `ffmpeg -i "${inputPath}" -t 8 -vf "scale=512:512:force_original_aspect_ratio=decrease,fps=15" -c:v libwebp -quality 75 -compression_level 6 -loop 0 -preset default -an -f webp "${outputPath}"`;
+          const cmd = `ffmpeg -y -i "${inputPath}" -vcodec libwebp -fs 0.99M -filter_complex "[0:v] scale=512:512, fps=30, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse" -f webp "${outputPath}"`;
 
           exec(cmd, (error, _, stderr) => {
             if (error) {
