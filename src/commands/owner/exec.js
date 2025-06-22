@@ -5,6 +5,7 @@
  * @author Dev Gui
  */
 const { exec } = require("child_process");
+const { isBotOwner } = require(`${BASE_DIR}/middlewares`);
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { DangerError } = require(`${BASE_DIR}/errors`);
 
@@ -17,7 +18,17 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({ fullArgs, sendSuccessReply, sendErrorReply }) => {
+  handle: async ({
+    fullArgs,
+    sendSuccessReply,
+    sendErrorReply,
+    userJid,
+    isLid,
+  }) => {
+    if (!isBotOwner({ userJid, isLid })) {
+      throw new DangerError("Apenas o dono do bot pode usar este comando!");
+    }
+
     if (!fullArgs) {
       throw new DangerError(`Uso correto: ${PREFIX}exec comando`);
     }

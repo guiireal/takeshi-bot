@@ -10,7 +10,11 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({ sendSuccessReply, remoteJid }) => {
+  handle: async ({ sendSuccessReply, remoteJid, isGroup }) => {
+    if (!isGroup) {
+      throw new WarningError("Este comando deve ser usado dentro de um grupo.");
+    }
+
     activateGroup(remoteJid);
 
     await sendSuccessReply("Bot ativado no grupo!");
