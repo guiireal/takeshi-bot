@@ -9,14 +9,14 @@ exports.BOT_EMOJI = "🤖";
 // Nome do bot (mude se preferir).
 exports.BOT_NAME = "Takeshi Bot";
 
-// Número do bot. Coloque o número do bot
-// (apenas números, exatamente como está no WhatsApp).
-// Se o seu DDD não for de SP ou do Rio, não coloque o 9 antes do número.
+// Número do bot.
+// Apenas números, exatamente como está no WhatsApp.
+// Se o seu número não exibir o nono dígito (9) no WhatsApp, não coloque-o.
 exports.BOT_NUMBER = "558112345678";
 
-// Número do dono do bot. Coloque o número do dono do bot
-// (apenas números, exatamente como está no WhatsApp).
-// Se o seu DDD não for de SP ou do Rio, não coloque o 9 antes do número.
+// Número do dono bot.
+// Apenas números, exatamente como está no WhatsApp.
+// Se o seu número não exibir o nono dígito (9) no WhatsApp, não coloque-o.
 exports.OWNER_NUMBER = "5521950502020";
 
 // LID do dono do bot.
@@ -44,7 +44,8 @@ exports.SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
 exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
-// Caso queira responder apenas um grupo específico, coloque o ID dele aqui (ex: 120363023799506419@g.us).
+// Caso queira responder apenas um grupo específico,
+// coloque o ID dele na configuração abaixo.
 // Para saber o ID do grupo, use o comando <prefixo>getid
 // Troque o <prefixo> pelo prefixo do bot (ex: /getid).
 exports.ONLY_GROUP_ID = "";
