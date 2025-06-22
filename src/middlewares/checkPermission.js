@@ -5,7 +5,7 @@
  * @author Dev Gui
  */
 const { OWNER_NUMBER, OWNER_LID } = require("../config");
-const { toUserJid, toUserLid } = require("../utils");
+const { toUserJid } = require("../utils");
 
 exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
   if (type === "member") {
