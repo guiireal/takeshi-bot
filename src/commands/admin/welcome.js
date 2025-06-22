@@ -1,8 +1,9 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+const { InvalidParameterError, WarningError } = require(`${BASE_DIR}/errors`);
 const {
   activateWelcomeGroup,
   deactivateWelcomeGroup,
+  isActiveWelcomeGroup,
 } = require(`${BASE_DIR}/utils/database`);
 
 module.exports = {
@@ -36,6 +37,17 @@ module.exports = {
     if (!welcome && !notWelcome) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+      );
+    }
+
+    const hasActive = welcome && isActiveWelcomeGroup(remoteJid);
+    const hasInactive = notWelcome && !isActiveWelcomeGroup(remoteJid);
+
+    if (hasActive || hasInactive) {
+      throw new WarningError(
+        `O recurso de boas-vindas já está ${
+          welcome ? "ativado" : "desativado"
+        }!`
       );
     }
 

@@ -1,8 +1,9 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+const { InvalidParameterError, WarningError } = require(`${BASE_DIR}/errors`);
 const {
   activateExitGroup,
   deactivateExitGroup,
+  isActiveExitGroup,
 } = require(`${BASE_DIR}/utils/database`);
 
 module.exports = {
@@ -28,6 +29,15 @@ module.exports = {
     if (!exit && !notExit) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+      );
+    }
+
+    const hasActive = exit && isActiveExitGroup(remoteJid);
+    const hasInactive = notExit && !isActiveExitGroup(remoteJid);
+
+    if (hasActive || hasInactive) {
+      throw new WarningError(
+        `O recurso de saída já está ${exit ? "ativado" : "desativado"}!`
       );
     }
 

@@ -6,7 +6,7 @@
  */
 const { getProfileImageData } = require("../services/baileys");
 const fs = require("fs");
-const { onlyNumbers, randomDelay } = require("../utils");
+const { onlyNumbers } = require("../utils");
 const {
   isActiveWelcomeGroup,
   isActiveExitGroup,
@@ -26,17 +26,11 @@ exports.onGroupParticipantsUpdate = async ({
   action,
 }) => {
   try {
-    if (!isActiveWelcomeGroup(remoteJid) || !isActiveExitGroup(remoteJid)) {
-      return;
-    }
-
-    await randomDelay();
-
     if (!remoteJid.endsWith("@g.us")) {
       return;
     }
 
-    if (action === "add") {
+    if (isActiveWelcomeGroup(remoteJid) && action === "add") {
       const { buffer, profileImage } = await getProfileImageData(
         socket,
         userJid
@@ -80,7 +74,7 @@ exports.onGroupParticipantsUpdate = async ({
       if (!profileImage.includes("default-user")) {
         fs.unlinkSync(profileImage);
       }
-    } else if (action === "remove") {
+    } else if (isActiveExitGroup(remoteJid) && action === "remove") {
       const { buffer, profileImage } = await getProfileImageData(
         socket,
         userJid
