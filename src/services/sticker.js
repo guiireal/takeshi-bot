@@ -60,20 +60,47 @@ exports.isAnimatedSticker = async (filePath) => {
 };
 
 exports.processStaticSticker = async (inputPath, metadata) => {
-  const stickerBuffer = await fs.promises.readFile(inputPath);
-  return await addStickerMetadata(stickerBuffer, metadata);
+  return new Promise((resolve, reject) => {
+    const tempOutputPath = path.resolve(TEMP_DIR, getRandomName("webp"));
+
+    const cmd = `ffmpeg -i "${inputPath}" -vf "scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2" -f webp -quality 90 "${tempOutputPath}"`;
+
+    exec(cmd, async (error, _, stderr) => {
+      try {
+        if (error) {
+          console.error("FFmpeg error:", stderr);
+          reject(new Error("Erro ao processar figurinha estática."));
+          return;
+        }
+
+        const processedBuffer = await fs.promises.readFile(tempOutputPath);
+        const finalPath = await addStickerMetadata(processedBuffer, metadata);
+
+        if (fs.existsSync(tempOutputPath)) {
+          fs.unlinkSync(tempOutputPath);
+        }
+
+        resolve(finalPath);
+      } catch (error) {
+        if (fs.existsSync(tempOutputPath)) {
+          fs.unlinkSync(tempOutputPath);
+        }
+        reject(error);
+      }
+    });
+  });
 };
 
 exports.processAnimatedSticker = async (inputPath, metadata) => {
   return new Promise((resolve, reject) => {
     const tempOutputPath = path.resolve(TEMP_DIR, getRandomName("webp"));
 
-    const ffmpegCmd = `ffmpeg -i "${inputPath}" -vcodec libwebp -lossless 1 -loop 0 -preset default -an -vsync 0 "${tempOutputPath}"`;
+    const cmd = `ffmpeg -i "${inputPath}" -t 8 -vf "scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2,fps=15" -c:v libwebp -quality 75 -compression_level 6 -loop 0 -preset default -an -f webp "${tempOutputPath}"`;
 
-    exec(ffmpegCmd, async (error) => {
+    exec(cmd, async (error, _, stderr) => {
       try {
         if (error) {
-          console.error("Erro no ffmpeg:", error);
+          console.error("FFmpeg error:", stderr);
           reject(new Error("Erro ao processar figurinha animada."));
           return;
         }

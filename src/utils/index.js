@@ -274,7 +274,7 @@ exports.readMore = () => {
 exports.getRandomNumber = getRandomNumber;
 
 exports.getRandomName = (extension) => {
-  const fileName = getRandomNumber(0, 999999);
+  const fileName = `takeshi_temp_${getRandomNumber(0, 999999)}`;
 
   if (!extension) {
     return fileName.toString();

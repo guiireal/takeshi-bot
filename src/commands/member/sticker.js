@@ -5,21 +5,16 @@
  * @author Dev Gui
  */
 const { getRandomName } = require(`${BASE_DIR}/utils`);
-const { PREFIX, BOT_NAME } = require(`${BASE_DIR}/config`);
+const fs = require("node:fs");
 const { addStickerMetadata } = require(`${BASE_DIR}/services/sticker`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const fs = require("node:fs");
-const ffmpeg = require("fluent-ffmpeg");
+const { PREFIX, BOT_NAME, BOT_EMOJI } = require(`${BASE_DIR}/config`);
 
 module.exports = {
   name: "sticker",
   description: "Cria figurinhas de imagem, gif ou vídeo (máximo 10 segundos).",
   commands: ["f", "s", "sticker", "fig"],
   usage: `${PREFIX}sticker (marque ou responda uma imagem/gif/vídeo)`,
-  /**
-   * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
-   */
   handle: async ({
     isImage,
     isVideo,
@@ -47,27 +42,68 @@ module.exports = {
 
     const metadata = {
       username: username,
-      botName: `🤖 ${BOT_NAME}`,
+      botName: `${BOT_EMOJI} ${BOT_NAME}`,
     };
 
     const outputPath = getRandomName("webp");
+    let inputPath = null;
 
     try {
       if (isImage) {
-        const inputPath = await downloadImage(webMessage, "input");
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            inputPath = await downloadImage(webMessage, getRandomName());
+            break;
+          } catch (downloadError) {
+            console.error(
+              `Tentativa ${attempt} de download de imagem falhou:`,
+              downloadError.message
+            );
+
+            if (attempt === 3) {
+              throw new Error(
+                `Falha ao baixar imagem após 3 tentativas: ${downloadError.message}`
+              );
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 2000 * attempt));
+          }
+        }
 
         await new Promise((resolve, reject) => {
-          ffmpeg(inputPath)
-            .size("512x512")
-            .output(outputPath)
-            .on("end", resolve)
-            .on("error", reject)
-            .run();
-        });
+          const { exec } = require("child_process");
 
-        fs.unlinkSync(inputPath);
+          const cmd = `ffmpeg -i "${inputPath}" -vf "scale=512:512:force_original_aspect_ratio=decrease" -f webp -quality 90 "${outputPath}"`;
+
+          exec(cmd, (error, _, stderr) => {
+            if (error) {
+              console.error("FFmpeg error:", stderr);
+              reject(error);
+            } else {
+              resolve();
+            }
+          });
+        });
       } else {
-        const inputPath = await downloadVideo(webMessage, "input");
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            inputPath = await downloadVideo(webMessage, getRandomName());
+            break;
+          } catch (downloadError) {
+            console.error(
+              `Tentativa ${attempt} de download de vídeo falhou:`,
+              downloadError.message
+            );
+
+            if (attempt === 3) {
+              throw new Error(
+                `Falha ao baixar vídeo após 3 tentativas. Problema de conexão com WhatsApp.`
+              );
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 2000 * attempt));
+          }
+        }
 
         const maxDuration = 10;
         const seconds =
@@ -76,38 +112,37 @@ module.exports = {
             ?.videoMessage?.seconds;
 
         if (!seconds || seconds > maxDuration) {
-          fs.unlinkSync(inputPath);
+          if (inputPath && fs.existsSync(inputPath)) {
+            fs.unlinkSync(inputPath);
+          }
           return sendErrorReply(
             `O vídeo enviado tem mais de ${maxDuration} segundos! Envie um vídeo menor.`
           );
         }
 
         await new Promise((resolve, reject) => {
-          ffmpeg(inputPath)
-            .videoCodec("libwebp")
-            .size("512x512")
-            .fps(12)
-            .outputOptions([
-              "-fs",
-              "0.99M",
-              "-vf",
-              "scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:-1:-1:color=white@0.0",
-              "-loop",
-              "0",
-              "-preset",
-              "default",
-              "-an",
-              "-vsync",
-              "0",
-            ])
-            .format("webp")
-            .output(outputPath)
-            .on("end", resolve)
-            .on("error", reject)
-            .run();
-        });
+          const { exec } = require("child_process");
 
+          const cmd = `ffmpeg -i "${inputPath}" -t 8 -vf "scale=512:512:force_original_aspect_ratio=decrease,fps=15" -c:v libwebp -quality 75 -compression_level 6 -loop 0 -preset default -an -f webp "${outputPath}"`;
+
+          exec(cmd, (error, _, stderr) => {
+            if (error) {
+              console.error("FFmpeg error:", stderr);
+              reject(error);
+            } else {
+              resolve();
+            }
+          });
+        });
+      }
+
+      if (inputPath && fs.existsSync(inputPath)) {
         fs.unlinkSync(inputPath);
+        inputPath = null;
+      }
+
+      if (!fs.existsSync(outputPath)) {
+        throw new Error("Arquivo de saída não foi criado pelo FFmpeg");
       }
 
       const stickerPath = await addStickerMetadata(
@@ -117,12 +152,60 @@ module.exports = {
 
       await sendSuccessReact();
 
-      await sendStickerFromFile(stickerPath);
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          await sendStickerFromFile(stickerPath);
+          break;
+        } catch (stickerError) {
+          console.error(
+            `Tentativa ${attempt} de envio de sticker falhou:`,
+            stickerError.message
+          );
 
-      fs.unlinkSync(outputPath);
-      fs.unlinkSync(stickerPath);
+          if (attempt === 3) {
+            throw new Error(
+              `Falha ao enviar figurinha após 3 tentativas: ${stickerError.message}`
+            );
+          }
+
+          await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
+        }
+      }
+
+      if (fs.existsSync(outputPath)) {
+        fs.unlinkSync(outputPath);
+      }
+      if (fs.existsSync(stickerPath)) {
+        fs.unlinkSync(stickerPath);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Erro detalhado no comando sticker:", error);
+
+      if (inputPath && fs.existsSync(inputPath)) {
+        fs.unlinkSync(inputPath);
+      }
+      if (fs.existsSync(outputPath)) {
+        fs.unlinkSync(outputPath);
+      }
+
+      if (
+        error.message.includes("ETIMEDOUT") ||
+        error.message.includes("AggregateError") ||
+        error.message.includes("getaddrinfo ENOTFOUND") ||
+        error.message.includes("connect ECONNREFUSED") ||
+        error.message.includes("mmg.whatsapp.net")
+      ) {
+        throw new Error(
+          `Erro de conexão ao baixar mídia do WhatsApp. Tente novamente em alguns segundos.`
+        );
+      }
+
+      if (error.message.includes("FFmpeg")) {
+        throw new Error(
+          `Erro ao processar mídia com FFmpeg. Verifique se o arquivo não está corrompido.`
+        );
+      }
+
       throw new Error(`Erro ao processar a figurinha: ${error.message}`);
     }
   },
