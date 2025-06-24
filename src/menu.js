@@ -56,6 +56,7 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}cep
 ▢ • ${PREFIX}exemplos-de-mensagens
 ▢ • ${PREFIX}fake-chat
+▢ • ${PREFIX}gerar-link
 ▢ • ${PREFIX}get-lid
 ▢ • ${PREFIX}google-search
 ▢ • ${PREFIX}perfil
