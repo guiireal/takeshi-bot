@@ -36,7 +36,6 @@
   </li>
 </ul>
 
-
 ## 💻 Tecnologias envolvidas
 
 - [Axios](https://axios-http.com/ptbr/docs/intro)
