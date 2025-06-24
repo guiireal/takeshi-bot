@@ -20,7 +20,24 @@
 
 ![Logger](./assets/images/logger.png)
 
-## Tecnologias envolvidas
+## 🌐 Acesse o Takeshi Bot em outros idiomas
+<ul style="list-style: none; padding-left: 0;">
+  <li>
+    <img src="https://flagcdn.com/w40/us.png" width="24" alt="English">
+    <strong>English</strong> — <a href="#">under construction</a>
+  </li>
+  <li>
+    <img src="https://flagcdn.com/w40/es.png" width="24" alt="Español">
+    <strong>Español</strong> — <a href="#">en construcción</a>
+  </li>
+  <li>
+    <img src="https://flagcdn.com/w40/id.png" width="24" alt="Indonésio">
+    <strong>Bahasa Indonesia</strong> — <a href="#">sedang dibangun</a>
+  </li>
+</ul>
+
+
+## 💻 Tecnologias envolvidas
 
 - [Axios](https://axios-http.com/ptbr/docs/intro)
 - [Baileys 6.7.18](https://github.com/WhiskeySockets/Baileys)
