@@ -38,7 +38,7 @@ module.exports = {
     await delay(3000);
 
     await sendDocumentFromURL(
-      "https://raw.githubusercontent.com/spiderxbr/sample-files/main/README.md",
+      "https://raw.githubusercontent.com/guiireal/takeshi-bot/refs/heads/main/README.md",
       "text/markdown",
       "readme-exemplo.md"
     );
