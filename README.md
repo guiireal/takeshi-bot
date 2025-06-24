@@ -24,15 +24,15 @@
 <ul style="list-style: none; padding-left: 0;">
   <li>
     <img src="https://flagcdn.com/w40/us.png" width="24" alt="English">
-    <strong>English</strong> — <a href="#">under construction</a>
+    <strong>English</strong> — <a href="https://github.com/guiireal/takeshi-bot-english">click here</a>
   </li>
   <li>
     <img src="https://flagcdn.com/w40/es.png" width="24" alt="Español">
-    <strong>Español</strong> — <a href="#">en construcción</a>
+    <strong>Español</strong> — <a href="https://github.com/guiireal/takeshi-bot-espanol">haz clic aquí</a>
   </li>
   <li>
     <img src="https://flagcdn.com/w40/id.png" width="24" alt="Indonésio">
-    <strong>Bahasa Indonesia</strong> — <a href="#">sedang dibangun</a>
+    <strong>Bahasa Indonesia</strong> — <a href="https://github.com/guiireal/takeshi-bot-bahasa-indonesia">klik di sini</a>
   </li>
 </ul>
 
