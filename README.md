@@ -426,7 +426,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
 | Comando | Função | Descrição | Características |
 |---------|---------|-----------|-----------------|
-| `/exemplos-baileys` | Central de exemplos | Central com lista de todos os exemplos disponíveis | Menu interativo, acesso direto a todos os exemplos |
+| `/exemplos-de-mensagens` | Central de exemplos | Central com lista de todos os exemplos disponíveis | Menu interativo, acesso direto a todos os exemplos |
 
 ## Auto responder
 
