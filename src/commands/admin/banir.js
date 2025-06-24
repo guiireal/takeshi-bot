@@ -5,7 +5,7 @@ const { DangerError, InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const { toUserJid, onlyNumbers } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
-  name: "banir",
+  name: "ban",
   description: "Removo um membro do grupo",
   commands: ["ban", "kick"],
   usage: `${PREFIX}ban @marcar_membro 
