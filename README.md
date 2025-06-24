@@ -21,6 +21,7 @@
 ![Logger](./assets/images/logger.png)
 
 ## 🌐 Acesse o Takeshi Bot em outros idiomas
+
 <ul style="list-style: none; padding-left: 0;">
   <li>
     <img src="https://flagcdn.com/w40/us.png" width="24" alt="English">
