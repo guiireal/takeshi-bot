@@ -13,13 +13,7 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({
-    sendReply,
-    sendReact,
-    sendStickerFromBuffer,
-    remoteJid,
-    webMessage,
-  }) => {
+  handle: async ({ sendReply, sendReact, sendStickerFromBuffer }) => {
     await sendReact("🏷️");
 
     await delay(3000);
