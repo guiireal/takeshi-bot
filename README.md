@@ -32,7 +32,7 @@
     <strong>Español</strong> — <a href="https://github.com/guiireal/takeshi-bot-espanol">haz clic aquí</a>
   </li>
   <li>
-    <img src="https://flagcdn.com/w40/id.png" width="24" alt="Indonésio">
+    <img src="https://flagcdn.com/w40/id.png" width="24" alt="Bahasa Indonesia">
     <strong>Bahasa Indonesia</strong> — <a href="https://github.com/guiireal/takeshi-bot-bahasa-indonesia">klik disini</a>
   </li>
 </ul>
