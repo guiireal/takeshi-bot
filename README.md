@@ -579,13 +579,13 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
     - 📝 loader.js ➔ _script de carga de funções_
     - 📝 menu.js ➔ _menu do bot_
     - 📝 test.js ➔ _script de testes_
-- ⚡-cases-estao-aqui ➔ _easter egg_ 
+- 📝 ⚡-cases-estao-aqui.js ➔ _easter egg_ 
 - 📝 index.js ➔ _script ponto de entrada do bot para hospedagem_
-- 📝.gitignore ➔ _arquivo para não subir certas pastas no GitHub_
-- 📝LICENSE ➔ _arquivo de licença_
-- 📝package-lock.json ➔ _arquivo de cache das dependências do bot_
-- 📝package.json ➔ _arquivo de definição das dependências do bot_
-- 📝README.md ➔ _esta documentação_
+- 📝 .gitignore ➔ _arquivo para não subir certas pastas no GitHub_
+- 📝 LICENSE ➔ _arquivo de licença_
+- 📝 package-lock.json ➔ _arquivo de cache das dependências do bot_
+- 📝 package.json ➔ _arquivo de definição das dependências do bot_
+- 📝 README.md ➔ _esta documentação_
 
 ## Erros comuns
 
