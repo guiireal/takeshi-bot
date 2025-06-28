@@ -37,6 +37,11 @@ declare global {
     fullMessage: string;
 
     /**
+     * Se a mensagem é um áudio.
+     */
+    isAudio: boolean;
+
+    /**
      * Se a mensagem veio de um grupo.
      */
     isGroup: boolean;
@@ -122,6 +127,12 @@ declare global {
       id: string;
       participant: string;
     }): Promise<void>;
+
+    /**
+     * Faz download de um áudio da mensagem atual.
+     * @returns Promise com o caminho do áudio
+     */
+    downloadAudio(): Promise<string>;
 
     /**
      * Faz download de uma imagem da mensagem atual.

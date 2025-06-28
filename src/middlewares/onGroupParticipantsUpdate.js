@@ -10,8 +10,9 @@ const { onlyNumbers } = require("../utils");
 const {
   isActiveWelcomeGroup,
   isActiveExitGroup,
+  isActiveGroup,
 } = require("../utils/database");
-
+const { welcomeMessage, exitMessage } = require("../messages");
 const { catBoxUpload } = require("../services/catbox");
 const {
   spiderAPITokenConfigured,
@@ -30,11 +31,28 @@ exports.onGroupParticipantsUpdate = async ({
       return;
     }
 
+    if (!isActiveGroup(remoteJid)) {
+      return;
+    }
+
     if (isActiveWelcomeGroup(remoteJid) && action === "add") {
       const { buffer, profileImage } = await getProfileImageData(
         socket,
         userJid
       );
+
+      const hasMemberMention = welcomeMessage.includes("@member");
+      const mentions = [];
+
+      let finalWelcomeMessage = welcomeMessage;
+
+      if (hasMemberMention) {
+        finalWelcomeMessage = welcomeMessage.replace(
+          "@member",
+          `@${onlyNumbers(userJid)}`
+        );
+        mentions.push(userJid);
+      }
 
       if (spiderAPITokenConfigured) {
         try {
@@ -52,22 +70,22 @@ exports.onGroupParticipantsUpdate = async ({
 
           await socket.sendMessage(remoteJid, {
             image: { url },
-            caption: `Seja bem vindo ao nosso grupo, @${onlyNumbers(userJid)}!`,
-            mentions: [userJid],
+            caption: finalWelcomeMessage,
+            mentions,
           });
         } catch (error) {
           console.error("Erro ao fazer upload da imagem:", error);
           await socket.sendMessage(remoteJid, {
             image: buffer,
-            caption: `Seja bem vindo ao nosso grupo, @${onlyNumbers(userJid)}!`,
-            mentions: [userJid],
+            caption: finalWelcomeMessage,
+            mentions,
           });
         }
       } else {
         await socket.sendMessage(remoteJid, {
           image: buffer,
-          caption: `Seja bem vindo ao nosso grupo, @${onlyNumbers(userJid)}!`,
-          mentions: [userJid],
+          caption: finalWelcomeMessage,
+          mentions,
         });
       }
 
@@ -79,6 +97,19 @@ exports.onGroupParticipantsUpdate = async ({
         socket,
         userJid
       );
+
+      const hasMemberMention = exitMessage.includes("@member");
+      const mentions = [];
+
+      let finalExitMessage = exitMessage;
+
+      if (hasMemberMention) {
+        finalExitMessage = exitMessage.replace(
+          "@member",
+          `@${onlyNumbers(userJid)}`
+        );
+        mentions.push(userJid);
+      }
 
       if (spiderAPITokenConfigured) {
         try {
@@ -92,22 +123,22 @@ exports.onGroupParticipantsUpdate = async ({
 
           await socket.sendMessage(remoteJid, {
             image: { url },
-            caption: `Tchau, @${onlyNumbers(userJid)}!`,
-            mentions: [userJid],
+            caption: finalExitMessage,
+            mentions,
           });
         } catch (error) {
           console.error("Erro ao fazer upload da imagem:", error);
           await socket.sendMessage(remoteJid, {
             image: buffer,
-            caption: `Tchau, @${onlyNumbers(userJid)}!`,
-            mentions: [userJid],
+            caption: finalExitMessage,
+            mentions,
           });
         }
       } else {
         await socket.sendMessage(remoteJid, {
           image: buffer,
-          caption: `Tchau, @${onlyNumbers(userJid)}!`,
-          mentions: [userJid],
+          caption: finalExitMessage,
+          mentions,
         });
       }
 

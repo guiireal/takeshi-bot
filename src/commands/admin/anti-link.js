@@ -1,5 +1,7 @@
+const { isActiveAntiLinkGroup } = require("../../utils/database");
+
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+const { InvalidParameterError, WarningError } = require(`${BASE_DIR}/errors`);
 const {
   activateAntiLinkGroup,
   deactivateAntiLinkGroup,
@@ -27,6 +29,17 @@ module.exports = {
     if (!antiLinkOn && !antiLinkOff) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+      );
+    }
+
+    const hasActive = antiLinkOn && isActiveAntiLinkGroup(remoteJid);
+    const hasInactive = antiLinkOff && !isActiveAntiLinkGroup(remoteJid);
+
+    if (hasActive || hasInactive) {
+      throw new WarningError(
+        `O recurso de anti-link já está ${
+          antiLinkOn ? "ativado" : "desativado"
+        }!`
       );
     }
 

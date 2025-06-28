@@ -4,17 +4,18 @@
  *
  * @author Dev Gui
  */
-const path = require("path");
-const fs = require("fs");
+const path = require("node:path");
+const fs = require("node:fs");
 
 const databasePath = path.resolve(__dirname, "..", "..", "database");
 
-const INACTIVE_GROUPS_FILE = "inactive-groups";
-const WELCOME_GROUPS_FILE = "welcome-groups";
+const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const EXIT_GROUPS_FILE = "exit-groups";
 const INACTIVE_AUTO_RESPONDER_GROUPS_FILE = "inactive-auto-responder-groups";
-const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
+const INACTIVE_GROUPS_FILE = "inactive-groups";
 const MUTE_FILE = "muted";
+const ONLY_ADMINS_FILE = "only-admins";
+const WELCOME_GROUPS_FILE = "welcome-groups";
 
 function createIfNotExists(fullPath, formatIfNotExists = []) {
   if (!fs.existsSync(fullPath)) {
@@ -280,4 +281,39 @@ exports.checkIfMemberIsMuted = (groupId, memberId) => {
   }
 
   return mutedMembers[groupId]?.includes(memberId);
+};
+
+exports.activateOnlyAdmins = (groupId) => {
+  const filename = ONLY_ADMINS_FILE;
+
+  const onlyAdminsGroups = readJSON(filename, []);
+
+  if (!onlyAdminsGroups.includes(groupId)) {
+    onlyAdminsGroups.push(groupId);
+  }
+
+  writeJSON(filename, onlyAdminsGroups);
+};
+
+exports.deactivateOnlyAdmins = (groupId) => {
+  const filename = ONLY_ADMINS_FILE;
+
+  const onlyAdminsGroups = readJSON(filename, []);
+
+  const index = onlyAdminsGroups.indexOf(groupId);
+  if (index === -1) {
+    return;
+  }
+
+  onlyAdminsGroups.splice(index, 1);
+
+  writeJSON(filename, onlyAdminsGroups);
+};
+
+exports.isActiveOnlyAdmins = (groupId) => {
+  const filename = ONLY_ADMINS_FILE;
+
+  const onlyAdminsGroups = readJSON(filename, []);
+
+  return onlyAdminsGroups.includes(groupId);
 };

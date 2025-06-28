@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.2.1-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.3.0-blue">
     </a>
 </div>
 
@@ -448,6 +448,14 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     }
 ]
 ```
+
+## Onde fica o menu do bot?
+
+O menu do bot fica dentro da pasta `src` no arquivo chamado `menu.js`
+
+## Onde modifico a mensagem de boas vindas e quando alguém sai do grupo?
+
+As mensagens ficam dentro da pasta `src` no arquivo chamado `messages.js`
 
 ## Implementação técnica dos exemplos
 
