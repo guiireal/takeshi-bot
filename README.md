@@ -319,6 +319,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Mudar nome do grupo | Admin | ❌
 | Mute/unmute | Admin | ❌
 | Revelar | Admin | ❌
+| Somente admins | Admin | ❌
 | Borrar imagem | Membro | ❌
 | Busca CEP | Membro | ❌
 | Canvas Bolsonaro | Membro | ✅
