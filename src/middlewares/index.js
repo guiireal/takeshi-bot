@@ -12,6 +12,10 @@ exports.hasTypeOrCommand = ({ type, command }) => type && command;
 exports.isLink = (text) => {
   const cleanText = text.trim();
 
+  if (/^\d+$/.test(cleanText)) {
+    return false;
+  }
+
   try {
     const url = new URL(cleanText);
     return url.protocol === "http:" || url.protocol === "https:";
@@ -19,7 +23,17 @@ exports.isLink = (text) => {
     try {
       const url = new URL("https://" + cleanText);
 
-      return url.hostname.length > 4 && url.hostname.includes(".");
+      const originalHostname = cleanText
+        .split("/")[0]
+        .split("?")[0]
+        .split("#")[0];
+
+      return (
+        url.hostname.includes(".") &&
+        originalHostname.includes(".") &&
+        url.hostname.length > 4 &&
+        !/^\d+$/.test(originalHostname)
+      );
     } catch (error) {
       return false;
     }

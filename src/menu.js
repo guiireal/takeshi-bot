@@ -37,6 +37,7 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}anti-link (1/0)
 ▢ • ${PREFIX}auto-responder (1/0)
 ▢ • ${PREFIX}ban
+▢ • ${PREFIX}delete
 ▢ • ${PREFIX}exit (1/0)
 ▢ • ${PREFIX}fechar
 ▢ • ${PREFIX}hidetag
