@@ -4,21 +4,21 @@
  *
  * @author Dev Gui
  */
+const fs = require("node:fs");
 const { getProfileImageData } = require("../services/baileys");
-const fs = require("fs");
-const { onlyNumbers } = require("../utils");
+const { onlyNumbers, getRandomNumber } = require("../utils");
 const {
   isActiveWelcomeGroup,
   isActiveExitGroup,
   isActiveGroup,
 } = require("../utils/database");
 const { welcomeMessage, exitMessage } = require("../messages");
-const { catBoxUpload } = require("../services/catbox");
 const {
   spiderAPITokenConfigured,
   exit,
   welcome,
 } = require("../services/spider-x-api");
+const { upload } = require("../services/upload");
 
 exports.onGroupParticipantsUpdate = async ({
   userJid,
@@ -56,10 +56,15 @@ exports.onGroupParticipantsUpdate = async ({
 
       if (spiderAPITokenConfigured) {
         try {
-          const link = await catBoxUpload(buffer);
+          const link = await upload(
+            buffer,
+            `${getRandomNumber(10_000, 99_9999)}.png`
+          );
 
           if (!link) {
-            throw new Error("Link inválido");
+            throw new Error(
+              "Não consegui fazer o upload da imagem, tente novamente mais tarde!"
+            );
           }
 
           const url = welcome(
@@ -113,10 +118,15 @@ exports.onGroupParticipantsUpdate = async ({
 
       if (spiderAPITokenConfigured) {
         try {
-          const link = await catBoxUpload(buffer);
+          const link = await upload(
+            buffer,
+            `${getRandomNumber(10_000, 99_9999)}.png`
+          );
 
           if (!link) {
-            throw new Error("Link inválido");
+            throw new Error(
+              "Não consegui fazer o upload da imagem, tente novamente mais tarde!"
+            );
           }
 
           const url = exit("membro", "Você foi um bom membro", link);

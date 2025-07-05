@@ -115,10 +115,16 @@ exports.baileysIs = (webMessage, context) => {
 
 exports.getContent = (webMessage, context) => {
   return (
-    webMessage.message?.[`${context}Message`] ||
-    webMessage.message?.extendedTextMessage?.contextInfo?.quotedMessage?.[
+    webMessage?.message?.[`${context}Message`] ||
+    webMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.[
       `${context}Message`
-    ]
+    ] ||
+    webMessage?.message?.viewOnceMessage?.message?.[`${context}Message`] ||
+    webMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage
+      ?.viewOnceMessage?.message?.[`${context}Message`] ||
+    webMessage?.message?.viewOnceMessageV2?.message?.[`${context}Message`] ||
+    webMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage
+      ?.viewOnceMessageV2?.message?.[`${context}Message`]
   );
 };
 

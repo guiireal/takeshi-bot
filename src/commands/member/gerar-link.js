@@ -1,8 +1,7 @@
 const fs = require("node:fs");
+const { upload } = require(`${BASE_DIR}/services/upload`);
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { catBoxUpload } = require(`${BASE_DIR}/services/catbox`);
-const { imgbbUpload } = require(`${BASE_DIR}/services/img-bb`);
 const { getRandomNumber } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
@@ -30,22 +29,17 @@ module.exports = {
 
     await sendWaitReact();
 
-    const filePath = await downloadImage(
-      webMessage,
-      `${getRandomNumber(10_000, 99_999)}`
-    );
+    const fileName = getRandomNumber(10_000, 99_999).toString();
+    const filePath = await downloadImage(webMessage, fileName);
 
     const buffer = fs.readFileSync(filePath);
 
-    let link = null;
+    const link = await upload(buffer, `${fileName}.png`);
 
-    try {
-      link = await catBoxUpload(buffer);
-    } catch (error) {
-      console.log(error);
-      link = await imgbbUpload(buffer, {
-        name: `upload-${getRandomNumber(1000, 9999)}`,
-      });
+    if (!link) {
+      throw new Error(
+        "Erro ao fazer upload da imagem. Tente novamente mais tarde."
+      );
     }
 
     await sendSuccessReact();
