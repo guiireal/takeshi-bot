@@ -1,0 +1,9 @@
+{
+    "sticker": "stickerMessage",
+    "video": "videoMessage",
+    "image": "imageMessage",
+    "audio": "audioMessage",
+    "product": "productMessage",
+    "document": "documentMessage",
+    "event": "eventMessage"
+}

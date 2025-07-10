@@ -6,6 +6,11 @@ exports.PREFIX = "/";
 // Emoji do bot (mude se preferir).
 exports.BOT_EMOJI = "🤖";
 
+// configuração para modo de desenvolvimento
+// mude o valor para ( true ) caso queira ver os logs de mensagens recebidas
+exports.DEVELOPER_MODE = false;
+
+
 // Nome do bot (mude se preferir).
 exports.BOT_NAME = "Takeshi Bot";
 

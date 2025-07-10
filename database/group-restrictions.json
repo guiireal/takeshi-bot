@@ -1,0 +1,14 @@
+{
+  "120363393114929135@g.us": {
+    "anti-sticker": true,
+    "anti-video": true,
+    "anti-image": true,
+    "anti-audio": true,
+    "anti-event": true,
+    "anti-product": true,
+    "anti-document": true
+  },
+  "120363330239998629@g.us": {
+    "anti-sticker": false
+  }
+}
