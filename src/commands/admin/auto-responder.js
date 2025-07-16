@@ -21,8 +21,8 @@ module.exports = {
       );
     }
 
-    const autoResponder = args[0] === "1";
-    const notAutoResponder = args[0] === "0";
+    const autoResponder = args[0] == "1";
+    const notAutoResponder = args[0] == "0";
 
     if (!autoResponder && !notAutoResponder) {
       throw new InvalidParameterError(

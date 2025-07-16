@@ -243,7 +243,11 @@ const onlyNumbers = (text) => text.replace(/[^0-9]/g, "");
 
 exports.onlyNumbers = onlyNumbers;
 
-exports.toUserJid = (number) => `${onlyNumbers(number)}@s.whatsapp.net`;
+function toUserJid(number) {
+  return `${onlyNumbers(number)}@s.whatsapp.net`;
+}
+
+exports.toUserJid = toUserJid;
 
 exports.toUserLid = (value) => `${onlyNumbers(value)}@lid`;
 
@@ -341,6 +345,51 @@ exports.getLastTimestampCreds = () => {
   );
 
   return credsJson.lastAccountSyncTimestamp;
+};
+
+const normalizeNumber = (number) => {
+  if (!number.startsWith("55")) {
+    return number;
+  }
+
+  const withoutCountryCode = number.slice(2);
+  const ddd = withoutCountryCode.slice(0, 2);
+  const phoneNumber = withoutCountryCode.slice(2);
+
+  if (phoneNumber.length === 9) {
+    const withoutNinthDigit = phoneNumber.slice(1);
+    return {
+      with9: `55${ddd}${phoneNumber}`,
+      without9: `55${ddd}${withoutNinthDigit}`,
+    };
+  }
+
+  if (phoneNumber.length === 8) {
+    const withNinthDigit = `9${phoneNumber}`;
+    return {
+      with9: `55${ddd}${withNinthDigit}`,
+      without9: `55${ddd}${phoneNumber}`,
+    };
+  }
+
+  return { with9: number, without9: number };
+};
+
+exports.compareUserJidWithOwnerNumber = ({ userJid, ownerNumber }) => {
+  if (!ownerNumber.startsWith("55")) {
+    return userJid === toUserJid(ownerNumber);
+  }
+
+  const userNumber = onlyNumbers(userJid);
+  const userVariations = normalizeNumber(userNumber);
+  const ownerVariations = normalizeNumber(ownerNumber);
+
+  return (
+    userVariations.with9 === ownerVariations.with9 ||
+    userVariations.with9 === ownerVariations.without9 ||
+    userVariations.without9 === ownerVariations.with9 ||
+    userVariations.without9 === ownerVariations.without9
+  );
 };
 
 exports.GROUP_PARTICIPANT_ADD = 27;

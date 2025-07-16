@@ -27,6 +27,19 @@ module.exports = {
 
     const url = await ttp(args[0].trim());
 
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const data = await response.json();
+
+      await sendErrorReply(
+        `Ocorreu um erro ao executar uma chamada remota para a Spider X API no comando ttp!
+      
+📄 *Detalhes*: ${data.message}`
+      );
+      return;
+    }
+
     await sendSuccessReact();
 
     await sendStickerFromURL(url);

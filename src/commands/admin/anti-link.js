@@ -23,8 +23,8 @@ module.exports = {
       );
     }
 
-    const antiLinkOn = args[0] === "1";
-    const antiLinkOff = args[0] === "0";
+    const antiLinkOn = args[0] == "1";
+    const antiLinkOff = args[0] == "0";
 
     if (!antiLinkOn && !antiLinkOff) {
       throw new InvalidParameterError(

@@ -35,8 +35,8 @@ module.exports = {
       );
     }
 
-    const onlyAdminOn = args[0] === "1";
-    const onlyAdminOff = args[0] === "0";
+    const onlyAdminOn = args[0] == "1";
+    const onlyAdminOff = args[0] == "0";
 
     if (!onlyAdminOn && !onlyAdminOff) {
       throw new InvalidParameterError(

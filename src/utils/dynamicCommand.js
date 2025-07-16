@@ -12,7 +12,7 @@ const {
 const { findCommandImport } = require(".");
 const {
   verifyPrefix,
-  hasTypeOrCommand,
+  hasTypeAndCommand,
   isLink,
   isAdmin,
 } = require("../middlewares");
@@ -75,41 +75,55 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     return;
   }
 
-  if (
-    activeGroup &&
-    (!verifyPrefix(prefix) || !hasTypeOrCommand({ type, command }))
-  ) {
-    if (isActiveAutoResponderGroup(remoteJid)) {
-      const response = getAutoResponderResponse(fullMessage);
+  if (activeGroup) {
+    if (!verifyPrefix(prefix) || !hasTypeAndCommand({ type, command })) {
+      if (isActiveAutoResponderGroup(remoteJid)) {
+        const response = getAutoResponderResponse(fullMessage);
 
-      if (response) {
-        await sendReply(response);
+        if (response) {
+          await sendReply(response);
+        }
       }
+
+      return;
     }
 
-    return;
+    if (!(await checkPermission({ type, ...paramsHandler }))) {
+      await sendErrorReply(
+        "Você não tem permissão para executar este comando!"
+      );
+      return;
+    }
+
+    if (
+      isActiveOnlyAdmins(remoteJid) &&
+      !(await isAdmin({ remoteJid, userJid, socket }))
+    ) {
+      await sendWarningReply(
+        "Somente administradores podem executar comandos!"
+      );
+      return;
+    }
   }
 
-  if (activeGroup && !(await checkPermission({ type, ...paramsHandler }))) {
-    await sendErrorReply("Você não tem permissão para executar este comando!");
-    return;
-  }
+  if (!activeGroup) {
+    if (verifyPrefix(prefix) && hasTypeAndCommand({ type, command })) {
+      if (command.name !== "on") {
+        await sendWarningReply(
+          "Este grupo está desativado! Peça para o dono do grupo ativar o bot!"
+        );
+        return;
+      }
 
-  if (
-    activeGroup &&
-    isActiveOnlyAdmins(remoteJid) &&
-    !(await isAdmin({ remoteJid, userJid, socket }))
-  ) {
-    await sendWarningReply("Somente administradores podem executar comandos!");
-    return;
-  }
-
-  if (!activeGroup && command.name !== "on") {
-    await sendWarningReply(
-      "Este grupo está desativado! Peça para o dono do grupo ativar o bot!"
-    );
-
-    return;
+      if (!(await checkPermission({ type, ...paramsHandler }))) {
+        await sendErrorReply(
+          "Você não tem permissão para executar este comando!"
+        );
+        return;
+      }
+    } else {
+      return;
+    }
   }
 
   try {
@@ -119,7 +133,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
       startProcess,
     });
   } catch (error) {
-    if (badMacHandler.handleError(error, `command:${command.name}`)) {
+    if (badMacHandler.handleError(error, `command:${command?.name}`)) {
       await sendWarningReply(
         "Erro temporário de sincronização. Tente novamente em alguns segundos."
       );
@@ -128,7 +142,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
 
     if (badMacHandler.isSessionError(error)) {
       errorLog(
-        `Erro de sessão durante execução de comando ${command.name}: ${error.message}`
+        `Erro de sessão durante execução de comando ${command?.name}: ${error.message}`
       );
       await sendWarningReply(
         "Erro de comunicação. Tente executar o comando novamente."
@@ -142,10 +156,23 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
       await sendWarningReply(error.message);
     } else if (error instanceof DangerError) {
       await sendErrorReply(error.message);
+    } else if (error.isAxiosError) {
+      const messageText = error.response?.data?.message || error.message;
+      const url = error.config?.url || "URL não disponível";
+
+      const isSpiderAPIError = url.includes("api.spiderx.com.br");
+
+      await sendErrorReply(
+        `Ocorreu um erro ao executar uma chamada remota para ${
+          isSpiderAPIError ? "a Spider X API" : url
+        } no comando ${command.name}!
+      
+📄 *Detalhes*: ${messageText}`
+      );
     } else {
       errorLog("Erro ao executar comando", error);
       await sendErrorReply(
-        `Ocorreu um erro ao executar o comando ${command.name}! O desenvolvedor foi notificado!
+        `Ocorreu um erro ao executar o comando ${command.name}!
       
 📄 *Detalhes*: ${error.message}`
       );

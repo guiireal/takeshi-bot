@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.4.1-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.5.0-blue">
     </a>
 </div>
 
@@ -308,7 +308,14 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Obter o ID do grupo | Dono | ❌
 | Abrir grupo | Admin | ❌
 | Agendar mensagem | Admin | ❌
+| Anti audio | Admin | ❌
+| Anti documento | Admin | ❌
+| Anti evento | Admin | ❌
+| Anti imagem | Admin | ❌
 | Anti link | Admin | ❌
+| Anti produto | Admin | ❌
+| Anti sticker | Admin | ❌
+| Anti video | Admin | ❌
 | Banir membros | Admin | ❌
 | Excluir mensagens | Admin | ❌
 | Fechar grupo | Admin | ❌

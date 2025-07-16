@@ -9,12 +9,15 @@ const fs = require("node:fs");
 
 const databasePath = path.resolve(__dirname, "..", "..", "database");
 
+const AUTO_RESPONDER_FILE = "auto-responder";
 const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const EXIT_GROUPS_FILE = "exit-groups";
+const GROUP_RESTRICTIONS_FILE = "group-restrictions";
 const INACTIVE_AUTO_RESPONDER_GROUPS_FILE = "inactive-auto-responder-groups";
 const INACTIVE_GROUPS_FILE = "inactive-groups";
 const MUTE_FILE = "muted";
 const ONLY_ADMINS_FILE = "only-admins";
+const RESTRICTED_MESSAGES_FILE = "restricted-messages";
 const WELCOME_GROUPS_FILE = "welcome-groups";
 
 function createIfNotExists(fullPath, formatIfNotExists = []) {
@@ -36,7 +39,7 @@ function writeJSON(jsonFile, data, formatIfNotExists = []) {
 
   createIfNotExists(fullPath, formatIfNotExists);
 
-  fs.writeFileSync(fullPath, JSON.stringify(data));
+  fs.writeFileSync(fullPath, JSON.stringify(data, null, 2), "utf8");
 }
 
 exports.activateExitGroup = (groupId) => {
@@ -148,7 +151,7 @@ exports.isActiveGroup = (groupId) => {
 };
 
 exports.getAutoResponderResponse = (match) => {
-  const filename = "auto-responder";
+  const filename = AUTO_RESPONDER_FILE;
 
   const responses = readJSON(filename);
 
@@ -316,4 +319,46 @@ exports.isActiveOnlyAdmins = (groupId) => {
   const onlyAdminsGroups = readJSON(filename, []);
 
   return onlyAdminsGroups.includes(groupId);
+};
+
+exports.readGroupRestrictions = () => {
+  return readJSON(GROUP_RESTRICTIONS_FILE, {});
+};
+
+exports.saveGroupRestrictions = (restrictions) => {
+  writeJSON(GROUP_RESTRICTIONS_FILE, restrictions, {});
+};
+
+exports.isActiveGroupRestriction = (groupId, restriction) => {
+  const restrictions = exports.readGroupRestrictions();
+
+  if (!restrictions[groupId]) {
+    return false;
+  }
+
+  return restrictions[groupId][restriction] === true;
+};
+
+exports.updateIsActiveGroupRestriction = (groupId, restriction, isActive) => {
+  const restrictions = exports.readGroupRestrictions();
+
+  if (!restrictions[groupId]) {
+    restrictions[groupId] = {};
+  }
+
+  restrictions[groupId][restriction] = isActive;
+
+  exports.saveGroupRestrictions(restrictions);
+};
+
+exports.readRestrictedMessageTypes = () => {
+  return readJSON(RESTRICTED_MESSAGES_FILE, {
+    sticker: "stickerMessage",
+    video: "videoMessage",
+    image: "imageMessage",
+    audio: "audioMessage",
+    product: "productMessage",
+    document: "documentMessage",
+    event: "eventMessage",
+  });
 };

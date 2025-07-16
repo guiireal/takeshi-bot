@@ -46,6 +46,19 @@ module.exports = {
 
     const url = canvas("bolsonaro", link);
 
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const data = await response.json();
+
+      await sendErrorReply(
+        `Ocorreu um erro ao executar uma chamada remota para a Spider X API no comando bolsonaro!
+      
+📄 *Detalhes*: ${data.message}`
+      );
+      return;
+    }
+
     await sendSuccessReact();
 
     await sendImageFromURL(url, "Imagem gerada!");

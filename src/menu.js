@@ -34,7 +34,14 @@ exports.menuMessage = () => {
 ▢
 ▢ • ${PREFIX}abrir
 ▢ • ${PREFIX}agendar-mensagem
+▢ • ${PREFIX}anti-audio (1/0)
+▢ • ${PREFIX}anti-document (1/0)
+▢ • ${PREFIX}anti-event (1/0)
+▢ • ${PREFIX}anti-image (1/0)
 ▢ • ${PREFIX}anti-link (1/0)
+▢ • ${PREFIX}anti-product (1/0)
+▢ • ${PREFIX}anti-sticker (1/0)
+▢ • ${PREFIX}anti-video (1/0)
 ▢ • ${PREFIX}auto-responder (1/0)
 ▢ • ${PREFIX}ban
 ▢ • ${PREFIX}delete

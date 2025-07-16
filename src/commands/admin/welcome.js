@@ -31,8 +31,8 @@ module.exports = {
       );
     }
 
-    const welcome = args[0] === "1";
-    const notWelcome = args[0] === "0";
+    const welcome = args[0] == "1";
+    const notWelcome = args[0] == "0";
 
     if (!welcome && !notWelcome) {
       throw new InvalidParameterError(

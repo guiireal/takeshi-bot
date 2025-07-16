@@ -23,8 +23,8 @@ module.exports = {
       );
     }
 
-    const exit = args[0] === "1";
-    const notExit = args[0] === "0";
+    const exit = args[0] == "1";
+    const notExit = args[0] == "0";
 
     if (!exit && !notExit) {
       throw new InvalidParameterError(

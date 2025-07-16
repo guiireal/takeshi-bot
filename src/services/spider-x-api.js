@@ -14,6 +14,19 @@ const { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = require("../config");
 const spiderAPITokenConfigured =
   SPIDER_API_TOKEN && SPIDER_API_TOKEN !== "seu_token_aqui";
 
+const messageIfTokenNotConfigured = `Token da API do Spider X não configurado!
+      
+Para configurar, entre na pasta: \`src\` 
+e edite o arquivo \`config.js\`:
+
+Procure por:
+
+\`exports.SPIDER_API_TOKEN = "seu_token_aqui";\`
+
+Para obter o seu token, 
+crie uma conta em: https://api.spiderx.com.br
+e contrate um plano!`;
+
 exports.spiderAPITokenConfigured = spiderAPITokenConfigured;
 
 exports.play = async (type, search) => {
@@ -22,7 +35,7 @@ exports.play = async (type, search) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   const { data } = await axios.get(
@@ -42,7 +55,7 @@ exports.download = async (type, url) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   const { data } = await axios.get(
@@ -60,7 +73,7 @@ exports.gemini = async (text) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   const { data } = await axios.post(
@@ -79,7 +92,7 @@ exports.attp = async (text) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   return `${SPIDER_API_BASE_URL}/stickers/attp?text=${encodeURIComponent(
@@ -93,7 +106,7 @@ exports.ttp = async (text) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   return `${SPIDER_API_BASE_URL}/stickers/ttp?text=${encodeURIComponent(
@@ -107,7 +120,7 @@ exports.search = async (type, search) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   const { data } = await axios.get(
@@ -127,7 +140,7 @@ exports.welcome = (title, description, imageURL) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   return `${SPIDER_API_BASE_URL}/canvas/welcome?title=${encodeURIComponent(
@@ -145,7 +158,7 @@ exports.exit = (title, description, imageURL) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   return `${SPIDER_API_BASE_URL}/canvas/goodbye?title=${encodeURIComponent(
@@ -161,7 +174,7 @@ exports.imageAI = async (type, description) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   const paramSearch = type === "stable-diffusion-turbo" ? "search" : "text";
@@ -181,7 +194,7 @@ exports.canvas = (type, imageURL) => {
   }
 
   if (!spiderAPITokenConfigured) {
-    throw new Error("Token da API do Spider X não configurado");
+    throw new Error(messageIfTokenNotConfigured);
   }
 
   return `${SPIDER_API_BASE_URL}/canvas/${type}?image_url=${encodeURIComponent(

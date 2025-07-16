@@ -5,7 +5,7 @@
  * @author Dev Gui
  */
 const { OWNER_NUMBER, OWNER_LID } = require("../config");
-const { toUserJid } = require("../utils");
+const { compareUserJidWithOwnerNumber } = require("../utils");
 
 exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
   if (type === "member") {
@@ -29,7 +29,8 @@ exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
     const isAdmin = participant.admin === "admin";
 
     const isBotOwner =
-      userJid === toUserJid(OWNER_NUMBER) || userJid === OWNER_LID;
+      compareUserJidWithOwnerNumber({ userJid, ownerNumber: OWNER_NUMBER }) ||
+      userJid === OWNER_LID;
 
     if (type === "admin") {
       return isOwner || isAdmin || isBotOwner;

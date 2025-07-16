@@ -16,6 +16,7 @@ module.exports = {
     args,
     sendStickerFromURL,
     sendSuccessReact,
+    sendErrorReply,
   }) => {
     if (!args.length) {
       throw new InvalidParameterError(
@@ -26,6 +27,19 @@ module.exports = {
     await sendWaitReact();
 
     const url = await attp(args[0].trim());
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const data = await response.json();
+
+      await sendErrorReply(
+        `Ocorreu um erro ao executar uma chamada remota para a Spider X API no comando attp!
+      
+📄 *Detalhes*: ${data.message}`
+      );
+      return;
+    }
 
     await sendSuccessReact();
 

@@ -10,12 +10,14 @@ const {
   GROUP_PARTICIPANT_LEAVE,
   isAddOrLeave,
 } = require("../utils");
+const { DEVELOPER_MODE } = require("../config");
 const { dynamicCommand } = require("../utils/dynamicCommand");
 const { loadCommonFunctions } = require("../utils/loadCommonFunctions");
 const { onGroupParticipantsUpdate } = require("./onGroupParticipantsUpdate");
-const { errorLog } = require("../utils/logger");
+const { errorLog, infoLog } = require("../utils/logger");
 const { badMacHandler } = require("../utils/badMacHandler");
 const { checkIfMemberIsMuted } = require("../utils/database");
+const { messageHandler } = require("./messageHandler");
 
 exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
   if (!messages.length) {
@@ -23,8 +25,22 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
   }
 
   for (const webMessage of messages) {
+    if (DEVELOPER_MODE) {
+      infoLog(
+        `\n\n⪨========== [ MENSAGEM RECEBIDA ] ==========⪩ \n\n${JSON.stringify(
+          messages,
+          null,
+          2
+        )}`
+      );
+    }
+
     try {
       const timestamp = webMessage.messageTimestamp;
+
+      if (webMessage?.message) {
+        messageHandler(socket, webMessage);
+      }
 
       if (isAtLeastMinutesInPast(timestamp)) {
         continue;
