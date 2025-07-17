@@ -14,11 +14,43 @@
 
 <br />
 
-## Bot de WhatsApp multifunções, desenvolvido no vídeo:
+[![Node.js](https://img.shields.io/badge/Node.js-22.14-green?logo=node.js)](https://nodejs.org/en)
+[![Axios](https://img.shields.io/badge/Axios-1.10-blue?logo=axios)](https://axios-http.com/ptbr/docs/intro)
+[![Baileys](https://img.shields.io/badge/Baileys-6.7.18-purple?logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)
+[![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
+[![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
+
+> Base para bots de WhatsApp multifuncional com diversos comandos prontos.
+
+## Desenvolvida do zero, no vídeo:
 
 [CRIANDO UM BOT DE WHATSAPP DO ZERO (GUIA DEFINITIVO) - BASE COMPLETA + 6 COMANDOS - JAVASCRIPT](https://youtu.be/6zr2NYIYIyc)
 
 ![Logger](./assets/images/logger.png)
+
+## 📋 Sumário
+
+1. [Idiomas disponíveis](#-acesse-o-takeshi-bot-em-outros-idiomas)
+2. [Tecnologias utilizadas](#-tecnologias-envolvidas)
+3. [Atenção - suporte](#-atenção)
+4. [Sobre o projeto](#sobre-este-projeto)
+5. [Instalação](#instalação)
+   - [Instalação no Termux](#instalação-no-termux)
+   - [Instalação em VPS (Debian/Ubuntu)](#instalação-em-vps-debianubuntu)
+6. [Configuração de API](#alguns-comandos-necessitam-de-api)
+7. [Funcionalidades](#funcionalidades)
+   - [Funcionalidades gerais](#funcionalidades-gerais)
+   - [Funcionalidades de envio](#funcionalidades-de-envio-exemplos)
+8. [Auto responder](#auto-responder)
+9. [Personalização](#personalização)
+    - [Menu do bot](#onde-fica-o-menu-do-bot)
+    - [Mensagens de boas vindas](#onde-modifico-a-mensagem-de-boas-vindas-e-quando-alguém-sai-do-grupo)
+10. [Implementação técnica](#implementação-técnica-dos-exemplos)
+11. [Estrutura de pastas](#estrutura-de-pastas)
+12. [Erros comuns](#erros-comuns)
+13. [Canal do YouTube](#inscreva-se-no-canal)
+14. [Licença](#licença)
+15. [Disclaimer](#-disclaimer)
 
 ## 🌐 Acesse o Takeshi Bot em outros idiomas
 
