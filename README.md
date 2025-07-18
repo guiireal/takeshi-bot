@@ -641,6 +641,7 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
 - 📝 package-lock.json ➔ _arquivo de cache das dependências do bot_
 - 📝 package.json ➔ _arquivo de definição das dependências do bot_
 - 📝 README.md ➔ _esta documentação_
+- 📝 reset-qr-auth.sh ➔ _arquivo para excluir as credenciais do bot_
 
 Aqui está o texto com emojis nos títulos relacionados ao assunto:
 
