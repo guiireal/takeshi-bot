@@ -669,8 +669,8 @@ Verifique se você não tem dois Takeshi's rodando no seu celular, muitas pessoa
 
 Geralmente as pessoas que cometem esse erro, ficam com dois bots:
 
-1 - O primeiro dentro da `/sdcard`
-2 - O segundo na pasta `/storage/emulated/0/Download`, que no zip fica como `takeshi-bot-main`
+1. O primeiro dentro da `/sdcard`
+2. O segundo na pasta `/storage/emulated/0/Download`, que no zip fica como `takeshi-bot-main`
 
 Você deve apagar um dos bots e tanto configurar quanto executar **apenas um**
 
