@@ -35,6 +35,7 @@
 3. [Sobre o projeto](#sobre-este-projeto)
 4. [Instalação](#instalação)
    - [Instalação no Termux](#instalação-no-termux)
+   - [Instalação nas principais hosts do Brasil](#instalação-nas-principais-hosts-do-brasil)
    - [Instalação em VPS (Debian/Ubuntu)](#instalação-em-vps-debianubuntu)
 5. [Configuração de API](#alguns-comandos-necessitam-de-api)
 6. [Funcionalidades](#funcionalidades)
@@ -73,10 +74,6 @@
 Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com terceiros e tenha pago por isso. 
 Solicite que **a pessoa que te vendeu, forneça suporte**.
 Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso, nem prestamos suporte nessas condições.
-
-Caso seu bot seja o oficial da Bronxys, 
-interaja conosco e receba suporte através do grupo:
-[https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM)
 
 ## Sobre este projeto
 
@@ -174,6 +171,17 @@ exports.OWNER_LID = "219999999999999@lid";
 ```sh
 npm start
 ```
+
+## Instalação nas principais hosts do Brasil
+
+As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo necessário nenhuma instalação manual!
+
+**Hosts suportadas**:
+
+| Bronxys | Speed Cloud |
+|---------|-------------|
+| [Grupo oficial](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM) | [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) |
+| [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
