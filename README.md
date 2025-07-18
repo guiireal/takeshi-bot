@@ -636,7 +636,7 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
 
 Aqui está o texto com emojis nos títulos relacionados ao assunto:
 
-## 🚨 Erros comuns
+## Erros comuns
 
 ### 📁 Operação negada ao extrair a pasta
 
@@ -676,11 +676,11 @@ Geralmente as pessoas que cometem esse erro, ficam com dois bots:
 
 Você deve apagar um dos bots e tanto configurar quanto executar **apenas um**
 
-## 📺 Inscreva-se no canal!
+## Inscreva-se no canal!
 
 <a href="https://www.youtube.com/@devgui_?sub_confirmation=1" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube"></a>
 
-## 📜 Licença
+## Licença
 
 [GPL-3.0](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
 
