@@ -634,9 +634,11 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
 - 📝 package.json ➔ _arquivo de definição das dependências do bot_
 - 📝 README.md ➔ _esta documentação_
 
-## Erros comuns
+Aqui está o texto com emojis nos títulos relacionados ao assunto:
 
-### Operação negada ao extrair a pasta
+## 🚨 Erros comuns
+
+### 📁 Operação negada ao extrair a pasta
 
 O erro abaixo acontece quando é feito o download do arquivo ZIP direto no celular em algumas versões do apk ZArchiver e também de celulares sem root.
 
@@ -644,7 +646,7 @@ Para resolver, siga o [tutorial de instalação via git clone](#termux-new-setup
 
 ![erro comum 1](./assets/images/erro-comum-1.jpg)
 
-### Remoção dos arquivos de sessão e conectar novamente
+### 🔄 Remoção dos arquivos de sessão e conectar novamente
 
 Caso dê algum erro na conexão, digite o seguinte comando:
 
@@ -655,7 +657,7 @@ sh reset-qr-auth.sh
 Depois, remova o dispositivo do WhatsApp indo nas configurações do WhatsApp em "dispositivos conectados" e repita
 o procedimento de iniciar o bot com `npm start`.
 
-### Permission denied (permissão negada) ao acessar `cd /sdcard`
+### 🔐 Permission denied (permissão negada) ao acessar `cd /sdcard`
 
 <br/>
 
@@ -663,7 +665,7 @@ o procedimento de iniciar o bot com `npm start`.
 
 Abra o termux, digite `termux-setup-storage` e depois, aceite as permissões
 
-### Você configura o token da Spider API, prefixo, etc e o bot não reconhece
+### ⚙️ Você configura o token da Spider API, prefixo, etc e o bot não reconhece
 
 Verifique se você não tem dois Takeshi's rodando no seu celular, muitas pessoas baixam o zip e seguem o tutorial, porém, **o tutorial não explica pelo zip, e sim, pelo git clone**.
 
@@ -674,11 +676,11 @@ Geralmente as pessoas que cometem esse erro, ficam com dois bots:
 
 Você deve apagar um dos bots e tanto configurar quanto executar **apenas um**
 
-## Inscreva-se no canal!
+## 📺 Inscreva-se no canal!
 
 <a href="https://www.youtube.com/@devgui_?sub_confirmation=1" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube"></a>
 
-## Licença
+## 📜 Licença
 
 [GPL-3.0](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
 
