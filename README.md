@@ -178,10 +178,10 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 
 **Hosts suportadas**:
 
-| Bronxys | Speed Cloud |
-|---------|-------------|
-| [Grupo oficial](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM) | [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) |
-| [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) |
+| Bronxys | Nexfuture | Speed Cloud |
+|---------|-------------|-------------|
+| [Grupo oficial](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM) | [Grupo oficial](https://chat.whatsapp.com/Fl5FzZQC00J5CZp07AZVwQ?mode=r_c) | [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) |
+| [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![Nexfuture](./assets/images/nexfuture.png)](https://speedhosting.cloud/) | [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
