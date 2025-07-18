@@ -99,8 +99,15 @@ pkg upgrade -y && pkg update -y && pkg install git -y && pkg install nodejs-lts 
 termux-setup-storage
 ```
 
-3 - Entre na pasta sdcard.
+3 - Escolha uma pasta de sua preferência pra colocar os arquivos do bot.
 
+Pastas mais utilizadas:
+
+- /sdcard
+- /storage/emulated/0
+- /storage/emulated/0/Download
+
+No nosso exemplo, vamos pra `/sdcard`
 ```sh
 cd /sdcard
 ```
@@ -639,15 +646,14 @@ Para resolver, siga o [tutorial de instalação via git clone](#termux-new-setup
 
 ### Remoção dos arquivos de sessão e conectar novamente
 
-Caso dê algum erro na conexão, você pode apagar os arquivos dentro da pasta `/assets/auth/baileys`.
+Caso dê algum erro na conexão, digite o seguinte comando:
 
 ```sh
-rm -rf ./asset/auth/baileys
+sh reset-qr-auth.sh
 ```
 
-Depois, remova o dispositivo do WhatsApp indo nas configurações do WhatsApp em "dispositivos conectados".
-
-Adicione novamente um novo dispositivo.
+Depois, remova o dispositivo do WhatsApp indo nas configurações do WhatsApp em "dispositivos conectados" e repita
+o procedimento de iniciar o bot com `npm start`.
 
 ### Permission denied (permissão negada) ao acessar `cd /sdcard`
 
