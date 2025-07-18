@@ -665,7 +665,7 @@ Abra o termux, digite `termux-setup-storage` e depois, aceite as permissões
 
 ### Você configura o token da Spider API, prefixo, etc e o bot não reconhece
 
-Verifique se você não tem dois Takeshi's rodando no seu celular, muitas pessoas baixam o .zip e segue o tutorial, porém, **o tutorial não explica pelo zip, e sim, pelo git clone**
+Verifique se você não tem dois Takeshi's rodando no seu celular, muitas pessoas baixam o zip e seguem o tutorial, porém, **o tutorial não explica pelo zip, e sim, pelo git clone**.
 
 Geralmente as pessoas que cometem esse erro, ficam com dois bots:
 
