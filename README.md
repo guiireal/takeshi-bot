@@ -107,7 +107,7 @@ Pastas mais utilizadas:
 - /storage/emulated/0
 - /storage/emulated/0/Download
 
-No nosso exemplo, vamos pra `/sdcard`
+No nosso exemplo, vamos para a `/sdcard`
 ```sh
 cd /sdcard
 ```
