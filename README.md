@@ -31,26 +31,25 @@
 ## 📋 Sumário
 
 1. [Idiomas disponíveis](#-acesse-o-takeshi-bot-em-outros-idiomas)
-2. [Tecnologias utilizadas](#-tecnologias-envolvidas)
-3. [Atenção - suporte](#-atenção)
-4. [Sobre o projeto](#sobre-este-projeto)
-5. [Instalação](#instalação)
+2. [Atenção - suporte](#-atenção)
+3. [Sobre o projeto](#sobre-este-projeto)
+4. [Instalação](#instalação)
    - [Instalação no Termux](#instalação-no-termux)
    - [Instalação em VPS (Debian/Ubuntu)](#instalação-em-vps-debianubuntu)
-6. [Configuração de API](#alguns-comandos-necessitam-de-api)
-7. [Funcionalidades](#funcionalidades)
+5. [Configuração de API](#alguns-comandos-necessitam-de-api)
+6. [Funcionalidades](#funcionalidades)
    - [Funcionalidades gerais](#funcionalidades-gerais)
    - [Funcionalidades de envio](#funcionalidades-de-envio-exemplos)
-8. [Auto responder](#auto-responder)
-9. [Personalização](#personalização)
+7. [Auto responder](#auto-responder)
+8. [Personalização](#personalização)
     - [Menu do bot](#onde-fica-o-menu-do-bot)
     - [Mensagens de boas vindas](#onde-modifico-a-mensagem-de-boas-vindas-e-quando-alguém-sai-do-grupo)
-10. [Implementação técnica](#implementação-técnica-dos-exemplos)
-11. [Estrutura de pastas](#estrutura-de-pastas)
-12. [Erros comuns](#erros-comuns)
-13. [Canal do YouTube](#inscreva-se-no-canal)
-14. [Licença](#licença)
-15. [Disclaimer](#-disclaimer)
+9. [Implementação técnica](#implementação-técnica-dos-exemplos)
+10. [Estrutura de pastas](#estrutura-de-pastas)
+11. [Erros comuns](#erros-comuns)
+12. [Canal do YouTube](#inscreva-se-no-canal)
+13. [Licença](#licença)
+14. [Disclaimer](#-disclaimer)
 
 ## 🌐 Acesse o Takeshi Bot em outros idiomas
 
@@ -68,14 +67,6 @@
     <strong>Bahasa Indonesia</strong> — <a href="https://github.com/guiireal/takeshi-bot-bahasa-indonesia">klik disini</a>
   </li>
 </ul>
-
-## 💻 Tecnologias envolvidas
-
-- [Axios](https://axios-http.com/ptbr/docs/intro)
-- [Baileys 6.7.18](https://github.com/WhiskeySockets/Baileys)
-- [FFMPEG](https://ffmpeg.org/)
-- [Node.js >= 22.14.0](https://nodejs.org/en)
-- [Spider X API](https://api.spiderx.com.br)
 
 ## ⚠ Atenção
 
