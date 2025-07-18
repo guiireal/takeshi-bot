@@ -105,7 +105,7 @@ Pastas mais utilizadas:
 
 - /sdcard
 - /storage/emulated/0
-- /storage/emulated/0/Download
+- /storage/emulated/0/Download (muito comum quando você baixa o bot pelo .zip)
 
 No nosso exemplo, vamos para a `/sdcard`
 ```sh
