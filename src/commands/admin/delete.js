@@ -11,6 +11,12 @@ module.exports = {
    * @returns {Promise<void>}
    */
   handle: async ({ deleteMessage, webMessage, remoteJid }) => {
+    if (!webMessage?.message?.extendedTextMessage?.contextInfo) {
+      throw new InvalidParameterError(
+        "Você deve mencionar uma mensagem para excluir!"
+      );
+    }
+
     const { stanzaId, participant } =
       webMessage?.message?.extendedTextMessage?.contextInfo;
 

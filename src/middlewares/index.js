@@ -4,7 +4,7 @@
  * @author Dev Gui
  */
 const { PREFIX, OWNER_NUMBER, OWNER_LID } = require("../config");
-const { compareUserJidWithOwnerNumber } = require("../utils");
+const { compareUserJidWithOtherNumber } = require("../utils");
 
 exports.verifyPrefix = (prefix) => PREFIX === prefix;
 exports.hasTypeAndCommand = ({ type, command }) => !!type && !!command;
@@ -54,9 +54,9 @@ exports.isAdmin = async ({ remoteJid, userJid, socket }) => {
   const isOwner =
     participant.id === owner ||
     participant.admin === "superadmin" ||
-    compareUserJidWithOwnerNumber({
+    compareUserJidWithOtherNumber({
       userJid: participant.id,
-      ownerNumber: OWNER_NUMBER,
+      otherNumber: OWNER_NUMBER,
     });
 
   const isAdmin = participant.admin === "admin";
@@ -69,8 +69,8 @@ exports.isBotOwner = ({ userJid, isLid }) => {
     return userJid === OWNER_LID;
   }
 
-  return compareUserJidWithOwnerNumber({
+  return compareUserJidWithOtherNumber({
     userJid: userJid,
-    ownerNumber: OWNER_NUMBER,
+    otherNumber: OWNER_NUMBER,
   });
 };

@@ -375,14 +375,14 @@ const normalizeNumber = (number) => {
   return { with9: number, without9: number };
 };
 
-exports.compareUserJidWithOwnerNumber = ({ userJid, ownerNumber }) => {
-  if (!ownerNumber.startsWith("55")) {
-    return userJid === toUserJid(ownerNumber);
+exports.compareUserJidWithOtherNumber = ({ userJid, otherNumber }) => {
+  if (!otherNumber.startsWith("55")) {
+    return userJid === toUserJid(otherNumber);
   }
 
   const userNumber = onlyNumbers(userJid);
   const userVariations = normalizeNumber(userNumber);
-  const ownerVariations = normalizeNumber(ownerNumber);
+  const ownerVariations = normalizeNumber(otherNumber);
 
   return (
     userVariations.with9 === ownerVariations.with9 ||
