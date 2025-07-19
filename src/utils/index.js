@@ -376,6 +376,10 @@ const normalizeNumber = (number) => {
 };
 
 exports.compareUserJidWithOtherNumber = ({ userJid, otherNumber }) => {
+  if (!userJid || !otherNumber) {
+    return false;
+  }
+
   if (!otherNumber.startsWith("55")) {
     return userJid === toUserJid(otherNumber);
   }

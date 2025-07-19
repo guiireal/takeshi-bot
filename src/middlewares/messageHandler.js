@@ -25,6 +25,10 @@ exports.messageHandler = async (socket, webMessage) => {
 
     const userJid = webMessage.key?.participant;
 
+    if (!userJid) {
+      return;
+    }
+
     const isBotOrOwner =
       compareUserJidWithOtherNumber({ userJid, otherNumber: OWNER_NUMBER }) ||
       compareUserJidWithOtherNumber({ userJid, otherNumber: BOT_NUMBER }) ||
