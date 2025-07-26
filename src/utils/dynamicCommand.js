@@ -15,8 +15,9 @@ const {
   hasTypeAndCommand,
   isLink,
   isAdmin,
+  checkPermission,
+  isBotOwner,
 } = require("../middlewares");
-const { checkPermission } = require("../middlewares/checkPermission");
 const {
   isActiveGroup,
   getAutoResponderResponse,
@@ -28,18 +29,23 @@ const { errorLog } = require("../utils/logger");
 const { ONLY_GROUP_ID } = require("../config");
 const { badMacHandler } = require("./badMacHandler");
 
+/**
+ * @param {CommandHandleProps} paramsHandler
+ * @param {number} startProcess
+ */
 exports.dynamicCommand = async (paramsHandler, startProcess) => {
   const {
     commandName,
     prefix,
     sendWarningReply,
     sendErrorReply,
-    remoteJid,
     sendReply,
+    remoteJid,
     socket,
     userJid,
     fullMessage,
     webMessage,
+    isLid,
   } = paramsHandler;
 
   const activeGroup = isActiveGroup(remoteJid);
@@ -106,7 +112,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     }
   }
 
-  if (!activeGroup) {
+  if (!isBotOwner({ userJid, isLid }) && !activeGroup) {
     if (verifyPrefix(prefix) && hasTypeAndCommand({ type, command })) {
       if (command.name !== "on") {
         await sendWarningReply(

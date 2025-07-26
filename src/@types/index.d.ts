@@ -94,12 +94,12 @@ declare global {
     /**
      * Timestamp em que o comando foi iniciado.
      */
-    startProcess: number;
+    startProcess?: number;
 
     /**
      * Tipo de comando por cargo, se é "admin", "owner" ou "member".
      */
-    type: string;
+    type?: string;
 
     /**
      * ID do usuário que está mandando a mensagem.

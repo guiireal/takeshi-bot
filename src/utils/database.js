@@ -10,10 +10,10 @@ const fs = require("node:fs");
 const databasePath = path.resolve(__dirname, "..", "..", "database");
 
 const AUTO_RESPONDER_FILE = "auto-responder";
+const AUTO_RESPONDER_GROUPS_FILE = "auto-responder-groups";
 const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const EXIT_GROUPS_FILE = "exit-groups";
 const GROUP_RESTRICTIONS_FILE = "group-restrictions";
-const INACTIVE_AUTO_RESPONDER_GROUPS_FILE = "inactive-auto-responder-groups";
 const INACTIVE_GROUPS_FILE = "inactive-groups";
 const MUTE_FILE = "muted";
 const ONLY_ADMINS_FILE = "only-admins";
@@ -169,39 +169,39 @@ exports.getAutoResponderResponse = (match) => {
 };
 
 exports.activateAutoResponderGroup = (groupId) => {
-  const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
+  const filename = AUTO_RESPONDER_GROUPS_FILE;
 
-  const inactiveAutoResponderGroups = readJSON(filename);
+  const autoResponderGroups = readJSON(filename);
 
-  const index = inactiveAutoResponderGroups.indexOf(groupId);
+  if (!autoResponderGroups.includes(groupId)) {
+    autoResponderGroups.push(groupId);
+  }
+
+  writeJSON(filename, autoResponderGroups);
+};
+
+exports.deactivateAutoResponderGroup = (groupId) => {
+  const filename = AUTO_RESPONDER_GROUPS_FILE;
+
+  const autoResponderGroups = readJSON(filename);
+
+  const index = autoResponderGroups.indexOf(groupId);
 
   if (index === -1) {
     return;
   }
 
-  inactiveAutoResponderGroups.splice(index, 1);
+  autoResponderGroups.splice(index, 1);
 
-  writeJSON(filename, inactiveAutoResponderGroups);
-};
-
-exports.deactivateAutoResponderGroup = (groupId) => {
-  const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
-
-  const inactiveAutoResponderGroups = readJSON(filename);
-
-  if (!inactiveAutoResponderGroups.includes(groupId)) {
-    inactiveAutoResponderGroups.push(groupId);
-  }
-
-  writeJSON(filename, inactiveAutoResponderGroups);
+  writeJSON(filename, autoResponderGroups);
 };
 
 exports.isActiveAutoResponderGroup = (groupId) => {
-  const filename = INACTIVE_AUTO_RESPONDER_GROUPS_FILE;
+  const filename = AUTO_RESPONDER_GROUPS_FILE;
 
-  const inactiveAutoResponderGroups = readJSON(filename);
+  const autoResponderGroups = readJSON(filename);
 
-  return !inactiveAutoResponderGroups.includes(groupId);
+  return autoResponderGroups.includes(groupId);
 };
 
 exports.activateAntiLinkGroup = (groupId) => {
