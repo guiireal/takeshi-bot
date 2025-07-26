@@ -179,10 +179,15 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 
 **Hosts suportadas**:
 
-| Bronxys | Nexfuture | Speed Cloud |
-|---------|-------------|-------------|
-| [Grupo oficial](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM) | [Grupo oficial](https://chat.whatsapp.com/Fl5FzZQC00J5CZp07AZVwQ?mode=r_c) | [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) |
-| [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![Nexfuture](./assets/images/nexfuture.png)](https://speedhosting.cloud/) | [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) |
+| Bronxys | Nexfuture |
+|---------|-----------|
+| [Grupo oficial](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM) | [Grupo oficial](https://chat.whatsapp.com/Fl5FzZQC00J5CZp07AZVwQ?mode=r_c) |
+| [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![Nexfuture](./assets/images/nexfuture.png)](https://speedhosting.cloud/) |
+
+| Speed Cloud | SpeedMaster |
+|-------------| ------------ |
+| [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) | [Grupo oficial](https://chat.whatsapp.com/H48GLkKeh3YAWGQRSActa2?mode=ac_t) |
+| [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) | [![Speed Master](./assets/images/speed-master.png)](https://speedmasterx.shop/) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
@@ -637,6 +642,7 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
     - 📝 menu.js ➔ _menu do bot_
     - 📝 test.js ➔ _script de testes_
 - 📝 ⚡-cases-estao-aqui.js ➔ _easter egg_ 
+- 📝 CONTRIBUTING.md ➔ _eguia de contribuição_ 
 - 📝 index.js ➔ _script ponto de entrada do bot para hospedagem_
 - 📝 .gitignore ➔ _arquivo para não subir certas pastas no GitHub_
 - 📝 LICENSE ➔ _arquivo de licença_
