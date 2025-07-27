@@ -64,7 +64,7 @@ async function connect() {
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
 
-  const { version } = await fetchLatestBaileysVersion();
+  const { version,isLatest } = await fetchLatestBaileysVersion();
 
   const socket = makeWASocket({
     version,
