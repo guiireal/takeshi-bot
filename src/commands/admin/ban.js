@@ -25,6 +25,7 @@ ${PREFIX}ban (mencionando uma mensagem)`,
     replyJid,
     sendReply,
     userJid,
+    isLid,
     sendSuccessReact,
   }) => {
     if (!args.length && !isReply) {
@@ -33,30 +34,46 @@ ${PREFIX}ban (mencionando uma mensagem)`,
       );
     }
 
-    const memberToRemoveJid = isReply ? replyJid : toUserJid(args[0]);
-    const memberToRemoveNumber = onlyNumbers(memberToRemoveJid);
+    let memberToRemoveId = null;
 
-    if (memberToRemoveNumber.length < 7 || memberToRemoveNumber.length > 15) {
-      throw new InvalidParameterError("Número inválido!");
-    }
+    if (isLid) {
+      const [result] = await socket.onWhatsApp(onlyNumbers(args[0]));
 
-    if (memberToRemoveJid === userJid) {
-      throw new DangerError("Você não pode remover você mesmo!");
-    }
+      if (!result) {
+        throw new WarningError(
+          "O número informado não está registrado no WhatsApp!"
+        );
+      }
 
-    if (memberToRemoveNumber === OWNER_NUMBER) {
-      throw new DangerError("Você não pode remover o dono do bot!");
-    }
+      memberToRemoveId = result.lid;
+    } else {
+      const memberToRemoveJid = isReply ? replyJid : toUserJid(args[0]);
+      const memberToRemoveNumber = onlyNumbers(memberToRemoveJid);
 
-    const botJid = toUserJid(BOT_NUMBER);
+      if (memberToRemoveNumber.length < 7 || memberToRemoveNumber.length > 15) {
+        throw new InvalidParameterError("Número inválido!");
+      }
 
-    if (memberToRemoveJid === botJid) {
-      throw new DangerError("Você não pode me remover!");
+      if (memberToRemoveJid === userJid) {
+        throw new DangerError("Você não pode remover você mesmo!");
+      }
+
+      if (memberToRemoveNumber === OWNER_NUMBER) {
+        throw new DangerError("Você não pode remover o dono do bot!");
+      }
+
+      const botJid = toUserJid(BOT_NUMBER);
+
+      if (memberToRemoveJid === botJid) {
+        throw new DangerError("Você não pode me remover!");
+      }
+
+      memberToRemoveId = memberToRemoveJid;
     }
 
     await socket.groupParticipantsUpdate(
       remoteJid,
-      [memberToRemoveJid],
+      [memberToRemoveId],
       "remove"
     );
 
