@@ -132,6 +132,10 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     }
   }
 
+  if (!verifyPrefix(prefix)) {
+    return;
+  }
+
   try {
     await command.handle({
       ...paramsHandler,
