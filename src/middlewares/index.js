@@ -16,6 +16,10 @@ exports.isLink = (text) => {
     return false;
   }
 
+  if (/[.]{2,3}/.test(cleanText)) {
+    return false;
+  }
+
   try {
     const url = new URL(cleanText);
     return url.protocol === "http:" || url.protocol === "https:";
