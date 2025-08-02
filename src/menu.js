@@ -77,7 +77,7 @@ exports.menuMessage = () => {
 ▢ • ${PREFIX}to-image
 ▢ • ${PREFIX}ttp
 ▢ • ${PREFIX}yt-search
-▢
+▢ • ${PREFIX}gerarCpf
 ╰━━─「🚀」─━━
 
 ╭━━⪩ DOWNLOADS ⪨━━
