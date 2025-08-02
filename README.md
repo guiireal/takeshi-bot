@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.7.1-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.7.2-blue">
     </a>
 </div>
 
