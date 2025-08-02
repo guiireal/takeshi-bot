@@ -32,9 +32,11 @@ exports.isLink = (text) => {
         .split("?")[0]
         .split("#")[0];
 
+      const hostnameWithoutTrailingDot = originalHostname.replace(/\.$/, "");
+
       return (
         url.hostname.includes(".") &&
-        originalHostname.includes(".") &&
+        hostnameWithoutTrailingDot.includes(".") &&
         url.hostname.length > 4 &&
         !/^\d+$/.test(originalHostname)
       );
