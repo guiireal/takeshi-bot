@@ -7,7 +7,12 @@
  * @author Dev Gui
  */
 const { BOT_EMOJI, TIMEOUT_IN_MILLISECONDS_BY_EVENT } = require("../config");
-const { extractDataFromMessage, baileysIs, download } = require(".");
+const {
+  extractDataFromMessage,
+  baileysIs,
+  download,
+  onlyNumbers,
+} = require(".");
 const fs = require("node:fs");
 const { delay } = require("baileys");
 
@@ -104,6 +109,20 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     });
   };
 
+  const sendEditedText = async (text, messageToEdit, mentions) => {
+    let optionalParams = {};
+
+    if (mentions?.length) {
+      optionalParams = { mentions };
+    }
+
+    return await socket.sendMessage(remoteJid, {
+      text: `${BOT_EMOJI} ${text}`,
+      ...optionalParams,
+      edit: messageToEdit.key,
+    });
+  };
+
   const sendReply = async (text, mentions) => {
     await sendTypingState();
 
@@ -118,6 +137,51 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
       { text: `${BOT_EMOJI} ${text}`, ...optionalParams },
       { quoted: webMessage }
     );
+  };
+
+  const sendEditedReply = async (text, messageToEdit, mentions) => {
+    let optionalParams = {};
+
+    if (mentions?.length) {
+      optionalParams = { mentions };
+    }
+
+    return await socket.sendMessage(
+      remoteJid,
+      {
+        text: `${BOT_EMOJI} ${text}`,
+        ...optionalParams,
+        edit: messageToEdit.key,
+      },
+      { quoted: webMessage }
+    );
+  };
+
+  const sendContact = async (phoneNumber, displayName) => {
+    const phoneNumberHidrated = onlyNumbers(phoneNumber);
+
+    const vcard =
+      "BEGIN:VCARD\n" +
+      "VERSION:3.0\n" +
+      `FN:${displayName}\n` +
+      `TEL;type=CELL;type=VOICE;waid=${phoneNumberHidrated}:${phoneNumber}\n` +
+      "END:VCARD";
+
+    await socket.sendMessage(remoteJid, {
+      contacts: {
+        displayName,
+        contacts: [{ vcard }],
+      },
+    });
+  };
+
+  const sendLocation = async (latitude, longitude) => {
+    await socket.sendMessage(remoteJid, {
+      location: {
+        degreesLatitude: latitude,
+        degreesLongitude: longitude,
+      },
+    });
   };
 
   const sendReact = async (emoji, msgKey = webMessage.key) => {
@@ -670,9 +734,12 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     sendAudioFromBuffer,
     sendAudioFromFile,
     sendAudioFromURL,
+    sendContact,
     sendDocumentFromBuffer,
     sendDocumentFromFile,
     sendDocumentFromURL,
+    sendEditedReply,
+    sendEditedText,
     sendErrorReact,
     sendErrorReply,
     sendGifFromBuffer,
@@ -681,6 +748,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     sendImageFromBuffer,
     sendImageFromFile,
     sendImageFromURL,
+    sendLocation,
     sendPoll,
     sendReact,
     sendRecordState,

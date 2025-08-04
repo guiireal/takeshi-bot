@@ -24,9 +24,10 @@ const {
   isActiveAutoResponderGroup,
   isActiveAntiLinkGroup,
   isActiveOnlyAdmins,
+  getPrefix,
 } = require("./database");
 const { errorLog } = require("../utils/logger");
-const { ONLY_GROUP_ID } = require("../config");
+const { ONLY_GROUP_ID, PREFIX, BOT_EMOJI } = require("../config");
 const { badMacHandler } = require("./badMacHandler");
 
 /**
@@ -36,16 +37,17 @@ const { badMacHandler } = require("./badMacHandler");
 exports.dynamicCommand = async (paramsHandler, startProcess) => {
   const {
     commandName,
+    fullMessage,
+    isLid,
     prefix,
-    sendWarningReply,
-    sendErrorReply,
-    sendReply,
     remoteJid,
+    sendErrorReply,
+    sendReact,
+    sendReply,
+    sendWarningReply,
     socket,
     userJid,
-    fullMessage,
     webMessage,
-    isLid,
   } = paramsHandler;
 
   const activeGroup = isActiveGroup(remoteJid);
@@ -82,7 +84,10 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
   }
 
   if (activeGroup) {
-    if (!verifyPrefix(prefix) || !hasTypeAndCommand({ type, command })) {
+    if (
+      !verifyPrefix(prefix, remoteJid) ||
+      !hasTypeAndCommand({ type, command })
+    ) {
       if (isActiveAutoResponderGroup(remoteJid)) {
         const response = getAutoResponderResponse(fullMessage);
 
@@ -113,7 +118,10 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
   }
 
   if (!isBotOwner({ userJid, isLid }) && !activeGroup) {
-    if (verifyPrefix(prefix) && hasTypeAndCommand({ type, command })) {
+    if (
+      verifyPrefix(prefix, remoteJid) &&
+      hasTypeAndCommand({ type, command })
+    ) {
       if (command.name !== "on") {
         await sendWarningReply(
           "Este grupo está desativado! Peça para o dono do grupo ativar o bot!"
@@ -132,7 +140,26 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     }
   }
 
-  if (!verifyPrefix(prefix)) {
+  if (!verifyPrefix(prefix, remoteJid)) {
+    return;
+  }
+
+  const groupPrefix = getPrefix(remoteJid);
+
+  if (fullMessage === groupPrefix) {
+    await sendReact(BOT_EMOJI);
+    await sendReply(
+      `Este é meu prefixo! Use ${groupPrefix}menu para ver os comandos disponíveis!`
+    );
+
+    return;
+  }
+
+  if (!hasTypeAndCommand({ type, command })) {
+    await sendWarningReply(
+      `Comando não encontrado! Use ${groupPrefix}menu para ver os comandos disponíveis!`
+    );
+
     return;
   }
 

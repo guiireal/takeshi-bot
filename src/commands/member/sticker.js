@@ -9,6 +9,7 @@ const fs = require("node:fs");
 const { addStickerMetadata } = require(`${BASE_DIR}/services/sticker`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const { PREFIX, BOT_NAME, BOT_EMOJI } = require(`${BASE_DIR}/config`);
+const { exec } = require("child_process");
 
 module.exports = {
   name: "sticker",
@@ -71,8 +72,6 @@ module.exports = {
         }
 
         await new Promise((resolve, reject) => {
-          const { exec } = require("child_process");
-
           const cmd = `ffmpeg -i "${inputPath}" -vf "scale=512:512:force_original_aspect_ratio=decrease" -f webp -quality 90 "${outputPath}"`;
 
           exec(cmd, (error, _, stderr) => {
@@ -121,9 +120,7 @@ module.exports = {
         }
 
         await new Promise((resolve, reject) => {
-          const { exec } = require("child_process");
-
-          const cmd = `ffmpeg -y -i "${inputPath}" -vcodec libwebp -fs 0.99M -filter_complex "[0:v] scale=512:512, fps=30, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse" -f webp "${outputPath}"`;
+          const cmd = `ffmpeg -y -i "${inputPath}" -vcodec libwebp -fs 0.99M -filter_complex "[0:v] scale=512:512, fps=15, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse" -f webp "${outputPath}"`;
 
           exec(cmd, (error, _, stderr) => {
             if (error) {
@@ -175,6 +172,7 @@ module.exports = {
       if (fs.existsSync(outputPath)) {
         fs.unlinkSync(outputPath);
       }
+
       if (fs.existsSync(stickerPath)) {
         fs.unlinkSync(stickerPath);
       }

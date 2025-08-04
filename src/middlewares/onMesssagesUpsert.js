@@ -96,7 +96,9 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
         continue;
       }
 
-      errorLog(`Erro ao processar mensagem: ${error.message}`);
+      errorLog(
+        `Erro ao processar mensagem: ${error.message} | Stack: ${error.stack}`
+      );
 
       continue;
     }

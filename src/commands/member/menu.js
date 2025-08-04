@@ -11,12 +11,12 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({ sendImageFromFile, sendSuccessReact }) => {
+  handle: async ({ remoteJid, sendImageFromFile, sendSuccessReact }) => {
     await sendSuccessReact();
 
     await sendImageFromFile(
       path.join(ASSETS_DIR, "images", "takeshi-bot.png"),
-      `\n\n${menuMessage()}`
+      `\n\n${menuMessage(remoteJid)}`
     );
   },
 };

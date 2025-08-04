@@ -19,7 +19,7 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendReact }) => {
+  handle: async ({ sendReply, sendReact, prefix }) => {
     await sendReact("📚");
 
     await delay(2000);
@@ -32,87 +32,101 @@ module.exports = {
     await delay(2000);
 
     await sendReply(
-      "*🔊 ÁUDIO:*\n" +
-        `• \`${PREFIX}enviar-audio-de-arquivo\` - Enviar áudio de arquivo local\n` +
-        `• \`${PREFIX}enviar-audio-de-url\` - Enviar áudio de URL\n` +
-        `• \`${PREFIX}enviar-audio-de-buffer\` - Enviar áudio de buffer`
+      "*🔊 ÁUDIO*\n" +
+        `• \`${prefix}enviar-audio-de-arquivo\` - Enviar áudio de arquivo local\n` +
+        `• \`${prefix}enviar-audio-de-url\` - Enviar áudio de URL\n` +
+        `• \`${prefix}enviar-audio-de-buffer\` - Enviar áudio de buffer`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*🖼️ IMAGEM:*\n" +
-        `• \`${PREFIX}enviar-imagem-de-arquivo\` - Enviar imagem de arquivo local\n` +
-        `• \`${PREFIX}enviar-imagem-de-url\` - Enviar imagem de URL\n` +
-        `• \`${PREFIX}enviar-imagem-de-buffer\` - Enviar imagem de buffer`
+      "*🖼️ IMAGEM*\n" +
+        `• \`${prefix}enviar-imagem-de-arquivo\` - Enviar imagem de arquivo local\n` +
+        `• \`${prefix}enviar-imagem-de-url\` - Enviar imagem de URL\n` +
+        `• \`${prefix}enviar-imagem-de-buffer\` - Enviar imagem de buffer`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*🎬 VÍDEO:*\n" +
-        `• \`${PREFIX}enviar-video-de-arquivo\` - Enviar vídeo de arquivo local\n` +
-        `• \`${PREFIX}enviar-video-de-url\` - Enviar vídeo de URL\n` +
-        `• \`${PREFIX}enviar-video-de-buffer\` - Enviar vídeo de buffer`
+      "*🎬 VÍDEO*\n" +
+        `• \`${prefix}enviar-video-de-arquivo\` - Enviar vídeo de arquivo local\n` +
+        `• \`${prefix}enviar-video-de-url\` - Enviar vídeo de URL\n` +
+        `• \`${prefix}enviar-video-de-buffer\` - Enviar vídeo de buffer`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*🎞️ GIF:*\n" +
-        `• \`${PREFIX}enviar-gif-de-arquivo\` - Enviar GIF de arquivo local\n` +
-        `• \`${PREFIX}enviar-gif-de-url\` - Enviar GIF de URL\n` +
-        `• \`${PREFIX}enviar-gif-de-buffer\` - Enviar GIF de buffer`
+      "*🎞️ GIF*\n" +
+        `• \`${prefix}enviar-gif-de-arquivo\` - Enviar GIF de arquivo local\n` +
+        `• \`${prefix}enviar-gif-de-url\` - Enviar GIF de URL\n` +
+        `• \`${prefix}enviar-gif-de-buffer\` - Enviar GIF de buffer`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*🏷️ STICKER:*\n" +
-        `• \`${PREFIX}enviar-sticker-de-arquivo\` - Enviar sticker de arquivo local\n` +
-        `• \`${PREFIX}enviar-sticker-de-url\` - Enviar sticker de URL\n` +
-        `• \`${PREFIX}enviar-sticker-de-buffer\` - Enviar sticker de buffer`
+      "*🏷️ STICKER*\n" +
+        `• \`${prefix}enviar-sticker-de-arquivo\` - Enviar sticker de arquivo local\n` +
+        `• \`${prefix}enviar-sticker-de-url\` - Enviar sticker de URL\n` +
+        `• \`${prefix}enviar-sticker-de-buffer\` - Enviar sticker de buffer`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*📊 ENQUETE:*\n" +
-        `• \`${PREFIX}enviar-enquete\` - Enviar enquetes/votações (escolha única ou múltipla)`
+      "*📊 ENQUETE*\n" +
+        `• \`${prefix}enviar-enquete\` - Enviar enquetes/votações (escolha única ou múltipla)`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*📄 DOCUMENTO:*\n" +
-        `• \`${PREFIX}enviar-documento-de-arquivo\` - Enviar documento de arquivo local\n` +
-        `• \`${PREFIX}enviar-documento-de-url\` - Enviar documento de URL\n` +
-        `• \`${PREFIX}enviar-documento-de-buffer\` - Enviar documento de buffer`
+      "*📍 LOCALIZAÇÃO*\n" +
+        `• \`${prefix}enviar-localizacao\` - Enviar localização`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*💬 TEXTO E RESPOSTAS:*\n" +
-        `• \`${PREFIX}enviar-texto\` - Enviar texto (com/sem menção)\n` +
-        `• \`${PREFIX}enviar-resposta\` - Responder mensagens (com/sem menção)\n` +
-        `• \`${PREFIX}enviar-reacoes\` - Enviar reações (emojis)`
+      "*📲 CONTATO*\n" + `• \`${prefix}enviar-contato\` - Enviar contato`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*📊 DADOS E METADADOS:*\n" +
-        `• \`${PREFIX}obter-dados-grupo\` - Obter dados do grupo (nome, dono, participantes)\n` +
-        `• \`${PREFIX}obter-metadados-mensagem\` - Obter metadados da mensagem\n` +
-        `• \`${PREFIX}funcoes-grupo\` - Funções utilitárias de grupo (demonstração)\n` +
-        `• \`${PREFIX}raw-message\` - Obter dados brutos da mensagem`
+      "*📄 DOCUMENTO*\n" +
+        `• \`${prefix}enviar-documento-de-arquivo\` - Enviar documento de arquivo local\n` +
+        `• \`${prefix}enviar-documento-de-url\` - Enviar documento de URL\n` +
+        `• \`${prefix}enviar-documento-de-buffer\` - Enviar documento de buffer`
     );
 
     await delay(2000);
 
     await sendReply(
-      "*🎯 COMO USAR:*\n\n" +
+      "*💬 TEXTO E RESPOSTAS*\n" +
+        `• \`${prefix}enviar-texto\` - Enviar texto (com/sem menção)\n` +
+        `• \`${prefix}enviar-resposta\` - Responder mensagens (com/sem menção)\n` +
+        `• \`${prefix}enviar-reacoes\` - Enviar reações (emojis)\n` +
+        `• \`${prefix}enviar-mensagem-editada\` - Enviar mensagens editadas`
+    );
+
+    await delay(2000);
+
+    await sendReply(
+      "*📊 DADOS E METADADOS*\n" +
+        `• \`${prefix}obter-dados-grupo\` - Obter dados do grupo (nome, dono, participantes)\n` +
+        `• \`${prefix}obter-metadados-mensagem\` - Obter metadados da mensagem\n` +
+        `• \`${prefix}funcoes-grupo\` - Funções utilitárias de grupo (demonstração)\n` +
+        `• \`${prefix}raw-message\` - Obter dados brutos da mensagem`
+    );
+
+    await delay(2000);
+
+    await sendReply(
+      "*🎯 COMO USAR*\n\n" +
         "1️⃣ Execute qualquer comando da lista acima\n" +
         "2️⃣ Observe o comportamento prático\n" +
         "3️⃣ Veja o código fonte em `/src/commands/member/exemplos/`\n" +
@@ -123,7 +137,7 @@ module.exports = {
     await delay(2000);
 
     await sendReply(
-      "*📝 FUNÇÕES DISPONÍVEIS:*\n\n" +
+      "*📝 FUNÇÕES DISPONÍVEIS*\n\n" +
         "Veja o arquivo `@types/index.d.ts` para documentação completa de todas as funções disponíveis com exemplos de código!"
     );
   },

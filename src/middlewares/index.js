@@ -3,10 +3,16 @@
  *
  * @author Dev Gui
  */
-const { PREFIX, OWNER_NUMBER, OWNER_LID } = require("../config");
+const { OWNER_NUMBER, OWNER_LID } = require("../config");
 const { compareUserJidWithOtherNumber } = require("../utils");
+const { getPrefix } = require("../utils/database");
 
-exports.verifyPrefix = (prefix) => PREFIX === prefix;
+exports.verifyPrefix = (prefix, groupJid) => {
+  const groupPrefix = getPrefix(groupJid);
+
+  return groupPrefix === prefix;
+};
+
 exports.hasTypeAndCommand = ({ type, command }) => !!type && !!command;
 
 exports.isLink = (text) => {

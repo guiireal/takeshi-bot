@@ -6,17 +6,19 @@
  */
 const path = require("node:path");
 const fs = require("node:fs");
+const { PREFIX } = require("../config");
 
 const databasePath = path.resolve(__dirname, "..", "..", "database");
 
+const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const AUTO_RESPONDER_FILE = "auto-responder";
 const AUTO_RESPONDER_GROUPS_FILE = "auto-responder-groups";
-const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const EXIT_GROUPS_FILE = "exit-groups";
 const GROUP_RESTRICTIONS_FILE = "group-restrictions";
 const INACTIVE_GROUPS_FILE = "inactive-groups";
 const MUTE_FILE = "muted";
 const ONLY_ADMINS_FILE = "only-admins";
+const PREFIX_GROUPS_FILE = "prefix-groups";
 const RESTRICTED_MESSAGES_FILE = "restricted-messages";
 const WELCOME_GROUPS_FILE = "welcome-groups";
 
@@ -361,4 +363,22 @@ exports.readRestrictedMessageTypes = () => {
     document: "documentMessage",
     event: "eventMessage",
   });
+};
+
+exports.setPrefix = (groupJid, prefix) => {
+  const filename = PREFIX_GROUPS_FILE;
+
+  const prefixGroups = readJSON(filename, {});
+
+  prefixGroups[groupJid] = prefix;
+
+  writeJSON(filename, prefixGroups, {});
+};
+
+exports.getPrefix = (groupJid) => {
+  const filename = PREFIX_GROUPS_FILE;
+
+  const prefixGroups = readJSON(filename, {});
+
+  return prefixGroups[groupJid] || PREFIX;
 };

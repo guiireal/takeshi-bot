@@ -8,7 +8,7 @@
 
 <div align="center">
     <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-5.7.2-blue">
+        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-6.0.0-blue">
     </a>
 </div>
 
@@ -452,6 +452,18 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 |---------|---------|-----------|-----------------|
 | `/enviar-enquete` | Enviar enquete | Demonstra como criar e enviar enquetes/votações em grupos | Suporte a escolha única ou múltipla escolha |
 
+### 📍 Exemplos de localização
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-localizacao` | Enviar localização | Demonstra como enviar localizações, com latitude e longitude | Suporte a latitude e longitude de qualquer lugar do mundo |
+
+### 📲 Exemplos de contatos
+
+| Comando | Função | Descrição | Características |
+|---------|---------|-----------|-----------------|
+| `/enviar-contato` | Enviar contato | Demonstra como enviar contatos | Os contatos podem ser chamados ou adicionados à lista dos seus contatos |
+
 ### 📄 Exemplos de documento
 
 | Comando | Função | Descrição | Características |
@@ -467,6 +479,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | `/enviar-texto` | Enviar texto | Demonstra envio de mensagens de texto simples | Suporte a menções |
 | `/enviar-resposta` | Enviar resposta | Demonstra envio de mensagens de resposta | Respostas de sucesso/erro/aviso |
 | `/enviar-reacoes` | Enviar reações | Demonstra envio de emojis de reação | Várias reações emoji, reações de sucesso/erro/aviso |
+| `/enviar-mensagem-editada` | Enviar mensagem editada | Demonstra envio de mensagens editadas | Pode editar mensagens enviadas de forma direta ou respondendo alguém |
 
 ### 📊 Exemplos de metadados
 
