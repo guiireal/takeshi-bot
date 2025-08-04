@@ -349,6 +349,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Desligar o bot no grupo | Dono | ❌
 | Executar comandos de infra | Dono | ❌
 | Ligar o bot no grupo | Dono | ❌
+| Modificar o prefixo por grupo | Dono | ❌
 | Obter o ID do grupo | Dono | ❌
 | Abrir grupo | Admin | ❌
 | Agendar mensagem | Admin | ❌
@@ -363,6 +364,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Banir membros | Admin | ❌
 | Excluir mensagens | Admin | ❌
 | Fechar grupo | Admin | ❌
+| Gestão de mensagens do auto-responder | Admin | ❌
 | Ligar/desligar auto responder | Admin | ❌
 | Ligar/desligar boas vindas | Admin | ❌
 | Ligar/desligar saída de grupo | Admin | ❌
