@@ -27,7 +27,7 @@ module.exports = {
 
     await sendWaitReply("gerando figurinha...");
 
-    const data = await imageAI("stable-diffusion-turbo", fullArgs);
+    const data = await imageAI(fullArgs);
 
     if (data.image) {
       await sendStickerFromURL(data.image);

@@ -111,10 +111,9 @@ exports.menuMessage = (groupJid) => {
 
 ╭━━⪩ IA ⪨━━
 ▢
+▢ • ${prefix}flux
 ▢ • ${prefix}gemini
 ▢ • ${prefix}ia-sticker
-▢ • ${prefix}pixart
-▢ • ${prefix}stable-diffusion-turbo
 ▢
 ╰━━─「🚀」─━━
 

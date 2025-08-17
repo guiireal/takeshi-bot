@@ -168,7 +168,7 @@ exports.exit = (title, description, imageURL) => {
   )}&image_url=${encodeURIComponent(imageURL)}&api_key=${SPIDER_API_TOKEN}`;
 };
 
-exports.imageAI = async (type, description) => {
+exports.imageAI = async (description) => {
   if (!description) {
     throw new Error("Você precisa informar a descrição da imagem!");
   }
@@ -177,10 +177,8 @@ exports.imageAI = async (type, description) => {
     throw new Error(messageIfTokenNotConfigured);
   }
 
-  const paramSearch = type === "stable-diffusion-turbo" ? "search" : "text";
-
   const { data } = await axios.get(
-    `${SPIDER_API_BASE_URL}/ai/${type}?${paramSearch}=${encodeURIComponent(
+    `${SPIDER_API_BASE_URL}/ai/flux?text=${encodeURIComponent(
       description
     )}&api_key=${SPIDER_API_TOKEN}`
   );

@@ -3,10 +3,10 @@ const { imageAI } = require(`${BASE_DIR}/services/spider-x-api`);
 const { PREFIX } = require(`${BASE_DIR}/config`);
 
 module.exports = {
-  name: "pixart",
-  description: "Cria uma imagem usando a IA Pixart",
-  commands: ["pixart"],
-  usage: `${PREFIX}pixart descrição`,
+  name: "flux",
+  description: "Cria uma imagem usando a IA Flux",
+  commands: ["flux"],
+  usage: `${PREFIX}flux descrição`,
   /**
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
@@ -27,7 +27,7 @@ module.exports = {
 
     await sendWaitReply("gerando imagem...");
 
-    const data = await imageAI("pixart", fullArgs);
+    const data = await imageAI(fullArgs);
 
     if (!data?.image) {
       return sendWarningReply(
