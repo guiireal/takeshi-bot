@@ -382,3 +382,55 @@ exports.getPrefix = (groupJid) => {
 
   return prefixGroups[groupJid] || PREFIX;
 };
+
+exports.listAutoResponderItems = () => {
+  const filename = AUTO_RESPONDER_FILE;
+  const responses = readJSON(filename, []);
+
+  return responses.map((item, index) => ({
+    key: index + 1,
+    match: item.match,
+    answer: item.answer,
+  }));
+};
+
+exports.addAutoResponderItem = (match, answer) => {
+  const filename = AUTO_RESPONDER_FILE;
+  const responses = readJSON(filename, []);
+
+  const matchUpperCase = match.toLocaleUpperCase();
+
+  const existingItem = responses.find(
+    (response) => response.match.toLocaleUpperCase() === matchUpperCase
+  );
+
+  if (existingItem) {
+    return false;
+  }
+
+  responses.push({
+    match: match.trim(),
+    answer: answer.trim(),
+  });
+
+  writeJSON(filename, responses, []);
+
+  return true;
+};
+
+exports.removeAutoResponderItemByKey = (key) => {
+  const filename = AUTO_RESPONDER_FILE;
+  const responses = readJSON(filename, []);
+
+  const index = key - 1;
+
+  if (index < 0 || index >= responses.length) {
+    return false;
+  }
+
+  responses.splice(index, 1);
+
+  writeJSON(filename, responses, []);
+
+  return true;
+};
