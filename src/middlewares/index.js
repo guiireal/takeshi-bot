@@ -26,30 +26,41 @@ exports.isLink = (text) => {
     return false;
   }
 
-  try {
-    const url = new URL(cleanText);
-    return url.protocol === "http:" || url.protocol === "https:";
-  } catch (error) {
-    try {
-      const url = new URL("https://" + cleanText);
+  const words = cleanText.split(/\s+/);
+  const possibleDomains = words.filter(
+    (word) => word.includes(".") && !word.startsWith(".") && !word.endsWith(".")
+  );
 
-      const originalHostname = cleanText
-        .split("/")[0]
-        .split("?")[0]
-        .split("#")[0];
-
-      const hostnameWithoutTrailingDot = originalHostname.replace(/\.$/, "");
-
-      return (
-        url.hostname.includes(".") &&
-        hostnameWithoutTrailingDot.includes(".") &&
-        url.hostname.length > 4 &&
-        !/^\d+$/.test(originalHostname)
-      );
-    } catch (error) {
-      return false;
-    }
+  if (possibleDomains.length === 0) {
+    return false;
   }
+
+  return possibleDomains.some((domain) => {
+    try {
+      const url = new URL("https://" + domain);
+      return url.hostname.includes(".") && url.hostname.length > 4;
+    } catch {
+      try {
+        const url = new URL("https://" + cleanText);
+
+        const originalHostname = cleanText
+          .split("/")[0]
+          .split("?")[0]
+          .split("#")[0];
+
+        const hostnameWithoutTrailingDot = originalHostname.replace(/\.$/, "");
+
+        return (
+          url.hostname.includes(".") &&
+          hostnameWithoutTrailingDot.includes(".") &&
+          url.hostname.length > 4 &&
+          !/^\d+$/.test(originalHostname)
+        );
+      } catch (error) {
+        return false;
+      }
+    }
+  });
 };
 
 exports.isAdmin = async ({ remoteJid, userJid, socket }) => {
