@@ -61,20 +61,23 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
           action,
         });
       } else {
-        const commonFunctions = loadCommonFunctions({ socket, webMessage });
-
-        if (!commonFunctions) {
-          continue;
-        }
-
         if (
           checkIfMemberIsMuted(
-            commonFunctions.remoteJid,
-            commonFunctions.userJid
+            webMessage?.key?.remoteJid,
+            webMessage?.key?.participant?.replace(/:[0-9][0-9]|:[0-9]/g, "")
           )
         ) {
           try {
-            await commonFunctions.deleteMessage(webMessage.key);
+            const { id, remoteJid, participant } = webMessage.key;
+
+            const deleteKey = {
+              remoteJid,
+              fromMe: false,
+              id,
+              participant,
+            };
+
+            await socket.sendMessage(remoteJid, { delete: deleteKey });
           } catch (error) {
             errorLog(
               `Erro ao deletar mensagem de membro silenciado, provavelmente eu não sou administrador do grupo! ${error.message}`
@@ -82,6 +85,12 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
           }
 
           return;
+        }
+
+        const commonFunctions = loadCommonFunctions({ socket, webMessage });
+
+        if (!commonFunctions) {
+          continue;
         }
 
         await dynamicCommand(commonFunctions, startProcess);

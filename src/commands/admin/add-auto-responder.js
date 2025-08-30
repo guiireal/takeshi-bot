@@ -7,28 +7,31 @@ module.exports = {
   name: "add-auto-responder",
   description: "Adiciona um termo no auto-responder",
   commands: ["add-auto-responder", "add-auto", "add-responder"],
-  usage: `${PREFIX}add-auto-responder Boa tarde! / Boa tarde pra você também!`,
+  usage: `${PREFIX}add-auto-responder termo / o que eu devo responder`,
   /**
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({ sendSuccessReply, args, prefix, sendErrorReply }) => {
-    if (args.length !== 2) {
+  handle: async ({ sendSuccessReply, prefix, sendErrorReply, fullArgs }) => {
+    const parts = fullArgs.split(/\s\/\s/);
+
+    if (parts.length !== 2) {
       throw new InvalidParameterError(`Você deve informar o termo e a resposta do auto-responder da seguinte forma:
 
 ${prefix}add-auto-responder termo / o que eu devo responder`);
     }
 
-    const success = await addAutoResponderItem(args[0], args[1]);
+    const [term, response] = parts;
+
+    const success = await addAutoResponderItem(term, response);
 
     if (!success) {
-      await sendErrorReply(`O termo "${args[0]}" já existe no auto-responder!`);
-
+      await sendErrorReply(`O termo "${term}" já existe no auto-responder!`);
       return;
     }
 
     await sendSuccessReply(
-      `O termo "${args[0]}" foi adicionado ao auto-responder com a resposta "${args[1]}".`
+      `O termo "${term}" foi adicionado ao auto-responder com a resposta "${response}".`
     );
   },
 };

@@ -29,7 +29,9 @@ exports.getProfileImageData = async (socket, userJid) => {
 
     profileImage = path.resolve(ASSETS_DIR, "images", "default-user.png");
 
-    buffer = fs.readFileSync(profileImage);
+    if (fs.existsSync(profileImage)) {
+      buffer = fs.readFileSync(profileImage);
+    }
   }
 
   return { buffer, profileImage, success };

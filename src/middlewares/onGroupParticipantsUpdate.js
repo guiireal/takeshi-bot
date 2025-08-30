@@ -56,6 +56,16 @@ exports.onGroupParticipantsUpdate = async ({
 
       if (spiderAPITokenConfigured) {
         try {
+          if (!buffer) {
+            await socket.sendMessage(remoteJid, {
+              image: buffer,
+              caption: finalWelcomeMessage,
+              mentions,
+            });
+
+            return;
+          }
+
           const link = await upload(
             buffer,
             `${getRandomNumber(10_000, 99_9999)}.png`
