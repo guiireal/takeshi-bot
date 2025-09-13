@@ -72,10 +72,10 @@
 
 ## ⚠ Atenção
 
-Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com terceiros e tenha pago por isso.
-Este bot sempre foi e sempre será **gratuíto**.
-Caso você tenha pago para utilizar este bot saiba que você **foi enganado**.
-Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso e não prestamos suporte nessas condições.
+Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com terceiros e tenha pago por isso.<br/>
+Este bot sempre foi e sempre será **gratuíto**.<br/>
+Caso você tenha pago para utilizar este bot saiba que você **foi enganado**.<br/>
+Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso e não prestamos suporte nessas condições.<br/>
 Os únicos recursos pagos deste bot, são pertencentes à https://api.spiderx.com.br, nossa API.
 
 ## Sobre este projeto
