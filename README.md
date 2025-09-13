@@ -76,7 +76,7 @@ Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com t
 Este bot sempre foi e sempre será **gratuíto**.<br/>
 Caso você tenha pago para utilizar este bot, do jeito que ele está hoje, saiba que você **foi enganado**.<br/>
 Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso, também não prestamos suporte nessas condições.<br/>
-Os únicos recursos pagos deste bot são pertencentes à https://api.spiderx.com.br, nossa API.
+Os únicos recursos pagos deste bot são pertencentes à https://api.spiderx.com.br, nossa API oficial.
 
 ## Sobre este projeto
 
