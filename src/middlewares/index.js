@@ -26,39 +26,75 @@ exports.isLink = (text) => {
     return false;
   }
 
-  const words = cleanText.split(/\s+/);
-  const possibleDomains = words.filter(
-    (word) => word.includes(".") && !word.startsWith(".") && !word.endsWith(".")
-  );
+  const ipPattern =
+    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
-  if (possibleDomains.length === 0) {
+  if (ipPattern.test(cleanText.split("/")[0])) {
+    return true;
+  }
+
+  const urlPattern =
+    /(https?:\/\/)?(www\.)?[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}(\/[^\s]*)?/g;
+
+  const matches = cleanText.match(urlPattern);
+
+  if (!matches || matches.length === 0) {
     return false;
   }
 
-  return possibleDomains.some((domain) => {
+  const fileExtensions =
+    /\.(txt|pdf|doc|docx|xls|xlsx|ppt|pptx|zip|rar|exe|jpg|jpeg|png|gif|mp4|mp3|avi)$/i;
+
+  return matches.some((match) => {
+    const cleanMatch = match.replace(/^https?:\/\//, "").replace(/^www\./, "");
+
+    const matchIndex = cleanText.indexOf(match);
+    const beforeMatch = cleanText.substring(0, matchIndex);
+    const afterMatch = cleanText.substring(matchIndex + match.length);
+
+    const charBefore = beforeMatch.slice(-1);
+    const charAfter = afterMatch.slice(0, 1);
+
+    if (
+      charBefore &&
+      /[a-zA-Z0-9]/.test(charBefore) &&
+      !/[\s\.\,\:\;\!\?\(\)\[\]\{\}]/.test(charBefore)
+    ) {
+      return false;
+    }
+
+    if (
+      charAfter &&
+      /[a-zA-Z0-9]/.test(charAfter) &&
+      !/[\s\.\,\:\;\!\?\(\)\[\]\{\}\/]/.test(charAfter)
+    ) {
+      return false;
+    }
+
+    if (/\s/.test(cleanMatch)) {
+      return false;
+    }
+
+    if (fileExtensions.test(cleanMatch)) {
+      return false;
+    }
+
+    const domainPart = cleanMatch.split("/")[0];
+    if (domainPart.split(".").length < 2) {
+      return false;
+    }
+
+    const parts = domainPart.split(".");
+    const extension = parts[parts.length - 1];
+    if (extension.length < 2) {
+      return false;
+    }
+
     try {
-      const url = new URL("https://" + domain);
+      const url = new URL("https://" + cleanMatch);
       return url.hostname.includes(".") && url.hostname.length > 4;
     } catch {
-      try {
-        const url = new URL("https://" + cleanText);
-
-        const originalHostname = cleanText
-          .split("/")[0]
-          .split("?")[0]
-          .split("#")[0];
-
-        const hostnameWithoutTrailingDot = originalHostname.replace(/\.$/, "");
-
-        return (
-          url.hostname.includes(".") &&
-          hostnameWithoutTrailingDot.includes(".") &&
-          url.hostname.length > 4 &&
-          !/^\d+$/.test(originalHostname)
-        );
-      } catch (error) {
-        return false;
-      }
+      return false;
     }
   });
 };
