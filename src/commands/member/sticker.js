@@ -4,12 +4,14 @@
  *
  * @author Dev Gui
  */
-const { getRandomName } = require(`${BASE_DIR}/utils`);
 const fs = require("node:fs");
+const path = require("node:path");
+const { exec } = require("node:child_process");
+
+const { getRandomName } = require(`${BASE_DIR}/utils`);
 const { addStickerMetadata } = require(`${BASE_DIR}/services/sticker`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { PREFIX, BOT_NAME, BOT_EMOJI } = require(`${BASE_DIR}/config`);
-const { exec } = require("child_process");
+const { PREFIX, BOT_NAME, BOT_EMOJI, TEMP_DIR } = require(`${BASE_DIR}/config`);
 
 module.exports = {
   name: "sticker",
@@ -46,7 +48,7 @@ module.exports = {
       botName: `${BOT_EMOJI} ${BOT_NAME}`,
     };
 
-    const outputPath = getRandomName("webp");
+    const outputTempPath = path.resolve(TEMP_DIR, getRandomName("webp"));
     let inputPath = null;
 
     try {
@@ -72,7 +74,7 @@ module.exports = {
         }
 
         await new Promise((resolve, reject) => {
-          const cmd = `ffmpeg -i "${inputPath}" -vf "scale=512:512:force_original_aspect_ratio=decrease" -f webp -quality 90 "${outputPath}"`;
+          const cmd = `ffmpeg -i "${inputPath}" -vf "scale=512:512:force_original_aspect_ratio=decrease" -f webp -quality 90 "${outputTempPath}"`;
 
           exec(cmd, (error, _, stderr) => {
             if (error) {
@@ -120,7 +122,7 @@ module.exports = {
         }
 
         await new Promise((resolve, reject) => {
-          const cmd = `ffmpeg -y -i "${inputPath}" -vcodec libwebp -fs 0.99M -filter_complex "[0:v] scale=512:512, fps=15, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse" -f webp "${outputPath}"`;
+          const cmd = `ffmpeg -y -i "${inputPath}" -vcodec libwebp -fs 0.99M -filter_complex "[0:v] scale=512:512, fps=15, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse" -f webp "${outputTempPath}"`;
 
           exec(cmd, (error, _, stderr) => {
             if (error) {
@@ -138,12 +140,12 @@ module.exports = {
         inputPath = null;
       }
 
-      if (!fs.existsSync(outputPath)) {
+      if (!fs.existsSync(outputTempPath)) {
         throw new Error("Arquivo de saída não foi criado pelo FFmpeg");
       }
 
       const stickerPath = await addStickerMetadata(
-        await fs.promises.readFile(outputPath),
+        await fs.promises.readFile(outputTempPath),
         metadata
       );
 
@@ -169,8 +171,8 @@ module.exports = {
         }
       }
 
-      if (fs.existsSync(outputPath)) {
-        fs.unlinkSync(outputPath);
+      if (fs.existsSync(outputTempPath)) {
+        fs.unlinkSync(outputTempPath);
       }
 
       if (fs.existsSync(stickerPath)) {
@@ -182,8 +184,8 @@ module.exports = {
       if (inputPath && fs.existsSync(inputPath)) {
         fs.unlinkSync(inputPath);
       }
-      if (fs.existsSync(outputPath)) {
-        fs.unlinkSync(outputPath);
+      if (fs.existsSync(outputTempPath)) {
+        fs.unlinkSync(outputTempPath);
       }
 
       if (
