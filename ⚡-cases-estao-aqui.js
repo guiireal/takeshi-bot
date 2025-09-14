@@ -1,4 +1,7 @@
 /*
+ * Este arquivo index.js é o mesmo existente em "src/index.js", ele só está aqui
+ * para facilitar a execução do bot em algumas hosts.
+ *
  * Se você clicou aqui é porque provavelmente já usou um bot de "case" e com um "index.js" de 20 mil linhas...
  * Eu sei, eu entendo você!
  * O que é melhor? Dar erro no seu play, você ir no arquivo "play.js" e corrigir
@@ -36,6 +39,8 @@
  * Simples, não é mesmo? Ah, detalhe, não precisa colocar um "if" para saber se o comando é de admin ou de dono.
  * O bot já faz isso para você! Basta colocar o comando na pasta correspondente!
  *
+ * O arquivo 🤖-como-criar-comandos.js é um gabarito para você copiar e colar no seu comando!
+ *
  * ---------------- 🤖 ONDE MODIFICO O MENU? 🤖 ----------------
  *
  * Abra a pasta "src"
@@ -56,6 +61,9 @@
  * Substitua a imagem "takeshi-bot.png" por outra de sua preferência!
  * Só não esqueça de manter o nome "takeshi-bot.png"
  *
+ * Ou se preferir, digite <prefixo>set-menu-image mencionando
+ * imagem que deseja definir como foto do menu.
+ *
  * ---------------- 🚀 IMPORTANTE 🚀 ----------------
  *
  * Leia o tutorial completo em: https://github.com/guiireal/takeshi-bot?tab=readme-ov-file#instala%C3%A7%C3%A3o-no-termux-
@@ -63,4 +71,6 @@
  * Não pule etapas! Leia-o completo, pois ele é muito importante para você entender como o bot funciona!
  *
  * By: Dev Gui
+ *
+ * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
