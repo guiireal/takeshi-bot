@@ -11,6 +11,7 @@ const { writeFile } = require("fs/promises");
 const readline = require("node:readline");
 const axios = require("axios");
 const { errorLog } = require("./logger");
+const { exec } = require("node:child_process");
 
 exports.question = (message) => {
   const rl = readline.createInterface({
@@ -283,7 +284,7 @@ exports.readMore = () => {
 
 exports.getRandomNumber = getRandomNumber;
 
-exports.getRandomName = (extension) => {
+function getRandomName(extension) {
   const fileName = `takeshi_temp_${getRandomNumber(0, 999999)}`;
 
   if (!extension) {
@@ -291,6 +292,59 @@ exports.getRandomName = (extension) => {
   }
 
   return `${fileName}.${extension}`;
+}
+
+exports.getRandomName = getRandomName;
+
+exports.removeFileWithTimeout = (filePath, timeout = 5000) => {
+  setTimeout(() => {
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    } catch (error) {
+      console.error("Erro ao remover arquivo:", error);
+    }
+  }, timeout);
+};
+
+exports.ajustAudioByBuffer = async (audioBuffer, isPtt = true) => {
+  return new Promise((resolve, reject) => {
+    const tempPath = path.resolve(
+      TEMP_DIR,
+      getRandomName(isPtt ? "ogg" : "mp3")
+    );
+
+    fs.writeFileSync(tempPath, audioBuffer);
+
+    const outputPath = path.resolve(
+      TEMP_DIR,
+      getRandomName(isPtt ? "ogg" : "mp3")
+    );
+
+    const command = isPtt
+      ? `ffmpeg -i "${tempPath}" -vn -c:a libopus -f ogg -b:a 48k -ac 1 -y "${outputPath}"`
+      : `ffmpeg -i "${tempPath}" -vn -c:a libmp3lame -f mp3 -ar 44100 -ac 2 -b:a 128k -y "${outputPath}"`;
+
+    exec(command, (error) => {
+      if (error) {
+        console.error(error);
+        reject(error);
+        return;
+      }
+
+      try {
+        const result = {
+          oldAudioPath: tempPath,
+          audioPath: outputPath,
+          audioBuffer: fs.readFileSync(outputPath),
+        };
+        resolve(result);
+      } catch (readError) {
+        reject(readError);
+      }
+    });
+  });
 };
 
 exports.getImageBuffer = async (url, options = {}) => {
