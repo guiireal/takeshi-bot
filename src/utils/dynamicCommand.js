@@ -27,7 +27,7 @@ const {
   getPrefix,
 } = require("./database");
 const { errorLog } = require("../utils/logger");
-const { ONLY_GROUP_ID, PREFIX, BOT_EMOJI } = require("../config");
+const { ONLY_GROUP_ID, BOT_EMOJI } = require("../config");
 const { badMacHandler } = require("./badMacHandler");
 
 /**
