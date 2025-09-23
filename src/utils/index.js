@@ -242,13 +242,9 @@ exports.readCommandImports = () => {
 
 const onlyNumbers = (text) => text.replace(/[^0-9]/g, "");
 
-exports.onlyNumbers = onlyNumbers;
-
 function toUserJid(number) {
   return `${onlyNumbers(number)}@s.whatsapp.net`;
 }
-
-exports.toUserJid = toUserJid;
 
 exports.toUserLid = (value) => `${onlyNumbers(value)}@lid`;
 
@@ -448,6 +444,8 @@ exports.compareUserJidWithOtherNumber = ({ userJid, otherNumber }) => {
 
 exports.getRandomNumber = getRandomNumber;
 exports.getRandomName = getRandomName;
+exports.onlyNumbers = onlyNumbers;
+exports.toUserJid = toUserJid;
 
 exports.GROUP_PARTICIPANT_ADD = 27;
 exports.GROUP_PARTICIPANT_LEAVE = 32;
