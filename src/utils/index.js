@@ -282,8 +282,6 @@ exports.readMore = () => {
   return invisibleBreak;
 };
 
-exports.getRandomNumber = getRandomNumber;
-
 function getRandomName(extension) {
   const fileName = `takeshi_temp_${getRandomNumber(0, 999999)}`;
 
@@ -293,8 +291,6 @@ function getRandomName(extension) {
 
   return `${fileName}.${extension}`;
 }
-
-exports.getRandomName = getRandomName;
 
 exports.removeFileWithTimeout = (filePath, timeout = 5000) => {
   setTimeout(() => {
@@ -449,6 +445,9 @@ exports.compareUserJidWithOtherNumber = ({ userJid, otherNumber }) => {
     userVariations.without9 === ownerVariations.without9
   );
 };
+
+exports.getRandomNumber = getRandomNumber;
+exports.getRandomName = getRandomName;
 
 exports.GROUP_PARTICIPANT_ADD = 27;
 exports.GROUP_PARTICIPANT_LEAVE = 32;
