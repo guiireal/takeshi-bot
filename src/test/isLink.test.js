@@ -1,5 +1,5 @@
 const assert = require("node:assert");
-const { describe, test } = require("node:test");
+const { describe, it } = require("node:test");
 const { isLink } = require("../middlewares");
 
 describe("isLink Middleware", () => {
@@ -148,7 +148,7 @@ describe("isLink Middleware", () => {
   ];
 
   testCases.forEach(({ input, expected, description }) => {
-    test(description, () => {
+    it(description, () => {
       const result = isLink(input);
       assert.strictEqual(
         result,
