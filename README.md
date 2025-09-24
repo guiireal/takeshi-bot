@@ -667,6 +667,10 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
 - 📝 README.md ➔ _esta documentação_
 - 📝 reset-qr-auth.sh ➔ _arquivo para excluir as credenciais do bot_
 
+## Testes
+
+Execute `npm run test:all`
+
 ## Erros comuns
 
 ### 📁 Operação negada ao extrair a pasta
