@@ -32,7 +32,6 @@ module.exports = {
     args,
     remoteJid,
     replyJid,
-    userJid,
     sendErrorReply,
     sendSuccessReply,
     getGroupMetadata,
