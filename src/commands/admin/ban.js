@@ -1,6 +1,9 @@
-const { OWNER_NUMBER } = require("../../config");
-
-const { PREFIX, BOT_NUMBER } = require(`${BASE_DIR}/config`);
+const {
+  PREFIX,
+  BOT_NUMBER,
+  OWNER_NUMBER,
+  ONWER_LID,
+} = require(`${BASE_DIR}/config`);
 const { DangerError, InvalidParameterError } = require(`${BASE_DIR}/errors`);
 const { toUserJid, onlyNumbers } = require(`${BASE_DIR}/utils`);
 
@@ -38,8 +41,6 @@ ${PREFIX}ban (mencionando uma mensagem)`,
         ? `${args?.[0]?.replace("@", "")}@lid`
         : args?.[0]?.replace("@", "") + "@s.whatsapp.net";
 
-    let memberToRemoveId = null;
-
     const memberToRemoveJid = isReply ? replyJid : userId;
     const memberToRemoveNumber = onlyNumbers(memberToRemoveJid);
 
@@ -47,7 +48,10 @@ ${PREFIX}ban (mencionando uma mensagem)`,
       throw new DangerError("Você não pode remover você mesmo!");
     }
 
-    if (memberToRemoveNumber === OWNER_NUMBER) {
+    if (
+      memberToRemoveNumber === OWNER_NUMBER ||
+      memberToRemoveNumber + "@lid" === ONWER_LID
+    ) {
       throw new DangerError("Você não pode remover o dono do bot!");
     }
 
@@ -57,11 +61,9 @@ ${PREFIX}ban (mencionando uma mensagem)`,
       throw new DangerError("Você não pode me remover!");
     }
 
-    memberToRemoveId = memberToRemoveJid;
-
     await socket.groupParticipantsUpdate(
       remoteJid,
-      [memberToRemoveId],
+      [memberToRemoveJid],
       "remove"
     );
 
