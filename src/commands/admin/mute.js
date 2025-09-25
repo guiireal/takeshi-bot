@@ -36,8 +36,6 @@ module.exports = {
     sendErrorReply,
     sendSuccessReply,
     getGroupMetadata,
-    socket,
-    isGroupWithLid,
     isGroup,
   }) => {
     if (!isGroup) {
@@ -50,66 +48,57 @@ module.exports = {
       );
     }
 
-    const targetUserNumber = args.length
-      ? onlyNumbers(args[0])
-      : isGroupWithLid
+    const userId = replyJid
       ? replyJid
-      : onlyNumbers(replyJid);
+      : args?.[0]?.length > 14
+      ? `${args?.[0]?.replace("@", "")}@lid`
+      : args?.[0]?.replace("@", "") + "@s.whatsapp.net";
 
-    if ([OWNER_NUMBER, OWNER_LID].includes(targetUserNumber)) {
+    const targetUserNumber = onlyNumbers(userId);
+
+    if (
+      [OWNER_NUMBER, OWNER_LID.replace("@lid", "")].includes(targetUserNumber)
+    ) {
       throw new DangerError("Você não pode mutar o dono do bot!");
     }
 
-    const targetUserJid = isGroupWithLid
-      ? targetUserNumber
-      : toUserJid(targetUserNumber);
-
-    if (targetUserJid === toUserJid(BOT_NUMBER)) {
+    if (userId === toUserJid(BOT_NUMBER)) {
       throw new DangerError("Você não pode mutar o bot.");
-    }
-
-    const [result] =
-      replyJid && isGroupWithLid
-        ? [{ jid: targetUserJid, lid: targetUserJid }]
-        : await socket.onWhatsApp(targetUserNumber);
-
-    if (result.jid === userJid) {
-      throw new DangerError("Você não pode mutar a si mesmo!");
     }
 
     const groupMetadata = await getGroupMetadata();
 
     const isUserInGroup = groupMetadata.participants.some(
-      (participant) => participant.id === targetUserJid
+      (participant) => participant.id === userId
     );
 
     if (!isUserInGroup) {
       return sendErrorReply(
         `O usuário @${targetUserNumber} não está neste grupo.`,
-        [targetUserJid]
+        [userId]
       );
     }
 
     const isTargetAdmin = groupMetadata.participants.some(
-      (participant) => participant.id === targetUserJid && participant.admin
+      (participant) => participant.id === userId && participant.admin
     );
 
     if (isTargetAdmin) {
       throw new DangerError("Você não pode mutar um administrador.");
     }
 
-    if (checkIfMemberIsMuted(remoteJid, targetUserJid)) {
+    if (checkIfMemberIsMuted(remoteJid, userId)) {
       return sendErrorReply(
         `O usuário @${targetUserNumber} já está silenciado neste grupo.`,
-        [targetUserJid]
+        [userId]
       );
     }
 
-    muteMember(remoteJid, targetUserJid);
+    muteMember(remoteJid, userId);
 
     await sendSuccessReply(
       `@${targetUserNumber} foi mutado com sucesso neste grupo!`,
-      [targetUserJid]
+      [userId]
     );
   },
 };

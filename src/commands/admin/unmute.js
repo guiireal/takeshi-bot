@@ -22,14 +22,7 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({
-    remoteJid,
-    sendSuccessReply,
-    args,
-    isGroup,
-    isGroupWithLid,
-    socket,
-  }) => {
+  handle: async ({ remoteJid, sendSuccessReply, args, isGroup, replyJid }) => {
     if (!isGroup) {
       throw new DangerError("Este comando só pode ser usado em grupos.");
     }
@@ -40,19 +33,17 @@ module.exports = {
       );
     }
 
-    const targetUserNumber = onlyNumbers(args[0]);
-    let targetUserJid = toUserJid(targetUserNumber);
+    const userId = replyJid
+      ? replyJid
+      : args?.[0]?.length > 14
+      ? `${args?.[0]?.replace("@", "")}@lid`
+      : args?.[0]?.replace("@", "") + "@s.whatsapp.net";
 
-    if (isGroupWithLid) {
-      const [result] = await socket.onWhatsApp(targetUserNumber);
-      targetUserJid = result?.lid;
-    }
-
-    if (!checkIfMemberIsMuted(remoteJid, targetUserJid)) {
+    if (!checkIfMemberIsMuted(remoteJid, userId)) {
       throw new WarningError("Este usuário não está silenciado!");
     }
 
-    unmuteMember(remoteJid, targetUserJid);
+    unmuteMember(remoteJid, userId);
 
     await sendSuccessReply("Usuário desmutado com sucesso!");
   },
