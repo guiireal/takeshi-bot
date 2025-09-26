@@ -6,7 +6,7 @@
  */
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { toUserJid } = require(`${BASE_DIR}/utils`);
+const { toUserOrGroupJid } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
   name: "fake-chat",
@@ -27,7 +27,7 @@ module.exports = {
     const quotedText = args[1];
     const responseText = args[2];
 
-    const mentionedJid = toUserJid(args[0]);
+    const mentionedJid = toUserOrGroupJid(args[0]);
 
     if (quotedText.length < 2) {
       throw new InvalidParameterError(

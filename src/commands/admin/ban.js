@@ -5,7 +5,11 @@ const {
   ONWER_LID,
 } = require(`${BASE_DIR}/config`);
 const { DangerError, InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { toUserJid, onlyNumbers } = require(`${BASE_DIR}/utils`);
+const {
+  toUserOrGroupJid,
+  onlyNumbers,
+  toUserJid,
+} = require(`${BASE_DIR}/utils`);
 
 module.exports = {
   name: "ban",
@@ -36,10 +40,7 @@ ${PREFIX}ban (mencionando uma mensagem)`,
       );
     }
 
-    const userId =
-      args?.[0]?.length > 14
-        ? `${args?.[0]?.replace("@", "")}@lid`
-        : args?.[0]?.replace("@", "") + "@s.whatsapp.net";
+    const userId = toUserOrGroupJid(args[0]);
 
     const memberToRemoveJid = isReply ? replyJid : userId;
     const memberToRemoveNumber = onlyNumbers(memberToRemoveJid);

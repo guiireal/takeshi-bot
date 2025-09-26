@@ -1,4 +1,4 @@
-const { isGroup } = require(`${BASE_DIR}/utils`);
+const { toUserOrGroupJid, isGroup } = require(`${BASE_DIR}/utils`);
 const { errorLog } = require(`${BASE_DIR}/utils/logger`);
 
 const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
@@ -29,9 +29,7 @@ module.exports = {
       );
     }
 
-    const targetJid = args[0]
-      ? args[0].replace(/[@ ]/g, "") + "@s.whatsapp.net"
-      : userJid;
+    const targetJid = args[0] ? toUserOrGroupJid(args[0]) : userJid;
 
     await sendWaitReply("Carregando perfil...");
 

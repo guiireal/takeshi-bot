@@ -9,6 +9,7 @@ const {
   unmuteMember,
 } = require(`${BASE_DIR}/utils/database`);
 const { PREFIX } = require(`${BASE_DIR}/config`);
+const { toUserOrGroupJid } = require(`${BASE_DIR}/utils`);
 
 const { DangerError, WarningError } = require(`${BASE_DIR}/errors`);
 
@@ -32,11 +33,7 @@ module.exports = {
       );
     }
 
-    const userId = replyJid
-      ? replyJid
-      : args?.[0]?.length > 14
-      ? `${args?.[0]?.replace("@", "")}@lid`
-      : args?.[0]?.replace("@", "") + "@s.whatsapp.net";
+    const userId = replyJid ? replyJid : toUserOrGroupJid(args[0]);
 
     if (!checkIfMemberIsMuted(remoteJid, userId)) {
       throw new WarningError("Este usuário não está silenciado!");
