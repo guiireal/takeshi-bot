@@ -377,6 +377,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 | Obter o link do grupo | Admin | ❌
 | Revelar | Admin | ❌
 | Somente admins | Admin | ❌
+| Ver saldo | Admin | ❌
 | Borrar imagem | Membro | ❌
 | Busca CEP | Membro | ❌
 | Canvas Bolsonaro | Membro | ✅
