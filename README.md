@@ -669,6 +669,10 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
 - 📝 reset-qr-auth.sh ➔ _arquivo para excluir as credenciais do bot_
 - 📝 update.sh ➔ _arquivo de atualização do bot_
 
+## Atualizar o bot
+
+Execute `bash update.sh`
+
 ## Testes
 
 Execute `npm run test:all`
