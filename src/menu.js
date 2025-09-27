@@ -62,6 +62,8 @@ exports.menuMessage = (groupJid) => {
 ▢ • ${prefix}promover
 ▢ • ${prefix}rebaixar
 ▢ • ${prefix}revelar
+▢ • ${prefix}saldo
+▢ • ${prefix}set-proxy
 ▢ • ${prefix}unmute
 ▢ • ${prefix}welcome (1/0)
 ▢
