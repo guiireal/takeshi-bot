@@ -3,6 +3,7 @@
  *
  * @author Dev Gui
  */
+const { delay } = require("baileys");
 const { OWNER_NUMBER, OWNER_LID } = require("../config");
 const { compareUserJidWithOtherNumber } = require("../utils");
 const { getPrefix } = require("../utils/database");
@@ -140,6 +141,8 @@ exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
   }
 
   try {
+    await delay(200);
+
     const { participants, owner } = await socket.groupMetadata(remoteJid);
 
     const participant = participants.find(

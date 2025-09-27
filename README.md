@@ -686,7 +686,7 @@ Para resolver, siga o [tutorial de instalação via git clone](#termux-new-setup
 Caso dê algum erro na conexão, digite o seguinte comando:
 
 ```sh
-sh reset-qr-auth.sh
+bash reset-qr-auth.sh
 ```
 
 Depois, remova o dispositivo do WhatsApp indo nas configurações do WhatsApp em "dispositivos conectados" e repita
