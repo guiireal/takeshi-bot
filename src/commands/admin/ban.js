@@ -33,43 +33,55 @@ ${PREFIX}ban (mencionando uma mensagem)`,
     sendReply,
     userJid,
     sendSuccessReact,
+    sendErrorReply,
   }) => {
-    if (!args.length && !isReply) {
-      throw new InvalidParameterError(
-        "Você precisa mencionar ou marcar um membro!"
+    try {
+      if (!args.length && !isReply) {
+        throw new InvalidParameterError(
+          "Você precisa mencionar ou marcar um membro!"
+        );
+      }
+
+      const userId = toUserOrGroupJid(args[0]);
+
+      const memberToRemoveJid = isReply ? replyJid : userId;
+      const memberToRemoveNumber = onlyNumbers(memberToRemoveJid);
+
+      if (!memberToRemoveJid) {
+        throw new InvalidParameterError("Membro inválido!");
+      }
+
+      if (memberToRemoveJid === userJid) {
+        throw new DangerError("Você não pode remover você mesmo!");
+      }
+
+      if (
+        memberToRemoveNumber === OWNER_NUMBER ||
+        memberToRemoveNumber + "@lid" === ONWER_LID
+      ) {
+        throw new DangerError("Você não pode remover o dono do bot!");
+      }
+
+      const botJid = toUserJid(BOT_NUMBER);
+
+      if (memberToRemoveJid === botJid) {
+        throw new DangerError("Você não pode me remover!");
+      }
+
+      await socket.groupParticipantsUpdate(
+        remoteJid,
+        [memberToRemoveJid],
+        "remove"
+      );
+
+      await sendSuccessReact();
+
+      await sendReply("Membro removido com sucesso!");
+    } catch (error) {
+      console.log(error);
+      await sendErrorReply(
+        `Ocorreu um erro ao remover o membro: ${error.message}`
       );
     }
-
-    const userId = toUserOrGroupJid(args[0]);
-
-    const memberToRemoveJid = isReply ? replyJid : userId;
-    const memberToRemoveNumber = onlyNumbers(memberToRemoveJid);
-
-    if (memberToRemoveJid === userJid) {
-      throw new DangerError("Você não pode remover você mesmo!");
-    }
-
-    if (
-      memberToRemoveNumber === OWNER_NUMBER ||
-      memberToRemoveNumber + "@lid" === ONWER_LID
-    ) {
-      throw new DangerError("Você não pode remover o dono do bot!");
-    }
-
-    const botJid = toUserJid(BOT_NUMBER);
-
-    if (memberToRemoveJid === botJid) {
-      throw new DangerError("Você não pode me remover!");
-    }
-
-    await socket.groupParticipantsUpdate(
-      remoteJid,
-      [memberToRemoveJid],
-      "remove"
-    );
-
-    await sendSuccessReact();
-
-    await sendReply("Membro removido com sucesso!");
   },
 };

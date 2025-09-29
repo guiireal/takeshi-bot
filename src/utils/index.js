@@ -247,8 +247,12 @@ function toUserJid(number) {
 }
 
 function toUserOrGroupJid(userArg) {
+  if (!userArg) {
+    return null;
+  }
+
   const cleanArg = userArg.replace("@", "");
-  return cleanArg.length > 14
+  return cleanArg.length >= 14
     ? `${cleanArg}@lid`
     : `${cleanArg}@s.whatsapp.net`;
 }
