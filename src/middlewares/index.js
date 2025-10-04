@@ -124,9 +124,9 @@ exports.isAdmin = async ({ remoteJid, userJid, socket }) => {
   return isOwner || isAdmin;
 };
 
-exports.isBotOwner = ({ userJid, isLid }) => {
-  if (isLid) {
-    return userJid === OWNER_LID;
+exports.isBotOwner = ({ userJid }) => {
+  if (userJid === OWNER_LID) {
+    return true;
   }
 
   return compareUserJidWithOtherNumber({

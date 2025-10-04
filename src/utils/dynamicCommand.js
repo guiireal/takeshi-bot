@@ -117,7 +117,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     }
   }
 
-  if (!isBotOwner({ userJid, isLid }) && !activeGroup) {
+  if (!isBotOwner({ userJid }) && !activeGroup) {
     if (
       verifyPrefix(prefix, remoteJid) &&
       hasTypeAndCommand({ type, command })

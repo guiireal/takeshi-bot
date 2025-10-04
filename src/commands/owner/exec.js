@@ -219,14 +219,8 @@ Exemplos: ls, pwd, ps, df, git status, npm list`,
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({
-    fullArgs,
-    sendSuccessReply,
-    sendErrorReply,
-    userJid,
-    isLid,
-  }) => {
-    if (!isBotOwner({ userJid, isLid })) {
+  handle: async ({ fullArgs, sendSuccessReply, sendErrorReply, userJid }) => {
+    if (!isBotOwner({ userJid })) {
       throw new DangerError("Apenas o dono do bot pode usar este comando!");
     }
 
