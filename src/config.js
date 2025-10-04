@@ -46,8 +46,8 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
 // Caso queira responder apenas um grupo específico,
 // coloque o ID dele na configuração abaixo.
-// Para saber o ID do grupo, use o comando <prefixo>getid
-// Troque o <prefixo> pelo prefixo do bot (ex: /getid).
+// Para saber o ID do grupo, use o comando <prefixo>get-id
+// Troque o <prefixo> pelo prefixo do bot (ex: /get-id).
 exports.ONLY_GROUP_ID = "";
 
 // Configuração para modo de desenvolvimento
