@@ -81,6 +81,7 @@ exports.menuMessage = (groupJid) => {
 ▢ • ${prefix}perfil
 ▢ • ${prefix}ping
 ▢ • ${prefix}raw-message
+▢ • ${prefix}refresh
 ▢ • ${prefix}rename
 ▢ • ${prefix}sticker
 ▢ • ${prefix}to-image

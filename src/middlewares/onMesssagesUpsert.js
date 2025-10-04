@@ -18,6 +18,7 @@ const { errorLog, infoLog } = require("../utils/logger");
 const { badMacHandler } = require("../utils/badMacHandler");
 const { checkIfMemberIsMuted } = require("../utils/database");
 const { messageHandler } = require("./messageHandler");
+const { updateCacheGroupMetadata } = require("../connection");
 
 exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
   if (!messages.length) {
@@ -50,6 +51,21 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
         let action = "";
         if (webMessage.messageStubType === GROUP_PARTICIPANT_ADD) {
           action = "add";
+          const randomTimeout = Math.floor(Math.random() * 10000) + 1000;
+          setTimeout(async () => {
+            try {
+              const remoteJid = webMessage?.key?.remoteJid;
+              if (!remoteJid) {
+                return;
+              }
+              const data = await socket.groupMetadata(remoteJid);
+              updateCacheGroupMetadata(remoteJid, data);
+            } catch (error) {
+              errorLog(
+                `Erro ao atualizar metadados do grupo: ${error.message}`
+              );
+            }
+          }, randomTimeout);
         } else if (webMessage.messageStubType === GROUP_PARTICIPANT_LEAVE) {
           action = "remove";
         }

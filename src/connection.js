@@ -53,6 +53,13 @@ logger.level = "error";
 
 const msgRetryCounterCache = new NodeCache();
 
+const oneDay = 60 * 60 * 24;
+const groupCache = new NodeCache({ stdTTL: oneDay, checkperiod: 60 });
+
+function updateGroupMetadataCache(jid, metadata) {
+  groupCache.set(jid, metadata);
+}
+
 async function connect() {
   const baileysFolder = path.resolve(
     __dirname,
@@ -77,12 +84,15 @@ async function connect() {
     },
     shouldIgnoreJid: (jid) =>
       isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
+    connectTimeoutMs: 20_000,
     keepAliveIntervalMs: 30_000,
     maxMsgRetryCount: 5,
     markOnlineOnConnect: true,
     syncFullHistory: false,
+    emitOwnEvents: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
+    cachedGroupMetadata: (jid) => groupCache.get(jid),
   });
 
   if (!socket.authState.creds.registered) {
@@ -196,4 +206,5 @@ async function connect() {
   return socket;
 }
 
+exports.updateCacheGroupMetadata = updateGroupMetadataCache;
 exports.connect = connect;
