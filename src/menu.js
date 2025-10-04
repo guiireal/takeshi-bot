@@ -26,7 +26,7 @@ exports.menuMessage = (groupJid) => {
 ╭━━⪩ DONO ⪨━━
 ▢
 ▢ • ${prefix}exec
-▢ • ${prefix}get-id
+▢ • ${prefix}get-lid
 ▢ • ${prefix}off
 ▢ • ${prefix}on
 ▢ • ${prefix}set-menu-image
