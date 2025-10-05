@@ -39,7 +39,7 @@ exports.TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
 exports.TIMEOUT_IN_MILLISECONDS_BY_EVENT = 300;
 
 // Plataforma de API's
-exports.SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
+exports.SPIDER_API_BASE_URL = "https://api.spiderx.com.br/app";
 
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
 exports.SPIDER_API_TOKEN = "seu_token_aqui";
