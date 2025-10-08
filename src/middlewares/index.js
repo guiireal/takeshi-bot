@@ -5,7 +5,7 @@
  */
 const { delay } = require("baileys");
 const { OWNER_NUMBER, OWNER_LID } = require("../config");
-const { compareUserJidWithOtherNumber } = require("../utils");
+const { compareUserJidWithOtherNumber, normalizeToLid } = require("../utils");
 const { getPrefix } = require("../utils/database");
 
 exports.verifyPrefix = (prefix, groupJid) => {
@@ -103,19 +103,30 @@ exports.isLink = (text) => {
 exports.isAdmin = async ({ remoteJid, userJid, socket }) => {
   const { participants, owner } = await socket.groupMetadata(remoteJid);
 
-  const participant = participants.find(
-    (participant) => participant.id === userJid
-  );
+  const normalizedUserJid = await normalizeToLid(socket, userJid);
+
+  const participant = participants.find((p) => {
+    const pLid = p.id.includes("@lid") ? p.id : `${onlyNumbers(p.id)}@lid`;
+    return pLid === normalizedUserJid;
+  });
 
   if (!participant) {
-    return false;
+    return (
+      normalizedUserJid === OWNER_LID ||
+      compareUserJidWithOtherNumber({
+        userJid: normalizedUserJid,
+        otherNumber: OWNER_NUMBER,
+      })
+    );
   }
 
+  const ownerLid = owner.includes("@lid") ? owner : `${onlyNumbers(owner)}@lid`;
+
   const isOwner =
-    participant.id === owner ||
+    normalizedUserJid === ownerLid ||
     participant.admin === "superadmin" ||
     compareUserJidWithOtherNumber({
-      userJid: participant.id,
+      userJid: normalizedUserJid,
       otherNumber: OWNER_NUMBER,
     });
 
@@ -144,23 +155,32 @@ exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
     await delay(200);
 
     const { participants, owner } = await socket.groupMetadata(remoteJid);
+    const normalizedUserJid = await normalizeToLid(socket, userJid);
 
-    const participant = participants.find(
-      (participant) => participant.id === userJid
-    );
+    const participant = participants.find((p) => {
+      const pLid = p.id.includes("@lid") ? p.id : `${onlyNumbers(p.id)}@lid`;
+      return pLid === normalizedUserJid;
+    });
 
     if (!participant) {
       return false;
     }
 
-    const isOwner =
-      participant.id === owner || participant.admin === "superadmin";
+    const ownerLid = owner.includes("@lid")
+      ? owner
+      : `${onlyNumbers(owner)}@lid`;
 
-    const isAdmin = participant.admin === "admin";
+    const isOwner = normalizedUserJid === ownerLid;
+
+    const isAdmin =
+      participant.admin === "admin" || participant.admin === "superadmin";
 
     const isBotOwner =
-      compareUserJidWithOtherNumber({ userJid, otherNumber: OWNER_NUMBER }) ||
-      userJid === OWNER_LID;
+      normalizedUserJid === OWNER_LID ||
+      compareUserJidWithOtherNumber({
+        userJid: normalizedUserJid,
+        otherNumber: OWNER_NUMBER,
+      });
 
     if (type === "admin") {
       return isOwner || isAdmin || isBotOwner;

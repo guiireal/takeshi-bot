@@ -4,11 +4,7 @@
  *
  * @author Dev Gui
  */
-const {
-  toUserOrGroupJid,
-  onlyNumbers,
-  toUserJid,
-} = require(`${BASE_DIR}/utils`);
+const { toUserJidOrLid, onlyNumbers, toUserJid } = require(`${BASE_DIR}/utils`);
 const {
   checkIfMemberIsMuted,
   muteMember,
@@ -51,7 +47,7 @@ module.exports = {
       );
     }
 
-    const userId = replyJid ? replyJid : toUserOrGroupJid(args[0]);
+    const userId = replyJid ? replyJid : toUserJidOrLid(args[0]);
 
     const targetUserNumber = onlyNumbers(userId);
 

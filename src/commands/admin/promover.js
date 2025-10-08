@@ -1,5 +1,5 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { isGroup, toUserOrGroupJid } = require(`${BASE_DIR}/utils`);
+const { isGroup, toUserJidOrLid } = require(`${BASE_DIR}/utils`);
 const { errorLog } = require(`${BASE_DIR}/utils/logger`);
 
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
       return sendWarningReply("Por favor, marque um usuário para promover.");
     }
 
-    const userId = toUserOrGroupJid(args[0]);
+    const userId = toUserJidOrLid(args[0]);
 
     try {
       await socket.groupParticipantsUpdate(remoteJid, [userId], "promote");

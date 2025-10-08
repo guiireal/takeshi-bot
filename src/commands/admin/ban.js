@@ -5,11 +5,7 @@ const {
   ONWER_LID,
 } = require(`${BASE_DIR}/config`);
 const { DangerError, InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const {
-  toUserOrGroupJid,
-  onlyNumbers,
-  toUserJid,
-} = require(`${BASE_DIR}/utils`);
+const { toUserJidOrLid, onlyNumbers, toUserJid } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
   name: "ban",
@@ -42,7 +38,7 @@ ${PREFIX}ban (mencionando uma mensagem)`,
         );
       }
 
-      const userId = toUserOrGroupJid(args[0]);
+      const userId = toUserJidOrLid(args[0]);
 
       const memberToRemoveJid = isReply ? replyJid : userId;
       const memberToRemoveNumber = onlyNumbers(memberToRemoveJid);

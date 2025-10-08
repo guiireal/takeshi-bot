@@ -9,7 +9,7 @@ const {
   unmuteMember,
 } = require(`${BASE_DIR}/utils/database`);
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { toUserOrGroupJid } = require(`${BASE_DIR}/utils`);
+const { toUserJidOrLid } = require(`${BASE_DIR}/utils`);
 
 const { DangerError, WarningError } = require(`${BASE_DIR}/errors`);
 
@@ -33,7 +33,7 @@ module.exports = {
       );
     }
 
-    const userId = replyJid ? replyJid : toUserOrGroupJid(args[0]);
+    const userId = replyJid ? replyJid : toUserJidOrLid(args[0]);
 
     if (!checkIfMemberIsMuted(remoteJid, userId)) {
       throw new WarningError("Este usuário não está silenciado!");

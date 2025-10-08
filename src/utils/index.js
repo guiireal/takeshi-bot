@@ -246,20 +246,6 @@ function toUserJid(number) {
   return `${onlyNumbers(number)}@s.whatsapp.net`;
 }
 
-/**
- * @deprecated O nome toUserOrGroupJid é meio ruim, em breve será substituído por toUserJidOrLid
- */
-function toUserOrGroupJid(userArg) {
-  if (!userArg) {
-    return null;
-  }
-
-  const cleanArg = userArg.replace("@", "");
-  return cleanArg.length >= 14
-    ? `${cleanArg}@lid`
-    : `${cleanArg}@s.whatsapp.net`;
-}
-
 function toUserJidOrLid(userArg) {
   if (!userArg) {
     return null;
@@ -467,12 +453,55 @@ exports.compareUserJidWithOtherNumber = ({ userJid, otherNumber }) => {
   );
 };
 
+async function getLidFromJid(socket, jid) {
+  if (!jid) {
+    return jid;
+  }
+
+  if (jid.includes("@lid")) {
+    return jid;
+  }
+
+  try {
+    const phoneNumber = onlyNumbers(jid);
+
+    const [contactInfo] = await socket.onWhatsApp(phoneNumber);
+
+    if (contactInfo && contactInfo.lid) {
+      return contactInfo.lid;
+    }
+
+    return `${phoneNumber}@lid`;
+  } catch (error) {
+    console.warn("Error getting LID from JID:", error.message);
+    const phoneNumber = onlyNumbers(jid);
+    return phoneNumber ? `${phoneNumber}@lid` : jid;
+  }
+}
+
+async function normalizeToLid(socket, jid) {
+  if (!jid) {
+    return jid;
+  }
+
+  if (jid.includes("@lid")) {
+    return jid;
+  }
+
+  if (jid.includes("@s.whatsapp.net")) {
+    return await getLidFromJid(socket, jid);
+  }
+
+  return await getLidFromJid(socket, jid);
+}
+
 exports.getRandomNumber = getRandomNumber;
 exports.getRandomName = getRandomName;
 exports.onlyNumbers = onlyNumbers;
 exports.toUserJid = toUserJid;
 exports.toUserJidOrLid = toUserJidOrLid;
-exports.toUserOrGroupJid = toUserOrGroupJid;
+exports.normalizeToLid = normalizeToLid;
+exports.getLidFromJid = getLidFromJid;
 
 exports.GROUP_PARTICIPANT_ADD = 27;
 exports.GROUP_PARTICIPANT_LEAVE = 32;

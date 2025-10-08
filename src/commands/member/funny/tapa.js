@@ -1,6 +1,6 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { onlyNumbers, toUserOrGroupJid } = require(`${BASE_DIR}/utils`);
+const { onlyNumbers, toUserJidOrLid } = require(`${BASE_DIR}/utils`);
 const path = require("node:path");
 const { ASSETS_DIR } = require(`${BASE_DIR}/config`);
 
@@ -27,7 +27,7 @@ module.exports = {
       );
     }
 
-    const targetJid = isReply ? replyJid : toUserOrGroupJid(args[0]);
+    const targetJid = isReply ? replyJid : toUserJidOrLid(args[0]);
 
     if (!targetJid) {
       await sendErrorReply(
