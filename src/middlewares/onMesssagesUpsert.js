@@ -18,7 +18,7 @@ const { errorLog, infoLog } = require("../utils/logger");
 const { badMacHandler } = require("../utils/badMacHandler");
 const { checkIfMemberIsMuted } = require("../utils/database");
 const { messageHandler } = require("./messageHandler");
-const { updateCacheGroupMetadata } = require("../connection");
+const connection = require("../connection");
 
 exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
   if (!messages.length) {
@@ -59,7 +59,7 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
                 return;
               }
               const data = await socket.groupMetadata(remoteJid);
-              updateCacheGroupMetadata(remoteJid, data);
+              connection.updateGroupMetadataCache(remoteJid, data);
             } catch (error) {
               errorLog(
                 `Erro ao atualizar metadados do grupo: ${error.message}`
