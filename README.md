@@ -1,18 +1,8 @@
 # 🤖 Takeshi Bot
 
-<div align="center">
-    <img src="./assets/images/takeshi-bot.png" width="500">
-</div>
+![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-<br />
-
-<div align="center">
-    <a href="https://github.com/guiireal/takeshi-bot">
-        <img alt="Version" src="https://img.shields.io/badge/Vers%C3%A3o-6.4.2-blue">
-    </a>
-</div>
-
-<br />
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-6.4.2-blue)](https://github.com/guiireal/takeshi-bot)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
@@ -22,7 +12,7 @@
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
 
-## Desenvolvida do zero, no vídeo:
+## Desenvolvida do zero, no vídeo
 
 [CRIANDO UM BOT DE WHATSAPP DO ZERO (GUIA DEFINITIVO) - BASE COMPLETA + 6 COMANDOS - JAVASCRIPT](https://youtu.be/6zr2NYIYIyc)
 
@@ -33,50 +23,38 @@
 1. [Idiomas disponíveis](#-acesse-o-takeshi-bot-em-outros-idiomas)
 2. [Atenção - suporte](#-atenção)
 3. [Sobre o projeto](#sobre-este-projeto)
-4. [Instalação](#instalação)
+4. Instalação
    - [Instalação no Termux](#instalação-no-termux)
    - [Instalação nas principais hosts do Brasil](#instalação-nas-principais-hosts-do-brasil)
    - [Instalação em VPS (Debian/Ubuntu)](#instalação-em-vps-debianubuntu)
 5. [Configuração de API](#alguns-comandos-necessitam-de-api)
-6. [Funcionalidades](#funcionalidades)
+6. Funcionalidades
    - [Funcionalidades gerais](#funcionalidades-gerais)
    - [Funcionalidades de envio](#funcionalidades-de-envio-exemplos)
 7. [Auto responder](#auto-responder)
-8. [Personalização](#personalização)
     - [Menu do bot](#onde-fica-o-menu-do-bot)
     - [Mensagens de boas vindas](#onde-modifico-a-mensagem-de-boas-vindas-e-quando-alguém-sai-do-grupo)
-9. [Implementação técnica](#implementação-técnica-dos-exemplos)
-10. [Estrutura de pastas](#estrutura-de-pastas)
-11. [Erros comuns](#erros-comuns)
-12. [Canal do YouTube](#inscreva-se-no-canal)
-13. [Contribuindo com o projeto](#contribuindo-com-o-projeto)
-14. [Licença](#licença)
-15. [Disclaimer](#-disclaimer)
+8. [Implementação técnica](#implementação-técnica-dos-exemplos)
+9. [Estrutura de pastas](#estrutura-de-pastas)
+10. [Erros comuns](#erros-comuns)
+11. [Canal do YouTube](#inscreva-se-no-canal)
+12. [Contribuindo com o projeto](#contribuindo-com-o-projeto)
+13. [Licença](#licença)
+14. [Disclaimer](#-disclaimer)
 
 ## 🌐 Acesse o Takeshi Bot em outros idiomas
 
-<ul style="list-style: none; padding-left: 0;">
-  <li>
-    <img src="https://flagcdn.com/w40/us.png" width="24" alt="English">
-    <strong>English</strong> — <a href="https://github.com/guiireal/takeshi-bot-english">click here</a>
-  </li>
-  <li>
-    <img src="https://flagcdn.com/w40/es.png" width="24" alt="Español">
-    <strong>Español</strong> — <a href="https://github.com/guiireal/takeshi-bot-espanol">haz clic aquí</a>
-  </li>
-  <li>
-    <img src="https://flagcdn.com/w40/id.png" width="24" alt="Bahasa Indonesia">
-    <strong>Bahasa Indonesia</strong> — <a href="https://github.com/guiireal/takeshi-bot-bahasa-indonesia">klik disini</a>
-  </li>
-</ul>
+- 🇺🇸 [**English version**](https://github.com/guiireal/takeshi-bot-english)
+- 🇪🇸 [**Versión en Español**](https://github.com/guiireal/takeshi-bot-espanol)
+- 🇮🇩 [**Versi Bahasa Indonesia**](https://github.com/guiireal/takeshi-bot-bahasa-indonesia)
 
 ## ⚠ Atenção
 
-Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com terceiros e tenha pago por isso.<br/>
-Este bot sempre foi e sempre será **gratuíto**.<br/>
-Caso você tenha pago para utilizar este bot, do jeito que ele está hoje, saiba que você **foi enganado**.<br/>
-Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso, também não prestamos suporte nessas condições.<br/>
-Os únicos recursos pagos deste bot são pertencentes à https://api.spiderx.com.br, nossa API oficial.
+Nós não prestamos suporte gratuíto caso você tenha adquirido esta base com terceiros e tenha pago por isso.
+Este bot sempre foi e sempre será **gratuíto**.
+Caso você tenha pago para utilizar este bot, do jeito que ele está hoje, saiba que você **foi enganado**.
+Nós não temos vínculo nenhum com terceiros e não nos responsabilizamos por isso, também não prestamos suporte nessas condições.
+Os únicos recursos pagos deste bot são pertencentes à [https://api.spiderx.com.br](https://api.spiderx.com.br), nossa API oficial.
 
 ## Sobre este projeto
 
@@ -86,7 +64,7 @@ Não nos responsabilizamos por qualquer uso indevido deste bot. É de responsabi
 
 ## Instalação no Termux
 
-1 - Abra o Termux e execute os comandos abaixo.<br/>
+1 - Abra o Termux e execute os comandos abaixo.
 _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/wxpygdb9bcb5npb/Termux_0.118.3_Dev_Gui.apk) ou [clique aqui e baixe versão da Play Store](https://play.google.com/store/apps/details?id=com.termux) caso a versão do MediaFire anterior não funcione._
 
 ```sh
@@ -108,6 +86,7 @@ Pastas mais utilizadas:
 - /storage/emulated/0/Download (muito comum quando você baixa o bot pelo .zip)
 
 No nosso exemplo, vamos para a `/sdcard`
+
 ```sh
 cd /sdcard
 ```
@@ -270,7 +249,7 @@ cd takeshi-bot
 npm start
 ```
 
-13 - O bot vai solicitar que você digite seu número de telefone.<br/>
+13 - O bot vai solicitar que você digite seu número de telefone.
 Digite **exatamente** como está no WhatsApp e apenas números.
 
 Não adicione o 9º dígito em números que não sejam de SP ou RJ.
@@ -282,6 +261,7 @@ Não adicione o 9º dígito em números que não sejam de SP ou RJ.
 ```sh
 pm2 start npm --name "takeshi-bot" -- start
 ```
+
 15 - O bot exibirá um **código de pareamento** que deve ser colocado em `dispositivos conectados` no seu WhatsApp.
 
 ![tutorial-vps-2](./assets/images/tutorial-vps-2.png)
@@ -341,7 +321,7 @@ exports.OWNER_NUMBER = "5511999999999";
 
 ## Alguns comandos necessitam de API
 
-Edite o arquivo `config.js` que está dentro da pasta `src` e cole sua api key da plataforma Spider X API, conforme o código abaixo.<br/>
+Edite o arquivo `config.js` que está dentro da pasta `src` e cole sua api key da plataforma Spider X API, conforme o código abaixo.
 Para obter seu token, acesse: [https://api.spiderx.com.br](https://api.spiderx.com.br) e crie sua conta gratuitamente!
 
 ```js
@@ -350,68 +330,68 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
 ## Funcionalidades gerais
 
-| Função | Contexto | Requer a Spider X API?
-| ------------ | --- | ---
-| Alterar imagem do bot | Dono | ❌
-| Desligar o bot no grupo | Dono | ❌
-| Executar comandos de infra | Dono | ❌
-| Ligar o bot no grupo | Dono | ❌
-| Modificar o prefixo por grupo | Dono | ❌
-| Obter o ID do grupo | Dono | ❌
-| Abrir grupo | Admin | ❌
-| Agendar mensagem | Admin | ❌
-| Anti audio | Admin | ❌
-| Anti documento | Admin | ❌
-| Anti evento | Admin | ❌
-| Anti imagem | Admin | ❌
-| Anti link | Admin | ❌
-| Anti produto | Admin | ❌
-| Anti sticker | Admin | ❌
-| Anti video | Admin | ❌
-| Banir membros | Admin | ❌
-| Excluir mensagens | Admin | ❌
-| Fechar grupo | Admin | ❌
-| Gestão de mensagens do auto-responder | Admin | ❌
-| Ligar/desligar auto responder | Admin | ❌
-| Ligar/desligar boas vindas | Admin | ❌
-| Ligar/desligar saída de grupo | Admin | ❌
-| Limpar chat | Admin | ❌
-| Marcar todos | Admin | ❌
-| Mudar nome do grupo | Admin | ❌
-| Mute/unmute | Admin | ❌
-| Obter o link do grupo | Admin | ❌
-| Revelar | Admin | ❌
-| Somente admins | Admin | ❌
-| Ver saldo | Admin | ❌
-| Borrar imagem | Membro | ❌
-| Busca CEP | Membro | ❌
-| Canvas Bolsonaro | Membro | ✅
-| Canvas cadeia | Membro | ✅
-| Canvas inverter | Membro | ✅
-| Canvas RIP | Membro | ✅
-| Comandos de diversão/brincadeiras | Membro |❌
-| Espelhar imagem | Membro | ❌
-| Fake chat | Membro | ❌
-| Figurinha de texto animada | Membro | ✅
-| Geração de imagens com IA | Membro | ✅
-| Gerar link | Membro | ❌
-| Google Gemini | Membro | ✅
-| Google search | Membro | ✅
-| Imagem com contraste | Membro | ❌
-| Imagem IA Flux | Membro | ✅
-| Imagem pixelada | Membro | ❌
-| Imagem preto/branco | Membro | ❌
-| Ping | Membro | ❌
-| Play áudio | Membro | ✅
-| Play vídeo | Membro | ✅
-| Renomear figurinha | Membro | ❌
-| Sticker | Membro | ❌
-| Sticker IA  | Membro | ✅
-| Sticker para imagem | Membro | ❌
-| TikTok video download | Membro | ✅
-| YT MP3 | Membro | ✅
-| YT MP4 | Membro | ✅
-| YT search | Membro | ✅
+| Função | Contexto | Requer a Spider X API? |
+| ------------ | --- | --- |
+| Alterar imagem do bot | Dono | ❌ |
+| Desligar o bot no grupo | Dono | ❌ |
+| Executar comandos de infra | Dono | ❌ |
+| Ligar o bot no grupo | Dono | ❌ |
+| Modificar o prefixo por grupo | Dono | ❌ |
+| Obter o ID do grupo | Dono | ❌ |
+| Abrir grupo | Admin | ❌ |
+| Agendar mensagem | Admin | ❌ |
+| Anti audio | Admin | ❌ |
+| Anti documento | Admin | ❌ |
+| Anti evento | Admin | ❌ |
+| Anti imagem | Admin | ❌ |
+| Anti link | Admin | ❌ |
+| Anti produto | Admin | ❌ |
+| Anti sticker | Admin | ❌ |
+| Anti video | Admin | ❌ |
+| Banir membros | Admin | ❌ |
+| Excluir mensagens | Admin | ❌ |
+| Fechar grupo | Admin | ❌ |
+| Gestão de mensagens do auto-responder | Admin | ❌ |
+| Ligar/desligar auto responder | Admin | ❌ |
+| Ligar/desligar boas vindas | Admin | ❌ |
+| Ligar/desligar saída de grupo | Admin | ❌ |
+| Limpar chat | Admin | ❌ |
+| Marcar todos | Admin | ❌ |
+| Mudar nome do grupo | Admin | ❌ |
+| Mute/unmute | Admin | ❌ |
+| Obter o link do grupo | Admin | ❌ |
+| Revelar | Admin | ❌ |
+| Somente admins | Admin | ❌ |
+| Ver saldo | Admin | ❌ |
+| Borrar imagem | Membro | ❌ |
+| Busca CEP | Membro | ❌ |
+| Canvas Bolsonaro | Membro | ✅ |
+| Canvas cadeia | Membro | ✅ |
+| Canvas inverter | Membro | ✅ |
+| Canvas RIP | Membro | ✅ |
+| Comandos de diversão/brincadeiras | Membro |❌ |
+| Espelhar imagem | Membro | ❌ |
+| Fake chat | Membro | ❌ |
+| Figurinha de texto animada | Membro | ✅ |
+| Geração de imagens com IA | Membro | ✅ |
+| Gerar link | Membro | ❌ |
+| Google Gemini | Membro | ✅ |
+| Google search | Membro | ✅ |
+| Imagem com contraste | Membro | ❌ |
+| Imagem IA Flux | Membro | ✅ |
+| Imagem pixelada | Membro | ❌ |
+| Imagem preto/branco | Membro | ❌ |
+| Ping | Membro | ❌ |
+| Play áudio | Membro | ✅ |
+| Play vídeo | Membro | ✅ |
+| Renomear figurinha | Membro | ❌ |
+| Sticker | Membro | ❌ |
+| Sticker IA  | Membro | ✅ |
+| Sticker para imagem | Membro | ❌ |
+| TikTok video download | Membro | ✅ |
+| YT MP3 | Membro | ✅ |
+| YT MP4 | Membro | ✅ |
+| YT search | Membro | ✅ |
 
 ## Funcionalidades de envio (Exemplos)
 
@@ -536,42 +516,51 @@ As mensagens ficam dentro da pasta `src` no arquivo chamado `messages.js`
 ## Implementação técnica dos exemplos
 
 ### 📁 Localização dos comandos de exemplo
+
 Todos os comandos de exemplo estão localizados em: `src/commands/member/exemplos/`
 
 ### 🛠️ Funções disponíveis
+
 Todos os comandos de exemplo utilizam funções de `src/utils/loadCommonFunctions.js`:
 
 #### Funções de áudio
+
 - `sendAudioFromFile(filePath, asVoice, quoted)`
 - `sendAudioFromURL(url, asVoice, quoted)`
 - `sendAudioFromBuffer(buffer, asVoice, quoted)`
 
 #### Funções de imagem
+
 - `sendImageFromFile(filePath, caption, mentions, quoted)`
 - `sendImageFromURL(url, caption, mentions, quoted)`
 - `sendImageFromBuffer(buffer, caption, mentions, quoted)`
 
 #### Funções de Vídeo
+
 - `sendVideoFromFile(filePath, caption, mentions, quoted)`
 - `sendVideoFromURL(url, caption, mentions, quoted)`
 - `sendVideoFromBuffer(buffer, caption, mentions, quoted)`
 
 #### Funções de GIF
+
 - `sendGifFromFile(file, caption, mentions, quoted)`
 - `sendGifFromURL(url, caption, mentions, quoted)`
 - `sendGifFromBuffer(buffer, caption, mentions, quoted)`
 
 #### Funções de sticker
+
 - `sendStickerFromFile(filePath, quoted)`
 - `sendStickerFromURL(url, quoted)`
 - `sendStickerFromBuffer(buffer, quoted)`
 
 #### Funções de documento
+
 - `sendDocumentFromFile(filePath, mimetype, fileName, quoted)`
 - `sendDocumentFromURL(url, mimetype, fileName, quoted)`
 - `sendDocumentFromBuffer(buffer, mimetype, fileName, quoted)`
 
 #### Funções de mensagem
+
 - `sendText(text, mentions)`
 - `sendReply(text, mentions)`
 - `sendReact(emoji)`
@@ -579,6 +568,7 @@ Todos os comandos de exemplo utilizam funções de `src/utils/loadCommonFunction
 - `sendSuccessReact()`, `sendErrorReact()`, `sendWarningReact()`, `sendWaitReact()`
 
 #### Funções utilitárias de grupo
+
 - `getGroupMetadata()` - Obter metadados completos do grupo
 - `getGroupName()` - Obter apenas o nome do grupo
 - `getGroupOwner()` - Obter informações do dono do grupo
@@ -588,6 +578,7 @@ Todos os comandos de exemplo utilizam funções de `src/utils/loadCommonFunction
 ### 🎯 Exemplos de uso com menções
 
 #### Enviar imagem com menções
+
 ```javascript
 await sendImageFromFile("./assets/image.jpg", "Olá @5511999999999!", ["5511999999999@s.whatsapp.net"]);
 
@@ -599,6 +590,7 @@ await sendImageFromURL(
 ```
 
 #### Enviar vídeo com menções
+
 ```javascript
 await sendVideoFromFile("./assets/video.mp4", "Confira este vídeo @5511999999999!", ["5511999999999@s.whatsapp.net"]);
 
@@ -611,6 +603,7 @@ await sendVideoFromBuffer(
 ```
 
 #### Enviar GIF com menções
+
 ```javascript
 await sendGifFromFile(
   "./assets/gif.mp4", 
@@ -620,14 +613,18 @@ await sendGifFromFile(
 ```
 
 ### 🎯 Suporte TypeScript
+
 Definições completas do TypeScript estão disponíveis em `src/@types/index.d.ts` com:
+
 - Assinaturas de função detalhadas
 - Descrições de parâmetros
 - Exemplos de uso
 - Especificações de tipo de retorno
 
 ### 📁 Arquivos de exemplo
+
 Todos os arquivos de exemplo são armazenados em `assets/samples/`:
+
 - `sample-audio.mp3` - Arquivo de áudio para teste
 - `sample-document.pdf` - Documento PDF para teste
 - `sample-document.txt` - Documento de texto para teste
@@ -638,34 +635,34 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
 ## Estrutura de pastas
 
 - 📁 assets ➔ _arquivos de mídia_
-    - 📁 auth ➔ _arquivos da conexão do bot_
-    - 📁 images ➔ _arquivos de imagem_
-        - 📁 funny ➔ _gifs de comandos de diversão_
-    - 📁 samples ➔ _arquivos de exemplo para testes_
-    - 📁 temp ➔ _arquivos temporários_
+  - 📁 auth ➔ _arquivos da conexão do bot_
+  - 📁 images ➔ _arquivos de imagem_
+    - 📁 funny ➔ _gifs de comandos de diversão_
+  - 📁 samples ➔ _arquivos de exemplo para testes_
+  - 📁 temp ➔ _arquivos temporários_
 - 📁 database ➔ _arquivos de dados_
 - 📁 node_modules ➔ _módulos do Node.js_
 - 📁 src ➔ _código fonte do bot (geralmente você mexerá mais aqui)_
-    - 📁 @types ➔ _pasta onde fica as definições de tipos_
-    - 📁 commands ➔ _pasta onde ficam os comandos_
-        - 📁 admin ➔ _pasta onde ficam os comandos administrativos_
-        - 📁 member ➔ _pasta onde ficam os comandos gerais (todos poderão utilizar)_
-            - 📁 exemplos ➔ _pasta com 24 comandos de exemplo_
-        - 📁 owner ➔ _pasta onde ficam os comandos de dono (grupo e bot)_
-        - 📝🤖-como-criar-comandos.js ➔ _arquivo de exemplo de como criar um comando_
-    - 📁 errors ➔ _classes de erros usadas nos comandos_
-    - 📁 middlewares ➔ _interceptadores de requisições_
-    - 📁 services ➔ _serviços diversos_
-    - 📁 utils ➔ _utilitários_
-    - 📝 config.js ➔ _arquivo de configurações do bot_
-    - 📝 connection.js ➔ _script de conexão do bot com a biblioteca Baileys_
-    - 📝 index.js ➔ _script ponto de entrada do bot_
-    - 📝 loader.js ➔ _script de carga de funções_
-    - 📝 menu.js ➔ _menu do bot_
-    - 📝 messages.js ➔ _arquivos de mensagens de boas vindas e saída_
-    - 📝 test.js ➔ _script de testes_
-- 📝 ⚡-cases-estao-aqui.js ➔ _easter egg_ 
-- 📝 CONTRIBUTING.md ➔ _eguia de contribuição_ 
+  - 📁 @types ➔ _pasta onde fica as definições de tipos_
+  - 📁 commands ➔ _pasta onde ficam os comandos_
+    - 📁 admin ➔ _pasta onde ficam os comandos administrativos_
+    - 📁 member ➔ _pasta onde ficam os comandos gerais (todos poderão utilizar)_
+      - 📁 exemplos ➔ _pasta com 24 comandos de exemplo_
+    - 📁 owner ➔ _pasta onde ficam os comandos de dono (grupo e bot)_
+    - 📝🤖-como-criar-comandos.js ➔ _arquivo de exemplo de como criar um comando_
+  - 📁 errors ➔ _classes de erros usadas nos comandos_
+  - 📁 middlewares ➔ _interceptadores de requisições_
+  - 📁 services ➔ _serviços diversos_
+  - 📁 utils ➔ _utilitários_
+  - 📝 config.js ➔ _arquivo de configurações do bot_
+  - 📝 connection.js ➔ _script de conexão do bot com a biblioteca Baileys_
+  - 📝 index.js ➔ _script ponto de entrada do bot_
+  - 📝 loader.js ➔ _script de carga de funções_
+  - 📝 menu.js ➔ _menu do bot_
+  - 📝 messages.js ➔ _arquivos de mensagens de boas vindas e saída_
+  - 📝 test.js ➔ _script de testes_
+- 📝 ⚡-cases-estao-aqui.js ➔ _easter egg_
+- 📝 CONTRIBUTING.md ➔ _eguia de contribuição_
 - 📝 index.js ➔ _script ponto de entrada do bot para hospedagem_
 - 📝 .gitignore ➔ _arquivo para não subir certas pastas no GitHub_
 - 📝 LICENSE ➔ _arquivo de licença_
@@ -689,7 +686,7 @@ Execute `npm run test:all`
 
 O erro abaixo acontece quando é feito o download do arquivo ZIP direto no celular em algumas versões do apk ZArchiver e também de celulares sem root.
 
-Para resolver, siga o [tutorial de instalação via git clone](#termux-new-setup).
+Para resolver, siga o [tutorial de instalação via git clone](#instalação-no-termux).
 
 ![erro comum 1](./assets/images/erro-comum-1.jpg)
 
@@ -706,8 +703,6 @@ o procedimento de iniciar o bot com `npm start`.
 
 ### 🔐 Permission denied (permissão negada) ao acessar `cd /sdcard`
 
-<br/>
-
 ![erro comum 2](./assets/images/erro-comum-2.png)
 
 Abra o termux, digite `termux-setup-storage` e depois, aceite as permissões
@@ -723,39 +718,39 @@ Geralmente as pessoas que cometem esse erro, ficam com dois bots:
 
 Você deve apagar um dos bots e tanto configurar quanto executar **apenas um**
 
-## Inscreva-se no canal!
+## Inscreva-se no canal
 
-<a href="https://www.youtube.com/@devgui_?sub_confirmation=1" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube"></a>
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@devgui_?sub_confirmation=1)
 
 ## Contribuindo com o projeto
 
-O Takeshi Bot é um projeto **open source** e sua contribuição é muito bem-vinda! 
+O Takeshi Bot é um projeto **open source** e sua contribuição é muito bem-vinda!
 
 ### 🚀 Como contribuir
 
 - 🐛 **Reportar bugs** através das [Issues](https://github.com/guiireal/takeshi-bot/issues)
-- ✨ **Sugerir novas funcionalidades** 
+- ✨ **Sugerir novas funcionalidades**
 - 🔧 **Contribuir com código** (novos comandos, correções, melhorias)
 - ⭐ **Dar uma estrela** no repositório
 
 ### 📖 Antes de contribuir
 
 1. Leia nosso **[Guia de Contribuição](CONTRIBUTING.md)** completo
-2. Verifique as [Issues abertas](https://github.com/guiireal/takeshi-bot/issues) 
+2. Verifique as [Issues abertas](https://github.com/guiireal/takeshi-bot/issues)
 3. Siga o template obrigatório para Pull Requests
 
 ## Licença
 
 [GPL-3.0](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
 
-Este projeto está licenciado sob a Licença Pública Geral GNU (GPL-3.0).<br/>
+Este projeto está licenciado sob a Licença Pública Geral GNU (GPL-3.0).
 Isso significa que:
 
 - Você pode usar este código como quiser, seja para projetos pessoais ou comerciais.
 - Você pode modificar o código para adaptá-lo às suas necessidades.
 - Você pode compartilhar ou vender o código, mesmo modificado, mas precisa:
-    - Manter os créditos ao autor original (Guilherme França - Dev Gui).
-    - Tornar o código modificado disponível sob a mesma licença GPL-3.0.
+  - Manter os créditos ao autor original (Guilherme França - Dev Gui).
+  - Tornar o código modificado disponível sob a mesma licença GPL-3.0.
 
 O que você não pode fazer:
 
