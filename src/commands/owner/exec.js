@@ -12,143 +12,44 @@ const { DangerError } = require(`${BASE_DIR}/errors`);
 
 const DANGEROUS_COMMANDS = [
   ":()",
-  "attrib",
-  "cacls",
-  "chmod 777",
-  "chown",
-  "cp /etc",
-  "dd",
-  "del /f",
-  "del",
+  "mkfs",
   "fdisk",
-  "firewall-cmd",
-  "fork()",
+  "parted",
   "format",
   "halt",
-  "init",
-  "iptables",
-  "kill",
-  "killall",
-  "ln -sf",
-  "mkfs",
-  "mv /etc",
-  "parted",
-  "passwd",
-  "pkill",
   "poweroff",
-  "rd /s",
   "reboot",
-  "rm",
-  "rmdir",
   "shutdown",
-  "su",
-  "sudo",
-  "ufw",
-  "unlink",
-  "yes",
+  "init 0",
+  "init 6",
 ];
 
 const DANGEROUS_PATTERNS = [
-  /;\s*(rm|mv|cp)\s/,
-  /\/dev\/sd[a-z]/,
-  /\|\s*sh/,
-  /\$\(.*\)/,
-  /&&\s*(rm|mv|cp)\s/,
-  /`.*`/,
-  />\s*\/dev\/(null|zero|random)/,
-  /chmod\s+[0-7]*77/,
-  /curl.*\|\s*sh/,
-  /dd\s+.*of=/,
-  /del\s+\/[fqs]/,
-  /format\s+[a-z]:/,
-  /mkfs\./,
-  /rd\s+\/s/,
-  /rm\s+.*\*.*\*/,
-  /rm\s+(-[rf]+\s+)?\//,
-  /wget.*\|\s*sh/,
-];
-
-const SAFE_COMMANDS = [
-  "alias",
-  "awk",
-  "cat",
-  "cut",
-  "date",
-  "df",
-  "dig",
-  "dir",
-  "du",
-  "echo",
-  "env",
-  "file",
-  "find",
-  "free",
-  "git branch",
-  "git config",
-  "git diff",
-  "git log",
-  "git remote",
-  "git show",
-  "git status",
-  "grep",
-  "groups",
-  "head",
-  "history",
-  "host",
-  "htop",
-  "id",
-  "ipconfig",
-  "jobs",
-  "la",
-  "less",
-  "ll",
-  "locate",
-  "ls",
-  "lsblk",
-  "lsof",
-  "more",
-  "mount",
-  "netsh interface show",
-  "netstat",
-  "node --version",
-  "npm --version",
-  "npm audit",
-  "npm list",
-  "npm outdated",
-  "nslookup",
-  "ping -c",
-  "printf",
-  "ps",
-  "pwd",
-  "sed",
-  "set",
-  "sort",
-  "ss",
-  "systeminfo",
-  "tail",
-  "tasklist",
-  "time",
-  "top",
-  "tree",
-  "type",
-  "uname",
-  "uniq",
-  "uptime",
-  "ver",
-  "wc",
-  "whereis",
-  "which",
-  "whoami",
+  /:\(\)\s*\{/i,
+  /rm\s+-rf\s+\/($|\s)/i,
+  /rm\s+-rf\s+~\/\*/i,
+  /rm\s+-rf\s+\*($|\s)/i,
+  /dd\s+.*of=\/dev\/sd[a-z]/i,
+  /mkfs\.[a-z]+\s+\/dev/i,
+  /:\(\)\s*\{.*fork/i,
+  /curl.*\|\s*bash/i,
+  /wget.*\|\s*bash/i,
+  /curl.*\|\s*sh/i,
+  /wget.*\|\s*sh/i,
+  /chmod\s+777\s+\//i,
+  /chown\s+.*\s+\//i,
+  />\s*\/dev\/sd[a-z]/i,
 ];
 
 function isSafeCommand(command) {
-  const trimmedCommand = command.trim().toLowerCase();
+  const trimmedCommand = command.trim();
+  const lowerCommand = trimmedCommand.toLowerCase();
 
   for (const dangerous of DANGEROUS_COMMANDS) {
-    if (trimmedCommand.includes(dangerous.toLowerCase())) {
+    if (lowerCommand.includes(dangerous.toLowerCase())) {
       return {
         safe: false,
-        reason: `Comando proibido detectado: ${dangerous}`,
+        reason: `Comando perigoso detectado: ${dangerous}`,
       };
     }
   }
@@ -157,50 +58,9 @@ function isSafeCommand(command) {
     if (pattern.test(trimmedCommand)) {
       return {
         safe: false,
-        reason: `Padrão perigoso detectado: ${pattern.toString()}`,
+        reason: `Padrão perigoso detectado: operação destrutiva bloqueada`,
       };
     }
-  }
-
-  if (trimmedCommand.includes("..")) {
-    return {
-      safe: false,
-      reason: "Navegação de diretório suspeita (..)",
-    };
-  }
-
-  const sensitivePaths = [
-    "/etc",
-    "/proc",
-    "/sys",
-    "/dev",
-    "c:\\windows",
-    "c:\\system32",
-  ];
-
-  for (const path of sensitivePaths) {
-    if (trimmedCommand.includes(path.toLowerCase())) {
-      return {
-        safe: false,
-        reason: "Acesso a diretórios de sistema proibido",
-      };
-    }
-  }
-
-  const firstWord = trimmedCommand.split(" ")[0];
-  const isExplicitlySafe = SAFE_COMMANDS.some((safeCmd) => {
-    const safeCmdLower = safeCmd.toLowerCase();
-    return (
-      safeCmdLower.startsWith(firstWord) ||
-      trimmedCommand.startsWith(safeCmdLower)
-    );
-  });
-
-  if (!isExplicitlySafe) {
-    return {
-      safe: false,
-      reason: `Comando não está na lista de comandos seguros: ${firstWord}`,
-    };
   }
 
   return { safe: true };
@@ -208,13 +68,20 @@ function isSafeCommand(command) {
 
 module.exports = {
   name: "exec",
-  description: "Executa comandos seguros do terminal diretamente pelo bot.",
+  description: "Executa comandos do terminal diretamente pelo bot.",
   commands: ["exec"],
   usage: `${PREFIX}exec comando
   
-Apenas comandos seguros de leitura são permitidos.
+Apenas comandos destrutivos do sistema são bloqueados (formatação, shutdown, fork bombs, etc).
 
-Exemplos: ls, pwd, ps, df, git status, npm list`,
+Exemplos permitidos: 
+- ls, pwd, cat arquivo.txt
+- npm install, yarn add, pnpm install
+- git status, git pull, git commit
+- node script.js, python arquivo.py
+- rm arquivo.txt, mv origem destino
+- chmod 755 script.sh
+- mkdir, touch, cp, etc.`,
   /**
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
@@ -228,22 +95,23 @@ Exemplos: ls, pwd, ps, df, git status, npm list`,
       throw new DangerError(
         `Uso correto: ${PREFIX}exec comando
 
-Comandos seguros incluem: ls, pwd, ps, df, git status, npm list, etc.`
+Execute qualquer comando do terminal. 
+Apenas operações destrutivas críticas são bloqueadas (formatação de disco, shutdown, fork bombs, etc).`
       );
     }
 
     const safetyCheck = isSafeCommand(fullArgs);
     if (!safetyCheck.safe) {
       throw new DangerError(
-        `Comando bloqueado por segurança!
+        `⛔ Comando bloqueado por segurança!
+
 Motivo: ${safetyCheck.reason}
 
-Para sua segurança, apenas comandos de leitura são permitidos.
-Comandos seguros incluem: ls, pwd, cat, ps, df, git status, etc.`
+Este comando pode causar danos críticos ao sistema.`
       );
     }
 
-    console.log(`[EXEC_AUDIT] ${userJid} executou comando seguro: ${fullArgs}`);
+    console.log(`[EXEC_AUDIT] ${userJid} executou comando: ${fullArgs}`);
 
     const timeoutMs = 15000;
     const maxBuffer = 1024 * 1024;
