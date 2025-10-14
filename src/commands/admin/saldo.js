@@ -11,9 +11,7 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({ sendSuccessReply, sendWaitReact }) => {
-    await sendWaitReact();
-
+  handle: async ({ sendSuccessReply }) => {
     const response = await axios.get(
       `${SPIDER_API_BASE_URL}/saldo?api_key=${SPIDER_API_TOKEN}`
     );
@@ -22,13 +20,12 @@ module.exports = {
       throw new DangerError(`Erro ao consultar saldo! ${response.message}`);
     }
 
-    const { user, plan, requests_left, end_date } = response.data;
+    const { plan, requests_left, end_date } = response.data;
 
     const [year, month, day] = end_date.split("-");
 
     await sendSuccessReply(`🤖 *Saldo da Spider X API*
       
-👤 *Usuário:* ${user}
 📦 *Plano:* ${plan}
 🔢 *Requests restantes:* ${requests_left}
 📅 *Validade do plano:* ${day}/${month}/${year}`);
