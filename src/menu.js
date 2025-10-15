@@ -77,7 +77,6 @@ exports.menuMessage = (groupJid) => {
 ▢ • ${prefix}fake-chat
 ▢ • ${prefix}gerar-link
 ▢ • ${prefix}get-lid
-▢ • ${prefix}google-search
 ▢ • ${prefix}perfil
 ▢ • ${prefix}ping
 ▢ • ${prefix}raw-message
