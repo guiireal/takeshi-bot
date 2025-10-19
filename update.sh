@@ -2,7 +2,8 @@
 
 # Script de atualização automática do bot
 # Autor: Dev Gui
-# Versão: 0.9.0-BETA
+# Versão: 1.0.0-BETA
+# Compatível com: VPS, WSL2 e Termux
 
 set -e 
 
@@ -13,6 +14,25 @@ BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m'
+
+detect_environment() {
+    if [ -d "/data/data/com.termux" ]; then
+        echo "termux"
+    elif grep -qi microsoft /proc/version 2>/dev/null; then
+        echo "wsl"
+    else
+        echo "vps"
+    fi
+}
+
+ENV_TYPE=$(detect_environment)
+
+if [ "$ENV_TYPE" = "termux" ]; then
+    TEMP_DIR="$HOME/.cache/takeshi-bot-update"
+    mkdir -p "$TEMP_DIR"
+else
+    TEMP_DIR="/tmp"
+fi
 
 print_color() {
     local color=$1
@@ -40,6 +60,29 @@ ask_yes_no() {
     done
 }
 
+check_dependencies() {
+    local missing_deps=()
+    
+    if ! command -v git &> /dev/null; then
+        missing_deps+=("git")
+    fi
+    
+    if ! command -v node &> /dev/null && ! command -v nodejs &> /dev/null; then
+        missing_deps+=("nodejs")
+    fi
+    
+    if [ ${#missing_deps[@]} -gt 0 ]; then
+        print_color $RED "❌ Dependências faltando: ${missing_deps[*]}"
+        
+        if [ "$ENV_TYPE" = "termux" ]; then
+            print_color $YELLOW "💡 Instale com: pkg install ${missing_deps[*]}"
+        else
+            print_color $YELLOW "💡 Instale as dependências necessárias primeiro."
+        fi
+        exit 1
+    fi
+}
+
 check_git_repo() {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then
         print_color $RED "❌ Erro: Este diretório não é um repositório Git!"
@@ -59,7 +102,12 @@ check_package_json() {
 get_version() {
     local file=$1
     if [ -f "$file" ]; then
-        node -pe "JSON.parse(require('fs').readFileSync('$file', 'utf8')).version" 2>/dev/null || echo "não encontrada"
+        local node_cmd="node"
+        if ! command -v node &> /dev/null && command -v nodejs &> /dev/null; then
+            node_cmd="nodejs"
+        fi
+        
+        $node_cmd -pe "JSON.parse(require('fs').readFileSync('$file', 'utf8')).version" 2>/dev/null || echo "não encontrada"
     else
         echo "não encontrada"
     fi
@@ -167,7 +215,7 @@ show_file_differences() {
         echo "$conflicted_files" | while read file; do
             print_color $PURPLE "  ⚠️  $file"
         done
-        print_color $YELLOW "🔧 Será usado o merge strategy 'ort' para tentar mesclar automaticamente."
+        print_color $YELLOW "🔧 Será usado o merge strategy para tentar mesclar automaticamente."
         echo
     fi
 }
@@ -177,12 +225,17 @@ apply_updates() {
     
     print_color $BLUE "🔄 Aplicando atualizações..."
     
-    git config merge.ours.driver true
-    git config pull.rebase false
+    git config pull.rebase false 2>/dev/null || true
     
-    print_color $YELLOW "🔧 Usando estratégia de merge 'ort' para mesclar alterações..."
+    local merge_strategy="ort"
+    if ! git merge -s ort --help &> /dev/null; then
+        merge_strategy="recursive"
+        print_color $YELLOW "ℹ️  Usando estratégia 'recursive' (versão antiga do Git)"
+    fi
     
-    if git merge -X ort $remote_branch --no-commit --no-ff 2>/dev/null; then
+    print_color $YELLOW "🔧 Usando estratégia de merge '$merge_strategy' para mesclar alterações..."
+    
+    if git merge -X $merge_strategy $remote_branch --no-commit --no-ff 2>/dev/null; then
         print_color $GREEN "✅ Merge automático realizado com sucesso!"
         
         if [[ "${delete_files:-no}" == "yes" ]]; then
@@ -215,8 +268,8 @@ apply_updates() {
         
         echo
         print_color $YELLOW "💡 O que fazer agora:"
-        print_color $YELLOW "  1. Aceitar TODAS as alterações do repositório do bot oficial (sobrescrever local)"
-        print_color $YELLOW "  2. Manter TODAS as alterações locais (ignorar repositório do bot oficial)" 
+        print_color $YELLOW "  1. Aceitar TODAS as alterações do repositório oficial (sobrescrever local)"
+        print_color $YELLOW "  2. Manter TODAS as alterações locais (ignorar repositório oficial)" 
         print_color $YELLOW "  3. Resolver conflitos manualmente depois"
         echo
         
@@ -262,8 +315,23 @@ cleanup() {
 main() {
     print_header "🤖 SCRIPT DE ATUALIZAÇÃO TAKESHI BOT"
     
-    print_color $BLUE "🔍 Verificando ambiente..."
+    case $ENV_TYPE in
+        termux)
+            print_color $CYAN "📱 Ambiente: Termux (Android)"
+            ;;
+        wsl)
+            print_color $CYAN "🐧 Ambiente: WSL2 (Windows Subsystem for Linux)"
+            ;;
+        vps)
+            print_color $CYAN "🖥️  Ambiente: VPS/Linux"
+            ;;
+    esac
+    echo
     
+    print_color $BLUE "🔍 Verificando dependências..."
+    check_dependencies
+    
+    print_color $BLUE "🔍 Verificando ambiente..."
     check_git_repo
     check_package_json
     check_remote
@@ -272,7 +340,7 @@ main() {
     local local_version=$(get_version "package.json")
     
     git fetch origin 2>/dev/null || {
-        print_color $RED "❌ Erro ao conectar com o repositório do bot oficial!"
+        print_color $RED "❌ Erro ao conectar com o repositório oficial!"
         print_color $YELLOW "💡 Verifique sua conexão de internet e as permissões do repositório."
         exit 1
     }
@@ -289,9 +357,10 @@ main() {
     fi
     
     local remote_version="não encontrada"
-    if git show $remote_branch:package.json > /tmp/remote_package.json 2>/dev/null; then
-        remote_version=$(get_version "/tmp/remote_package.json")
-        rm -f /tmp/remote_package.json
+    local remote_package="$TEMP_DIR/remote_package_$$.json"
+    if git show $remote_branch:package.json > "$remote_package" 2>/dev/null; then
+        remote_version=$(get_version "$remote_package")
+        rm -f "$remote_package"
     fi
     
     print_color $([ "$local_version" = "$remote_version" ] && echo $GREEN || echo $RED) "  📦 Sua versão:     $local_version"
@@ -328,7 +397,11 @@ main() {
             
             print_color $YELLOW "💡 PRÓXIMOS PASSOS:"
             print_color $YELLOW "  1. Verifique se tudo está funcionando corretamente"
-            print_color $YELLOW "  2. Execute 'npm install' se houver novas dependências"
+            if [ "$ENV_TYPE" = "termux" ]; then
+                print_color $YELLOW "  2. Execute 'npm install' se houver novas dependências"
+            else
+                print_color $YELLOW "  2. Execute 'npm install' se houver novas dependências"
+            fi
             print_color $YELLOW "  3. Reinicie o bot se necessário"
             
             if [ -f .update_backup_info ]; then
