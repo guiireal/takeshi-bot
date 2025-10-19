@@ -8,8 +8,15 @@ const { errorLog } = require("../utils/logger");
 const {
   readGroupRestrictions,
   readRestrictedMessageTypes,
+  getOwnerNumber,
+  getBotNumber,
+  getOwnerLid,
 } = require("../utils/database");
-const { BOT_NUMBER, OWNER_NUMBER, OWNER_LID } = require("../config");
+let { BOT_NUMBER, OWNER_NUMBER, OWNER_LID } = require("../config");
+
+OWNER_NUMBER = getOwnerNumber() || OWNER_NUMBER;
+OWNER_LID = getOwnerLid() || OWNER_LID;
+BOT_NUMBER = getBotNumber() || BOT_NUMBER;
 
 exports.messageHandler = async (socket, webMessage) => {
   try {

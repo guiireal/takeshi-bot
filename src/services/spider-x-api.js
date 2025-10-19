@@ -6,7 +6,14 @@
  */
 const axios = require("axios");
 
-const { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = require("../config");
+let { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = require("../config");
+const { getSpiderApiToken } = require("../utils/database");
+
+const spiderApiTokenConfig = getSpiderApiToken();
+
+if (spiderApiTokenConfig) {
+  SPIDER_API_TOKEN = spiderApiTokenConfig;
+}
 
 /**
  * Não configure o token da Spider X API aqui, configure em: src/config.js
@@ -22,6 +29,14 @@ e edite o arquivo \`config.js\`:
 Procure por:
 
 \`exports.SPIDER_API_TOKEN = "seu_token_aqui";\`
+
+ou
+
+Use o comando:
+
+/set-spider-api-token seu_token_aqui
+
+Não esqueça de ver se a / é seu prefixo!
 
 Para obter o seu token, 
 crie uma conta em: https://api.spiderx.com.br
@@ -198,4 +213,30 @@ exports.canvas = (type, imageURL) => {
   return `${SPIDER_API_BASE_URL}/canvas/${type}?image_url=${encodeURIComponent(
     imageURL
   )}&api_key=${SPIDER_API_TOKEN}`;
+};
+
+exports.setProxy = async (name) => {
+  try {
+    if (!name) {
+      throw new Error("Você precisa informar o nome da nova proxy!");
+    }
+
+    if (!spiderAPITokenConfigured) {
+      throw new Error(messageIfTokenNotConfigured);
+    }
+
+    const { data } = await axios.post(
+      `${SPIDER_API_BASE_URL}/internal/set-node-js-proxy-active?api_key=${SPIDER_API_TOKEN}`,
+      {
+        name,
+      }
+    );
+
+    return data.success;
+  } catch (error) {
+    console.error("Erro ao definir a proxy:", error);
+    throw new Error(
+      "Não foi possível definir a proxy! Verifique se o nome está correto e tente novamente!"
+    );
+  }
 };

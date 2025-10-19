@@ -6,13 +6,20 @@
  */
 const path = require("node:path");
 const fs = require("node:fs");
-const { PREFIX } = require("../config");
+const {
+  PREFIX,
+  SPIDER_API_TOKEN,
+  BOT_NUMBER,
+  OWNER_NUMBER,
+  OWNER_LID,
+} = require("../config");
 
 const databasePath = path.resolve(__dirname, "..", "..", "database");
 
 const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const AUTO_RESPONDER_FILE = "auto-responder";
 const AUTO_RESPONDER_GROUPS_FILE = "auto-responder-groups";
+const CONFIG_FILE = "config";
 const EXIT_GROUPS_FILE = "exit-groups";
 const GROUP_RESTRICTIONS_FILE = "group-restrictions";
 const INACTIVE_GROUPS_FILE = "inactive-groups";
@@ -433,4 +440,81 @@ exports.removeAutoResponderItemByKey = (key) => {
   writeJSON(filename, responses, []);
 
   return true;
+};
+
+exports.setSpiderApiToken = (token) => {
+  const filename = CONFIG_FILE;
+
+  const config = readJSON(filename, {});
+
+  config.spider_api_token = token;
+
+  writeJSON(filename, config, {});
+};
+
+exports.getSpiderApiToken = () => {
+  const filename = CONFIG_FILE;
+
+  const config = readJSON(filename, {});
+
+  return config.spider_api_token || SPIDER_API_TOKEN;
+};
+
+exports.setBotNumber = (number) => {
+  const filename = CONFIG_FILE;
+
+  const config = readJSON(filename, {});
+
+  config.bot_number = number;
+
+  writeJSON(filename, config, {});
+};
+
+exports.getBotNumber = () => {
+  const filename = CONFIG_FILE;
+
+  const config = readJSON(filename, {});
+
+  return config.bot_number || BOT_NUMBER;
+};
+
+exports.setOwnerNumber = (number) => {
+  const filename = CONFIG_FILE;
+
+  const config = readJSON(filename, {});
+
+  config.owner_number = number;
+
+  writeJSON(filename, config, {});
+};
+
+exports.getOwnerNumber = () => {
+  const filename = CONFIG_FILE;
+
+  const config = readJSON(filename, {});
+
+  return (
+    config.owner_number ||
+    (OWNER_NUMBER !== "5521950502020" ? OWNER_NUMBER : null)
+  );
+};
+
+exports.setOwnerLid = (lid) => {
+  const filename = CONFIG_FILE;
+
+  const config = readJSON(filename, {});
+
+  config.owner_lid = lid;
+
+  writeJSON(filename, config, {});
+};
+
+exports.getOwnerLid = () => {
+  const filename = CONFIG_FILE;
+
+  const config = readJSON(filename, {});
+
+  return (
+    config.owner_lid || (OWNER_LID !== "219999999999999@lid" ? OWNER_LID : null)
+  );
 };

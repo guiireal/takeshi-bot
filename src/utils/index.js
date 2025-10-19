@@ -488,10 +488,6 @@ async function normalizeToLid(socket, jid) {
     return jid;
   }
 
-  if (jid.includes("@s.whatsapp.net")) {
-    return await getLidFromJid(socket, jid);
-  }
-
   return await getLidFromJid(socket, jid);
 }
 

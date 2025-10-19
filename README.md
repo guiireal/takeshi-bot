@@ -2,7 +2,7 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-6.4.3-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-6.5.0-blue)](https://github.com/guiireal/takeshi-bot)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
@@ -119,9 +119,11 @@ npm start
 
 9 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
 
-10 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+10 - Aqui você pode configurar de duas formas (10.1 ou 10.2):
 
-11 - Configure o arquivo `config.js` que está dentro da pasta `src`.
+10.1 - Primeira forma: aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+
+Depois, Configure o arquivo `config.js` que está dentro da pasta `src`.
 
 ```js
 // Prefixo dos comandos
@@ -148,7 +150,17 @@ exports.OWNER_NUMBER = "5521950502020";
 exports.OWNER_LID = "219999999999999@lid";
 ```
 
-12 - Inicie o bot novamente.
+10.2 - Segunda forma: configure o número do dono do bot e número do bot pelo próprio WhatsApp, com os comandos:
+
+`/numero-dono +55 11 99999999`
+
+e
+
+`/numero-bot +55 11 88888888`
+
+Lembre-se de trocar os números acima pelos seus números, obviamente e tbm ver se o seu prefixo é a barra /.
+
+11 - Inicie o bot novamente.
 
 ```sh
 npm start
@@ -296,7 +308,11 @@ pm2 start npm --name "takeshi-bot" -- start
 
 ![tutorial-vps-8](./assets/images/tutorial-vps-8.png)
 
-23 - Configure o arquivo `config.js` que está dentro da pasta `src`.
+23 - Aqui você pode configurar de duas formas (23.1 ou 23.2):
+
+23.1 - Primeira forma: aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+
+Depois, Configure o arquivo `config.js` que está dentro da pasta `src`.
 
 ```js
 // Prefixo dos comandos
@@ -308,12 +324,30 @@ exports.BOT_EMOJI = "🤖";
 // Nome do bot (mude se preferir).
 exports.BOT_NAME = "Takeshi Bot";
 
-// Número do bot. Coloque o número do bot (apenas números).
-exports.BOT_NUMBER = "5511920202020";
+// Número do bot. Coloque o número do bot
+// (apenas números, exatamente como está no WhatsApp).
+// Se o seu DDD não for de SP ou do Rio, não coloque o 9 antes do número.
+exports.BOT_NUMBER = "558112345678";
 
-// Número do dono do bot. Coloque o número do dono do bot (apenas números).
-exports.OWNER_NUMBER = "5511999999999";
+// Número do dono do bot. Coloque o número do dono do bot
+// (apenas números, exatamente como está no WhatsApp).
+// Se o seu DDD não for de SP ou do Rio, não coloque o 9 antes do número.
+exports.OWNER_NUMBER = "5521950502020";
+
+// LID do dono do bot.
+// Para obter o LID do dono do bot, use o comando <prefixo>get-lid @marca ou +telefone do dono.
+exports.OWNER_LID = "219999999999999@lid";
 ```
+
+23.2 - Segunda forma: configure o número do dono do bot e número do bot pelo próprio WhatsApp, com os comandos:
+
+`/numero-dono +55 11 99999999`
+
+e
+
+`/numero-bot +55 11 88888888`
+
+Lembre-se de trocar os números acima pelos seus números, obviamente e tbm ver se o seu prefixo é a barra /.
 
 24 - Por fim, teste o bot!
 

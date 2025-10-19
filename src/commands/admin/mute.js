@@ -8,8 +8,10 @@ const { toUserJidOrLid, onlyNumbers, toUserJid } = require(`${BASE_DIR}/utils`);
 const {
   checkIfMemberIsMuted,
   muteMember,
+  getOwnerNumber,
+  getOwnerLid,
 } = require(`${BASE_DIR}/utils/database`);
-const {
+let {
   PREFIX,
   BOT_NUMBER,
   OWNER_NUMBER,
@@ -50,6 +52,12 @@ module.exports = {
     const userId = replyJid ? replyJid : toUserJidOrLid(args[0]);
 
     const targetUserNumber = onlyNumbers(userId);
+
+    const ownerNumber = getOwnerNumber();
+    const ownerLid = getOwnerLid();
+
+    OWNER_NUMBER = ownerNumber ? ownerNumber : OWNER_NUMBER;
+    OWNER_LID = ownerLid ? ownerLid : OWNER_LID;
 
     if (
       [OWNER_NUMBER, OWNER_LID.replace("@lid", "")].includes(targetUserNumber)

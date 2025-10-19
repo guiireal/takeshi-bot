@@ -4,9 +4,12 @@
  * @author Dev Gui
  */
 const { delay } = require("baileys");
-const { OWNER_NUMBER, OWNER_LID } = require("../config");
+let { OWNER_NUMBER, OWNER_LID } = require("../config");
 const { compareUserJidWithOtherNumber, normalizeToLid } = require("../utils");
-const { getPrefix } = require("../utils/database");
+const { getPrefix, getOwnerNumber, getOwnerLid } = require("../utils/database");
+
+OWNER_NUMBER = getOwnerNumber() || OWNER_NUMBER;
+OWNER_LID = getOwnerLid() || OWNER_LID;
 
 exports.verifyPrefix = (prefix, groupJid) => {
   const groupPrefix = getPrefix(groupJid);
@@ -105,8 +108,10 @@ exports.isAdmin = async ({ remoteJid, userJid, socket }) => {
 
   const normalizedUserJid = await normalizeToLid(socket, userJid);
 
-  const participant = participants.find((p) => {
-    const pLid = p.id.includes("@lid") ? p.id : `${onlyNumbers(p.id)}@lid`;
+  const participant = participants.find((participant) => {
+    const pLid = participant.id.includes("@lid")
+      ? participant.id
+      : `${onlyNumbers(participant.id)}@lid`;
     return pLid === normalizedUserJid;
   });
 
@@ -157,8 +162,10 @@ exports.checkPermission = async ({ type, socket, userJid, remoteJid }) => {
     const { participants, owner } = await socket.groupMetadata(remoteJid);
     const normalizedUserJid = await normalizeToLid(socket, userJid);
 
-    const participant = participants.find((p) => {
-      const pLid = p.id.includes("@lid") ? p.id : `${onlyNumbers(p.id)}@lid`;
+    const participant = participants.find((participant) => {
+      const pLid = participant.id.includes("@lid")
+        ? participant.id
+        : `${onlyNumbers(participant.id)}@lid`;
       return pLid === normalizedUserJid;
     });
 
