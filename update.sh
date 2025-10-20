@@ -2,7 +2,7 @@
 
 # Script de atualização automática do bot
 # Autor: Dev Gui
-# Versão: 1.0.0-BETA
+# Versão: 1.0.0
 # Compatível com: VPS, WSL2 e Termux
 
 set -e 
