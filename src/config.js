@@ -21,7 +21,7 @@ exports.OWNER_NUMBER = "5583991423778";
 
 // LID do dono do bot.
 // Para obter o LID do dono do bot, use o comando <prefixo>get-lid @marca ou +telefone do dono.
-exports.OWNER_LID = "219999999999999@lid";
+exports.OWNER_LID = "237060770263102@lid";
 
 // Diretório dos comandos
 exports.COMMANDS_DIR = path.join(__dirname, "commands");

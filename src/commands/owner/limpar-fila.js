@@ -6,14 +6,13 @@ module.exports = {
   description: "Limpa a fila de downloads pendentes do yt-dlp",
   commands: ["limpar-fila", "limparfila", "clearqueue"],
   usage: `${PREFIX}limpar-fila`,
-  handle: async (
+  handle: async ({
     sendSuccessReact,
     sendWaitReact,
     sendErrorReply,
     sendSuccessReply,
     sendWarningReply,
-    sendTextMessage
-  ) => {
+  }) => {
     try {
       await sendWaitReact();
       

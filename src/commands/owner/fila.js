@@ -6,13 +6,12 @@ module.exports = {
   description: "Mostra informações sobre a fila de downloads do yt-dlp",
   commands: ["fila", "queue", "fila-status"],
   usage: `${PREFIX}fila`,
-  handle: async (
+  handle: async ({
     sendSuccessReact,
     sendWaitReact,
     sendErrorReply,
-    sendSuccessReply,
-    sendTextMessage
-  ) => {
+    sendReply,
+  }) => {
     try {
       await sendWaitReact();
       
@@ -30,7 +29,7 @@ module.exports = {
       }
       
       await sendSuccessReact();
-      await sendTextMessage(
+      await sendReply(
         `${statusEmoji} *Status da Fila de Downloads*\n\n` +
         `📊 *Informações:*\n` +
         `• Status: ${statusText}\n` +
