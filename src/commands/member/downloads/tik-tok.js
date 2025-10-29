@@ -16,10 +16,10 @@ module.exports = {
     socket,
     remoteJid,
     webMessage,
-    fullArgs,
     sendWaitReact,
     sendSuccessReact,
     sendErrorReply,
+    fullArgs,
   }) => {
     if (!fullArgs.length) {
       throw new InvalidParameterError("Você precisa enviar uma URL do TikTok!");
@@ -34,17 +34,23 @@ module.exports = {
       const result = await downloadTiktokVideo(fullArgs);
       filePath = result.filePath;
 
-      // Ler arquivo e enviar como vídeo
+      // Ler arquivo
       const videoBuffer = fs.readFileSync(filePath);
 
+      // Enviar vídeo com configurações para manter qualidade HD
       await socket.sendMessage(
         remoteJid,
         {
           video: videoBuffer,
-          mimetype: "video/mp4",
-          caption: `🎬 *TikTok Video*\n\n✅ Download concluído com sucesso!`,
+          caption: "🎬 *TikTok Video*\n\n✅ Download concluído com sucesso!",
+          gifPlayback: false, // Desabilita reprodução como GIF (mantém como vídeo)
+          ptv: false, // Desabilita Picture-in-Picture
         },
-        { quoted: webMessage }
+        { 
+          quoted: webMessage,
+          // Configurações adicionais para melhor qualidade
+          mediaUploadTimeoutMs: 120000, // 2 minutos de timeout para upload
+        }
       );
 
       await sendSuccessReact();
