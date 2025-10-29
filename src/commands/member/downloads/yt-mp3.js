@@ -1,7 +1,8 @@
 const { PREFIX } = require(`${BASE_DIR}/config`);
-const { download } = require(`${BASE_DIR}/services/spider-x-api`);
+const { downloadMedia, cleanupFile } = require(`${BASE_DIR}/services/ytdlpService`);
 const { WarningError } = require(`${BASE_DIR}/errors`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+const fs = require("fs");
 
 module.exports = {
   name: "yt-mp3",
@@ -13,7 +14,9 @@ module.exports = {
    * @returns {Promise<void>}
    */
   handle: async ({
-    sendAudioFromURL,
+    socket,
+    remoteJid,
+    webMessage,
     sendImageFromURL,
     fullArgs,
     sendWaitReact,
@@ -26,35 +29,64 @@ module.exports = {
       );
     }
 
-    await sendWaitReact();
-
-    if (!fullArgs.includes("you")) {
-      throw new WarningError("O link não é do YouTube!");
+    if (!fullArgs.includes("http://") && !fullArgs.includes("https://")) {
+      throw new InvalidParameterError(
+        "Você precisa enviar uma URL válida!"
+      );
     }
 
-    try {
-      const data = await download("yt-mp3", fullArgs);
+    await sendWaitReact();
 
-      if (!data) {
+    let filePath = null;
+
+    try {
+      const { filePath: downloadedFile, info } = await downloadMedia(fullArgs, "audio");
+      filePath = downloadedFile;
+
+      if (!info) {
         await sendErrorReply("Nenhum resultado encontrado!");
         return;
       }
 
       await sendSuccessReact();
 
-      await sendImageFromURL(
-        data.thumbnail,
-        `*Título*: ${data.title}
+      // Enviar thumbnail e informações
+      if (info.thumbnail) {
+        await sendImageFromURL(
+          info.thumbnail,
+          `*Título*: ${info.title}
         
-*Descrição*: ${data.description}
-*Duração em segundos*: ${data.total_duration_in_seconds}
-*Canal*: ${data.channel.name}`
+*Descrição*: ${info.description.substring(0, 200)}${info.description.length > 200 ? "..." : ""}
+*Duração*: ${Math.floor(info.duration / 60)}:${String(info.duration % 60).padStart(2, "0")}
+*Canal*: ${info.channel.name}`
+        );
+      }
+
+      // Enviar áudio diretamente (MP3 do yt-dlp já está no formato correto)
+      const audioBuffer = fs.readFileSync(filePath);
+      await socket.sendMessage(
+        remoteJid,
+        {
+          audio: audioBuffer,
+          mimetype: "audio/mpeg",
+          ptt: false,
+        },
+        { quoted: webMessage }
       );
 
-      await sendAudioFromURL(data.url);
+      // Limpar arquivo temporário após o envio
+      await cleanupFile(filePath);
+      filePath = null;
     } catch (error) {
-      console.log(error);
-      await sendErrorReply(error.message);
+      console.error(error);
+      await sendErrorReply(
+        error.message || "Erro desconhecido durante o download do áudio!"
+      );
+    } finally {
+      // Limpar arquivo temporário apenas se ainda não foi limpo
+      if (filePath) {
+        await cleanupFile(filePath);
+      }
     }
   },
 };

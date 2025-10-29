@@ -62,13 +62,61 @@ Este projeto não possui qualquer vínculo oficial com o WhatsApp. Ele foi desen
 
 Não nos responsabilizamos por qualquer uso indevido deste bot. É de responsabilidade exclusiva do usuário garantir que sua utilização esteja em conformidade com os termos de uso do WhatsApp e a legislação vigente.
 
+## 📦 Dependências Necessárias
+
+Para o funcionamento completo dos comandos de download de vídeos/áudios do YouTube, você precisa ter instalado:
+
+### yt-dlp
+Ferramenta para download de vídeos do YouTube e outros sites.
+
+**Windows:**
+```powershell
+# Usando winget (recomendado)
+winget install yt-dlp
+
+# Ou baixe manualmente de: https://github.com/yt-dlp/yt-dlp/releases
+```
+
+**Linux/Mac:**
+```sh
+sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && sudo chmod a+rx /usr/local/bin/yt-dlp
+```
+
+**Termux (Android):**
+```sh
+pkg install python -y && pip install yt-dlp
+```
+
+### ffmpeg
+Necessário para conversões de áudio/vídeo.
+
+**Windows:**
+- Baixe de: https://ffmpeg.org/download.html
+- Ou use: `winget install ffmpeg`
+
+**Linux:**
+```sh
+sudo apt install ffmpeg
+```
+
+**Termux:**
+```sh
+pkg install ffmpeg
+```
+
+Para verificar se as dependências estão instaladas:
+```sh
+yt-dlp --version
+ffmpeg -version
+```
+
 ## Instalação no Termux
 
 1 - Abra o Termux e execute os comandos abaixo.
 _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/wxpygdb9bcb5npb/Termux_0.118.3_Dev_Gui.apk) ou [clique aqui e baixe versão da Play Store](https://play.google.com/store/apps/details?id=com.termux) caso a versão do MediaFire anterior não funcione._
 
 ```sh
-pkg upgrade -y && pkg update -y && pkg install git -y && pkg install nodejs-lts -y && pkg install ffmpeg -y
+pkg upgrade -y && pkg update -y && pkg install git -y && pkg install nodejs-lts -y && pkg install ffmpeg -y && pkg install python -y && pip install yt-dlp
 ```
 
 2 - Habilite o acesso da pasta storage, no termux.
@@ -188,6 +236,18 @@ As principais hosts já oferecem o Okarun como **bot padrão**, não sendo neces
 
 ```sh
 sudo apt update && sudo apt upgrade && sudo apt-get update && sudo apt-get upgrade && sudo apt install ffmpeg
+```
+
+1.1 - Instale o yt-dlp (necessário para downloads de YouTube).
+
+```sh
+sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && sudo chmod a+rx /usr/local/bin/yt-dlp
+```
+
+1.2 - Verifique se o yt-dlp foi instalado corretamente.
+
+```sh
+yt-dlp --version
 ```
 
 2 - Instale o `curl` se não tiver.

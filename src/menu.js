@@ -55,6 +55,7 @@ exports.menuMessage = (groupJid) => {
 ▢ • ${prefix}fechar
 ▢ • ${prefix}hidetag
 ▢ • ${prefix}limpar
+▢ • ${prefix}limpar-fila
 ▢ • ${prefix}link-grupo
 ▢ • ${prefix}list-auto-responder
 ▢ • ${prefix}mute
@@ -75,6 +76,7 @@ exports.menuMessage = (groupJid) => {
 ▢ • ${prefix}cep
 ▢ • ${prefix}exemplos-de-mensagens
 ▢ • ${prefix}fake-chat
+▢ • ${prefix}fila
 ▢ • ${prefix}gerar-link
 ▢ • ${prefix}get-lid
 ▢ • ${prefix}perfil

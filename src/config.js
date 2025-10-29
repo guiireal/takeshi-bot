@@ -44,6 +44,26 @@ exports.SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
 exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
+// === Configurações do yt-dlp ===
+// Limite máximo de duração para downloads (em segundos)
+// 1800 segundos = 30 minutos
+exports.YTDLP_MAX_DURATION = 1800;
+
+// Limite máximo de tamanho de arquivo para downloads
+// Formato: "100M" (megabytes), "1G" (gigabytes), etc.
+exports.YTDLP_MAX_FILESIZE = "100M";
+
+// Qualidade padrão para downloads de vídeo
+// Opções: "360", "480", "720", "1080", "best"
+exports.YTDLP_DEFAULT_VIDEO_QUALITY = "720";
+
+// Formato de áudio para downloads de áudio
+// Opções: "mp3", "m4a", "opus", "vorbis", "wav", "best"
+exports.YTDLP_AUDIO_FORMAT = "mp3";
+
+// Qualidade de áudio (0 = melhor, 9 = pior)
+exports.YTDLP_AUDIO_QUALITY = "0";
+
 // Caso queira responder apenas um grupo específico,
 // coloque o ID dele na configuração abaixo.
 // Para saber o ID do grupo, use o comando <prefixo>get-id
