@@ -64,7 +64,7 @@ Não nos responsabilizamos por qualquer uso indevido deste bot. É de responsabi
 
 ## 📦 Dependências Necessárias
 
-Para o funcionamento completo dos comandos de download de vídeos/áudios do YouTube, você precisa ter instalado:
+Para o funcionamento completo dos comandos de download, você precisa ter instalado:
 
 ### yt-dlp
 Ferramenta para download de vídeos do YouTube e outros sites.
@@ -104,11 +104,31 @@ sudo apt install ffmpeg
 pkg install ffmpeg
 ```
 
+### Dependências NPM
+O projeto usa as seguintes bibliotecas para downloads:
+- **yt-dlp** (via linha de comando) - YouTube, 1000+ sites
+- **@faouzkk/tiktok-dl** - Downloads de vídeos públicos do TikTok
+
 Para verificar se as dependências estão instaladas:
 ```sh
 yt-dlp --version
 ffmpeg -version
 ```
+
+### ⚠️ Limitações dos Comandos de Download
+
+**Comando `/tik-tok`:**
+- ✅ Funciona com vídeos **públicos** do TikTok
+- ✅ Verifica limite de tamanho (100MB)
+- ⚠️ **Não verifica duração** antes do download
+- ❌ Não funciona com vídeos privados ou que exigem login
+- ❌ Não funciona com stories
+
+**Comandos YouTube (`/play-audio`, `/play-video`, `/yt-mp3`, `/yt-mp4`):**
+- ✅ Funciona com vídeos públicos do YouTube e 1000+ sites
+- ✅ Verifica duração (limite: 30 minutos)
+- ✅ Verifica tamanho (limite: 100MB)
+- ✅ Sistema de fila para evitar conflitos
 
 ## Instalação no Termux
 
