@@ -42,8 +42,8 @@ module.exports = {
     await delay(3000);
 
     await sendImageFromFile(
-      path.join(ASSETS_DIR, "images", "takeshi-bot.png"),
-      "Logo do Takeshi Bot!"
+      path.join(ASSETS_DIR, "images", "okarun-bot.png"),
+      "Logo do Okarun Bot!"
     );
 
     await delay(3000);
@@ -53,8 +53,8 @@ module.exports = {
     await delay(3000);
 
     await sendImageFromFile(
-      path.join(ASSETS_DIR, "images", "takeshi-bot.png"),
-      `Logo do Takeshi Bot para você @${userJid.split("@")[0]}!`,
+      path.join(ASSETS_DIR, "images", "okarun-bot.png"),
+      `Logo do Okarun Bot para você @${userJid.split("@")[0]}!`,
       [userJid]
     );
 

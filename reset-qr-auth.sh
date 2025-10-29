@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Script para reset da autenticação do Takeshi Bot
+# Script para reset da autenticação do Okarun Bot
 
-echo "🤖 Takeshi Bot - Reset da Autenticação"
+echo "🤖 Okarun Bot - Reset da Autenticação"
 echo "====================================="
 echo ""
 
 if [ ! -d "assets" ]; then
-    echo "❌ Erro: Você deve executar este script no diretório raiz do Takeshi Bot"
+    echo "❌ Erro: Você deve executar este script no diretório raiz do Okarun Bot"
     echo "   Certifique-se de estar na pasta onde estão as pastas 'assets' e 'src'"
     exit 1
 fi

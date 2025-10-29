@@ -35,12 +35,12 @@ module.exports = {
     }
 
     try {
-      const menuImagePath = path.join(ASSETS_DIR, "images", "takeshi-bot.png");
+      const menuImagePath = path.join(ASSETS_DIR, "images", "okarun-bot.png");
 
       let backupPath = "";
 
       if (fs.existsSync(menuImagePath)) {
-        backupPath = path.join(ASSETS_DIR, "images", "takeshi-bot-backup.png");
+        backupPath = path.join(ASSETS_DIR, "images", "okarun-bot-backup.png");
 
         fs.copyFileSync(menuImagePath, backupPath);
       }

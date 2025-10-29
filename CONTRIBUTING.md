@@ -1,6 +1,6 @@
-# Guia de Contribuição - Takeshi Bot 🤖
+# Guia de Contribuição - Okarun Bot 🤖
 
-O Takeshi é um bot open source (código aberto), o que significa que você pode contribuir com melhorias, correções de bugs e adição de novas funcionalidades.
+O Okarun é um bot open source (código aberto), o que significa que você pode contribuir com melhorias, correções de bugs e adição de novas funcionalidades.
 
 ## 🚀 Como contribuir
 

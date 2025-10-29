@@ -42,7 +42,7 @@ module.exports = {
 
     await sendImageFromURL(
       "https://api.spiderx.com.br/storage/samples/sample-image.jpg",
-      `Logo do Takeshi Bot para você ${userJid.split("@")[0]}!`,
+      `Logo do Okarun Bot para você ${userJid.split("@")[0]}!`,
       [userJid]
     );
 

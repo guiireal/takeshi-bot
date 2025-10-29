@@ -5,7 +5,7 @@ const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
 module.exports = {
   name: "gemini",
   description: "Use a inteligência artificial da Google Gemini!",
-  commands: ["gemini", "takeshi"],
+  commands: ["gemini", "okarun"],
   usage: `${PREFIX}gemini com quantos paus se faz uma canoa?`,
   /**
    * @param {CommandHandleProps} props

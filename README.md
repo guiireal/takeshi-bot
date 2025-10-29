@@ -1,8 +1,8 @@
-# 🤖 Takeshi Bot
+# 🤖 Okarun Bot
 
-![Takeshi Bot](./assets/images/takeshi-bot.png)
+![Okarun Bot](./assets/images/okarun-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-6.5.1-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-6.5.1-blue)](https://github.com/AnthonyVeras/okarun-bot)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
@@ -20,7 +20,7 @@
 
 ## 📋 Sumário
 
-1. [Idiomas disponíveis](#-acesse-o-takeshi-bot-em-outros-idiomas)
+1. [Idiomas disponíveis](#-acesse-o-okarun-bot-em-outros-idiomas)
 2. [Atenção - suporte](#-atenção)
 3. [Sobre o projeto](#sobre-este-projeto)
 4. Instalação
@@ -42,11 +42,11 @@
 13. [Licença](#licença)
 14. [Disclaimer](#-disclaimer)
 
-## 🌐 Acesse o Takeshi Bot em outros idiomas
+## 🌐 Acesse o Okarun Bot em outros idiomas
 
-- 🇺🇸 [**English version**](https://github.com/guiireal/takeshi-bot-english)
-- 🇪🇸 [**Versión en Español**](https://github.com/guiireal/takeshi-bot-espanol)
-- 🇮🇩 [**Versi Bahasa Indonesia**](https://github.com/guiireal/takeshi-bot-bahasa-indonesia)
+- 🇺🇸 [**English version**](https://github.com/AnthonyVeras/okarun-bot-english)
+- 🇪🇸 [**Versión en Español**](https://github.com/AnthonyVeras/okarun-bot-espanol)
+- 🇮🇩 [**Versi Bahasa Indonesia**](https://github.com/AnthonyVeras/okarun-bot-bahasa-indonesia)
 
 ## ⚠ Atenção
 
@@ -94,13 +94,13 @@ cd /sdcard
 4 - Clone o repositório.
 
 ```sh
-git clone https://github.com/guiireal/takeshi-bot.git
+git clone https://github.com/AnthonyVeras/okarun-bot.git
 ```
 
 5 - Entre na pasta que foi clonada.
 
 ```sh
-cd takeshi-bot
+cd okarun-bot
 ```
 
 6 - Habilite permissões de leitura e escrita (faça apenas 1x esse passo).
@@ -133,7 +133,7 @@ exports.PREFIX = "/";
 exports.BOT_EMOJI = "🤖";
 
 // Nome do bot (mude se preferir).
-exports.BOT_NAME = "Takeshi Bot";
+exports.BOT_NAME = "Okarun Bot";
 
 // Número do bot. Coloque o número do bot
 // (apenas números, exatamente como está no WhatsApp).
@@ -168,7 +168,7 @@ npm start
 
 ## Instalação nas principais hosts do Brasil
 
-As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo necessário nenhuma instalação manual!
+As principais hosts já oferecem o Okarun como **bot padrão**, não sendo necessário nenhuma instalação manual!
 
 **Hosts suportadas**:
 
@@ -241,13 +241,13 @@ npm install pm2 -g
 10 - Clone o repositório do bot onde você desejar.
 
 ```sh
-git clone https://github.com/guiireal/takeshi-bot.git
+git clone https://github.com/AnthonyVeras/okarun-bot.git
 ```
 
 11 - Entre na pasta clonada.
 
 ```sh
-cd takeshi-bot
+cd okarun-bot
 ```
 
 12 - Digite o seguinte comando.
@@ -266,7 +266,7 @@ Não adicione o 9º dígito em números que não sejam de SP ou RJ.
 14 - Conecte o bot no PM2
 
 ```sh
-pm2 start npm --name "takeshi-bot" -- start
+pm2 start npm --name "okarun-bot" -- start
 ```
 
 15 - O bot exibirá um **código de pareamento** que deve ser colocado em `dispositivos conectados` no seu WhatsApp.
@@ -298,7 +298,7 @@ pm2 start npm --name "takeshi-bot" -- start
 22 - Agora inicie ele pelo `PM2`, executando o seguinte código abaixo.
 
 ```sh
-pm2 start npm --name "takeshi-bot" -- start
+pm2 start npm --name "okarun-bot" -- start
 ```
 
 ![tutorial-vps-8](./assets/images/tutorial-vps-8.png)
@@ -317,7 +317,7 @@ exports.PREFIX = "/";
 exports.BOT_EMOJI = "🤖";
 
 // Nome do bot (mude se preferir).
-exports.BOT_NAME = "Takeshi Bot";
+exports.BOT_NAME = "Okarun Bot";
 
 // Número do bot. Coloque o número do bot
 // (apenas números, exatamente como está no WhatsApp).
@@ -515,7 +515,7 @@ exports.SPIDER_API_TOKEN = "seu_token_aqui";
 
 ## Auto responder
 
-O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/auto-responder.json`:
+O Okarun Bot possui um auto-responder embutido, edite o arquivo em `./database/auto-responder.json`:
 
 ```json
 [
@@ -529,7 +529,7 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     },
     {
         "match": "Qual seu nome",
-        "answer": "Meu nome é Takeshi Bot"
+        "answer": "Meu nome é Okarun Bot"
     }
 ]
 ```
@@ -738,12 +738,12 @@ Abra o termux, digite `termux-setup-storage` e depois, aceite as permissões
 
 ### ⚙️ Você configura o token da Spider API, prefixo, etc e o bot não reconhece
 
-Verifique se você não tem dois Takeshi's rodando no seu celular, muitas pessoas baixam o zip e seguem o tutorial, porém, **o tutorial não explica pelo zip, e sim, pelo git clone**.
+Verifique se você não tem dois Okarun's rodando no seu celular, muitas pessoas baixam o zip e seguem o tutorial, porém, **o tutorial não explica pelo zip, e sim, pelo git clone**.
 
 Geralmente as pessoas que cometem esse erro, ficam com dois bots:
 
 1. O primeiro dentro da `/sdcard`
-2. O segundo na pasta `/storage/emulated/0/Download`, que no zip fica como `takeshi-bot-main`
+2. O segundo na pasta `/storage/emulated/0/Download`, que no zip fica como `okarun-bot-main`
 
 Você deve apagar um dos bots e tanto configurar quanto executar **apenas um**
 
@@ -753,11 +753,11 @@ Você deve apagar um dos bots e tanto configurar quanto executar **apenas um**
 
 ## Contribuindo com o projeto
 
-O Takeshi Bot é um projeto **open source** e sua contribuição é muito bem-vinda!
+O Okarun Bot é um projeto **open source** e sua contribuição é muito bem-vinda!
 
 ### 🚀 Como contribuir
 
-- 🐛 **Reportar bugs** através das [Issues](https://github.com/guiireal/takeshi-bot/issues)
+- 🐛 **Reportar bugs** através das [Issues](https://github.com/AnthonyVeras/okarun-bot/issues)
 - ✨ **Sugerir novas funcionalidades**
 - 🔧 **Contribuir com código** (novos comandos, correções, melhorias)
 - ⭐ **Dar uma estrela** no repositório
@@ -765,12 +765,12 @@ O Takeshi Bot é um projeto **open source** e sua contribuição é muito bem-vi
 ### 📖 Antes de contribuir
 
 1. Leia nosso **[Guia de Contribuição](CONTRIBUTING.md)** completo
-2. Verifique as [Issues abertas](https://github.com/guiireal/takeshi-bot/issues)
+2. Verifique as [Issues abertas](https://github.com/AnthonyVeras/okarun-bot/issues)
 3. Siga o template obrigatório para Pull Requests
 
 ## Licença
 
-[GPL-3.0](https://github.com/guiireal/takeshi-bot/blob/main/LICENSE)
+[GPL-3.0](https://github.com/AnthonyVeras/okarun-bot/blob/main/LICENSE)
 
 Este projeto está licenciado sob a Licença Pública Geral GNU (GPL-3.0).
 Isso significa que:
