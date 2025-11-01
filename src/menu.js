@@ -29,8 +29,11 @@ exports.menuMessage = (groupJid) => {
 ▢ • ${prefix}get-id
 ▢ • ${prefix}off
 ▢ • ${prefix}on
+▢ • ${prefix}set-bot-number
 ▢ • ${prefix}set-menu-image
+▢ • ${prefix}set-owner-number
 ▢ • ${prefix}set-prefix
+▢ • ${prefix}set-spider-api-token
 ▢
 ╰━━─「🌌」─━━
 
@@ -84,6 +87,7 @@ exports.menuMessage = (groupJid) => {
 ▢ • ${prefix}rename
 ▢ • ${prefix}sticker
 ▢ • ${prefix}to-image
+▢ • ${prefix}to-mp3
 ▢ • ${prefix}ttp
 ▢ • ${prefix}yt-search
 ▢

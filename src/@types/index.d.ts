@@ -134,25 +134,25 @@ declare global {
      * Faz download de um áudio da mensagem atual.
      * @returns Promise com o caminho do áudio
      */
-    downloadAudio(): Promise<string>;
+    downloadAudio(webMessage: any, fileName: string): Promise<string>;
 
     /**
      * Faz download de uma imagem da mensagem atual.
      * @returns Promise com o caminho da imagem
      */
-    downloadImage(): Promise<string>;
+    downloadImage(webMessage: any, fileName: string): Promise<string>;
 
     /**
      * Faz download de um sticker da mensagem atual.
      * @returns Promise com o caminho do sticker
      */
-    downloadSticker(): Promise<string>;
+    downloadSticker(webMessage: any, fileName: string): Promise<string>;
 
     /**
      * Faz download de um vídeo da mensagem atual.
      * @returns Promise com o caminho do vídeo
      */
-    downloadVideo(): Promise<string>;
+    downloadVideo(webMessage: any, fileName: string): Promise<string>;
 
     /**
      * Envia um áudio a partir de um arquivo.
