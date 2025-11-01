@@ -192,22 +192,6 @@ então, quanto mais simples, melhor!"
 
 ### 3. `package.json` - Metadados do Projeto
 
-**Versão atual:** 6.6.0
-
-**Dependências principais:**
-```json
-{
-  "baileys": "^6.7.20",           // WhatsApp Web API
-  "axios": "^1.11.0",             // HTTP requests
-  "node-cache": "^5.1.2",         // Cache em memória
-  "fluent-ffmpeg": "^2.1.3",      // Processamento de áudio/vídeo
-  "node-webpmux": "^3.2.1",       // Manipulação de stickers
-  "openai": "^5.11.0",            // Integração OpenAI
-  "pino": "^9.7.0",               // Logger
-  "correios-brasil": "^3.0.6"     // Consulta CEP
-}
-```
-
 **Scripts disponíveis:**
 ```bash
 npm start       # Inicia bot com --watch (reinicia em mudanças)
