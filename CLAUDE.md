@@ -73,7 +73,7 @@ src/commands/
 ### Estrutura de Pastas (Raiz)
 
 ```
-takeshi-bot-private/
+takeshi-bot/
 ├── 📁 .git/                    # Controle de versão Git
 ├── 📁 .github/                 # Configurações do GitHub
 ├── 📁 assets/                  # Arquivos de mídia e autenticação
@@ -534,7 +534,7 @@ const prefix = getPrefix(groupJid);  // Busca no DB, fallback para config
 
 ```javascript
 // Prefixo padrão (pode ser sobrescrito por grupo)
-exports.PREFIX = "=";
+exports.PREFIX = "/";
 
 // Identidade do bot
 exports.BOT_EMOJI = "🤖";
