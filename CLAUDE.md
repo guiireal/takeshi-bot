@@ -2439,5 +2439,352 @@ type?: string // Tipo de comando ("admin", "owner", "member")
 **Maintainer:** Dev Gui ([@devgui_](https://youtube.com/@devgui_))
 
 ---
+# Pterodactyl
+
+Este é um documento de suporte completo e passo a passo em Markdown para guiar os clientes sobre como operar as funcionalidades essenciais do **Painel Pterodactyl**.
+
+O **Pterodactyl** é um painel de gerenciamento de servidores amplamente utilizado no setor de hospedagem.
+
+Aqui estão os detalhes sobre o que ele é e como é utilizado, de acordo com as fontes:
+
+### Definição e Popularidade
+
+*   O painel é conhecido por diferentes nomes, incluindo **"piteiro"** ou **"Pterodáctilo"**.
+*   É **extremamente popular** na indústria de hospedagem. Estima-se que **95% das empresas de hospedagem** utilizam este painel, especialmente aquelas que trabalham com Minecraft.
+*   É referido como um **"maravilhoso painel"**.
+*   O Pterodactyl usa uma **Framework** e requer a instalação de dependências como PHP, Nginx, e MySQL.
+
+### Aparência e Uso
+
+*   O Pterodactyl segue um **mesmo visual** e estrutura, sendo que **a única coisa que geralmente muda são as cores**, o que significa que os painéis são semelhantes.
+*   Ele é usado para gerenciar e configurar servidores de jogos, como Minecraft e FiveM (GTA V Multiplayer), mas também pode ser configurado para rodar bots e APIs.
+*   Ao acessá-lo, o painel exibe informações cruciais sobre o desempenho e o status do servidor, incluindo:
+    *   Nome e IP do servidor.
+    *   **CPU** (quanto o servidor está puxando em tempo real e o limite que pode atingir).
+    *   **Memória** (quanto está sendo puxado e o total adquirido).
+    *   **Armazenamento/Disco**.
+    *   Tempo que o servidor está online.
+    *   Informações de envio e recebimento de dados da máquina, o que permite verificar a banda utilizada pelo servidor.
+
+Em resumo, o Pterodactyl funciona como o **ponto central de controle** (o "cockpit") onde o cliente pode ligar, desligar, reiniciar o servidor, interagir via Console, gerenciar arquivos e configurar bancos de dados.
+
+***
+
+# Guia de Operação do Painel Pterodactyl
+
+Este guia detalhado destina-se a clientes que utilizam o Painel Pterodactyl (também conhecido como "Piteiro" ou "Pterodáctilo") para gerenciar seus servidores hospedados. Este painel é amplamente utilizado por empresas de hospedagem (cerca de 95%). Embora a aparência do painel possa variar ligeiramente em cores, a estrutura e o visual são geralmente semelhantes.
+
+## 1. Visão Geral e Status do Servidor (Início)
+
+Ao acessar o painel, a tela inicial (Início) fornece informações em tempo real sobre o estado do seu servidor:
+
+| Elemento | Descrição |
+| :--- | :--- |
+| **Nome do Servidor e Ícone** | Identificação do seu servidor. |
+| **IP do Servidor** | O endereço IP do seu servidor. Este IP será provavelmente diferente do meu e do seu. |
+| **CPU/Tempo de CPU** | Mostra o quanto de CPU o servidor está usando em tempo real e o limite de CPU que ele pode atingir (exemplo: 300%). |
+| **Memória** | Mostra a memória que o servidor está consumindo no momento e o total de memória adquirida (exemplo: 6 GB). |
+| **Armazenamento/Disco** | Indica o espaço em disco que o servidor está utilizando. |
+| **Tempo Online** | O tempo que o servidor está ligado. |
+| **Banda de Rede** | Informações sobre o envio e o recebimento de dados da sua máquina. O envio (azul) geralmente fica acima do recebimento, pois o usuário está mandando informações para o servidor. Isso permite verificar a banda utilizada pelo servidor. |
+
+## 2. Controles Básicos do Servidor
+
+No painel principal, você encontrará três botões essenciais para gerenciar o estado do servidor:
+
+*   **Ligar** (Start): Inicia o servidor.
+*   **Reiniciar** (Restart): Reinicia o servidor.
+*   **Desligar** (Stop): Desliga o servidor.
+
+## 3. Console (CMD)
+
+O **Console** é a área principal onde você pode interagir diretamente com o servidor.
+
+1.  **Localização:** É a área de texto onde são exibidas as mensagens do servidor.
+2.  **Execução de Comandos:** Permite a execução de todos os comandos necessários (similar a um CMD no seu computador).
+    *   **Exemplo:** Se o servidor for de Minecraft, você pode inserir comandos como `/gamemode [jogador]`.
+3.  **Observação:** O procedimento de uso do Console é praticamente o mesmo para diferentes tipos de hospedagem, como Minecraft ou FiveM.
+
+## 4. Gerenciamento de Arquivos (*Files/Pastas*)
+
+A seção **Files** (Pastas) contém o corpo completo do seu servidor.
+
+1.  **Conteúdo:** Aqui ficam arquivos cruciais como `Cash`, `Config`, `Lobby`, `Logs`, `Plugins`, e outros.
+2.  **Ações Principais:**
+    *   **Upload:** O método mais utilizado para enviar arquivos para a hospedagem.
+    *   **Criar Novo Arquivo** (`New File`).
+    *   **Criar Diretório** (`Create diretório`).
+3.  **Arquivos Compactados:** É possível **extrair** arquivos zipados ou WinRAR diretamente dentro do painel.
+4.  **SFTP:** Para acesso via programas externos (como FileZilla, que é usado para mexer na máquina), é necessário o domínio, usuário, senha e a porta (que geralmente é a padrão `2222`). **Nota de segurança:** O uso do gerenciador de arquivos interno é aconselhado, pois o uso de programas SFTP de terceiros (como o FileZilla) pode ter riscos de vírus.
+
+## 5. Banco de Dados (*Databases*)
+
+O banco de dados é usado para organizar as informações específicas de cada plugin ou aplicação, como se fosse uma estante que armazena livros organizados.
+
+1.  **Criação:** Acesse a seção **Banco de Dados**.
+2.  Clique em **New Database**.
+3.  Defina um **nome** para o banco de dados.
+4.  As informações de local (host) e porta geralmente são definidas pela empresa e podem não aparecer para você, mas serão necessárias para a configuração de plugins ou aplicações.
+
+## 6. Sub-Usuários (*Users*)
+
+A seção **Users** (também referida como *Name Use Name*) permite que você libere o acesso ao servidor para outras pessoas, como amigos ou colaboradores.
+
+1.  **Adicionar Usuário:** Vá para a seção **Users** e clique em **New**.
+2.  Insira o **e-mail** da pessoa.
+3.  Defina as **permissões** que essa pessoa terá.
+    *   **Exemplos de Permissões:**
+        *   Acesso ao Console.
+        *   Ligar, parar ou reiniciar o servidor.
+        *   Operações de Arquivos: Criar, ler, atualizar (editar), excluir, e acesso ao SFTP.
+    *   **Atenção:** É crucial ser cauteloso ao conceder acesso a áreas importantes, pois o usuário pode causar problemas no servidor.
+
+## 7. Backups
+
+O recurso **Backup** cria uma cópia do seu servidor, que pode ser baixada ou usada para recuperação.
+
+1.  **Criação de Backup:**
+    *   Acesse a seção **Backup**.
+    *   Clique para criar um novo backup.
+    *   Defina um **nome**.
+    *   Você pode optar por ignorar alguns arquivos (não recomendado).
+    *   O recurso "Look" (Cadeado) pode ser usado para proteger o backup, impedindo sua exclusão.
+2.  **Gerenciamento:**
+    *   Após a criação, use os três pontos (opções) para gerenciar o backup.
+    *   As opções disponíveis são: **Download**, **Recuperar** (Restore), **Travar** (Lock/colocar cadeado), **Destravar** (Unlock), e **Deletar**.
+3.  **Status:** Durante um backup muito grande, um cadeado pode aparecer na seção, impedindo o uso do painel momentaneamente.
+
+## 8. Configurações de Inicialização (*Startup*)
+
+A seção **Startup** contém as configurações avançadas sobre como seu servidor é iniciado e qual ambiente ele utiliza.
+
+1.  **Start Commands:** É o código ou *flag* que faz o servidor iniciar.
+2.  **Docker Image:** A imagem utilizada para rodar o servidor (exemplo: `1.07` ou `Java 8`).
+3.  **Seleção de Versão:** Você pode selecionar a versão específica do servidor (exemplo: 1.8.8).
+4.  **Atenção:** Geralmente, você só deve mexer na seleção da versão ou em parâmetros específicos de inicialização. Outros campos, como `server.jar` ou `build numeric`, geralmente devem ser mantidos como estão.
+
+## 9. Atividades (*Activity*)
+
+A seção **Atividades** foi adicionada recentemente e é muito importante para a segurança.
+
+1.  **Propósito:** Registra todas as ações e alterações feitas dentro do painel.
+2.  **Uso:** Se você deu acesso a um colega ou sub-usuário, esta seção permite verificar se alguma configuração foi alterada ou se houve atividades suspeitas, ajudando a identificar a origem de problemas de segurança.
+
+***
+
+**Analogia Final:** Pense no Painel Pterodactyl como o **Cockpit de um Avião**. A tela inicial mostra todos os indicadores vitais (CPU, memória, velocidade da rede), os botões de controle são para as ações de decolagem, voo e pouso (Ligar, Reiniciar, Desligar), o Console é o rádio de comunicação direta com o motor (para comandos específicos), e a seção de Arquivos é o compartimento de bagagem e manutenção, onde ficam todas as peças necessárias para o voo.
+
+A função principal do **Console** (também chamado de **CMD** para maior familiaridade) é permitir a **execução de todos os comandos necessários** diretamente no servidor.
+
+O Console é a área do Painel Pterodactyl onde as mensagens e o *output* do servidor são exibidos, e onde a interação direta ocorre.
+
+Detalhes sobre a função e uso do Console:
+
+*   **Execução de Comandos:** É o local onde você pode inserir e executar comandos. Por exemplo, em um servidor de Minecraft, é possível inserir comandos como o de dar "game mode" a um jogador, inserindo o comando correto em inglês junto ao *nick* do jogador.
+*   **Similaridade com CMD:** O Console é semelhante ao CMD (Command Prompt) encontrado em seu próprio computador.
+*   **Reflexo da Atividade:** O Console reflete a atividade em tempo real do servidor. Por exemplo, uma "alta atividade" é visível no Console após o usuário realizar ações no jogo, como andar ou bater.
+*   **Procedimento Universal:** O procedimento para utilizar o Console é praticamente o mesmo para diferentes tipos de hospedagem, como Minecraft ou FiveM (GTA V multiplayer), embora o conteúdo das informações possa variar.
+*   **Controle de Acesso:** O acesso ao Console é uma das permissões que pode ser concedida (ou revogada) a sub-usuários (*Users*) que você adiciona ao painel, sendo uma área importante que requer cautela ao liberar para outras pessoas.
+
+Este documento fornece uma documentação completa e passo a passo sobre como hospedar um bot ou API (Application Programming Interface) utilizando o Painel Pterodactyl, baseando-se nas funcionalidades e nos procedimentos de hospedagem de aplicações que não sejam servidores de jogos tradicionais.
+
+O Painel Pterodactyl pode ser utilizado para hospedar não apenas servidores de jogos (como Minecraft ou FiveM), mas também bots de **Telegram, Discord e WhatsApp**, e **APIs** que utilizam linguagens como **Node.js, Python ou PHP**.
+
+***
+
+# Documentação Completa: Hospedagem de Bots no Painel Pterodactyl
+
+## 1. Configuração e Criação do Servidor
+
+### 1.1 Escolha da Linguagem e Método de Hospedagem
+
+Ao criar o servidor, você deve definir o ambiente de execução do seu bot.
+
+1.  Acesse a área de **Servidores** e clique em `Criar Servidor`.
+2.  Defina um **nome** para o servidor (ex: "Bot Aleatório"). O nome serve apenas para identificação e não interfere na funcionalidade.
+3.  Em **Método de Hospedagem**:
+    *   Se estiver hospedando seu **próprio projeto/API**, escolha `Linguagens`. Você verá opções como **Node.js, Python e PHP**. A escolha deve corresponder à linguagem em que sua aplicação foi desenvolvida.
+    *   Se estiver utilizando um **bot pré-disponível** (por exemplo, um bot de WhatsApp que a hospedagem disponibiliza), você deve escolher a `Categoria` (ex: `Baileys` ou `Web JS`).
+4.  Selecione a **localização** (ex: `br2`) e o **plano** desejado, que define a quantidade de CPU, RAM e Armazenamento.
+
+## 2. Upload e Extração dos Arquivos do Bot
+
+A seção **Files** (Pastas) é onde você irá carregar os arquivos do seu projeto.
+
+### 2.1 Preparação dos Arquivos (Recomendado)
+
+É **muito importante** enviar os arquivos do seu bot **sem os módulos** (como a pasta `node_modules` no Node.js). Isso evita que o envio demore muito.
+
+1.  **Compacte** seu projeto em um arquivo `.zip`.
+
+### 2.2 Envio e Descompactação
+
+1.  Acesse a seção **Files** (Pastas) no painel.
+2.  Use o recurso de **Upload** para enviar o arquivo `.zip` para a hospedagem.
+3.  Após o envio, localize o arquivo `.zip`.
+4.  Clique nos **três pontinhos** (opções) e selecione `Unarchive` para descompactar o arquivo (se o painel estiver em inglês).
+
+### 2.3 Organização dos Arquivos
+
+Se o seu arquivo `.zip` criou uma subpasta (ex: `api/` ou `bot/`) e o conteúdo do bot está dentro dela, você precisa mover os arquivos para a raiz do contêiner:
+
+1.  Acesse a subpasta criada (ex: `api/`).
+2.  Marque todos os arquivos clicando na primeira caixa (`caixinha`).
+3.  Clique em `Move` (Mover).
+4.  No campo de destino, insira `..` (dois pontos) e clique em `move`. Isso moverá os arquivos para a pasta anterior (a raiz do servidor).
+5.  Volte para a raiz, selecione o arquivo `.zip` e a pasta vazia (ex: `api/`) e clique para **deletar** (`deletar`) para limpar o espaço.
+
+## 3. Configuração de Inicialização (*Startup*)
+
+A seção `Startup` é onde você garante que o bot será executado corretamente no ambiente (Docker Image) escolhido.
+
+1.  Acesse a seção **Startup**.
+2.  **Instalação de Módulos:** Verifique se a opção de instalação de módulos está ativada. Ao estar ativa, o painel irá instalar os módulos necessários através do arquivo `package.json`.
+3.  **Comando de Início (*Start Commands*):** O painel utiliza um código (`Flag`) para iniciar a aplicação. Para Node.js, o comando padrão pode ser **`npm start`**, que executa o script de inicialização definido no `package.json`.
+4.  **Configuração de Porta (Para APIs):** Se estiver hospedando uma API (que pode ser acessada via link), a porta que sua API escuta (`app.listen` no código) deve ser a mesma porta que o painel atribuiu ao seu servidor. Esta porta será exibida na tela inicial do Console (ex: `4022` ou `25565`). Você precisará ajustar o código da sua API para usar essa porta específica.
+
+## 4. Execução e Monitoramento
+
+### 4.1 Iniciando o Bot
+
+1.  Retorne ao **Console**.
+2.  Utilize o botão **Ligar** (*Start*) para iniciar a aplicação.
+3.  O Console mostrará o processo de **instalação dos módulos** e, em seguida, o início da aplicação.
+
+### 4.2 Monitoramento e Parelhamento (Exemplo: Bot de WhatsApp)
+
+*   Se o bot for de WhatsApp, ele iniciará o processo de parelhamento.
+*   O Console pode exibir um **QR Code** ou um código de parelhamento.
+*   Caso seja um código de parelhamento, você deve ir ao seu WhatsApp (em um outro dispositivo), acessar `Aparelhos Conectados`, `Conectar um Aparelho`, e, em seguida, selecionar `Conectar com o número de telefone` e inserir o código gerado no Console.
+
+### 4.3 Agendamento de Reinicialização (Recomendação)
+
+Para **evitar sobrecarga de Cash** e manter a estabilidade do bot, é aconselhável configurar a reinicialização periódica.
+
+1.  Acesse a seção **Sheduler** (Agendador).
+2.  Crie um novo agendamento (`Create shedler`).
+3.  Defina um nome (ex: "Reiniciar").
+4.  Defina a frequência (ex: a cada **24 horas** ou outro intervalo).
+5.  Crie uma nova tarefa (`New Task`).
+6.  Em `Send Command`, selecione `Send Power Reaction`.
+7.  Escolha a ação **Reiniciar o servidor** (`Restart server`) e marque para continuar mesmo após falha.
+
+Este processo garantirá que o bot será reiniciado automaticamente no horário programado.
+
+***
+
+**Analogia:** Hospedar um bot é como montar um kit de montar. O Painel Pterodactyl é a **caixa de ferramentas** (Console, Files, Startup)-. A seção **Startup** é o **manual de instruções** que diz qual idioma (Node/Python) usar e qual botão apertar (`npm start`) para começar. Os **Files** são as **peças soltas** (seu código) que você deve montar (descompactar e mover) na área de trabalho. Ao final, o **Console** é a **luz de funcionamento** que mostra se o kit está ligado e operando.
+
+A funcionalidade de **Backup** no Painel Pterodactyl é essencialmente um recurso que cria uma cópia de segurança do seu servidor.
+
+Com base nas fontes, aqui está o que é e como funciona um backup:
+
+### Definição e Propósito
+
+*   Um backup **faz uma cópia do seu servidor**.
+*   É, na prática, **uma cópia do seu servidor**.
+*   Essa cópia fica no painel, onde o usuário pode:
+    *   Fazer o **download** da cópia.
+    *   **Recuperar** (Restore) o servidor a partir dessa cópia.
+
+### Criação e Gerenciamento
+
+Ao criar um backup, o usuário pode:
+
+1.  **Dar um nome** ao backup.
+2.  Optar por **ignorar algumas pastas** (*faixas*), embora isso não seja aconselhado.
+3.  Utilizar o recurso **"look"** (cadeado), que é uma funcionalidade nova, para **travar** o backup. Esse recurso proíbe a exclusão do backup até que ele seja desbloqueado.
+
+Se o backup for **muito grande**, um **cadeado** pode aparecer na seção, o que **impede o uso** do painel momentaneamente enquanto o processo está ocorrendo.
+
+As opções disponíveis para gerenciar um backup criado (acessíveis pelos três pontos) incluem:
+
+*   **Download**.
+*   **Recuperar** (Restore).
+*   **Travar** (colocar um cadeado).
+*   **Destravar** (remover o cadeado).
+*   **Deletar**.
+
+Com base nas informações fornecidas, este é um tutorial completo e passo a passo sobre como utilizar um **bot que já se encontra disponível** na plataforma de hospedagem, usando o Painel Pterodactyl.
+
+Este procedimento é específico para bots que são oferecidos como parte do serviço de hospedagem (como bots de WhatsApp prontos), e não para o *upload* de um bot personalizado ou API.
+
+***
+
+# Tutorial: Utilizando um Bot Disponível no Painel Pterodactyl
+
+## 1. Criação e Seleção do Tipo de Bot
+
+O primeiro passo é criar um novo servidor e selecionar a categoria correta para o bot que você deseja utilizar.
+
+1.  No lado esquerdo do Painel, clique nas três barras (`três Barrinhas`) e vá para a seção **Servidores**.
+2.  Clique em `Criar Servidor`.
+3.  **Nome do Servidor:** Insira um nome para o servidor (ex: "aleató BR" ou "cachorro gato Tigre"). O nome não interfere em nada, é apenas para identificação.
+4.  **Método de Hospedagem:** Nesta seção, você deve escolher a categoria que contém os bots já disponíveis:
+    *   Se for hospedar seu **próprio bot/API**, você escolheria `Linguagens`.
+    *   Se for utilizar um **Bot que já está disponível no site** (por exemplo, Bots de WhatsApp), escolha a categoria específica.
+5.  **Seleção da Biblioteca (Categoria):** Escolha a biblioteca ou categoria do bot:
+    *   **Baileys** (ou `Bailes`): É a opção mais completa e estável na atualidade, sendo mais indicada para **baixo consumo de RAM** e uso em vários grupos.
+    *   **Web JS**: É uma biblioteca diferente, que geralmente é mais pesada e pode ter menos bots disponíveis.
+6.  **Plano e Localização:** O sistema escolherá o servidor mais atualizado e disponível (ex: `br2` ou `br1`). Escolha o plano de servidor (ex: Bronze, Prata, Ouro, Premium) que define a quantidade de RAM, CPU e armazenamento. Os planos podem variar de consumo mensal ou por hora.
+
+## 2. Gerenciamento e Configuração Inicial
+
+Após a criação do servidor, você será enviado para a área de gerenciamento.
+
+1.  Acesse o servidor criado clicando em **Gerir**.
+2.  Você estará no **Console**, onde verá as opções básicas de controle:
+    *   **Start** (Ligar).
+    *   **Restart** (Reiniciar).
+    *   **Stop** (Parar).
+3.  **Seleção Específica do Bot (Se aplicável):** Dependendo do seu provedor, dentro da seção **Startup**:
+    *   Você pode ver a lista dos **Bots disponíveis na host** (ex: Sakura, Sabrina, Shadow, Noel).
+    *   Selecione o bot desejado.
+    *   *Nota: Lembre-se que alguns bots disponíveis são criptografados e a hospedagem não se responsabiliza por problemas, pois são criadores diferentes*.
+
+## 3. Configurando a Reinicialização Programada (*Scheduler*)
+
+É altamente recomendado configurar um agendamento para reiniciar o bot, o que ajuda a **evitar sobrecarga de Cash** e a manter o bot estável e leve.
+
+1.  No lado esquerdo, vá para a seção **Sheduler** (ou Agendador).
+2.  Clique em `Create shedler`.
+3.  Defina um nome (ex: "reiniciar").
+4.  Defina a frequência da reinicialização (ex: a cada **24 horas** ou outro intervalo desejado).
+5.  Crie uma nova tarefa clicando em `New Task`.
+6.  Em `Send Command`, selecione `Send Power Re Action`.
+7.  Escolha a ação **Reiniciar o servidor** (`Restart server`) e marque a opção para continuar mesmo após falha.
+
+## 4. Inicialização e Parelhamento do Bot
+
+O bot geralmente usa o **Console** para fornecer informações de parelhamento, especialmente se for um bot de WhatsApp.
+
+1.  Volte ao **Console** e clique em **Start** (Ligar).
+2.  O Console fará a instalação (se necessário) e iniciará o bot.
+3.  Ele irá gerar um **QR Code** ou um **código de parelhamento**.
+
+### Parelhamento via Código:
+
+Se o bot gerar um código (e não um QR Code):
+
+1.  O console pode pedir que você **coloque o número** que será o bot (incluindo o prefixo `+55` e o DDD, sem espaços).
+2.  Acesse o **WhatsApp** no seu dispositivo (que será pareado).
+3.  Vá para `Aparelhos Conectados`.
+4.  Selecione `Conectar um Aparelho`.
+5.  Selecione `Conectar com o número de telefone` (localizado na parte inferior da tela).
+6.  Insira o código de parelhamento que foi gerado no **Console** do Pterodactyl.
+
+Após inserir o código, o bot estará conectado e pronto para funcionar em grupos.
+
+### Parelhamento Avançado (Comando `start.sh`):
+
+Em alguns casos, para que o bot inicie o processo de parelhamento corretamente, o comando de *start* padrão pode precisar ser ajustado:
+
+1.  Se o bot exigir o uso de um comando específico como `sh start.sh`, você pode precisar acessar a seção **Files** (Pastas).
+2.  Localize o arquivo `package.json`.
+3.  Edite este arquivo para garantir que o *script* de inicialização (que o painel executa via `npm start`) chame o comando correto (ex: `sh start.sh`).
+4.  **Salve** o arquivo e volte ao **Console** para iniciar o bot.
+
+
+---
 
 *Este arquivo foi criado especificamente para assistentes de IA (Claude, ChatGPT, etc) entenderem completamente o projeto Takeshi Bot e auxiliarem desenvolvedores de forma precisa e contextualizada.*
