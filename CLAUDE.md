@@ -1,8 +1,10 @@
 # 🤖 TAKESHI BOT - Documentação Completa para IA
 
 > **Última atualização:** 2 de Novembro de 2025  
-> **Versão:** 5.0.0 FINAL  
-> **Autor:** Dev Gui (Guilherme França)
+> **Comandos documentados:** 110+ (detalhados tecnicamente)  
+> **Estrutura técnica:** src/errors, src/middlewares, src/services incluídas  
+> **Suporte a hosts:** Pterodactyl, Docker, VPS configurado  
+> **Maintainer:** Dev Gui ([@devgui_](https://youtube.com/@devgui_))
 
 ---
 
@@ -1726,13 +1728,6 @@ module.exports = {
 - Cleanup de recursos (arquivos, connections)
 
 ---
-
-**Última atualização:** 2 de Novembro de 2025  
-**Versão da documentação:** 3.0.0  
-**Comandos documentados:** 110+ (detalhados tecnicamente)  
-**Estrutura técnica:** src/errors, src/middlewares, src/services incluídas  
-**Suporte a hosts:** Pterodactyl, Docker, VPS configurado  
-**Maintainer:** Dev Gui ([@devgui_](https://youtube.com/@devgui_))
 
 ### 📁 ARQUIVOS PRINCIPAIS DO SISTEMA
 
