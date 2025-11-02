@@ -46,6 +46,7 @@ exports.extractDataFromMessage = (webMessage) => {
       remoteJid: null,
       replyJid: null,
       userJid: null,
+      replyText: null,
     };
   }
 
@@ -56,6 +57,17 @@ exports.extractDataFromMessage = (webMessage) => {
     !!extendedTextMessage && !!extendedTextMessage.contextInfo?.participant
       ? extendedTextMessage.contextInfo.participant
       : null;
+
+  const replyTextType1 =
+    extendedTextMessage?.contextInfo?.quotedMessage?.conversation;
+
+  const replyTextType2 =
+    extendedTextMessage?.contextInfo?.quotedMessage?.extendedTextMessage?.text;
+
+  const replyTextType3 =
+    extendedTextMessage?.contextInfo?.quotedMessage?.imageMessage?.caption;
+
+  const replyText = replyTextType1 || replyTextType2 || replyTextType3 || "";
 
   const userJid = webMessage?.key?.participant?.replace(
     /:[0-9][0-9]|:[0-9]/g,
@@ -76,6 +88,7 @@ exports.extractDataFromMessage = (webMessage) => {
     prefix,
     remoteJid: webMessage?.key?.remoteJid,
     replyJid,
+    replyText,
     userJid,
   };
 };

@@ -29,6 +29,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     remoteJid,
     replyJid,
     userJid,
+    replyText,
   } = extractDataFromMessage(webMessage);
 
   if (!remoteJid) {
@@ -781,6 +782,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     replyJid,
     socket,
     userJid,
+    replyText,
     webMessage,
     deleteMessage,
     downloadAudio,

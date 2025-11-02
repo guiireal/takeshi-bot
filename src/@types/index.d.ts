@@ -89,6 +89,11 @@ declare global {
     replyJid: string;
 
     /**
+     * Texto da mensagem que vem de uma mensagem que você responde em cima.
+     */
+    replyText: string;
+
+    /**
      * Socket do baileys para operações avançadas.
      */
     socket: any;
