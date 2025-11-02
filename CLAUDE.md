@@ -1,7 +1,7 @@
 # 🤖 TAKESHI BOT - Documentação Completa para IA
 
-> **Última atualização:** 1 de Novembro de 2025  
-> **Versão:** 6.6.0  
+> **Última atualização:** 2 de Novembro de 2025  
+> **Versão:** 5.0.0 FINAL  
 > **Autor:** Dev Gui (Guilherme França)
 
 ---
@@ -1016,7 +1016,438 @@ Deseja continuar? (s/N):
 
 ---
 
-## 🔧 TROUBLESHOOTING E SUPORTE TÉCNICO
+## � ESTRUTURA TÉCNICA DO PROJETO
+
+### 🚨 src/errors/ - Sistema de Erros Customizados
+
+O bot utiliza um sistema robusto de tratamento de erros com 3 classes específicas:
+
+#### **InvalidParameterError.js**
+```javascript
+class InvalidParameterError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "InvalidParameterError";
+  }
+}
+```
+
+**Uso:** Parâmetros faltando ou inválidos
+**Exemplo:**
+```javascript
+if (!args.length) {
+  throw new InvalidParameterError("Você precisa fornecer um argumento!");
+}
+```
+
+#### **WarningError.js**
+```javascript
+class WarningError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "WarningError";
+  }
+}
+```
+
+**Uso:** Avisos não críticos, funcionalidade já ativa/inativa
+**Exemplo:**
+```javascript
+if (isActiveAntiLink) {
+  throw new WarningError("Anti-link já está ativo!");
+}
+```
+
+#### **DangerError.js**
+```javascript
+class DangerError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "DangerError";
+  }
+}
+```
+
+**Uso:** Erros críticos, operações perigosas, permissões
+**Exemplo:**
+```javascript
+if (!isAdmin) {
+  throw new DangerError("Apenas administradores podem usar este comando!");
+}
+```
+
+### 🛡️ src/middlewares/ - Sistema de Interceptação
+
+#### **index.js - Funções de Verificação**
+
+**Principais funções:**
+
+1. **verifyPrefix(prefix, groupJid)**
+   - Verifica se o prefixo está correto para o grupo
+   - Suporta prefixos customizados por grupo
+
+2. **isLink(text)**
+   - Detecta URLs em mensagens
+   - Filtros avançados para evitar falsos positivos
+   - Usado pelo anti-link
+
+3. **isAdmin(remoteJid, userJid, socket)**
+   - Verifica se usuário é admin do grupo
+   - Suporta tanto admins quanto super-admins
+   - Trata casos especiais (dono, bot owner)
+
+4. **checkPermission(type, socket, userJid, remoteJid)**
+   - Sistema principal de verificação de permissões
+   - Tipos: "member", "admin", "owner"
+   - Retorna boolean para autorizar comandos
+
+#### **onMessagesUpsert.js - Processador Principal**
+
+**Fluxo de processamento:**
+1. **Filtragem inicial:** timestamp, developer mode
+2. **Detecção de eventos:** entrada/saída de membros
+3. **Verificação de mute:** deletar mensagens de usuários mutados
+4. **Carregamento de funções comuns**
+5. **Execução de comandos dinâmicos**
+
+**Recursos implementados:**
+- ✅ Cache automático de metadados de grupo
+- ✅ Timeout randômico para evitar rate limiting
+- ✅ Tratamento robusto de erros Bad MAC
+- ✅ Logging detalhado em developer mode
+- ✅ Sistema de mute com delete automático
+
+#### **onGroupParticipantsUpdate.js**
+- Gerencia eventos de entrada/saída de membros
+- Integra com sistema de boas-vindas
+- Atualiza cache de participantes
+
+#### **messageHandler.js**
+- Processa tipos específicos de mensagens
+- Integra com anti-spam systems
+- Trata mensagens de mídia
+
+### 🔌 src/services/ - Serviços Externos e Processamento
+
+#### **spider-x-api.js - Integração API Externa**
+
+**Serviços disponíveis:**
+
+1. **play(type, search)** - Download com busca
+   ```javascript
+   const audioData = await play("audio", "MC Hariel Amor");
+   ```
+
+2. **download(type, url)** - Download direto
+   ```javascript
+   const videoData = await download("tik-tok", "https://tiktok.com/...");
+   ```
+
+3. **gemini(text)** - IA Conversacional
+   ```javascript
+   const response = await gemini("Como fazer um bot?");
+   ```
+
+4. **imageAI(description)** - Geração de imagens IA
+   ```javascript
+   const imageUrl = await imageAI("Gato cyberpunk em cidade neon");
+   ```
+
+5. **attp(text) / ttp(text)** - Stickers de texto
+   ```javascript
+   const stickerUrl = await attp("Olá mundo!");
+   ```
+
+**Configuração automática:**
+- Token configurável via comando ou config
+- Fallback para configuração de runtime
+- Mensagens de erro explicativas
+
+#### **ffmpeg.js - Processamento de Mídia**
+
+**Efeitos disponíveis:**
+
+1. **applyBlur(inputPath, intensity)**
+   ```javascript
+   const outputPath = await ffmpeg.applyBlur(imagePath, "7:5");
+   ```
+
+2. **convertToGrayscale(inputPath)**
+   ```javascript
+   const grayImage = await ffmpeg.convertToGrayscale(imagePath);
+   ```
+
+3. **mirrorImage(inputPath)**
+   ```javascript
+   const mirroredImage = await ffmpeg.mirrorImage(imagePath);
+   ```
+
+4. **adjustContrast(inputPath, contrast)**
+   ```javascript
+   const contrastImage = await ffmpeg.adjustContrast(imagePath, 1.5);
+   ```
+
+5. **applyPixelation(inputPath)**
+   ```javascript
+   const pixelImage = await ffmpeg.applyPixelation(imagePath);
+   ```
+
+**Características:**
+- ✅ Paths temporários únicos
+- ✅ Cleanup automático
+- ✅ Error handling robusto
+- ✅ Execução assíncrona
+
+#### **sticker.js - Processamento de Figurinhas**
+
+**Funções principais:**
+
+1. **addStickerMetadata(media, metadata)**
+   - Adiciona metadados EXIF
+   - Pack info customizável
+   - Suporte a emojis
+
+2. **processStaticSticker(inputPath, metadata)**
+   - Converte para WebP estático
+   - Redimensiona para 512x512
+   - Otimização de qualidade
+
+3. **processAnimatedSticker(inputPath, metadata)**
+   - Suporte a GIFs animados
+   - Limite de 8 segundos
+   - 15 FPS para otimização
+
+**Especificações técnicas:**
+- Formato: WebP (estático/animado)
+- Resolução: 512x512 pixels
+- Qualidade: 75-90 (otimizada)
+- Metadados: Pack name, publisher, emojis
+
+#### **baileys.js - Funções WhatsApp**
+
+**getProfileImageData(socket, userJid)**
+- Obtém foto de perfil do usuário
+- Fallback para imagem padrão
+- Salva em arquivo temporário
+- Retorna buffer e path
+
+**Tratamento de erros:**
+- Foto privada/inexistente
+- Problemas de conexão
+- Fallback gracioso
+
+#### **upload.js - Upload de Imagens**
+
+**upload(imageBuffer, filename)**
+- API: FreeImage.Host
+- Entrada: Buffer + filename
+- Saída: URL pública da imagem
+- Error handling completo
+
+### 🖥️ SUPORTE PARA HOSTS (Pterodactyl/Similar)
+
+#### **🦕 Configuração em Pterodactyl Panel**
+
+**1. Preparação do Ambiente**
+```bash
+# Startup Command
+cd /home/container && npm start
+
+# Variables
+NODE_VERSION=22
+NPM_VERSION=latest
+```
+
+**2. Dockerfile recomendado**
+```dockerfile
+FROM node:22-alpine
+
+# Instalar dependências do sistema
+RUN apk add --no-cache \
+    ffmpeg \
+    python3 \
+    make \
+    g++ \
+    git
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+CMD ["npm", "start"]
+```
+
+**3. Configurações específicas**
+
+**Port Allocation:**
+- WhatsApp Bot: Não precisa de porta HTTP
+- Se usar express: Configure PORT env variable
+
+**File Permissions:**
+```bash
+chmod +x reset-qr-auth.sh
+chmod +x update.sh
+chown -R node:node /app
+```
+
+**Environment Variables:**
+```env
+NODE_ENV=production
+SPIDER_API_TOKEN=seu_token_aqui
+DEVELOPER_MODE=false
+```
+
+#### **📦 Wings/Nest Specific**
+
+**1. Startup Process**
+```json
+{
+  "startup": "npm start",
+  "stop": "pkill -f 'node.*takeshi'",
+  "configs": {
+    "files": "package.json",
+    "startup": {
+      "done": "Bot conectado com sucesso!"
+    }
+  }
+}
+```
+
+**2. File Management**
+- **Persistent:** `database/`, `assets/auth/`
+- **Temporary:** `assets/temp/` (pode ser tmpfs)
+- **Static:** `assets/images/`, `assets/stickers/`
+
+**3. Resource Requirements**
+```yaml
+cpu: 1000m      # 1 vCPU
+memory: 512Mi   # 512MB RAM  
+storage: 2Gi    # 2GB disk
+```
+
+#### **🐳 Docker Compose Setup**
+
+```yaml
+version: '3.8'
+services:
+  takeshi-bot:
+    build: .
+    container_name: takeshi-bot
+    restart: unless-stopped
+    volumes:
+      - ./database:/app/database
+      - ./assets/auth:/app/assets/auth
+      - ./assets/temp:/app/assets/temp
+    environment:
+      - NODE_ENV=production
+      - SPIDER_API_TOKEN=${SPIDER_API_TOKEN}
+    networks:
+      - bot-network
+
+networks:
+  bot-network:
+    driver: bridge
+```
+
+#### **⚙️ Troubleshooting Hosts**
+
+**1. Problemas Comuns em Hosting**
+
+**❌ "Permission Denied" em scripts**
+```bash
+# Solução
+chmod +x *.sh
+```
+
+**❌ "FFmpeg not found"**
+```bash
+# Pterodactyl Dockerfile
+RUN apk add --no-cache ffmpeg
+
+# Ubuntu/Debian
+apt-get update && apt-get install -y ffmpeg
+```
+
+**❌ "Port already in use"**
+```bash
+# Verificar processos
+ps aux | grep node
+pkill -f "node.*takeshi"
+```
+
+**2. Otimizações para VPS**
+
+**Memory Management:**
+```javascript
+// Adicionar ao código se necessário
+if (process.memoryUsage().heapUsed > 400 * 1024 * 1024) {
+  console.log('High memory usage, triggering GC');
+  global.gc && global.gc();
+}
+```
+
+**Process Monitoring:**
+```bash
+# PM2 para produção
+npm install -g pm2
+pm2 start index.js --name takeshi-bot
+pm2 startup
+pm2 save
+```
+
+**3. Backup Automatizado**
+
+```bash
+#!/bin/bash
+# backup.sh
+DATE=$(date +%Y%m%d_%H%M%S)
+tar -czf "backup_${DATE}.tar.gz" database/ assets/auth/
+echo "Backup criado: backup_${DATE}.tar.gz"
+```
+
+#### **📊 Monitoramento em Produção**
+
+**1. Health Checks**
+```javascript
+// health-check.js
+const fs = require('fs');
+const logFile = 'assets/temp/wa-logs.txt';
+
+if (fs.existsSync(logFile)) {
+  const stats = fs.statSync(logFile);
+  const lastModified = new Date(stats.mtime);
+  const now = new Date();
+  
+  if (now - lastModified > 300000) { // 5 minutos
+    console.error('Bot pode estar inativo!');
+    process.exit(1);
+  }
+}
+```
+
+**2. Alertas via Webhook**
+```javascript
+// alerts.js
+const axios = require('axios');
+
+const sendAlert = async (message) => {
+  await axios.post('YOUR_WEBHOOK_URL', {
+    content: `🚨 Takeshi Bot Alert: ${message}`
+  });
+};
+```
+
+**3. Métricas importantes**
+- CPU Usage: < 50%
+- Memory: < 80% do limite
+- Disk Space: < 70%
+- Log file growth: Monitorar tamanho
+- API Response time: < 3s
+
+---
+
+## �🔧 TROUBLESHOOTING E SUPORTE TÉCNICO
 
 ### 🚨 Problemas Comuns
 
@@ -1297,8 +1728,719 @@ module.exports = {
 ---
 
 **Última atualização:** 2 de Novembro de 2025  
-**Versão da documentação:** 2.0.0  
-**Comandos documentados:** 110+  
+**Versão da documentação:** 3.0.0  
+**Comandos documentados:** 110+ (detalhados tecnicamente)  
+**Estrutura técnica:** src/errors, src/middlewares, src/services incluídas  
+**Suporte a hosts:** Pterodactyl, Docker, VPS configurado  
+**Maintainer:** Dev Gui ([@devgui_](https://youtube.com/@devgui_))
+
+### 📁 ARQUIVOS PRINCIPAIS DO SISTEMA
+
+#### **🔗 src/connection.js - Gerenciador de Conexão WhatsApp**
+
+**Responsabilidades:**
+- Conexão e reconexão automática com WhatsApp
+- Gerenciamento de estados de autenticação
+- Cache de metadados de grupos (24h TTL)
+- Handling robusto de erros "Bad MAC"
+- Pareamento por código QR/PIN
+
+**Principais funções:**
+
+1. **connect()**
+   ```javascript
+   const socket = makeWASocket({
+     version: [2, 3000, 1029037448],
+     auth: { creds, keys: makeCacheableSignalKeyStore() },
+     cachedGroupMetadata: (jid) => groupCache.get(jid),
+     maxMsgRetryCount: 5,
+     keepAliveIntervalMs: 30_000
+   });
+   ```
+
+2. **updateGroupMetadataCache(jid, metadata)**
+   - Cache NodeCache com TTL de 24 horas
+   - Reduz chamadas à API do WhatsApp
+   - Melhora performance drasticamente
+
+**Estados de conexão tratados:**
+- **connection.close** → Reconexão automática
+- **DisconnectReason.loggedOut** → Requer novo pareamento
+- **DisconnectReason.badSession** → Clear cache + reconnect
+- **DisconnectReason.restartRequired** → Manual restart needed
+
+**Bad MAC Error Handling:**
+- Limite: 15 tentativas automáticas
+- Auto-clear de arquivos de sessão problemáticos
+- Reset automático do counter após sucesso
+
+**Configurações de performance:**
+- `connectTimeoutMs: 20_000` - Timeout de conexão
+- `retryRequestDelayMs: 5000` - Delay entre tentativas
+- `syncFullHistory: false` - Não sincroniza histórico completo
+- `shouldSyncHistoryMessage: () => false` - Otimização de memória
+
+#### **⚙️ src/config.js - Configurações Centralizadas**
+
+**Variáveis principais:**
+
+```javascript
+// Identidade do bot
+exports.BOT_NAME = "Takeshi Bot";
+exports.BOT_EMOJI = "🤖";
+exports.PREFIX = "/";
+
+// Números (apenas dígitos)
+exports.BOT_NUMBER = "558112345678";
+exports.OWNER_NUMBER = "5521950502020";
+exports.OWNER_LID = "219999999999999@lid";
+
+// Diretórios do sistema
+exports.COMMANDS_DIR = path.join(__dirname, "commands");
+exports.DATABASE_DIR = path.resolve(__dirname, "..", "database");
+exports.ASSETS_DIR = path.resolve(__dirname, "..", "assets");
+exports.TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
+
+// API Externa
+exports.SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
+exports.SPIDER_API_TOKEN = "seu_token_aqui";
+
+// Performance
+exports.TIMEOUT_IN_MILLISECONDS_BY_EVENT = 1000; // Anti-ban
+exports.DEVELOPER_MODE = false; // Logs detalhados
+
+// Opcional
+exports.ONLY_GROUP_ID = ""; // Restringir a um grupo específico
+```
+
+**Configurações de Proxy (opcional):**
+- `PROXY_PROTOCOL`, `PROXY_HOST`, `PROXY_PORT`
+- `PROXY_USERNAME`, `PROXY_PASSWORD`
+
+**Overrides via Database:**
+- Prefixo: `database/prefix-groups.json`
+- Token API: `database/config.json`
+- Números: Runtime via comandos set-*
+
+#### **🚀 src/loader.js - Carregador de Eventos**
+
+**Função principal: load(socket)**
+
+**Responsabilidades:**
+1. **Define BASE_DIR global** para todos os comandos
+2. **Registra event listeners** do Baileys
+3. **Implementa timeout anti-ban** (TIMEOUT_IN_MILLISECONDS_BY_EVENT)
+4. **Error handling global** com badMacHandler
+
+**Event Listeners registrados:**
+
+```javascript
+socket.ev.on("messages.upsert", async (data) => {
+  setTimeout(() => {
+    safeEventHandler(() => onMessagesUpsert({
+      socket,
+      messages: data.messages,
+      startProcess: Date.now()
+    }));
+  }, TIMEOUT_IN_MILLISECONDS_BY_EVENT);
+});
+```
+
+**SafeEventHandler pattern:**
+- Try/catch wrapper para todos os eventos
+- BadMacHandler integration
+- Stack trace logging para debugging
+
+**Process-level error handling:**
+- `uncaughtException` → BadMacHandler ou log + exit
+- `unhandledRejection` → BadMacHandler ou log
+
+#### **📋 src/menu.js - Gerador de Menu Dinâmico**
+
+**Função: menuMessage(groupJid)**
+
+**Features:**
+- **Prefixo dinâmico** via `getPrefix(groupJid)`
+- **Data/hora atual** formatada para pt-BR
+- **Versão do bot** via package.json
+- **Categorização** por permissões (DONO/ADMINS/PRINCIPAL/etc)
+
+**Estrutura do menu:**
+```javascript
+return `╭━━⪩ BEM VINDO! ⪨━━${readMore()}
+▢ • ${BOT_NAME}
+▢ • Prefixo: ${prefix}
+▢ • Versão: ${packageInfo.version}
+╰━━─「🪐」─━━
+
+╭━━⪩ DONO ⪨━━
+▢ • ${prefix}exec
+▢ • ${prefix}set-*
+╰━━─「🌌」─━━`;
+```
+
+**readMore() function:**
+- Adiciona 950 caracteres invisíveis (\u200B)
+- Força "Ler mais..." no WhatsApp
+- Melhora UX em menus longos
+
+#### **💬 src/messages.js - Templates de Mensagens**
+
+**Mensagens configuráveis:**
+
+```javascript
+module.exports = {
+  welcomeMessage: "Seja bem vindo ao nosso grupo, @member!",
+  exitMessage: "Poxa, @member saiu do grupo... Sentiremos sua falta!",
+};
+```
+
+**Placeholder @member:**
+- Automaticamente substituído por menção ao usuário
+- Usado em `onGroupParticipantsUpdate.js`
+- Suporte a formatação customizada
+
+#### **🧪 src/test.js - Ambiente de Testes**
+
+**Propósito:**
+- Testes isolados de funções utilitárias
+- Não requer conexão WhatsApp
+- Usado com `npm test`
+
+**Exemplo de uso:**
+```javascript
+(async () => {
+  // Teste de funções específicas
+  const { isLink } = require('./middlewares');
+  console.log(isLink('https://google.com')); // true
+  
+  // Teste de database functions
+  const { getPrefix } = require('./utils/database');
+  console.log(getPrefix('grupo@g.us')); // "/" ou customizado
+})();
+```
+
+#### **🎬 src/index.js - Ponto de Entrada Principal**
+
+**Função: startBot()**
+
+**Fluxo de inicialização:**
+1. **Configurações de ambiente**
+   ```javascript
+   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+   process.setMaxListeners(1500);
+   ```
+
+2. **BadMacHandler stats** iniciais
+3. **Conexão** via `connect()`
+4. **Load de eventos** via `load(socket)`
+5. **Health monitoring** a cada 5 minutos
+
+**Error handling robusto:**
+- `uncaughtException` → BadMacHandler ou exit(1)
+- `unhandledRejection` → BadMacHandler ou log
+- Startup errors → Retry após 5s ou exit
+
+**Comentários educativos:**
+- Explica diferença entre "cases" e "comandos modulares"
+- Guia completo para iniciantes
+- Links para tutorial detalhado
+
+#### **🛠️ src/utils/index.js - Funções Utilitárias Principais**
+
+**Principais funções organizadas por categoria:**
+
+**1. Processamento de Mensagens:**
+
+```javascript
+extractDataFromMessage(webMessage) // Extrai args, comando, prefix, etc
+splitByCharacters(str, ["/", "|", "\\"]) // Split por múltiplos chars
+formatCommand(text) // Normaliza comando (lowercase, sem acentos)
+```
+
+**2. Detecção de Tipos de Mídia:**
+
+```javascript
+baileysIs(webMessage, "image") // Verifica se é imagem
+getContent(webMessage, "video") // Obtém conteúdo de vídeo
+download(webMessage, fileName, "audio", "mp3") // Download de mídia
+```
+
+**3. Comandos Dinâmicos:**
+
+```javascript
+findCommandImport(commandName) // Busca comando nos diretórios
+readCommandImports() // Carrega todos os comandos {admin,member,owner}
+```
+
+**4. Processamento de Números/JIDs:**
+
+```javascript
+onlyNumbers(text) // Remove tudo exceto dígitos
+toUserJid(number) // Converte para JID padrão
+toUserJidOrLid(userArg) // Inteligente: JID ou LID conforme tamanho
+normalizeToLid(socket, jid) // Converte JID → LID via onWhatsApp()
+compareUserJidWithOtherNumber() // Compara com variações (9º dígito)
+```
+
+**5. Processamento de Mídia:**
+
+```javascript
+getBuffer(url, options) // Download via axios
+ajustAudioByBuffer(buffer, isPtt) // Converte áudio via FFmpeg
+removeFileWithTimeout(path, 5000) // Cleanup automático
+```
+
+**6. Utilitários Diversos:**
+
+```javascript
+isAtLeastMinutesInPast(timestamp, 5) // Filtro de mensagens antigas
+getRandomNumber(min, max) // RNG
+getRandomName(extension) // Nome de arquivo único
+readMore() // Caracteres invisíveis para "Ler mais"
+question(message) // Input readline
+```
+
+#### **⚡ src/utils/dynamicCommand.js - Router de Comandos**
+
+**Responsabilidades principais:**
+
+1. **Validação de Prefixo e Comando**
+   ```javascript
+   if (!verifyPrefix(prefix, remoteJid) || !hasTypeAndCommand({ type, command })) {
+     // Auto-responder ou resposta de prefixo
+   }
+   ```
+
+2. **Sistema Anti-Link**
+   - Detecta links em mensagens via `isLink(fullMessage)`
+   - Remove automaticamente usuários não-admin
+   - Deleta mensagem com link
+
+3. **Verificação de Permissões**
+   ```javascript
+   if (!(await checkPermission({ type, ...paramsHandler }))) {
+     // Bloqueia comando baseado na pasta (owner/admin/member)
+   }
+   ```
+
+4. **Modo Only-Admins**
+   - Verifica se grupo tem restrição de admin
+   - Bloqueia comandos para membros comuns
+
+5. **Error Handling Robusto**
+   - **InvalidParameterError** → Parâmetros inválidos
+   - **WarningError** → Avisos amarelos
+   - **DangerError** → Erros vermelhos
+   - **AxiosError** → Erros de API externa
+   - **BadMacError** → Problemas de sessão
+
+6. **Comando Especial: Grupo Inativo**
+   - Permite apenas comando `on` em grupos desativados
+   - Bloqueia demais comandos até reativação
+
+**Fluxo de execução:**
+```javascript
+Anti-Link Check → Permission Check → Only-Admin Check → 
+Command Execution → Error Handling → Response
+```
+
+#### **🔗 src/utils/loadCommonFunctions.js - Factory de Funções**
+
+**Função principal: loadCommonFunctions({ socket, webMessage })**
+
+**Retorna objeto com 60+ funções organizadas:**
+
+**1. Estados de Presença:**
+```javascript
+sendTypingState(anotherJid) // "digitando..."
+sendRecordState(anotherJid) // "gravando áudio..."
+```
+
+**2. Sistema de Retry:**
+```javascript
+withRetry(fn, maxRetries = 3, delayMs = 1000) // Retry automático
+```
+
+**3. Downloads de Mídia:**
+```javascript
+downloadAudio(webMessage, fileName) // → .mpeg
+downloadImage(webMessage, fileName) // → .png
+downloadSticker(webMessage, fileName) // → .webp
+downloadVideo(webMessage, fileName) // → .mp4
+```
+
+**4. Funções de Envio (26 variações):**
+
+**Texto:**
+```javascript
+sendText(text, mentions) // Texto simples
+sendReply(text, mentions) // Resposta quotada
+sendEditedText/Reply(text, messageToEdit, mentions) // Editar mensagem
+```
+
+**Reações e Respostas Estilizadas:**
+```javascript
+sendReact(emoji, msgKey) // Reação customizada
+sendSuccessReact/Reply() // ✅ Verde
+sendWaitReact/Reply() // ⏳ Aguarde
+sendWarningReact/Reply() // ⚠️ Amarelo
+sendErrorReact/Reply() // ❌ Vermelho
+```
+
+**Mídia (File/URL/Buffer):**
+```javascript
+// Áudio
+sendAudioFromFile(filePath, asVoice, quoted)
+sendAudioFromURL(url, asVoice, quoted)
+sendAudioFromBuffer(buffer, asVoice, quoted)
+
+// Imagem
+sendImageFromFile(file, caption, mentions, quoted)
+sendImageFromURL(url, caption, mentions, quoted)
+sendImageFromBuffer(buffer, caption, mentions, quoted)
+
+// Vídeo, GIF, Documento, Sticker (mesmo padrão)
+```
+
+**5. Comunicação Avançada:**
+```javascript
+sendContact(phoneNumber, displayName) // Contato vCard
+sendLocation(latitude, longitude) // Localização
+sendPoll(title, options, singleChoice) // Enquete
+deleteMessage(key) // Deletar mensagem
+```
+
+**6. Funções de Grupo:**
+```javascript
+getGroupMetadata(jid) // Metadados completos
+getGroupName(jid) // Nome do grupo
+getGroupOwner(jid) // Dono do grupo
+getGroupParticipants(jid) // Lista de participantes
+getGroupAdmins(jid) // Lista de administradores
+```
+
+**Características especiais:**
+- **withRetry pattern** para operações instáveis
+- **Processamento de áudio** via FFmpeg automático
+- **Cleanup automático** de arquivos temporários
+- **Validação de tipos** (isGroup, isGroupWithLid)
+
+#### **🌐 src/utils/proxy.js - Configuração de Proxy**
+
+**Função: getProxyData()**
+
+**Retorna:**
+```javascript
+{
+  proxy: {
+    protocol: "http", // ou "https", "socks5"
+    host: "proxy.exemplo.com",
+    port: 8080,
+    auth: {
+      username: "usuario_encoded",
+      password: "senha_encoded"
+    }
+  },
+  proxyConnectionString: "http://user:pass@proxy.exemplo.com:8080"
+}
+```
+
+**Uso:**
+- Configuração opcional para conexões via proxy
+- Encoding automático de credenciais
+- Compatible com Axios e outras libs HTTP
+
+### 🧪 PASTA src/test - SISTEMA DE TESTES
+
+#### **🔍 src/test/isLink.test.js - Testes do Anti-Link**
+
+**Responsabilidades:**
+- Testa função `isLink()` do middleware
+- **37 casos de teste** abrangentes
+- Cobertura completa de edge cases
+
+**Categorias de teste:**
+
+**1. Links Válidos (should return true):**
+```javascript
+"site com espaços.com"     // Domínio com espaços
+"site-legal.com"           // Domínio com hífen
+"site.com.br"              // Múltiplas extensões
+"www.google.com"           // Com www
+"ab.xyz"                   // Domínio curto válido
+"site123.com"              // Termina com número
+"123site.com"              // Começa com número
+"200.155.65.12"            // Endereço IP
+"subdomain.example.org"    // Subdomínio
+"https://github.com/user/repo" // URL completa
+"Acesse google.com para buscar" // Texto com URL
+"  google.com  "           // URL com espaços nas bordas
+"GOOGLE.COM"               // URL em maiúscula
+```
+
+**2. Texto Normal (should return false):**
+```javascript
+"arquivo.txt"              // Arquivo local
+"documento.pdf"            // Arquivo PDF
+"   "                      // Apenas espaços
+"12345"                    // Apenas números
+".com"                     // Começa com ponto
+"a.b"                      // Domínio muito curto
+"email@domain"             // E-mail sem extensão
+"versão 1.0.5"             // Número de versão
+"site..com"                // Pontos consecutivos
+""                         // String vazia
+"site."                    // Termina com ponto
+"apenas texto"             // Texto normal
+```
+
+**Execução dos testes:**
+```bash
+npm test                   # Executa todos os testes
+npm run test:all          # Node.js test runner
+node src/test.js          # Teste manual
+```
+
+**Estrutura do teste:**
+```javascript
+describe("isLink Middleware", () => {
+  const testCases = [
+    {
+      input: "google.com",
+      expected: true,
+      description: "Domínio simples"
+    }
+  ];
+
+  testCases.forEach(({ input, expected, description }) => {
+    it(description, () => {
+      const result = isLink(input);
+      assert.strictEqual(result, expected, 
+        `Para entrada "${input}", esperado ${expected} mas recebeu ${result}`
+      );
+    });
+  });
+});
+```
+
+**Validação rigorosa:**
+- Testa edge cases reais encontrados em produção
+- Previne falsos positivos (arquivo.txt não é link)
+- Previne falsos negativos (google.com é link)
+- Cobertura de URLs com parâmetros, paths, protocolos
+
+### 🎯 PRINCIPAIS UTILIDADES DOCUMENTADAS
+
+#### **📝 src/utils/logger.js - Sistema de Logs**
+
+**Funções de logging:**
+
+```javascript
+bannerLog() // ASCII art de inicialização
+successLog(message) // ✅ Verde
+errorLog(message) // ❌ Vermelho
+warningLog(message) // ⚠️ Amarelo
+infoLog(message) // ℹ️ Azul
+sayLog(message) // 💬 Cyan
+```
+
+**Configuração:**
+- Output: Console + arquivo `assets/temp/wa-logs.txt`
+- Timestamp automático
+- Cores para fácil identificação
+
+#### **🗄️ src/utils/database.js - Gerenciador de Database JSON**
+
+**Principais funções por categoria:**
+
+**Configurações:**
+```javascript
+getPrefix(groupJid) // Prefixo personalizado ou padrão
+setGroupPrefix(groupJid, prefix) // Define prefixo do grupo
+getBotNumber() / setBotNumber(number) // Número do bot
+getOwnerNumber() / setOwnerNumber(number) // Número do dono
+getSpiderApiToken() / setSpiderApiToken(token) // Token da API
+```
+
+**Grupos:**
+```javascript
+activateGroup(jid) / deactivateGroup(jid) // Liga/desliga bot
+isActiveGroup(jid) // Verifica se bot está ativo
+```
+
+**Anti-spam systems:**
+```javascript
+isActiveAntiLinkGroup(jid) // Anti-link ativo?
+activateAntiLinkGroup(jid) / deactivateAntiLinkGroup(jid)
+// Similar para: AntiAudio, AntiDocument, AntiImage, etc
+```
+
+**Mute system:**
+```javascript
+muteMember(groupJid, userJid) // Adiciona a lista de muted
+unmuteMember(groupJid, userJid) // Remove da lista
+checkIfMemberIsMuted(groupJid, userJid) // Verifica status
+```
+
+**Auto-responder:**
+```javascript
+getAutoResponderResponse(text) // Busca resposta para texto
+addAutoResponderItem(match, answer) // Adiciona termo
+deleteAutoResponderItem(index) // Remove termo
+getAutoResponderList() // Lista todos os termos
+```
+
+**Padrão de uso:**
+- Todos os JSONs em `database/`
+- Read → Modify → Write pattern
+- Error handling para arquivos corrompidos/inexistentes
+
+#### **⚠️ src/utils/badMacHandler.js - Gerenciador de Erros Bad MAC**
+
+**Funcionalidades:**
+
+1. **Error tracking**
+   ```javascript
+   handleError(error, context) // Processa erro e incrementa counter
+   isSessionError(error) // Detecta erros de sessão
+   hasReachedLimit() // Verifica se atingiu máximo (15)
+   ```
+
+2. **Session management**
+   ```javascript
+   clearProblematicSessionFiles() // Remove pasta baileys/
+   resetErrorCount() // Zera contador
+   getStats() // { errorCount, maxRetries, lastError }
+   ```
+
+3. **Detecção inteligente**
+   - Strings: "Bad MAC", "Connection Closed"
+   - Contexts: "connection.update", "message-processing"
+   - Timeout entre tentativas
+
+### 🔍 ARQUIVOS DE TIPO (TypeScript Definitions)
+
+#### **📘 src/@types/index.d.ts - Definições TypeScript**
+
+**Interface CommandHandleProps:**
+
+**Propriedades básicas:**
+```typescript
+args: string[]           // ["arg1", "arg2"] - split por / | \
+commandName: string      // Nome do comando executado
+fullArgs: string         // "arg1 / arg2" - string completa
+fullMessage: string      // Mensagem inteira incluindo comando
+prefix: string           // Prefixo configurado
+remoteJid: string        // ID do grupo/usuário
+userJid: string          // ID do usuário que mandou
+```
+
+**Detectores de tipo:**
+```typescript
+isAudio: boolean         // Se é mensagem de áudio
+isGroup: boolean         // Se veio de um grupo
+isImage: boolean         // Se é imagem
+isReply: boolean         // Se é resposta a outra mensagem
+isSticker: boolean       // Se é figurinha
+isVideo: boolean         // Se é vídeo
+isGroupWithLid: boolean  // Se grupo tem participantes com LID
+```
+
+**Reply handling:**
+```typescript
+replyJid: string         // ID de quem foi respondido
+replyText: string        // Texto da mensagem respondida
+```
+
+**Funções de envio de mídia (26 variações):**
+```typescript
+// Áudio
+sendAudioFromFile(path: string, asVoice: boolean, quoted?: boolean)
+sendAudioFromURL(url: string, asVoice: boolean, quoted?: boolean)
+sendAudioFromBuffer(buffer: Buffer, asVoice: boolean, quoted?: boolean)
+
+// Imagem (3 variações similares)
+sendImageFromFile/URL/Buffer(source, caption?, mentions?, quoted?)
+
+// Vídeo (3 variações similares)
+sendVideoFromFile/URL/Buffer(source, caption?, mentions?, quoted?)
+
+// Sticker (3 variações similares)
+sendStickerFromFile/URL/Buffer(source, quoted?)
+
+// GIF (3 variações similares)
+sendGifFromFile/URL/Buffer(source, caption?, mentions?, quoted?)
+
+// Documento (3 variações similares)
+sendDocumentFromFile/URL/Buffer(source, mimetype?, fileName?, quoted?)
+```
+
+**Funções de resposta:**
+```typescript
+sendReply(text: string, mentions?: string[]) // Resposta básica
+sendSuccessReply(text: string, mentions?: string[]) // ✅ Verde
+sendErrorReply(text: string, mentions?: string[]) // ❌ Vermelho
+sendWarningReply(text: string, mentions?: string[]) // ⚠️ Amarelo
+sendWaitReply(text: string, mentions?: string[]) // ⏳ Aguarde
+
+sendText(text: string, mentions?: string[]) // Texto simples
+sendEditedText/Reply() // Mensagens editadas
+```
+
+**Funções de reação:**
+```typescript
+sendReact(emoji: string) // Reação customizada
+sendSuccessReact() // ✅
+sendErrorReact() // ❌
+sendWarningReact() // ⚠️
+sendWaitReact() // ⏳
+```
+
+**Estados de digitação:**
+```typescript
+sendTypingState(anotherJid?: string) // Mostra "digitando..."
+sendRecordState(anotherJid?: string) // Mostra "gravando áudio"
+```
+
+**Downloads de mídia:**
+```typescript
+downloadAudio(webMessage, fileName: string): Promise<string>
+downloadImage(webMessage, fileName: string): Promise<string>
+downloadSticker(webMessage, fileName: string): Promise<string>
+downloadVideo(webMessage, fileName: string): Promise<string>
+```
+
+**Funções de grupo:**
+```typescript
+getGroupMetadata(jid?: string): Promise<GroupMetadata | null>
+getGroupName(jid?: string): Promise<string>
+getGroupOwner(jid?: string): Promise<string>
+getGroupParticipants(jid?: string): Promise<any[]>
+getGroupAdmins(jid?: string): Promise<string[]>
+```
+
+**Comunicação avançada:**
+```typescript
+sendContact(phoneNumber: string, displayName: string): Promise<void>
+sendLocation(latitude: number, longitude: number): Promise<void>
+sendPoll(title: string, options: {optionName: string}[], singleChoice?: boolean)
+deleteMessage(key: MessageKey): Promise<void>
+```
+
+**Socket Baileys:**
+```typescript
+socket: any // Socket completo do Baileys para operações avançadas
+webMessage: any // Mensagem raw do WhatsApp
+startProcess?: number // Timestamp de quando comando iniciou
+type?: string // Tipo de comando ("admin", "owner", "member")
+```
+
+---
+
+**Estrutura técnica:** src/errors, src/middlewares, src/services incluídas  
+**Suporte a hosts:** Pterodactyl, Docker, VPS configurado  
+**Documentação completa:** src/test, src/utils, arquivos principais  
 **Maintainer:** Dev Gui ([@devgui_](https://youtube.com/@devgui_))
 
 ---
