@@ -679,16 +679,16 @@ Deseja continuar? (s/N):
 
 | Package | Versão | Uso |
 |---------|--------|-----|
+| `@cacheable/node-cache` | ^1.7.4 | Cache avançado |
+| `axios` | ^1.13.0 | Requisições HTTP (downloads, APIs) |
 | `baileys` | ^6.7.20 | WhatsApp Web API (conexão principal) |
-| `axios` | ^1.11.0 | Requisições HTTP (downloads, APIs) |
-| `@cacheable/node-cache` | ^1.6.1 | Cache avançado |
-| `node-cache` | ^5.1.2 | Cache em memória (metadados grupo) |
+| `correios-brasil` | ^3.0.6 | Consulta CEP brasileiro |
 | `fluent-ffmpeg` | ^2.1.3 | Conversão áudio/vídeo |
+| `node-cache` | ^5.1.2 | Cache em memória (metadados grupo) |
 | `node-webpmux` | ^3.2.1 | Criação/edição de stickers WebP |
 | `openai` | ^5.11.0 | Integração ChatGPT/GPT-4 |
 | `pino` | ^9.7.0 | Logger performático |
 | `tiktoken` | ^1.0.21 | Contagem de tokens (IA) |
-| `correios-brasil` | ^3.0.6 | Consulta CEP brasileiro |
 
 ### Tecnologias Externas
 
