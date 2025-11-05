@@ -265,7 +265,7 @@ function toUserJidOrLid(userArg) {
   }
 
   const cleanArg = userArg.replace("@", "");
-  return cleanArg.length >= 14
+  return cleanArg.length >= 14 || !cleanArg.startsWith("55")
     ? `${cleanArg}@lid`
     : `${cleanArg}@s.whatsapp.net`;
 }
