@@ -78,10 +78,7 @@ async function connect() {
     logger,
     defaultQueryTimeoutMs: undefined,
     retryRequestDelayMs: 5000,
-    auth: {
-      creds: state.creds,
-      keys: makeCacheableSignalKeyStore(state.keys, logger),
-    },
+    auth: state,
     shouldIgnoreJid: (jid) =>
       isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
     connectTimeoutMs: 20_000,
