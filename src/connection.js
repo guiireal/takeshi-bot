@@ -70,7 +70,7 @@ async function connect() {
   );
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
-  const version = [2, 3000, 1029297767];
+  const version = [2, 3000, 1029399661];
   const isLatest = true;
 
   const socket = makeWASocket({
