@@ -20,9 +20,7 @@ const {
   default: makeWASocket,
   DisconnectReason,
   useMultiFileAuthState,
-  fetchLatestBaileysVersion,
   isJidBroadcast,
-  makeCacheableSignalKeyStore,
   isJidStatusBroadcast,
   isJidNewsletter,
 } = require("baileys");
