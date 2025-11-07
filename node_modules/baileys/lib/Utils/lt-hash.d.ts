@@ -1,12 +1,13 @@
-declare class d {
+declare class LTHash {
     salt: string;
     constructor(e: string);
-    add(e: any, t: any): any;
-    subtract(e: any, t: any): any;
-    subtractThenAdd(e: any, t: any, r: any): any;
-    _addSingle(e: any, t: any): Promise<ArrayBuffer>;
-    _subtractSingle(e: any, t: any): Promise<ArrayBuffer>;
-    performPointwiseWithOverflow(e: any, t: any, r: any): ArrayBuffer;
+    add(e: ArrayBuffer, t: ArrayBuffer[]): Promise<ArrayBuffer>;
+    subtract(e: ArrayBuffer, t: ArrayBuffer[]): Promise<ArrayBuffer>;
+    subtractThenAdd(e: ArrayBuffer, addList: ArrayBuffer[], subtractList: ArrayBuffer[]): Promise<ArrayBuffer>;
+    private _addSingle;
+    private _subtractSingle;
+    private performPointwiseWithOverflow;
 }
-export declare const LT_HASH_ANTI_TAMPERING: d;
+export declare const LT_HASH_ANTI_TAMPERING: LTHash;
 export {};
+//# sourceMappingURL=lt-hash.d.ts.map

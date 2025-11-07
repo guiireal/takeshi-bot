@@ -1,7 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WAMessageStatus = exports.WAMessageStubType = exports.WAProto = void 0;
-const WAProto_1 = require("../../WAProto");
-Object.defineProperty(exports, "WAProto", { enumerable: true, get: function () { return WAProto_1.proto; } });
-exports.WAMessageStubType = WAProto_1.proto.WebMessageInfo.StubType;
-exports.WAMessageStatus = WAProto_1.proto.WebMessageInfo.Status;
+import { proto } from '../../WAProto/index.js';
+import { MEDIA_HKDF_KEY_MAPPING } from '../Defaults/index.js';
+// export the WAMessage Prototypes
+export { proto as WAProto };
+export const WAMessageStubType = proto.WebMessageInfo.StubType;
+export const WAMessageStatus = proto.WebMessageInfo.Status;
+//# sourceMappingURL=Message.js.map

@@ -1,15 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SenderKeyRecord = void 0;
-const generics_1 = require("../../Utils/generics");
-const sender_key_state_1 = require("./sender-key-state");
-class SenderKeyRecord {
+import { BufferJSON } from '../../Utils/generics.js';
+import { SenderKeyState } from './sender-key-state.js';
+export class SenderKeyRecord {
     constructor(serialized) {
         this.MAX_STATES = 5;
         this.senderKeyStates = [];
         if (serialized) {
             for (const structure of serialized) {
-                this.senderKeyStates.push(new sender_key_state_1.SenderKeyState(null, null, null, null, null, null, structure));
+                this.senderKeyStates.push(new SenderKeyState(null, null, null, null, null, null, structure));
             }
         }
     }
@@ -23,14 +20,14 @@ class SenderKeyRecord {
         return this.senderKeyStates.find(state => state.getKeyId() === keyId);
     }
     addSenderKeyState(id, iteration, chainKey, signatureKey) {
-        this.senderKeyStates.push(new sender_key_state_1.SenderKeyState(id, iteration, chainKey, null, signatureKey));
+        this.senderKeyStates.push(new SenderKeyState(id, iteration, chainKey, null, signatureKey));
         if (this.senderKeyStates.length > this.MAX_STATES) {
             this.senderKeyStates.shift();
         }
     }
     setSenderKeyState(id, iteration, chainKey, keyPair) {
         this.senderKeyStates.length = 0;
-        this.senderKeyStates.push(new sender_key_state_1.SenderKeyState(id, iteration, chainKey, keyPair));
+        this.senderKeyStates.push(new SenderKeyState(id, iteration, chainKey, keyPair));
     }
     serialize() {
         return this.senderKeyStates.map(state => state.getStructure());
@@ -38,11 +35,11 @@ class SenderKeyRecord {
     static deserialize(data) {
         let parsed;
         if (typeof data === 'string') {
-            parsed = JSON.parse(data, generics_1.BufferJSON.reviver);
+            parsed = JSON.parse(data, BufferJSON.reviver);
         }
         else if (data instanceof Uint8Array) {
             const str = Buffer.from(data).toString('utf-8');
-            parsed = JSON.parse(str, generics_1.BufferJSON.reviver);
+            parsed = JSON.parse(str, BufferJSON.reviver);
         }
         else {
             parsed = data;
@@ -50,4 +47,4 @@ class SenderKeyRecord {
         return new SenderKeyRecord(parsed);
     }
 }
-exports.SenderKeyRecord = SenderKeyRecord;
+//# sourceMappingURL=sender-key-record.js.map

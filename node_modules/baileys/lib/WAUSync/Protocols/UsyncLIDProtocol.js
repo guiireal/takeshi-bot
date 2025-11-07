@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.USyncLIDProtocol = void 0;
-class USyncLIDProtocol {
+export class USyncLIDProtocol {
     constructor() {
         this.name = 'lid';
     }
@@ -21,4 +18,4 @@ class USyncLIDProtocol {
         return null;
     }
 }
-exports.USyncLIDProtocol = USyncLIDProtocol;
+//# sourceMappingURL=UsyncLIDProtocol.js.map

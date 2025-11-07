@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FLAG_EXTENDED = exports.FLAG_FIELD = exports.FLAG_EVENT = exports.FLAG_GLOBAL = exports.FLAG_BYTE = exports.WEB_GLOBALS = exports.WEB_EVENTS = void 0;
-exports.WEB_EVENTS = [
+export const WEB_EVENTS = [
     {
         name: 'WebcFingerprint',
         id: 1704,
@@ -14793,7 +14790,7 @@ exports.WEB_EVENTS = [
         privateStatsIdInt: -1
     }
 ];
-exports.WEB_GLOBALS = [
+export const WEB_GLOBALS = [
     {
         name: 'abKey2',
         id: 4473,
@@ -15240,4 +15237,5 @@ exports.WEB_GLOBALS = [
         channels: ['regular', 'private']
     }
 ];
-exports.FLAG_BYTE = 8, exports.FLAG_GLOBAL = 0, exports.FLAG_EVENT = 1, exports.FLAG_FIELD = 2, exports.FLAG_EXTENDED = 4;
+export const FLAG_BYTE = 8, FLAG_GLOBAL = 0, FLAG_EVENT = 1, FLAG_FIELD = 2, FLAG_EXTENDED = 4;
+//# sourceMappingURL=constants.js.map

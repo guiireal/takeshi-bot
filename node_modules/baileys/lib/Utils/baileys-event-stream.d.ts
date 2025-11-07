@@ -1,4 +1,4 @@
-import type { BaileysEventEmitter } from '../Types';
+import type { BaileysEventEmitter } from '../Types/index.js';
 /**
  * Captures events from a baileys event emitter & stores them in a file
  * @param ev The event emitter to read events from
@@ -14,3 +14,4 @@ export declare const readAndEmitEventStream: (filename: string, delayIntervalMs?
     ev: BaileysEventEmitter;
     task: Promise<void>;
 };
+//# sourceMappingURL=baileys-event-stream.d.ts.map

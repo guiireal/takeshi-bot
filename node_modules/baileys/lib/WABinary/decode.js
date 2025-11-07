@@ -1,45 +1,9 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.decodeBinaryNode = exports.decodeDecompressedBinaryNode = exports.decompressingIfRequired = void 0;
-const util_1 = require("util");
-const zlib_1 = require("zlib");
-const constants = __importStar(require("./constants"));
-const jid_utils_1 = require("./jid-utils");
-const inflatePromise = (0, util_1.promisify)(zlib_1.inflate);
-const decompressingIfRequired = async (buffer) => {
+import { promisify } from 'util';
+import { inflate } from 'zlib';
+import * as constants from './constants.js';
+import { jidEncode } from './jid-utils.js';
+const inflatePromise = promisify(inflate);
+export const decompressingIfRequired = async (buffer) => {
     if (2 & buffer.readUInt8()) {
         buffer = await inflatePromise(buffer.slice(1));
     }
@@ -49,8 +13,7 @@ const decompressingIfRequired = async (buffer) => {
     }
     return buffer;
 };
-exports.decompressingIfRequired = decompressingIfRequired;
-const decodeDecompressedBinaryNode = (buffer, opts, indexRef = { index: 0 }) => {
+export const decodeDecompressedBinaryNode = (buffer, opts, indexRef = { index: 0 }) => {
     const { DOUBLE_BYTE_TOKENS, SINGLE_BYTE_TOKENS, TAGS } = opts;
     const checkEOS = (length) => {
         if (indexRef.index + length > buffer.length) {
@@ -161,7 +124,7 @@ const decodeDecompressedBinaryNode = (buffer, opts, indexRef = { index: 0 }) => 
         const domainType = Number(rawDomainType);
         const device = readByte();
         const user = readString(readByte());
-        return (0, jid_utils_1.jidEncode)(user, domainType === 0 || domainType === 128 ? 's.whatsapp.net' : 'lid', device);
+        return jidEncode(user, domainType === 0 || domainType === 128 ? 's.whatsapp.net' : 'lid', device);
     };
     const readString = (tag) => {
         if (tag >= 1 && tag < SINGLE_BYTE_TOKENS.length) {
@@ -196,7 +159,7 @@ const decodeDecompressedBinaryNode = (buffer, opts, indexRef = { index: 0 }) => 
         const items = [];
         const size = readListSize(tag);
         for (let i = 0; i < size; i++) {
-            items.push((0, exports.decodeDecompressedBinaryNode)(buffer, opts, indexRef));
+            items.push(decodeDecompressedBinaryNode(buffer, opts, indexRef));
         }
         return items;
     };
@@ -258,9 +221,8 @@ const decodeDecompressedBinaryNode = (buffer, opts, indexRef = { index: 0 }) => 
         content: data
     };
 };
-exports.decodeDecompressedBinaryNode = decodeDecompressedBinaryNode;
-const decodeBinaryNode = async (buff) => {
-    const decompBuff = await (0, exports.decompressingIfRequired)(buff);
-    return (0, exports.decodeDecompressedBinaryNode)(decompBuff, constants);
+export const decodeBinaryNode = async (buff) => {
+    const decompBuff = await decompressingIfRequired(buff);
+    return decodeDecompressedBinaryNode(decompBuff, constants);
 };
-exports.decodeBinaryNode = decodeBinaryNode;
+//# sourceMappingURL=decode.js.map

@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.encodeWAM = void 0;
-const constants_1 = require("./constants");
+import { BinaryInfo } from './BinaryInfo.js';
+import { FLAG_BYTE, FLAG_EVENT, FLAG_EXTENDED, FLAG_FIELD, FLAG_GLOBAL, WEB_EVENTS, WEB_GLOBALS } from './constants.js';
 const getHeaderBitLength = (key) => (key < 256 ? 2 : 3);
-const encodeWAM = (binaryInfo) => {
+export const encodeWAM = (binaryInfo) => {
     binaryInfo.buffer = [];
     encodeWAMHeader(binaryInfo);
     encodeEvents(binaryInfo);
@@ -17,7 +15,6 @@ const encodeWAM = (binaryInfo) => {
     }
     return buffer;
 };
-exports.encodeWAM = encodeWAM;
 function encodeWAMHeader(binaryInfo) {
     const headerBuffer = Buffer.alloc(8); // starting buffer
     headerBuffer.write('WAM', 0, 'utf8');
@@ -29,34 +26,34 @@ function encodeWAMHeader(binaryInfo) {
 }
 function encodeGlobalAttributes(binaryInfo, globals) {
     for (const [key, _value] of Object.entries(globals)) {
-        const id = constants_1.WEB_GLOBALS.find(a => (a === null || a === void 0 ? void 0 : a.name) === key).id;
+        const id = WEB_GLOBALS.find(a => a?.name === key).id;
         let value = _value;
         if (typeof value === 'boolean') {
             value = value ? 1 : 0;
         }
-        binaryInfo.buffer.push(serializeData(id, value, constants_1.FLAG_GLOBAL));
+        binaryInfo.buffer.push(serializeData(id, value, FLAG_GLOBAL));
     }
 }
 function encodeEvents(binaryInfo) {
     for (const [name, { props, globals }] of binaryInfo.events.map(a => Object.entries(a)[0])) {
         encodeGlobalAttributes(binaryInfo, globals);
-        const event = constants_1.WEB_EVENTS.find(a => a.name === name);
+        const event = WEB_EVENTS.find(a => a.name === name);
         const props_ = Object.entries(props);
         let extended = false;
         for (const [, value] of props_) {
             extended || (extended = value !== null);
         }
-        const eventFlag = extended ? constants_1.FLAG_EVENT : constants_1.FLAG_EVENT | constants_1.FLAG_EXTENDED;
+        const eventFlag = extended ? FLAG_EVENT : FLAG_EVENT | FLAG_EXTENDED;
         binaryInfo.buffer.push(serializeData(event.id, -event.weight, eventFlag));
         for (let i = 0; i < props_.length; i++) {
             const [key, _value] = props_[i];
-            const id = event.props[key][0];
+            const id = event.props[key]?.[0];
             extended = i < props_.length - 1;
             let value = _value;
             if (typeof value === 'boolean') {
                 value = value ? 1 : 0;
             }
-            const fieldFlag = extended ? constants_1.FLAG_EVENT : constants_1.FLAG_FIELD | constants_1.FLAG_EXTENDED;
+            const fieldFlag = extended ? FLAG_EVENT : FLAG_FIELD | FLAG_EXTENDED;
             binaryInfo.buffer.push(serializeData(id, value, fieldFlag));
         }
     }
@@ -66,7 +63,7 @@ function serializeData(key, value, flag) {
     let buffer;
     let offset = 0;
     if (value === null) {
-        if (flag === constants_1.FLAG_GLOBAL) {
+        if (flag === FLAG_GLOBAL) {
             buffer = Buffer.alloc(bufferLength);
             offset = serializeHeader(buffer, offset, key, flag);
             return buffer;
@@ -144,10 +141,11 @@ function serializeHeader(buffer, offset, key, flag) {
         offset += 1;
     }
     else {
-        buffer.writeUInt8(flag | constants_1.FLAG_BYTE, offset);
+        buffer.writeUInt8(flag | FLAG_BYTE, offset);
         offset += 1;
         buffer.writeUInt16LE(key, offset);
         offset += 2;
     }
     return offset;
 }
+//# sourceMappingURL=encode.js.map

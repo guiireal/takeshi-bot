@@ -1,25 +1,22 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeNoiseHandler = void 0;
-const boom_1 = require("@hapi/boom");
-const WAProto_1 = require("../../WAProto");
-const Defaults_1 = require("../Defaults");
-const WABinary_1 = require("../WABinary");
-const crypto_1 = require("./crypto");
+import { Boom } from '@hapi/boom';
+import { proto } from '../../WAProto/index.js';
+import { NOISE_MODE, WA_CERT_DETAILS } from '../Defaults/index.js';
+import { decodeBinaryNode } from '../WABinary/index.js';
+import { aesDecryptGCM, aesEncryptGCM, Curve, hkdf, sha256 } from './crypto.js';
 const generateIV = (counter) => {
     const iv = new ArrayBuffer(12);
     new DataView(iv).setUint32(8, counter);
     return new Uint8Array(iv);
 };
-const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publicKey }, NOISE_HEADER, logger, routingInfo }) => {
+export const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publicKey }, NOISE_HEADER, logger, routingInfo }) => {
     logger = logger.child({ class: 'ns' });
     const authenticate = (data) => {
         if (!isFinished) {
-            hash = (0, crypto_1.sha256)(Buffer.concat([hash, data]));
+            hash = sha256(Buffer.concat([hash, data]));
         }
     };
     const encrypt = (plaintext) => {
-        const result = (0, crypto_1.aesEncryptGCM)(plaintext, encKey, generateIV(writeCounter), hash);
+        const result = aesEncryptGCM(plaintext, encKey, generateIV(writeCounter), hash);
         writeCounter += 1;
         authenticate(result);
         return result;
@@ -28,7 +25,7 @@ const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publicKey },
         // before the handshake is finished, we use the same counter
         // after handshake, the counters are different
         const iv = generateIV(isFinished ? readCounter : writeCounter);
-        const result = (0, crypto_1.aesDecryptGCM)(ciphertext, decKey, iv, hash);
+        const result = aesDecryptGCM(ciphertext, decKey, iv, hash);
         if (isFinished) {
             readCounter += 1;
         }
@@ -39,7 +36,7 @@ const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publicKey },
         return result;
     };
     const localHKDF = async (data) => {
-        const key = await (0, crypto_1.hkdf)(Buffer.from(data), 64, { salt, info: '' });
+        const key = await hkdf(Buffer.from(data), 64, { salt, info: '' });
         return [key.slice(0, 32), key.slice(32)];
     };
     const mixIntoKey = async (data) => {
@@ -59,8 +56,8 @@ const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publicKey },
         writeCounter = 0;
         isFinished = true;
     };
-    const data = Buffer.from(Defaults_1.NOISE_MODE);
-    let hash = data.byteLength === 32 ? data : (0, crypto_1.sha256)(data);
+    const data = Buffer.from(NOISE_MODE);
+    let hash = data.byteLength === 32 ? data : sha256(data);
     let salt = hash;
     let encKey = hash;
     let decKey = hash;
@@ -79,17 +76,17 @@ const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publicKey },
         finishInit,
         processHandshake: async ({ serverHello }, noiseKey) => {
             authenticate(serverHello.ephemeral);
-            await mixIntoKey(crypto_1.Curve.sharedKey(privateKey, serverHello.ephemeral));
+            await mixIntoKey(Curve.sharedKey(privateKey, serverHello.ephemeral));
             const decStaticContent = decrypt(serverHello.static);
-            await mixIntoKey(crypto_1.Curve.sharedKey(privateKey, decStaticContent));
+            await mixIntoKey(Curve.sharedKey(privateKey, decStaticContent));
             const certDecoded = decrypt(serverHello.payload);
-            const { intermediate: certIntermediate } = WAProto_1.proto.CertChain.decode(certDecoded);
-            const { issuerSerial } = WAProto_1.proto.CertChain.NoiseCertificate.Details.decode(certIntermediate.details);
-            if (issuerSerial !== Defaults_1.WA_CERT_DETAILS.SERIAL) {
-                throw new boom_1.Boom('certification match failed', { statusCode: 400 });
+            const { intermediate: certIntermediate } = proto.CertChain.decode(certDecoded);
+            const { issuerSerial } = proto.CertChain.NoiseCertificate.Details.decode(certIntermediate.details);
+            if (issuerSerial !== WA_CERT_DETAILS.SERIAL) {
+                throw new Boom('certification match failed', { statusCode: 400 });
             }
             const keyEnc = encrypt(noiseKey.public);
-            await mixIntoKey(crypto_1.Curve.sharedKey(noiseKey.private, serverHello.ephemeral));
+            await mixIntoKey(Curve.sharedKey(noiseKey.private, serverHello.ephemeral));
             return keyEnc;
         },
         encodeFrame: (data) => {
@@ -121,7 +118,6 @@ const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publicKey },
             return frame;
         },
         decodeFrame: async (newData, onFrame) => {
-            var _a;
             // the binary protocol uses its own framing mechanism
             // on top of the WS frames
             // so we get this data and separate out the frames
@@ -138,13 +134,13 @@ const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publicKey },
                 inBytes = inBytes.slice(size + 3);
                 if (isFinished) {
                     const result = decrypt(frame);
-                    frame = await (0, WABinary_1.decodeBinaryNode)(result);
+                    frame = await decodeBinaryNode(result);
                 }
-                logger.trace({ msg: (_a = frame === null || frame === void 0 ? void 0 : frame.attrs) === null || _a === void 0 ? void 0 : _a.id }, 'recv frame');
+                logger.trace({ msg: frame?.attrs?.id }, 'recv frame');
                 onFrame(frame);
                 size = getBytesSize();
             }
         }
     };
 };
-exports.makeNoiseHandler = makeNoiseHandler;
+//# sourceMappingURL=noise-handler.js.map

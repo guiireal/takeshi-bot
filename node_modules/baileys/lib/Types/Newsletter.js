@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.QueryIds = exports.XWAPaths = void 0;
-var XWAPaths;
+export var XWAPaths;
 (function (XWAPaths) {
     XWAPaths["xwa2_newsletter_create"] = "xwa2_newsletter_create";
     XWAPaths["xwa2_newsletter_subscribers"] = "xwa2_newsletter_subscribers";
@@ -15,8 +12,8 @@ var XWAPaths;
     XWAPaths["xwa2_newsletter_change_owner"] = "xwa2_newsletter_change_owner";
     XWAPaths["xwa2_newsletter_demote"] = "xwa2_newsletter_demote";
     XWAPaths["xwa2_newsletter_delete_v2"] = "xwa2_newsletter_delete_v2";
-})(XWAPaths || (exports.XWAPaths = XWAPaths = {}));
-var QueryIds;
+})(XWAPaths || (XWAPaths = {}));
+export var QueryIds;
 (function (QueryIds) {
     QueryIds["CREATE"] = "8823471724422422";
     QueryIds["UPDATE_METADATA"] = "24250201037901610";
@@ -30,4 +27,5 @@ var QueryIds;
     QueryIds["CHANGE_OWNER"] = "7341777602580933";
     QueryIds["DEMOTE"] = "6551828931592903";
     QueryIds["DELETE"] = "30062808666639665";
-})(QueryIds || (exports.QueryIds = QueryIds = {}));
+})(QueryIds || (QueryIds = {}));
+//# sourceMappingURL=Newsletter.js.map

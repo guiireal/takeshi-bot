@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AbstractSocketClient = void 0;
-const events_1 = require("events");
-class AbstractSocketClient extends events_1.EventEmitter {
+import { EventEmitter } from 'events';
+import { URL } from 'url';
+export class AbstractSocketClient extends EventEmitter {
     constructor(url, config) {
         super();
         this.url = url;
@@ -10,4 +8,4 @@ class AbstractSocketClient extends events_1.EventEmitter {
         this.setMaxListeners(0);
     }
 }
-exports.AbstractSocketClient = AbstractSocketClient;
+//# sourceMappingURL=types.js.map

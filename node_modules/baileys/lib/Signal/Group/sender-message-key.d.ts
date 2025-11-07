@@ -9,3 +9,4 @@ export declare class SenderMessageKey {
     getCipherKey(): Uint8Array;
     getSeed(): Uint8Array;
 }
+//# sourceMappingURL=sender-message-key.d.ts.map

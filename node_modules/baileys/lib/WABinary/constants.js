@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TOKEN_MAP = exports.SINGLE_BYTE_TOKENS = exports.DOUBLE_BYTE_TOKENS = exports.TAGS = void 0;
-exports.TAGS = {
+export const TAGS = {
     LIST_EMPTY: 0,
     DICTIONARY_0: 236,
     DICTIONARY_1: 237,
@@ -20,7 +17,7 @@ exports.TAGS = {
     NIBBLE_8: 255,
     PACKED_MAX: 127
 };
-exports.DOUBLE_BYTE_TOKENS = [
+export const DOUBLE_BYTE_TOKENS = [
     [
         'read-self',
         'active',
@@ -1054,7 +1051,7 @@ exports.DOUBLE_BYTE_TOKENS = [
         '1961'
     ]
 ];
-exports.SINGLE_BYTE_TOKENS = [
+export const SINGLE_BYTE_TOKENS = [
     '',
     'xmlstreamstart',
     'xmlstreamend',
@@ -1292,12 +1289,13 @@ exports.SINGLE_BYTE_TOKENS = [
     '03',
     'screen_height'
 ];
-exports.TOKEN_MAP = {};
-for (const [i, SINGLE_BYTE_TOKEN] of exports.SINGLE_BYTE_TOKENS.entries()) {
-    exports.TOKEN_MAP[SINGLE_BYTE_TOKEN] = { index: i };
+export const TOKEN_MAP = {};
+for (const [i, SINGLE_BYTE_TOKEN] of SINGLE_BYTE_TOKENS.entries()) {
+    TOKEN_MAP[SINGLE_BYTE_TOKEN] = { index: i };
 }
-for (const [i, DOUBLE_BYTE_TOKEN] of exports.DOUBLE_BYTE_TOKENS.entries()) {
+for (const [i, DOUBLE_BYTE_TOKEN] of DOUBLE_BYTE_TOKENS.entries()) {
     for (const [j, element] of DOUBLE_BYTE_TOKEN.entries()) {
-        exports.TOKEN_MAP[element] = { dict: i, index: j };
+        TOKEN_MAP[element] = { dict: i, index: j };
     }
 }
+//# sourceMappingURL=constants.js.map

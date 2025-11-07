@@ -1,4 +1,4 @@
-import * as constants from './constants';
+import * as constants from './constants.js';
 /**
  * the binary node WA uses internally for communication
  *
@@ -16,3 +16,4 @@ export type BinaryNode = {
 export type BinaryNodeAttributes = BinaryNode['attrs'];
 export type BinaryNodeData = BinaryNode['content'];
 export type BinaryNodeCodingOptions = typeof constants;
+//# sourceMappingURL=types.d.ts.map

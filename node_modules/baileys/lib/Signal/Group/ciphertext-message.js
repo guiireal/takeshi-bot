@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CiphertextMessage = void 0;
-class CiphertextMessage {
+export class CiphertextMessage {
     constructor() {
         this.UNSUPPORTED_VERSION = 1;
         this.CURRENT_VERSION = 3;
@@ -12,4 +9,4 @@ class CiphertextMessage {
         this.ENCRYPTED_MESSAGE_OVERHEAD = 53;
     }
 }
-exports.CiphertextMessage = CiphertextMessage;
+//# sourceMappingURL=ciphertext-message.js.map

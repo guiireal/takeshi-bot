@@ -1,15 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SenderKeyDistributionMessage = void 0;
-const WAProto_1 = require("../../../WAProto");
-const ciphertext_message_1 = require("./ciphertext-message");
-class SenderKeyDistributionMessage extends ciphertext_message_1.CiphertextMessage {
+import { proto } from '../../../WAProto/index.js';
+import { CiphertextMessage } from './ciphertext-message.js';
+export class SenderKeyDistributionMessage extends CiphertextMessage {
     constructor(id, iteration, chainKey, signatureKey, serialized) {
         super();
         if (serialized) {
             try {
                 const message = serialized.slice(1);
-                const distributionMessage = WAProto_1.proto.SenderKeyDistributionMessage.decode(message).toJSON();
+                const distributionMessage = proto.SenderKeyDistributionMessage.decode(message).toJSON();
                 this.serialized = serialized;
                 this.id = distributionMessage.id;
                 this.iteration = distributionMessage.iteration;
@@ -32,7 +29,7 @@ class SenderKeyDistributionMessage extends ciphertext_message_1.CiphertextMessag
             this.iteration = iteration;
             this.chainKey = chainKey;
             this.signatureKey = signatureKey;
-            const message = WAProto_1.proto.SenderKeyDistributionMessage.encode(WAProto_1.proto.SenderKeyDistributionMessage.create({
+            const message = proto.SenderKeyDistributionMessage.encode(proto.SenderKeyDistributionMessage.create({
                 id,
                 iteration,
                 chainKey,
@@ -63,4 +60,4 @@ class SenderKeyDistributionMessage extends ciphertext_message_1.CiphertextMessag
         return this.id;
     }
 }
-exports.SenderKeyDistributionMessage = SenderKeyDistributionMessage;
+//# sourceMappingURL=sender-key-distribution-message.js.map

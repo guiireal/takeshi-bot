@@ -1,4 +1,4 @@
-import { SenderKeyState } from './sender-key-state';
+import { SenderKeyState } from './sender-key-state.js';
 export interface SenderKeyStateStructure {
     senderKeyId: number;
     senderChainKey: {
@@ -28,3 +28,4 @@ export declare class SenderKeyRecord {
     serialize(): SenderKeyStateStructure[];
     static deserialize(data: Uint8Array | string | SenderKeyStateStructure[]): SenderKeyRecord;
 }
+//# sourceMappingURL=sender-key-record.d.ts.map

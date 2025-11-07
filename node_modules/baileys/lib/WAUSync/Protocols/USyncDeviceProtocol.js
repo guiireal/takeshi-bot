@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.USyncDeviceProtocol = void 0;
-const WABinary_1 = require("../../WABinary");
-class USyncDeviceProtocol {
+import { assertNodeErrorFree, getBinaryNodeChild } from '../../WABinary/index.js';
+export class USyncDeviceProtocol {
     constructor() {
         this.name = 'devices';
     }
@@ -24,10 +21,10 @@ class USyncDeviceProtocol {
         const deviceList = [];
         let keyIndex = undefined;
         if (node.tag === 'devices') {
-            (0, WABinary_1.assertNodeErrorFree)(node);
-            const deviceListNode = (0, WABinary_1.getBinaryNodeChild)(node, 'device-list');
-            const keyIndexNode = (0, WABinary_1.getBinaryNodeChild)(node, 'key-index-list');
-            if (Array.isArray(deviceListNode === null || deviceListNode === void 0 ? void 0 : deviceListNode.content)) {
+            assertNodeErrorFree(node);
+            const deviceListNode = getBinaryNodeChild(node, 'device-list');
+            const keyIndexNode = getBinaryNodeChild(node, 'key-index-list');
+            if (Array.isArray(deviceListNode?.content)) {
                 for (const { tag, attrs } of deviceListNode.content) {
                     const id = +attrs.id;
                     const keyIndex = +attrs['key-index'];
@@ -40,10 +37,10 @@ class USyncDeviceProtocol {
                     }
                 }
             }
-            if ((keyIndexNode === null || keyIndexNode === void 0 ? void 0 : keyIndexNode.tag) === 'key-index-list') {
+            if (keyIndexNode?.tag === 'key-index-list') {
                 keyIndex = {
                     timestamp: +keyIndexNode.attrs['ts'],
-                    signedKeyIndex: keyIndexNode === null || keyIndexNode === void 0 ? void 0 : keyIndexNode.content,
+                    signedKeyIndex: keyIndexNode?.content,
                     expectedTimestamp: keyIndexNode.attrs['expected_ts'] ? +keyIndexNode.attrs['expected_ts'] : undefined
                 };
             }
@@ -54,4 +51,4 @@ class USyncDeviceProtocol {
         };
     }
 }
-exports.USyncDeviceProtocol = USyncDeviceProtocol;
+//# sourceMappingURL=USyncDeviceProtocol.js.map

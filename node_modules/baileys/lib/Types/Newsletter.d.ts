@@ -132,3 +132,4 @@ export interface NewsletterMetadata {
         description?: string;
     };
 }
+//# sourceMappingURL=Newsletter.d.ts.map

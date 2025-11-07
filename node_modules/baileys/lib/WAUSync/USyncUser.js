@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.USyncUser = void 0;
-class USyncUser {
+export class USyncUser {
     withId(id) {
         this.id = id;
         return this;
@@ -23,4 +20,4 @@ class USyncUser {
         return this;
     }
 }
-exports.USyncUser = USyncUser;
+//# sourceMappingURL=USyncUser.js.map

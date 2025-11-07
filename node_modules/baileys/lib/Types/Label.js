@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LabelColor = void 0;
 /** WhatsApp has 20 predefined colors */
-var LabelColor;
+export var LabelColor;
 (function (LabelColor) {
     LabelColor[LabelColor["Color1"] = 0] = "Color1";
     LabelColor[LabelColor["Color2"] = 1] = "Color2";
@@ -24,4 +21,5 @@ var LabelColor;
     LabelColor[LabelColor["Color18"] = 17] = "Color18";
     LabelColor[LabelColor["Color19"] = 18] = "Color19";
     LabelColor[LabelColor["Color20"] = 19] = "Color20";
-})(LabelColor || (exports.LabelColor = LabelColor = {}));
+})(LabelColor || (LabelColor = {}));
+//# sourceMappingURL=Label.js.map

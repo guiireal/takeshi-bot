@@ -1,2 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import { proto } from '../../WAProto/index.js';
+import {} from './Message.js';
+//# sourceMappingURL=Socket.js.map

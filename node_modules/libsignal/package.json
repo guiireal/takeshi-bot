@@ -4,6 +4,7 @@
   "description": "Open Whisper Systems' libsignal for Node.js",
   "repository": "WhiskeySockets/libsignal-node",
   "main": "index.js",
+  "types": "index.d.ts",
   "keywords": [
     "signal",
     "whispersystems",
@@ -15,7 +16,8 @@
     "protobufjs": "6.8.8"
   },
   "files": [
-    "src/*"
+    "src/*",
+    "index.d.ts"
   ],
   "devDependencies": {
     "eslint": "6.0.1"

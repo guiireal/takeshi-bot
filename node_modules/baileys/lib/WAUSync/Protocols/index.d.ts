@@ -1,4 +1,5 @@
-export * from './USyncDeviceProtocol';
-export * from './USyncContactProtocol';
-export * from './USyncStatusProtocol';
-export * from './USyncDisappearingModeProtocol';
+export * from './USyncDeviceProtocol.js';
+export * from './USyncContactProtocol.js';
+export * from './USyncStatusProtocol.js';
+export * from './USyncDisappearingModeProtocol.js';
+//# sourceMappingURL=index.d.ts.map

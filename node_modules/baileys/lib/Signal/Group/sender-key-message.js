@@ -1,10 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SenderKeyMessage = void 0;
-const curve_1 = require("libsignal/src/curve");
-const WAProto_1 = require("../../../WAProto");
-const ciphertext_message_1 = require("./ciphertext-message");
-class SenderKeyMessage extends ciphertext_message_1.CiphertextMessage {
+/* @ts-ignore */
+import { calculateSignature, verifySignature } from 'libsignal/src/curve.js';
+import { proto } from '../../../WAProto/index.js';
+import { CiphertextMessage } from './ciphertext-message.js';
+export class SenderKeyMessage extends CiphertextMessage {
     constructor(keyId, iteration, ciphertext, signatureKey, serialized) {
         super();
         this.SIGNATURE_LENGTH = 64;
@@ -12,7 +10,7 @@ class SenderKeyMessage extends ciphertext_message_1.CiphertextMessage {
             const version = serialized[0];
             const message = serialized.slice(1, serialized.length - this.SIGNATURE_LENGTH);
             const signature = serialized.slice(-1 * this.SIGNATURE_LENGTH);
-            const senderKeyMessage = WAProto_1.proto.SenderKeyMessage.decode(message).toJSON();
+            const senderKeyMessage = proto.SenderKeyMessage.decode(message).toJSON();
             this.serialized = serialized;
             this.messageVersion = (version & 0xff) >> 4;
             this.keyId = senderKeyMessage.id;
@@ -26,7 +24,7 @@ class SenderKeyMessage extends ciphertext_message_1.CiphertextMessage {
         else {
             const version = (((this.CURRENT_VERSION << 4) | this.CURRENT_VERSION) & 0xff) % 256;
             const ciphertextBuffer = Buffer.from(ciphertext);
-            const message = WAProto_1.proto.SenderKeyMessage.encode(WAProto_1.proto.SenderKeyMessage.create({
+            const message = proto.SenderKeyMessage.encode(proto.SenderKeyMessage.create({
                 id: keyId,
                 iteration: iteration,
                 ciphertext: ciphertextBuffer
@@ -52,12 +50,12 @@ class SenderKeyMessage extends ciphertext_message_1.CiphertextMessage {
     verifySignature(signatureKey) {
         const part1 = this.serialized.slice(0, this.serialized.length - this.SIGNATURE_LENGTH);
         const part2 = this.serialized.slice(-1 * this.SIGNATURE_LENGTH);
-        const res = (0, curve_1.verifySignature)(signatureKey, part1, part2);
+        const res = verifySignature(signatureKey, part1, part2);
         if (!res)
             throw new Error('Invalid signature!');
     }
     getSignature(signatureKey, serialized) {
-        return Buffer.from((0, curve_1.calculateSignature)(signatureKey, serialized));
+        return Buffer.from(calculateSignature(signatureKey, serialized));
     }
     serialize() {
         return this.serialized;
@@ -66,4 +64,4 @@ class SenderKeyMessage extends ciphertext_message_1.CiphertextMessage {
         return 4;
     }
 }
-exports.SenderKeyMessage = SenderKeyMessage;
+//# sourceMappingURL=sender-key-message.js.map

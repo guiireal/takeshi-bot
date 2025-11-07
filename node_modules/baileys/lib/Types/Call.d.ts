@@ -11,3 +11,4 @@ export type WACallEvent = {
     offline: boolean;
     latencyMs?: number;
 };
+//# sourceMappingURL=Call.d.ts.map

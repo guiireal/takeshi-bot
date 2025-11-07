@@ -15,3 +15,4 @@ export declare class SenderKeyName {
     hashCode(): number;
 }
 export {};
+//# sourceMappingURL=sender-key-name.d.ts.map

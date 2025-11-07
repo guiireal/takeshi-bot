@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { URL } from 'url';
-import { SocketConfig } from '../../Types';
+import type { SocketConfig } from '../../Types/index.js';
 export declare abstract class AbstractSocketClient extends EventEmitter {
     url: URL;
     config: SocketConfig;
@@ -13,3 +13,4 @@ export declare abstract class AbstractSocketClient extends EventEmitter {
     abstract close(): Promise<void>;
     abstract send(str: Uint8Array | string, cb?: (err?: Error) => void): boolean;
 }
+//# sourceMappingURL=types.d.ts.map

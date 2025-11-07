@@ -1,17 +1,17 @@
-export * from './Auth';
-export * from './GroupMetadata';
-export * from './Chat';
-export * from './Contact';
-export * from './State';
-export * from './Message';
-export * from './Socket';
-export * from './Events';
-export * from './Product';
-export * from './Call';
-export * from './Signal';
-export * from './Newsletter';
-import { AuthenticationState } from './Auth';
-import { SocketConfig } from './Socket';
+export * from './Auth.js';
+export * from './GroupMetadata.js';
+export * from './Chat.js';
+export * from './Contact.js';
+export * from './State.js';
+export * from './Message.js';
+export * from './Socket.js';
+export * from './Events.js';
+export * from './Product.js';
+export * from './Call.js';
+export * from './Signal.js';
+export * from './Newsletter.js';
+import type { AuthenticationState } from './Auth.js';
+import type { SocketConfig } from './Socket.js';
 export type UserFacingSocketConfig = Partial<SocketConfig> & {
     auth: AuthenticationState;
 };
@@ -62,3 +62,4 @@ export type CurveKeyPair = {
     private: Uint8Array;
     public: Uint8Array;
 };
+//# sourceMappingURL=index.d.ts.map

@@ -1,13 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SenderKeyState = void 0;
-const sender_chain_key_1 = require("./sender-chain-key");
-const sender_message_key_1 = require("./sender-message-key");
-class SenderKeyState {
+import { SenderChainKey } from './sender-chain-key.js';
+import { SenderMessageKey } from './sender-message-key.js';
+export class SenderKeyState {
     constructor(id, iteration, chainKey, signatureKeyPair, signatureKeyPublic, signatureKeyPrivate, senderKeyStateStructure) {
         this.MAX_MESSAGE_KEYS = 2000;
         if (senderKeyStateStructure) {
-            this.senderKeyStateStructure = senderKeyStateStructure;
+            if (!Array.isArray(senderKeyStateStructure.senderMessageKeys)) {
+                this.senderKeyStateStructure = { ...senderKeyStateStructure, senderMessageKeys: [] };
+            }
+            else {
+                this.senderKeyStateStructure = senderKeyStateStructure;
+            }
         }
         else {
             if (signatureKeyPair) {
@@ -40,7 +42,7 @@ class SenderKeyState {
         return this.senderKeyStateStructure.senderKeyId;
     }
     getSenderChainKey() {
-        return new sender_chain_key_1.SenderChainKey(this.senderKeyStateStructure.senderChainKey.iteration, this.senderKeyStateStructure.senderChainKey.seed);
+        return new SenderChainKey(this.senderKeyStateStructure.senderChainKey.iteration, this.senderKeyStateStructure.senderChainKey.seed);
     }
     setSenderChainKey(chainKey) {
         this.senderKeyStateStructure.senderChainKey = {
@@ -88,7 +90,7 @@ class SenderKeyState {
         if (index !== -1) {
             const messageKey = this.senderKeyStateStructure.senderMessageKeys[index];
             this.senderKeyStateStructure.senderMessageKeys.splice(index, 1);
-            return new sender_message_key_1.SenderMessageKey(messageKey.iteration, messageKey.seed);
+            return new SenderMessageKey(messageKey.iteration, messageKey.seed);
         }
         return null;
     }
@@ -96,4 +98,4 @@ class SenderKeyState {
         return this.senderKeyStateStructure;
     }
 }
-exports.SenderKeyState = SenderKeyState;
+//# sourceMappingURL=sender-key-state.js.map

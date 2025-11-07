@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.USyncQuery = void 0;
-const WABinary_1 = require("../WABinary");
-const UsyncBotProfileProtocol_1 = require("./Protocols/UsyncBotProfileProtocol");
-const UsyncLIDProtocol_1 = require("./Protocols/UsyncLIDProtocol");
-const Protocols_1 = require("./Protocols");
-class USyncQuery {
+import { getBinaryNodeChild } from '../WABinary/index.js';
+import { USyncBotProfileProtocol } from './Protocols/UsyncBotProfileProtocol.js';
+import { USyncLIDProtocol } from './Protocols/UsyncLIDProtocol.js';
+import { USyncContactProtocol, USyncDeviceProtocol, USyncDisappearingModeProtocol, USyncStatusProtocol } from './Protocols/index.js';
+import { USyncUser } from './USyncUser.js';
+export class USyncQuery {
     constructor() {
         this.protocols = [];
         this.users = [];
@@ -36,15 +34,15 @@ class USyncQuery {
             list: [],
             sideList: []
         };
-        const usyncNode = (0, WABinary_1.getBinaryNodeChild)(result, 'usync');
+        const usyncNode = getBinaryNodeChild(result, 'usync');
         //TODO: implement error backoff, refresh etc.
         //TODO: see if there are any errors in the result node
         //const resultNode = getBinaryNodeChild(usyncNode, 'result')
-        const listNode = (0, WABinary_1.getBinaryNodeChild)(usyncNode, 'list');
-        if (Array.isArray(listNode === null || listNode === void 0 ? void 0 : listNode.content) && typeof listNode !== 'undefined') {
+        const listNode = getBinaryNodeChild(usyncNode, 'list');
+        if (Array.isArray(listNode?.content) && typeof listNode !== 'undefined') {
             queryResult.list = listNode.content.map(node => {
-                const id = node === null || node === void 0 ? void 0 : node.attrs.jid;
-                const data = Array.isArray(node === null || node === void 0 ? void 0 : node.content)
+                const id = node?.attrs.jid;
+                const data = Array.isArray(node?.content)
                     ? Object.fromEntries(node.content
                         .map(content => {
                         const protocol = content.tag;
@@ -66,28 +64,28 @@ class USyncQuery {
         return queryResult;
     }
     withDeviceProtocol() {
-        this.protocols.push(new Protocols_1.USyncDeviceProtocol());
+        this.protocols.push(new USyncDeviceProtocol());
         return this;
     }
     withContactProtocol() {
-        this.protocols.push(new Protocols_1.USyncContactProtocol());
+        this.protocols.push(new USyncContactProtocol());
         return this;
     }
     withStatusProtocol() {
-        this.protocols.push(new Protocols_1.USyncStatusProtocol());
+        this.protocols.push(new USyncStatusProtocol());
         return this;
     }
     withDisappearingModeProtocol() {
-        this.protocols.push(new Protocols_1.USyncDisappearingModeProtocol());
+        this.protocols.push(new USyncDisappearingModeProtocol());
         return this;
     }
     withBotProfileProtocol() {
-        this.protocols.push(new UsyncBotProfileProtocol_1.USyncBotProfileProtocol());
+        this.protocols.push(new USyncBotProfileProtocol());
         return this;
     }
     withLIDProtocol() {
-        this.protocols.push(new UsyncLIDProtocol_1.USyncLIDProtocol());
+        this.protocols.push(new USyncLIDProtocol());
         return this;
     }
 }
-exports.USyncQuery = USyncQuery;
+//# sourceMappingURL=USyncQuery.js.map

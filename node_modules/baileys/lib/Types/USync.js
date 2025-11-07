@@ -1,2 +1,2 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import { USyncUser } from '../WAUSync/index.js';
+//# sourceMappingURL=USync.js.map

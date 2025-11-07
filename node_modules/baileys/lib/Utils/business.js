@@ -1,31 +1,26 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadingNecessaryImages = exports.parseProductNode = exports.toProductNode = exports.parseOrderDetailsNode = exports.parseCollectionsNode = exports.parseCatalogNode = void 0;
-exports.uploadingNecessaryImagesOfProduct = uploadingNecessaryImagesOfProduct;
-const boom_1 = require("@hapi/boom");
-const crypto_1 = require("crypto");
-const fs_1 = require("fs");
-const os_1 = require("os");
-const path_1 = require("path");
-const WABinary_1 = require("../WABinary");
-const generics_1 = require("./generics");
-const messages_media_1 = require("./messages-media");
-const parseCatalogNode = (node) => {
-    const catalogNode = (0, WABinary_1.getBinaryNodeChild)(node, 'product_catalog');
-    const products = (0, WABinary_1.getBinaryNodeChildren)(catalogNode, 'product').map(exports.parseProductNode);
-    const paging = (0, WABinary_1.getBinaryNodeChild)(catalogNode, 'paging');
+import { Boom } from '@hapi/boom';
+import { createHash } from 'crypto';
+import { createWriteStream, promises as fs } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
+import { getBinaryNodeChild, getBinaryNodeChildren, getBinaryNodeChildString } from '../WABinary/index.js';
+import { generateMessageIDV2 } from './generics.js';
+import { getStream, getUrlFromDirectPath } from './messages-media.js';
+export const parseCatalogNode = (node) => {
+    const catalogNode = getBinaryNodeChild(node, 'product_catalog');
+    const products = getBinaryNodeChildren(catalogNode, 'product').map(parseProductNode);
+    const paging = getBinaryNodeChild(catalogNode, 'paging');
     return {
         products,
-        nextPageCursor: paging ? (0, WABinary_1.getBinaryNodeChildString)(paging, 'after') : undefined
+        nextPageCursor: paging ? getBinaryNodeChildString(paging, 'after') : undefined
     };
 };
-exports.parseCatalogNode = parseCatalogNode;
-const parseCollectionsNode = (node) => {
-    const collectionsNode = (0, WABinary_1.getBinaryNodeChild)(node, 'collections');
-    const collections = (0, WABinary_1.getBinaryNodeChildren)(collectionsNode, 'collection').map(collectionNode => {
-        const id = (0, WABinary_1.getBinaryNodeChildString)(collectionNode, 'id');
-        const name = (0, WABinary_1.getBinaryNodeChildString)(collectionNode, 'name');
-        const products = (0, WABinary_1.getBinaryNodeChildren)(collectionNode, 'product').map(exports.parseProductNode);
+export const parseCollectionsNode = (node) => {
+    const collectionsNode = getBinaryNodeChild(node, 'collections');
+    const collections = getBinaryNodeChildren(collectionsNode, 'collection').map(collectionNode => {
+        const id = getBinaryNodeChildString(collectionNode, 'id');
+        const name = getBinaryNodeChildString(collectionNode, 'name');
+        const products = getBinaryNodeChildren(collectionNode, 'product').map(parseProductNode);
         return {
             id,
             name,
@@ -37,32 +32,30 @@ const parseCollectionsNode = (node) => {
         collections
     };
 };
-exports.parseCollectionsNode = parseCollectionsNode;
-const parseOrderDetailsNode = (node) => {
-    const orderNode = (0, WABinary_1.getBinaryNodeChild)(node, 'order');
-    const products = (0, WABinary_1.getBinaryNodeChildren)(orderNode, 'product').map(productNode => {
-        const imageNode = (0, WABinary_1.getBinaryNodeChild)(productNode, 'image');
+export const parseOrderDetailsNode = (node) => {
+    const orderNode = getBinaryNodeChild(node, 'order');
+    const products = getBinaryNodeChildren(orderNode, 'product').map(productNode => {
+        const imageNode = getBinaryNodeChild(productNode, 'image');
         return {
-            id: (0, WABinary_1.getBinaryNodeChildString)(productNode, 'id'),
-            name: (0, WABinary_1.getBinaryNodeChildString)(productNode, 'name'),
-            imageUrl: (0, WABinary_1.getBinaryNodeChildString)(imageNode, 'url'),
-            price: +(0, WABinary_1.getBinaryNodeChildString)(productNode, 'price'),
-            currency: (0, WABinary_1.getBinaryNodeChildString)(productNode, 'currency'),
-            quantity: +(0, WABinary_1.getBinaryNodeChildString)(productNode, 'quantity')
+            id: getBinaryNodeChildString(productNode, 'id'),
+            name: getBinaryNodeChildString(productNode, 'name'),
+            imageUrl: getBinaryNodeChildString(imageNode, 'url'),
+            price: +getBinaryNodeChildString(productNode, 'price'),
+            currency: getBinaryNodeChildString(productNode, 'currency'),
+            quantity: +getBinaryNodeChildString(productNode, 'quantity')
         };
     });
-    const priceNode = (0, WABinary_1.getBinaryNodeChild)(orderNode, 'price');
+    const priceNode = getBinaryNodeChild(orderNode, 'price');
     const orderDetails = {
         price: {
-            total: +(0, WABinary_1.getBinaryNodeChildString)(priceNode, 'total'),
-            currency: (0, WABinary_1.getBinaryNodeChildString)(priceNode, 'currency')
+            total: +getBinaryNodeChildString(priceNode, 'total'),
+            currency: getBinaryNodeChildString(priceNode, 'currency')
         },
         products
     };
     return orderDetails;
 };
-exports.parseOrderDetailsNode = parseOrderDetailsNode;
-const toProductNode = (productId, product) => {
+export const toProductNode = (productId, product) => {
     const attrs = {};
     const content = [];
     if (typeof productId !== 'undefined') {
@@ -99,7 +92,7 @@ const toProductNode = (productId, product) => {
             attrs: {},
             content: product.images.map(img => {
                 if (!('url' in img)) {
-                    throw new boom_1.Boom('Expected img for product to already be uploaded', { statusCode: 400 });
+                    throw new Boom('Expected img for product to already be uploaded', { statusCode: 400 });
                 }
                 return {
                     tag: 'image',
@@ -157,38 +150,36 @@ const toProductNode = (productId, product) => {
     };
     return node;
 };
-exports.toProductNode = toProductNode;
-const parseProductNode = (productNode) => {
+export const parseProductNode = (productNode) => {
     const isHidden = productNode.attrs.is_hidden === 'true';
-    const id = (0, WABinary_1.getBinaryNodeChildString)(productNode, 'id');
-    const mediaNode = (0, WABinary_1.getBinaryNodeChild)(productNode, 'media');
-    const statusInfoNode = (0, WABinary_1.getBinaryNodeChild)(productNode, 'status_info');
+    const id = getBinaryNodeChildString(productNode, 'id');
+    const mediaNode = getBinaryNodeChild(productNode, 'media');
+    const statusInfoNode = getBinaryNodeChild(productNode, 'status_info');
     const product = {
         id,
         imageUrls: parseImageUrls(mediaNode),
         reviewStatus: {
-            whatsapp: (0, WABinary_1.getBinaryNodeChildString)(statusInfoNode, 'status')
+            whatsapp: getBinaryNodeChildString(statusInfoNode, 'status')
         },
         availability: 'in stock',
-        name: (0, WABinary_1.getBinaryNodeChildString)(productNode, 'name'),
-        retailerId: (0, WABinary_1.getBinaryNodeChildString)(productNode, 'retailer_id'),
-        url: (0, WABinary_1.getBinaryNodeChildString)(productNode, 'url'),
-        description: (0, WABinary_1.getBinaryNodeChildString)(productNode, 'description'),
-        price: +(0, WABinary_1.getBinaryNodeChildString)(productNode, 'price'),
-        currency: (0, WABinary_1.getBinaryNodeChildString)(productNode, 'currency'),
+        name: getBinaryNodeChildString(productNode, 'name'),
+        retailerId: getBinaryNodeChildString(productNode, 'retailer_id'),
+        url: getBinaryNodeChildString(productNode, 'url'),
+        description: getBinaryNodeChildString(productNode, 'description'),
+        price: +getBinaryNodeChildString(productNode, 'price'),
+        currency: getBinaryNodeChildString(productNode, 'currency'),
         isHidden
     };
     return product;
 };
-exports.parseProductNode = parseProductNode;
 /**
  * Uploads images not already uploaded to WA's servers
  */
-async function uploadingNecessaryImagesOfProduct(product, waUploadToServer, timeoutMs = 30000) {
+export async function uploadingNecessaryImagesOfProduct(product, waUploadToServer, timeoutMs = 30000) {
     product = {
         ...product,
         images: product.images
-            ? await (0, exports.uploadingNecessaryImages)(product.images, waUploadToServer, timeoutMs)
+            ? await uploadingNecessaryImages(product.images, waUploadToServer, timeoutMs)
             : product.images
     };
     return product;
@@ -196,7 +187,7 @@ async function uploadingNecessaryImagesOfProduct(product, waUploadToServer, time
 /**
  * Uploads images not already uploaded to WA's servers
  */
-const uploadingNecessaryImages = async (images, waUploadToServer, timeoutMs = 30000) => {
+export const uploadingNecessaryImages = async (images, waUploadToServer, timeoutMs = 30000) => {
     const results = await Promise.all(images.map(async (img) => {
         if ('url' in img) {
             const url = img.url.toString();
@@ -204,10 +195,10 @@ const uploadingNecessaryImages = async (images, waUploadToServer, timeoutMs = 30
                 return { url };
             }
         }
-        const { stream } = await (0, messages_media_1.getStream)(img);
-        const hasher = (0, crypto_1.createHash)('sha256');
-        const filePath = (0, path_1.join)((0, os_1.tmpdir)(), 'img' + (0, generics_1.generateMessageIDV2)());
-        const encFileWriteStream = (0, fs_1.createWriteStream)(filePath);
+        const { stream } = await getStream(img);
+        const hasher = createHash('sha256');
+        const filePath = join(tmpdir(), 'img' + generateMessageIDV2());
+        const encFileWriteStream = createWriteStream(filePath);
         for await (const block of stream) {
             hasher.update(block);
             encFileWriteStream.write(block);
@@ -218,23 +209,23 @@ const uploadingNecessaryImages = async (images, waUploadToServer, timeoutMs = 30
             fileEncSha256B64: sha,
             timeoutMs
         });
-        await fs_1.promises.unlink(filePath).catch(err => console.log('Error deleting temp file ', err));
-        return { url: (0, messages_media_1.getUrlFromDirectPath)(directPath) };
+        await fs.unlink(filePath).catch(err => console.log('Error deleting temp file ', err));
+        return { url: getUrlFromDirectPath(directPath) };
     }));
     return results;
 };
-exports.uploadingNecessaryImages = uploadingNecessaryImages;
 const parseImageUrls = (mediaNode) => {
-    const imgNode = (0, WABinary_1.getBinaryNodeChild)(mediaNode, 'image');
+    const imgNode = getBinaryNodeChild(mediaNode, 'image');
     return {
-        requested: (0, WABinary_1.getBinaryNodeChildString)(imgNode, 'request_image_url'),
-        original: (0, WABinary_1.getBinaryNodeChildString)(imgNode, 'original_image_url')
+        requested: getBinaryNodeChildString(imgNode, 'request_image_url'),
+        original: getBinaryNodeChildString(imgNode, 'original_image_url')
     };
 };
 const parseStatusInfo = (mediaNode) => {
-    const node = (0, WABinary_1.getBinaryNodeChild)(mediaNode, 'status_info');
+    const node = getBinaryNodeChild(mediaNode, 'status_info');
     return {
-        status: (0, WABinary_1.getBinaryNodeChildString)(node, 'status'),
-        canAppeal: (0, WABinary_1.getBinaryNodeChildString)(node, 'can_appeal') === 'true'
+        status: getBinaryNodeChildString(node, 'status'),
+        canAppeal: getBinaryNodeChildString(node, 'can_appeal') === 'true'
     };
 };
+//# sourceMappingURL=business.js.map

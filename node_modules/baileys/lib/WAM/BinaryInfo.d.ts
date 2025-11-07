@@ -1,4 +1,4 @@
-import { EventInputType } from './constants';
+import type { EventInputType } from './constants.js';
 export declare class BinaryInfo {
     protocolVersion: number;
     sequence: number;
@@ -6,3 +6,4 @@ export declare class BinaryInfo {
     buffer: Buffer[];
     constructor(options?: Partial<BinaryInfo>);
 }
+//# sourceMappingURL=BinaryInfo.d.ts.map

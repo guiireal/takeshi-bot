@@ -1,14 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeEventBuffer = void 0;
-const events_1 = __importDefault(require("events"));
-const Types_1 = require("../Types");
-const generics_1 = require("./generics");
-const messages_1 = require("./messages");
-const process_message_1 = require("./process-message");
+import EventEmitter from 'events';
+import { proto } from '../../WAProto/index.js';
+import { WAMessageStatus } from '../Types/index.js';
+import { trimUndefined } from './generics.js';
+import { updateMessageWithReaction, updateMessageWithReceipt } from './messages.js';
+import { isRealMessage, shouldIncrementChatUnread } from './process-message.js';
 const BUFFERABLE_EVENT = [
     'messaging-history.set',
     'chats.upsert',
@@ -29,11 +24,11 @@ const BUFFERABLE_EVENT_SET = new Set(BUFFERABLE_EVENT);
  * making the data processing more efficient.
  * @param ev the baileys event emitter
  */
-const makeEventBuffer = (logger) => {
-    const ev = new events_1.default();
+export const makeEventBuffer = (logger) => {
+    const ev = new EventEmitter();
     const historyCache = new Set();
     let data = makeBufferData();
-    let buffersInProgress = 0;
+    let isBuffering = false;
     // take the generic event and fire it as a baileys event
     ev.on('event', (map) => {
         for (const event in map) {
@@ -41,25 +36,19 @@ const makeEventBuffer = (logger) => {
         }
     });
     function buffer() {
-        buffersInProgress += 1;
+        if (!isBuffering) {
+            logger.debug('Event buffer activated');
+            isBuffering = true;
+        }
     }
-    function flush(force = false) {
-        // no buffer going on
-        if (!buffersInProgress) {
+    function flush() {
+        if (!isBuffering) {
             return false;
         }
-        if (!force) {
-            // reduce the number of buffers in progress
-            buffersInProgress -= 1;
-            // if there are still some buffers going on
-            // then we don't flush now
-            if (buffersInProgress) {
-                return false;
-            }
-        }
+        logger.debug('Flushing event buffer');
+        isBuffering = false;
         const newData = makeBufferData();
         const chatUpdates = Object.values(data.chatUpdates);
-        // gather the remaining conditional events so we re-queue them
         let conditionalChatUpdatesLeft = 0;
         for (const update of chatUpdates) {
             if (update.conditional) {
@@ -87,14 +76,14 @@ const makeEventBuffer = (logger) => {
             };
         },
         emit(event, evData) {
-            if (buffersInProgress && BUFFERABLE_EVENT_SET.has(event)) {
+            if (isBuffering && BUFFERABLE_EVENT_SET.has(event)) {
                 append(data, historyCache, event, evData, logger);
                 return true;
             }
             return ev.emit('event', { [event]: evData });
         },
         isBuffering() {
-            return buffersInProgress > 0;
+            return isBuffering;
         },
         buffer,
         flush,
@@ -102,11 +91,10 @@ const makeEventBuffer = (logger) => {
             return async (...args) => {
                 buffer();
                 try {
-                    const result = await work(...args);
-                    return result;
+                    return await work(...args);
                 }
                 finally {
-                    flush();
+                    // Flushing is now controlled centrally by the state machine.
                 }
             };
         },
@@ -115,7 +103,6 @@ const makeEventBuffer = (logger) => {
         removeAllListeners: (...args) => ev.removeAllListeners(...args)
     };
 };
-exports.makeEventBuffer = makeEventBuffer;
 const makeBufferData = () => {
     return {
         historySets: {
@@ -141,7 +128,6 @@ const makeBufferData = () => {
 function append(data, historyCache, event, 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 eventData, logger) {
-    var _a, _b, _c;
     switch (event) {
         case 'messaging-history.set':
             for (const chat of eventData.chats) {
@@ -158,7 +144,7 @@ eventData, logger) {
             for (const contact of eventData.contacts) {
                 const existingContact = data.historySets.contacts[contact.id];
                 if (existingContact) {
-                    Object.assign(existingContact, (0, generics_1.trimUndefined)(contact));
+                    Object.assign(existingContact, trimUndefined(contact));
                 }
                 else {
                     const historyContactId = `c:${contact.id}`;
@@ -187,7 +173,7 @@ eventData, logger) {
             for (const chat of eventData) {
                 let upsert = data.chatUpserts[chat.id];
                 if (!upsert) {
-                    upsert = data.historySets[chat.id];
+                    upsert = data.historySets.chats[chat.id];
                     if (upsert) {
                         logger.debug({ chatId: chat.id }, 'absorbed chat upsert in chat set');
                     }
@@ -261,14 +247,14 @@ eventData, logger) {
                     }
                 }
                 if (upsert) {
-                    upsert = Object.assign(upsert, (0, generics_1.trimUndefined)(contact));
+                    upsert = Object.assign(upsert, trimUndefined(contact));
                 }
                 else {
                     upsert = contact;
                     data.contactUpserts[contact.id] = upsert;
                 }
                 if (data.contactUpdates[contact.id]) {
-                    upsert = Object.assign(data.contactUpdates[contact.id], (0, generics_1.trimUndefined)(contact));
+                    upsert = Object.assign(data.contactUpdates[contact.id], trimUndefined(contact));
                     delete data.contactUpdates[contact.id];
                 }
             }
@@ -293,7 +279,7 @@ eventData, logger) {
             const { messages, type } = eventData;
             for (const message of messages) {
                 const key = stringifyMessageKey(message.key);
-                let existing = (_a = data.messageUpserts[key]) === null || _a === void 0 ? void 0 : _a.message;
+                let existing = data.messageUpserts[key]?.message;
                 if (!existing) {
                     existing = data.historySets.messages[key];
                     if (existing) {
@@ -314,7 +300,7 @@ eventData, logger) {
                 else {
                     data.messageUpserts[key] = {
                         message,
-                        type: type === 'notify' || ((_b = data.messageUpserts[key]) === null || _b === void 0 ? void 0 : _b.type) === 'notify' ? 'notify' : type
+                        type: type === 'notify' || data.messageUpserts[key]?.type === 'notify' ? 'notify' : type
                     };
                 }
             }
@@ -323,13 +309,13 @@ eventData, logger) {
             const msgUpdates = eventData;
             for (const { key, update } of msgUpdates) {
                 const keyStr = stringifyMessageKey(key);
-                const existing = data.historySets.messages[keyStr] || ((_c = data.messageUpserts[keyStr]) === null || _c === void 0 ? void 0 : _c.message);
+                const existing = data.historySets.messages[keyStr] || data.messageUpserts[keyStr]?.message;
                 if (existing) {
                     Object.assign(existing, update);
                     // if the message was received & read by us
                     // the chat counter must have been incremented
                     // so we need to decrement it
-                    if (update.status === Types_1.WAMessageStatus.READ && !key.fromMe) {
+                    if (update.status === WAMessageStatus.READ && !key.fromMe) {
                         decrementChatReadCounterIfMsgDidUnread(existing);
                     }
                 }
@@ -367,11 +353,11 @@ eventData, logger) {
                 const keyStr = stringifyMessageKey(key);
                 const existing = data.messageUpserts[keyStr];
                 if (existing) {
-                    (0, messages_1.updateMessageWithReaction)(existing.message, reaction);
+                    updateMessageWithReaction(existing.message, reaction);
                 }
                 else {
                     data.messageReactions[keyStr] = data.messageReactions[keyStr] || { key, reactions: [] };
-                    (0, messages_1.updateMessageWithReaction)(data.messageReactions[keyStr], reaction);
+                    updateMessageWithReaction(data.messageReactions[keyStr], reaction);
                 }
             }
             break;
@@ -381,11 +367,11 @@ eventData, logger) {
                 const keyStr = stringifyMessageKey(key);
                 const existing = data.messageUpserts[keyStr];
                 if (existing) {
-                    (0, messages_1.updateMessageWithReceipt)(existing.message, receipt);
+                    updateMessageWithReceipt(existing.message, receipt);
                 }
                 else {
                     data.messageReceipts[keyStr] = data.messageReceipts[keyStr] || { key, userReceipt: [] };
-                    (0, messages_1.updateMessageWithReceipt)(data.messageReceipts[keyStr], receipt);
+                    updateMessageWithReceipt(data.messageReceipts[keyStr], receipt);
                 }
             }
             break;
@@ -424,9 +410,9 @@ eventData, logger) {
         // if the message has already been marked read by us
         const chatId = message.key.remoteJid;
         const chat = data.chatUpdates[chatId] || data.chatUpserts[chatId];
-        if ((0, process_message_1.isRealMessage)(message, '') &&
-            (0, process_message_1.shouldIncrementChatUnread)(message) &&
-            typeof (chat === null || chat === void 0 ? void 0 : chat.unreadCount) === 'number' &&
+        if (isRealMessage(message, '') &&
+            shouldIncrementChatUnread(message) &&
+            typeof chat?.unreadCount === 'number' &&
             chat.unreadCount > 0) {
             logger.debug({ chatId: chat.id }, 'decrementing chat counter');
             chat.unreadCount -= 1;
@@ -514,3 +500,4 @@ function concatChats(a, b) {
     return Object.assign(a, b);
 }
 const stringifyMessageKey = (key) => `${key.remoteJid},${key.id},${key.fromMe ? '1' : '0'}`;
+//# sourceMappingURL=event-buffer.js.map

@@ -1,5 +1,5 @@
-import { CatalogCollection, OrderDetails, Product, ProductCreate, ProductUpdate, WAMediaUpload, WAMediaUploadFunction } from '../Types';
-import { BinaryNode } from '../WABinary';
+import type { CatalogCollection, OrderDetails, Product, ProductCreate, ProductUpdate, WAMediaUpload, WAMediaUploadFunction } from '../Types/index.js';
+import { type BinaryNode } from '../WABinary/index.js';
 export declare const parseCatalogNode: (node: BinaryNode) => {
     products: Product[];
     nextPageCursor: string | undefined;
@@ -20,3 +20,4 @@ export declare function uploadingNecessaryImagesOfProduct<T extends ProductUpdat
 export declare const uploadingNecessaryImages: (images: WAMediaUpload[], waUploadToServer: WAMediaUploadFunction, timeoutMs?: number) => Promise<{
     url: string;
 }[]>;
+//# sourceMappingURL=business.d.ts.map

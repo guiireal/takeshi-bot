@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SenderKeyName = void 0;
 function isNull(str) {
     return str === null || str === '';
 }
@@ -22,7 +19,7 @@ function hashCode(strKey) {
     }
     return hash;
 }
-class SenderKeyName {
+export class SenderKeyName {
     constructor(groupId, sender) {
         this.groupId = groupId;
         this.sender = sender;
@@ -48,4 +45,4 @@ class SenderKeyName {
         return hashCode(this.groupId) ^ hashCode(this.sender.toString());
     }
 }
-exports.SenderKeyName = SenderKeyName;
+//# sourceMappingURL=sender-key-name.js.map

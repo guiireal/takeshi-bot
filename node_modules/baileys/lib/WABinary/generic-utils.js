@@ -1,41 +1,32 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBinaryNodeMessages = exports.reduceBinaryNodeToDictionary = exports.assertNodeErrorFree = exports.getBinaryNodeChildUInt = exports.getBinaryNodeChildString = exports.getBinaryNodeChildBuffer = exports.getBinaryNodeChild = exports.getAllBinaryNodeChildren = exports.getBinaryNodeChildren = void 0;
-exports.binaryNodeToString = binaryNodeToString;
-const boom_1 = require("@hapi/boom");
-const WAProto_1 = require("../../WAProto");
+import { Boom } from '@hapi/boom';
+import { proto } from '../../WAProto/index.js';
+import {} from './types.js';
 // some extra useful utilities
-const getBinaryNodeChildren = (node, childTag) => {
-    if (Array.isArray(node === null || node === void 0 ? void 0 : node.content)) {
+export const getBinaryNodeChildren = (node, childTag) => {
+    if (Array.isArray(node?.content)) {
         return node.content.filter(item => item.tag === childTag);
     }
     return [];
 };
-exports.getBinaryNodeChildren = getBinaryNodeChildren;
-const getAllBinaryNodeChildren = ({ content }) => {
+export const getAllBinaryNodeChildren = ({ content }) => {
     if (Array.isArray(content)) {
         return content;
     }
     return [];
 };
-exports.getAllBinaryNodeChildren = getAllBinaryNodeChildren;
-const getBinaryNodeChild = (node, childTag) => {
-    if (Array.isArray(node === null || node === void 0 ? void 0 : node.content)) {
-        return node === null || node === void 0 ? void 0 : node.content.find(item => item.tag === childTag);
+export const getBinaryNodeChild = (node, childTag) => {
+    if (Array.isArray(node?.content)) {
+        return node?.content.find(item => item.tag === childTag);
     }
 };
-exports.getBinaryNodeChild = getBinaryNodeChild;
-const getBinaryNodeChildBuffer = (node, childTag) => {
-    var _a;
-    const child = (_a = (0, exports.getBinaryNodeChild)(node, childTag)) === null || _a === void 0 ? void 0 : _a.content;
+export const getBinaryNodeChildBuffer = (node, childTag) => {
+    const child = getBinaryNodeChild(node, childTag)?.content;
     if (Buffer.isBuffer(child) || child instanceof Uint8Array) {
         return child;
     }
 };
-exports.getBinaryNodeChildBuffer = getBinaryNodeChildBuffer;
-const getBinaryNodeChildString = (node, childTag) => {
-    var _a;
-    const child = (_a = (0, exports.getBinaryNodeChild)(node, childTag)) === null || _a === void 0 ? void 0 : _a.content;
+export const getBinaryNodeChildString = (node, childTag) => {
+    const child = getBinaryNodeChild(node, childTag)?.content;
     if (Buffer.isBuffer(child) || child instanceof Uint8Array) {
         return Buffer.from(child).toString('utf-8');
     }
@@ -43,42 +34,42 @@ const getBinaryNodeChildString = (node, childTag) => {
         return child;
     }
 };
-exports.getBinaryNodeChildString = getBinaryNodeChildString;
-const getBinaryNodeChildUInt = (node, childTag, length) => {
-    const buff = (0, exports.getBinaryNodeChildBuffer)(node, childTag);
+export const getBinaryNodeChildUInt = (node, childTag, length) => {
+    const buff = getBinaryNodeChildBuffer(node, childTag);
     if (buff) {
         return bufferToUInt(buff, length);
     }
 };
-exports.getBinaryNodeChildUInt = getBinaryNodeChildUInt;
-const assertNodeErrorFree = (node) => {
-    const errNode = (0, exports.getBinaryNodeChild)(node, 'error');
+export const assertNodeErrorFree = (node) => {
+    const errNode = getBinaryNodeChild(node, 'error');
     if (errNode) {
-        throw new boom_1.Boom(errNode.attrs.text || 'Unknown error', { data: +errNode.attrs.code });
+        throw new Boom(errNode.attrs.text || 'Unknown error', { data: +errNode.attrs.code });
     }
 };
-exports.assertNodeErrorFree = assertNodeErrorFree;
-const reduceBinaryNodeToDictionary = (node, tag) => {
-    const nodes = (0, exports.getBinaryNodeChildren)(node, tag);
+export const reduceBinaryNodeToDictionary = (node, tag) => {
+    const nodes = getBinaryNodeChildren(node, tag);
     const dict = nodes.reduce((dict, { attrs }) => {
-        dict[attrs.name || attrs.config_code] = attrs.value || attrs.config_value;
+        if (typeof attrs.name === 'string') {
+            dict[attrs.name] = attrs.value || attrs.config_value;
+        }
+        else {
+            dict[attrs.config_code] = attrs.value || attrs.config_value;
+        }
         return dict;
     }, {});
     return dict;
 };
-exports.reduceBinaryNodeToDictionary = reduceBinaryNodeToDictionary;
-const getBinaryNodeMessages = ({ content }) => {
+export const getBinaryNodeMessages = ({ content }) => {
     const msgs = [];
     if (Array.isArray(content)) {
         for (const item of content) {
             if (item.tag === 'message') {
-                msgs.push(WAProto_1.proto.WebMessageInfo.decode(item.content));
+                msgs.push(proto.WebMessageInfo.decode(item.content));
             }
         }
     }
     return msgs;
 };
-exports.getBinaryNodeMessages = getBinaryNodeMessages;
 function bufferToUInt(e, t) {
     let a = 0;
     for (let i = 0; i < t; i++) {
@@ -87,7 +78,7 @@ function bufferToUInt(e, t) {
     return a;
 }
 const tabs = (n) => '\t'.repeat(n);
-function binaryNodeToString(node, i = 0) {
+export function binaryNodeToString(node, i = 0) {
     if (!node) {
         return node;
     }
@@ -108,3 +99,4 @@ function binaryNodeToString(node, i = 0) {
     const content = children ? `>\n${children}\n${tabs(i)}</${node.tag}>` : '/>';
     return tag + content;
 }
+//# sourceMappingURL=generic-utils.js.map
