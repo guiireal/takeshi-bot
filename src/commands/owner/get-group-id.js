@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { WarningError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../config.js";
+import { WarningError } from "../../errors/index.js";
 
-module.exports = {
-  name: "get-id",
+export default {
+  name: "get-group-id",
   description: "Retorna o ID completo de um grupo no formato JID.",
-  commands: ["get-id", "get-group-id", "id-get", "id-group"],
-  usage: `${PREFIX}get-id`,
+  commands: ["get-group-id", "id-get", "id-group"],
+  usage: `${PREFIX}get-group-id`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ remoteJid, sendSuccessReply, isGroup }) => {
     if (!isGroup) {

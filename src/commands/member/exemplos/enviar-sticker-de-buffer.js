@@ -1,17 +1,16 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
-const fs = require("node:fs");
-const { getBuffer } = require(`${BASE_DIR}/utils`);
+import { delay } from "baileys";
+import fs from "node:fs";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
+import { getBuffer } from "../../../utils/index.js";
 
-module.exports = {
+export default {
   name: "enviar-sticker-de-buffer",
   description: "Exemplo de como enviar um sticker a partir de um buffer",
   commands: ["enviar-sticker-de-buffer"],
   usage: `${PREFIX}enviar-sticker-de-buffer`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendReact, sendStickerFromBuffer }) => {
     await sendReact("🏷️");

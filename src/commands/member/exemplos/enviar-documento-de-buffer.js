@@ -1,17 +1,16 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
-const fs = require("node:fs");
-const { getBuffer } = require(`${BASE_DIR}/utils`);
+import { delay } from "baileys";
+import fs from "node:fs";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
+import { getBuffer } from "../../../utils/index.js";
 
-module.exports = {
+export default {
   name: "enviar-documento-de-buffer",
   description: "Exemplo de como enviar documentos a partir de buffers",
   commands: ["enviar-documento-de-buffer"],
   usage: `${PREFIX}enviar-documento-de-buffer`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendReact, socket, remoteJid, webMessage }) => {
     await sendReact("📄");

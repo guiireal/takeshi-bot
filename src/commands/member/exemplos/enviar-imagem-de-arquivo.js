@@ -1,17 +1,16 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
+import { delay } from "baileys";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-imagem-de-arquivo",
   description: "Exemplo de como enviar uma imagem a partir de um arquivo local",
   commands: ["enviar-imagem-de-arquivo"],
   usage: `${PREFIX}enviar-imagem-de-arquivo`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendImageFromFile, sendReact, userJid }) => {
+  handle: async ({ sendReply, sendImageFromFile, sendReact, userLid }) => {
     await sendReact("🖼️");
 
     await delay(3000);
@@ -54,8 +53,8 @@ module.exports = {
 
     await sendImageFromFile(
       path.join(ASSETS_DIR, "images", "takeshi-bot.png"),
-      `Logo do Takeshi Bot para você @${userJid.split("@")[0]}!`,
-      [userJid]
+      `Logo do Takeshi Bot para você @${userLid.split("@")[0]}!`,
+      [userLid]
     );
 
     await delay(3000);

@@ -1,27 +1,21 @@
-const { delay } = require("baileys");
-const { BOT_EMOJI } = require(`${BASE_DIR}/config`);
+import { delay } from "baileys";
+import { BOT_EMOJI, PREFIX } from "../../config.js";
+import { WarningError } from "../../errors/index.js";
 
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { WarningError } = require(`${BASE_DIR}/errors`);
-
-module.exports = {
+export default {
   name: "limpar",
   description: "Limpa o histórico de mensagens do grupo.",
   commands: ["limpar", "limpa", "clear", "clear-chat"],
   usage: `${PREFIX}limpar`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ socket, remoteJid, isGroup, sendSuccessReact }) => {
     if (!isGroup) {
       throw new WarningError("Esse comando só pode ser usado em grupos.");
     }
-
     await sendSuccessReact();
-
     await delay(1000);
-
     const cleanMessage = {
       botInvokeMessage: {
         message: {
@@ -59,7 +53,6 @@ module.exports = {
         },
       },
     };
-
     await socket.relayMessage(remoteJid, cleanMessage, {});
   },
 };

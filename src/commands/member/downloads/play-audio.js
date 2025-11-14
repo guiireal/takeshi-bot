@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { play } = require(`${BASE_DIR}/services/spider-x-api`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../../config.js";
+import { InvalidParameterError } from "../../../errors/index.js";
+import { play } from "../../../services/spider-x-api.js";
 
-module.exports = {
+export default {
   name: "play-audio",
   description: "Faço o download de músicas",
   commands: ["play-audio", "play", "pa"],
   usage: `${PREFIX}play-audio MC Hariel`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendAudioFromURL,
@@ -33,29 +32,24 @@ module.exports = {
 
     await sendWaitReact();
 
-    try {
-      const data = await play("audio", fullArgs);
+    const data = await play("audio", fullArgs);
 
-      if (!data) {
-        await sendErrorReply("Nenhum resultado encontrado!");
-        return;
-      }
+    if (!data) {
+      await sendErrorReply("Nenhum resultado encontrado!");
+      return;
+    }
 
-      await sendSuccessReact();
+    await sendSuccessReact();
 
-      await sendImageFromURL(
-        data.thumbnail,
-        `*Título*: ${data.title}
+    await sendImageFromURL(
+      data.thumbnail,
+      `*Título*: ${data.title}
         
 *Descrição*: ${data.description}
 *Duração em segundos*: ${data.total_duration_in_seconds}
 *Canal*: ${data.channel.name}`
-      );
+    );
 
-      await sendAudioFromURL(data.url);
-    } catch (error) {
-      console.log(error);
-      await sendErrorReply(error.message);
-    }
+    await sendAudioFromURL(data.url);
   },
 };

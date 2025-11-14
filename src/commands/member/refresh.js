@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { updateGroupMetadataCache } = require(`${BASE_DIR}/connection`);
-const { errorLog } = require(`${BASE_DIR}/utils/logger`);
+import { PREFIX } from "../../config.js";
+import { updateGroupMetadataCache } from "../../connection.js";
+import { errorLog } from "../../utils/logger.js";
 
-module.exports = {
+export default {
   name: "refresh",
   description: "Atualiza os dados do participante",
   commands: ["refresh", "fresh"],
   usage: `${PREFIX}refresh`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     prefix,
@@ -24,20 +23,18 @@ module.exports = {
       await sendSuccessReply(
         `Dados atualizados com sucesso! Tente novamente fazer o que você estava tentando!
 
-Caso você seja o dono do grupo, não esqueça de configurar o número do dono e o LID do dono em:
+Caso você seja o dono do grupo, não esqueça de configurar o LID do dono em:
 
 \`src/config.js\`
 
 \`\`\`
-exports.OWNER_NUMBER = "5511999999999";
-
-exports.OWNER_LID = "1234567890@lid";
+export const OWNER_LID = "1234567890@lid";
 \`\`\`
 
 Para configurar o LID, 
 utilize o comando 
 
-${prefix}get-lid seu_número_aqui
+${prefix}meu-lid
 
 Depois pegue o número do LID que foi respondido e coloque na configuração acima.
 

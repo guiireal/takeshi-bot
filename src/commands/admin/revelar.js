@@ -1,18 +1,17 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const { DEFAULT_PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const ffmpeg = require("fluent-ffmpeg");
-const { getRandomName } = require(`${BASE_DIR}/utils`);
+import { exec } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { PREFIX, TEMP_DIR } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { getRandomName } from "../../utils/index.js";
 
-module.exports = {
+export default {
   name: "revelar",
   description: "Revela uma imagem ou vídeo com visualização única",
   commands: ["revelar", "rv", "reveal"],
-  usage: `${DEFAULT_PREFIX}revelar (marque a imagem/vídeo) ou ${DEFAULT_PREFIX}revelar (responda a imagem/vídeo).`,
+  usage: `${PREFIX}revelar (marque a imagem/vídeo) ou ${PREFIX}revelar (responda a imagem/vídeo).`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     isImage,
@@ -49,35 +48,37 @@ module.exports = {
         inputPath = await downloadImage(webMessage, "input");
 
         await new Promise((resolve, reject) => {
-          ffmpeg(inputPath)
-            .outputOptions("-q:v 2")
-            .on("end", async () => {
-              await sendImageFromFile(outputPath, mediaCaption);
-              await sendSuccessReact();
-              resolve();
-            })
-            .on("error", (err) => {
-              console.error("Erro FFmpeg:", err);
-              reject(err);
-            })
-            .save(outputPath);
+          exec(
+            `ffmpeg -y -i "${inputPath}" -q:v 2 "${outputPath}"`,
+            (error) => {
+              if (error) {
+                console.error("Erro FFmpeg:", error);
+                reject(error);
+              } else {
+                sendImageFromFile(outputPath, mediaCaption).then(() => {
+                  sendSuccessReact().then(resolve);
+                });
+              }
+            }
+          );
         });
       } else if (isVideo) {
         inputPath = await downloadVideo(webMessage, "input");
 
         await new Promise((resolve, reject) => {
-          ffmpeg(inputPath)
-            .outputOptions("-c copy")
-            .on("end", async () => {
-              await sendVideoFromFile(outputPath, mediaCaption);
-              await sendSuccessReact();
-              resolve();
-            })
-            .on("error", (err) => {
-              console.error("Erro FFmpeg:", err);
-              reject(err);
-            })
-            .save(outputPath);
+          exec(
+            `ffmpeg -y -i "${inputPath}" -c copy "${outputPath}"`,
+            (error) => {
+              if (error) {
+                console.error("Erro FFmpeg:", error);
+                reject(error);
+              } else {
+                sendVideoFromFile(outputPath, mediaCaption).then(() => {
+                  sendSuccessReact().then(resolve);
+                });
+              }
+            }
+          );
         });
       }
     } catch (error) {

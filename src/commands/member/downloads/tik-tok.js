@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { download } = require(`${BASE_DIR}/services/spider-x-api`);
-const { WarningError, InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../../config.js";
+import { InvalidParameterError, WarningError } from "../../../errors/index.js";
+import { download } from "../../../services/spider-x-api.js";
 
-module.exports = {
+export default {
   name: "tik-tok",
   description: "Faço o download de vídeos do TikTok",
   commands: ["tik-tok", "ttk"],
   usage: `${PREFIX}tik-tok https://www.tiktok.com/@yrrefutavel/video/7359413022483287301`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendVideoFromURL,

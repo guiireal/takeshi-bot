@@ -1,15 +1,13 @@
-const { imageAI } = require(`${BASE_DIR}/services/spider-x-api`);
+import { PREFIX } from "../../../config.js";
+import { imageAI } from "../../../services/spider-x-api.js";
 
-const { PREFIX } = require(`${BASE_DIR}/config`);
-
-module.exports = {
+export default {
   name: "flux",
   description: "Cria uma imagem usando a IA Flux",
   commands: ["flux"],
   usage: `${PREFIX}flux descrição`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     args,

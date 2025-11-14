@@ -2,13 +2,14 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-6.6.3-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.0.0-blue)](https://github.com/guiireal/takeshi-bot)
+[![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
 [![Node.js](https://img.shields.io/badge/Node.js-22.19-green?logo=node.js)](https://nodejs.org/en)
 [![Axios](https://img.shields.io/badge/Axios-1.13-blue?logo=axios)](https://axios-http.com/ptbr/docs/intro)
-[![Baileys](https://img.shields.io/badge/Baileys-6.7.21-purple?logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)
+[![Baileys](https://img.shields.io/badge/Baileys-7.0.0.6-purple?logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
 
@@ -119,46 +120,30 @@ npm start
 
 9 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
 
-10 - Aqui você pode configurar de duas formas (10.1 ou 10.2):
-
-10.1 - Primeira forma: aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+10 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
 
 Depois, Configure o arquivo `config.js` que está dentro da pasta `src`.
 
 ```js
-// Prefixo dos comandos
-exports.PREFIX = "/";
+// Prefixo padrão dos comandos.
+export const PREFIX = "/";
 
 // Emoji do bot (mude se preferir).
-exports.BOT_EMOJI = "🤖";
+export const BOT_EMOJI = "🤖";
 
 // Nome do bot (mude se preferir).
-exports.BOT_NAME = "Takeshi Bot";
+export const BOT_NAME = "Takeshi Bot";
 
-// Número do bot. Coloque o número do bot
-// (apenas números, exatamente como está no WhatsApp).
-// Se o seu DDD não for de SP ou do Rio, não coloque o 9 antes do número.
-exports.BOT_NUMBER = "558112345678";
-
-// Número do dono do bot. Coloque o número do dono do bot
-// (apenas números, exatamente como está no WhatsApp).
-// Se o seu DDD não for de SP ou do Rio, não coloque o 9 antes do número.
-exports.OWNER_NUMBER = "5521950502020";
+// LID do bot.
+// Para obter o LID do bot, use o comando <prefixo>lid respondendo em cima de uma mensagem do número do bot
+// Troque o <prefixo> pelo prefixo do bot (ex: /lid).
+export const BOT_LID = "12345678901234567890@lid";
 
 // LID do dono do bot.
-// Para obter o LID do dono do bot, use o comando <prefixo>get-lid @marca ou +telefone do dono.
-exports.OWNER_LID = "219999999999999@lid";
+// Para obter o LID do dono do bot, use o comando <prefixo>meu-lid
+// Troque o <prefixo> pelo prefixo do bot (ex: /meu-lid).
+export const OWNER_LID = "12345678901234567890@lid";
 ```
-
-10.2 - Segunda forma: configure o número do dono do bot e número do bot pelo próprio WhatsApp, com os comandos:
-
-`/numero-dono +55 11 99999999`
-
-e
-
-`/numero-bot +55 11 88888888`
-
-Lembre-se de trocar os números acima pelos seus números, obviamente e tbm ver se o seu prefixo é a barra /.
 
 11 - Inicie o bot novamente.
 
@@ -310,28 +295,24 @@ pm2 start npm --name "takeshi-bot" -- start
 Depois, Configure o arquivo `config.js` que está dentro da pasta `src`.
 
 ```js
-// Prefixo dos comandos
-exports.PREFIX = "/";
+// Prefixo padrão dos comandos.
+export const PREFIX = "/";
 
 // Emoji do bot (mude se preferir).
-exports.BOT_EMOJI = "🤖";
+export const BOT_EMOJI = "🤖";
 
 // Nome do bot (mude se preferir).
-exports.BOT_NAME = "Takeshi Bot";
+export const BOT_NAME = "Takeshi Bot";
 
-// Número do bot. Coloque o número do bot
-// (apenas números, exatamente como está no WhatsApp).
-// Se o seu DDD não for de SP ou do Rio, não coloque o 9 antes do número.
-exports.BOT_NUMBER = "558112345678";
-
-// Número do dono do bot. Coloque o número do dono do bot
-// (apenas números, exatamente como está no WhatsApp).
-// Se o seu DDD não for de SP ou do Rio, não coloque o 9 antes do número.
-exports.OWNER_NUMBER = "5521950502020";
+// LID do bot.
+// Para obter o LID do bot, use o comando <prefixo>lid respondendo em cima de uma mensagem do número do bot
+// Troque o <prefixo> pelo prefixo do bot (ex: /lid).
+export const BOT_LID = "12345678901234567890@lid";
 
 // LID do dono do bot.
-// Para obter o LID do dono do bot, use o comando <prefixo>get-lid @marca ou +telefone do dono.
-exports.OWNER_LID = "219999999999999@lid";
+// Para obter o LID do dono do bot, use o comando <prefixo>meu-lid
+// Troque o <prefixo> pelo prefixo do bot (ex: /meu-lid).
+export const OWNER_LID = "12345678901234567890@lid";
 ```
 
 23.2 - Segunda forma: configure o número do dono do bot e número do bot pelo próprio WhatsApp, com os comandos:
@@ -354,7 +335,7 @@ Edite o arquivo `config.js` que está dentro da pasta `src` e cole sua api key d
 Para obter seu token, acesse: [https://api.spiderx.com.br](https://api.spiderx.com.br) e crie sua conta gratuitamente!
 
 ```js
-exports.SPIDER_API_TOKEN = "seu_token_aqui";
+export const SPIDER_API_TOKEN = "seu_token_aqui";
 ```
 
 ## Funcionalidades gerais
@@ -692,7 +673,6 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
   - 📝 test.js ➔ _script de testes_
 - 📝 ⚡-cases-estao-aqui.js ➔ _easter egg_
 - 📝 CONTRIBUTING.md ➔ _eguia de contribuição_
-- 📝 index.js ➔ _script ponto de entrada do bot para hospedagem_
 - 📝 .gitignore ➔ _arquivo para não subir certas pastas no GitHub_
 - 📝 LICENSE ➔ _arquivo de licença_
 - 📝 package-lock.json ➔ _arquivo de cache das dependências do bot_

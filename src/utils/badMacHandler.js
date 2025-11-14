@@ -7,9 +7,9 @@
  *
  * @author Dev Gui
  */
-const { errorLog, warningLog, infoLog } = require("./logger");
-const path = require("node:path");
-const fs = require("node:fs");
+import fs from "node:fs";
+import path from "node:path";
+import { errorLog, warningLog } from "./logger.js";
 
 class BadMacHandler {
   constructor() {
@@ -63,17 +63,6 @@ class BadMacHandler {
             file.includes("app-state-sync-version")
           ) {
             continue;
-          }
-
-          if (
-            file.includes("pre-key") ||
-            file.includes("sender-key") ||
-            file.includes("session-") ||
-            file.includes("signal-identity")
-          ) {
-            fs.unlinkSync(filePath);
-            infoLog(`Removido arquivo de sessão problemático: ${file}`);
-            removedCount++;
           }
         }
       }
@@ -167,7 +156,4 @@ class BadMacHandler {
 
 const badMacHandler = new BadMacHandler();
 
-module.exports = {
-  BadMacHandler,
-  badMacHandler,
-};
+export { BadMacHandler, badMacHandler };

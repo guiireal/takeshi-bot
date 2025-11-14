@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { ttp } = require(`${BASE_DIR}/services/spider-x-api`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { ttp } from "../../services/spider-x-api.js";
 
-module.exports = {
+export default {
   name: "ttp",
   description: "Faz figurinhas de texto.",
   commands: ["ttp"],
   usage: `${PREFIX}ttp teste`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendWaitReact,

@@ -4,18 +4,17 @@
  *
  * @author Dev Gui
  */
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { toUserJidOrLid } = require(`${BASE_DIR}/utils`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+// Nenhum import de JID necessário
 
-module.exports = {
+export default {
   name: "fake-chat",
   description: "Cria uma citação falsa mencionando um usuário",
   commands: ["fake-chat", "fq", "fake-quote", "f-quote", "fk"],
   usage: `${PREFIX}fake-chat @usuário / texto citado / mensagem que será enviada`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ remoteJid, socket, args }) => {
     if (args.length !== 3) {
@@ -27,7 +26,9 @@ module.exports = {
     const quotedText = args[1];
     const responseText = args[2];
 
-    const mentionedJid = toUserJidOrLid(args[0]);
+    const mentionedLid = args[0]
+      ? `${args[0].replace(/[^0-9]/g, "")}@lid`
+      : null;
 
     if (quotedText.length < 2) {
       throw new InvalidParameterError(

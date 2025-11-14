@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-reacoes",
   description: "Exemplo de diferentes tipos de reações (emojis)",
   commands: ["enviar-reacoes"],
   usage: `${PREFIX}enviar-reacoes`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendReply,

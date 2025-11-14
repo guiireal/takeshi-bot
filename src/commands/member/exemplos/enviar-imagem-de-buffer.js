@@ -1,19 +1,18 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
-const fs = require("node:fs");
-const { getBuffer } = require(`${BASE_DIR}/utils`);
+import { delay } from "baileys";
+import fs from "node:fs";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
+import { getBuffer } from "../../../utils/index.js";
 
-module.exports = {
+export default {
   name: "enviar-imagem-de-buffer",
   description: "Exemplo de como enviar uma imagem a partir de um buffer",
   commands: ["enviar-imagem-de-buffer"],
   usage: `${PREFIX}enviar-imagem-de-buffer`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendImageFromBuffer, sendReact, userJid }) => {
+  handle: async ({ sendReply, sendImageFromBuffer, sendReact, userLid }) => {
     await sendReact("🖼️");
 
     await delay(3000);
@@ -64,8 +63,8 @@ module.exports = {
 
     await sendImageFromBuffer(
       urlBuffer,
-      `Tá ai a imagem @${userJid.split("@")[0]}!`,
-      [userJid]
+      `Tá ai a imagem @${userLid.split("@")[0]}!`,
+      [userLid]
     );
 
     await delay(3000);

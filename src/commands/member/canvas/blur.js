@@ -4,11 +4,11 @@
  *
  * @author Dev Gui
  */
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const Ffmpeg = require(`${BASE_DIR}/services/ffmpeg`);
+import { PREFIX } from "../../../config.js";
+import { InvalidParameterError } from "../../../errors/index.js";
+import { Ffmpeg } from "../../../services/ffmpeg.js";
 
-module.exports = {
+export default {
   name: "blur",
   description: "Gero uma montagem que embaça a imagem que você enviar",
   commands: ["blur", "embaça", "embaçar"],

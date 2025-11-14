@@ -1,23 +1,21 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { onlyNumbers, toUserJidOrLid } = require(`${BASE_DIR}/utils`);
-const path = require("node:path");
-const { ASSETS_DIR } = require(`${BASE_DIR}/config`);
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
+import { InvalidParameterError } from "../../../errors/index.js";
+import { onlyNumbers } from "../../../utils/index.js";
 
-module.exports = {
+export default {
   name: "tapa",
   description: "Dá um tapa em alguém.",
   commands: ["tapa"],
   usage: `${PREFIX}tapa @usuario`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendGifFromFile,
     sendErrorReply,
-    userJid,
-    replyJid,
+    userLid,
+    replyLid,
     args,
     isReply,
   }) => {
@@ -27,9 +25,13 @@ module.exports = {
       );
     }
 
-    const targetJid = isReply ? replyJid : toUserJidOrLid(args[0]);
+    const targetLid = isReply
+      ? replyLid
+      : args[0]
+      ? `${onlyNumbers(args[0])}@lid`
+      : null;
 
-    if (!targetJid) {
+    if (!targetLid) {
       await sendErrorReply(
         "Você precisa mencionar um usuário ou responder uma mensagem para dar um tapa."
       );
@@ -37,13 +39,13 @@ module.exports = {
       return;
     }
 
-    const userNumber = onlyNumbers(userJid);
-    const targetNumber = onlyNumbers(targetJid);
+    const userNumber = onlyNumbers(userLid);
+    const targetNumber = onlyNumbers(targetLid);
 
     await sendGifFromFile(
       path.resolve(ASSETS_DIR, "images", "funny", "slap-jjk.mp4"),
       `@${userNumber} deu um tapa na cara de @${targetNumber}!`,
-      [userJid, targetJid]
+      [userLid, targetLid]
     );
   },
 };

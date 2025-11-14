@@ -1,9 +1,9 @@
-const { PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
-const { exec } = require("node:child_process");
-const fs = require("node:fs");
-const path = require("node:path");
-const { getRandomNumber, getRandomName } = require(`${BASE_DIR}/utils`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { exec as execChild } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { PREFIX, TEMP_DIR } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { getRandomName, getRandomNumber } from "../../utils/index.js";
 
 async function extractAudio(videoPath) {
   const audioPath = path.resolve(
@@ -12,7 +12,7 @@ async function extractAudio(videoPath) {
   );
 
   return new Promise((resolve, reject) => {
-    exec(
+    execChild(
       `ffmpeg -i ${videoPath} -vn -acodec copy ${audioPath}`,
       async (error) => {
         fs.unlinkSync(videoPath);
@@ -28,7 +28,7 @@ async function extractAudio(videoPath) {
   });
 }
 
-module.exports = {
+export default {
   name: "to-mp3",
   description: "Converte vídeos para áudio MP3!",
   commands: ["to-mp3", "video2mp3", "mp3"],
@@ -36,7 +36,6 @@ module.exports = {
 
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     isVideo,

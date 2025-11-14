@@ -1,15 +1,14 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { menuMessage } = require(`${BASE_DIR}/menu`);
-const path = require("path");
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../config.js";
+import { menuMessage } from "../../menu.js";
 
-module.exports = {
+export default {
   name: "menu",
   description: "Menu de comandos",
   commands: ["menu", "help"],
   usage: `${PREFIX}menu`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ remoteJid, sendImageFromFile, sendSuccessReact }) => {
     await sendSuccessReact();

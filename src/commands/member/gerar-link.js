@@ -1,17 +1,16 @@
-const fs = require("node:fs");
-const { upload } = require(`${BASE_DIR}/services/upload`);
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { getRandomNumber } = require(`${BASE_DIR}/utils`);
+import fs from "node:fs";
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { upload } from "../../services/upload.js";
+import { getRandomNumber } from "../../utils/index.js";
 
-module.exports = {
+export default {
   name: "gerar-link",
   description: "Faço upload da imagens",
   commands: ["to-link", "up", "upload", "gera-link", "gerar-link"],
   usage: `${PREFIX}gerar-link (marque a imagem) ou ${PREFIX}gerar-link (responda a imagem)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     isImage,

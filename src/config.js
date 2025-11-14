@@ -1,66 +1,69 @@
-const path = require("path");
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Prefixo padrão dos comandos.
-exports.PREFIX = "/";
+export const PREFIX = "/";
 
 // Emoji do bot (mude se preferir).
-exports.BOT_EMOJI = "🤖";
+export const BOT_EMOJI = "🤖";
 
 // Nome do bot (mude se preferir).
-exports.BOT_NAME = "Takeshi Bot";
+export const BOT_NAME = "Takeshi Bot";
 
-// Número do bot.
-// Apenas números, exatamente como está no WhatsApp.
-// Se o seu número não exibir o nono dígito (9) no WhatsApp, não coloque-o.
-exports.BOT_NUMBER = "558112345678";
-
-// Número do dono bot.
-// Apenas números, exatamente como está no WhatsApp.
-// Se o seu número não exibir o nono dígito (9) no WhatsApp, não coloque-o.
-exports.OWNER_NUMBER = "5521950502020";
+// LID do bot.
+// Para obter o LID do bot, use o comando <prefixo>lid respondendo em cima de uma mensagem do número do bot
+// Troque o <prefixo> pelo prefixo do bot (ex: /lid).
+export const BOT_LID = "12345678901234567890@lid";
 
 // LID do dono do bot.
-// Para obter o LID do dono do bot, use o comando <prefixo>get-lid @marca ou +telefone do dono.
-exports.OWNER_LID = "219999999999999@lid";
+// Para obter o LID do dono do bot, use o comando <prefixo>meu-lid
+// Troque o <prefixo> pelo prefixo do bot (ex: /meu-lid).
+export const OWNER_LID = "12345678901234567890@lid";
 
 // Diretório dos comandos
-exports.COMMANDS_DIR = path.join(__dirname, "commands");
+export const COMMANDS_DIR = path.join(__dirname, "commands");
 
 // Diretório de arquivos de mídia.
-exports.DATABASE_DIR = path.resolve(__dirname, "..", "database");
+export const DATABASE_DIR = path.resolve(__dirname, "..", "database");
 
 // Diretório de arquivos de mídia.
-exports.ASSETS_DIR = path.resolve(__dirname, "..", "assets");
+export const ASSETS_DIR = path.resolve(__dirname, "..", "assets");
 
 // Diretório de arquivos temporários.
-exports.TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
+export const TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
 
 // Timeout em milissegundos por evento (evita banimento).
-exports.TIMEOUT_IN_MILLISECONDS_BY_EVENT = 1000;
+export const TIMEOUT_IN_MILLISECONDS_BY_EVENT = 700;
 
 // Plataforma de API's
-exports.SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
+export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
-exports.SPIDER_API_TOKEN = "seu_token_aqui";
+export const SPIDER_API_TOKEN = "seu_token_aqui";
 
 // Caso queira responder apenas um grupo específico,
 // coloque o ID dele na configuração abaixo.
-// Para saber o ID do grupo, use o comando <prefixo>get-id
-// Troque o <prefixo> pelo prefixo do bot (ex: /get-id).
-exports.ONLY_GROUP_ID = "";
+// Para saber o ID do grupo, use o comando <prefixo>get-group-id
+// Troque o <prefixo> pelo prefixo do bot (ex: /get-group-id).
+export const ONLY_GROUP_ID = "";
 
 // Configuração para modo de desenvolvimento
 // mude o valor para ( true ) sem os parênteses
 // caso queira ver os logs de mensagens recebidas
-exports.DEVELOPER_MODE = false;
-
-// Diretório base do projeto.
-exports.BASE_DIR = path.resolve(__dirname);
+export const DEVELOPER_MODE = false;
 
 // Caso queira usar proxy.
-exports.PROXY_PROTOCOL = "http";
-exports.PROXY_HOST = "ip";
-exports.PROXY_PORT = "porta";
-exports.PROXY_USERNAME = "usuário";
-exports.PROXY_PASSWORD = "senha";
+export const PROXY_PROTOCOL = "http";
+export const PROXY_HOST = "";
+export const PROXY_PORT = "";
+export const PROXY_USERNAME = "";
+export const PROXY_PASSWORD = "";
+
+// Versão do WhatsApp Web
+export const WAWEB_VERSION = [2, 3000, 1029890518];
+
+// Chave da OpenAI para o comando de suporte
+export const OPENAI_API_KEY = "";

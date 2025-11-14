@@ -5,10 +5,10 @@
  *
  * @author Dev Gui
  */
-const { exec } = require("child_process");
-const { isBotOwner } = require(`${BASE_DIR}/middlewares`);
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { DangerError } = require(`${BASE_DIR}/errors`);
+import { exec as execChild } from "child_process";
+import { PREFIX } from "../../config.js";
+import { DangerError } from "../../errors/index.js";
+import { isBotOwner } from "../../middlewares/index.js";
 
 const DANGEROUS_COMMANDS = [
   ":()",
@@ -66,7 +66,7 @@ function isSafeCommand(command) {
   return { safe: true };
 }
 
-module.exports = {
+export default {
   name: "exec",
   description: "Executa comandos do terminal diretamente pelo bot.",
   commands: ["exec"],
@@ -81,56 +81,53 @@ Exemplos permitidos:
 - node script.js, python arquivo.py
 - rm arquivo.txt, mv origem destino
 - chmod 755 script.sh
-- mkdir, touch, cp, etc.`,
+- mkdir, touch, cp, etc.
+Execute qualquer comando do terminal. 
+Apenas operações destrutivas críticas são bloqueadas (formatação de disco, shutdown, fork bombs, etc)
+
+Este comando pode causar danos críticos ao sistema.`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ fullArgs, sendSuccessReply, sendErrorReply, userJid }) => {
-    if (!isBotOwner({ userJid })) {
+  handle: async ({ fullArgs, sendSuccessReply, sendErrorReply, userLid }) => {
+    if (!isBotOwner({ userLid })) {
       throw new DangerError("Apenas o dono do bot pode usar este comando!");
     }
 
     if (!fullArgs) {
       throw new DangerError(
-        `Uso correto: ${PREFIX}exec comando
-
-Execute qualquer comando do terminal. 
-Apenas operações destrutivas críticas são bloqueadas (formatação de disco, shutdown, fork bombs, etc).`
+        `Uso correto: ${PREFIX}exec comando\n\nExecute qualquer comando do terminal. \nApenas operações destrutivas críticas são bloqueadas (formatação de disco, shutdown, fork bombs, etc).`
       );
     }
 
     const safetyCheck = isSafeCommand(fullArgs);
+
     if (!safetyCheck.safe) {
       throw new DangerError(
-        `⛔ Comando bloqueado por segurança!
-
-Motivo: ${safetyCheck.reason}
-
-Este comando pode causar danos críticos ao sistema.`
+        `⛔ Comando bloqueado por segurança!\n\nMotivo: ${safetyCheck.reason}\n\nEste comando pode causar danos críticos ao sistema.`
       );
     }
-
-    console.log(`[EXEC_AUDIT] ${userJid} executou comando: ${fullArgs}`);
 
     const timeoutMs = 15000;
     const maxBuffer = 1024 * 1024;
 
-    exec(
+    execChild(
       fullArgs,
       {
         timeout: timeoutMs,
         maxBuffer: maxBuffer,
       },
-      (error, stdout, stderr) => {
+      async (error, stdout, stderr) => {
         if (error) {
           if (error.code === "ETIMEDOUT") {
-            return sendErrorReply("⏱️ Comando cancelado por timeout (15s)");
+            await sendErrorReply("⏱️ Comando cancelado por timeout (15s)");
           }
+
           if (error.message.includes("maxBuffer")) {
-            return sendErrorReply("📊 Saída muito grande, comando cancelado");
+            await sendErrorReply("📊 Saída muito grande, comando cancelado");
           }
-          return sendErrorReply(error.message);
+
+          await sendErrorReply(error.message);
         }
 
         let output = stdout || stderr || "Comando executado sem saída.";
@@ -144,7 +141,7 @@ Este comando pode causar danos críticos ao sistema.`
 
         output = output.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
 
-        return sendSuccessReply(
+        await sendSuccessReply(
           `Resultado do comando: \`${fullArgs}\`\n\n` +
             `\`\`\`\n${output.trim()}\n\`\`\``
         );

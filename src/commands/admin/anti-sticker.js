@@ -1,13 +1,11 @@
-const {
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError, WarningError } from "../../errors/index.js";
+import {
+  isActiveGroupRestriction,
   updateIsActiveGroupRestriction,
-} = require(`${BASE_DIR}/utils/database`);
+} from "../../utils/database.js";
 
-const { isActiveGroupRestriction } = require(`${BASE_DIR}/utils/database`);
-
-const { InvalidParameterError, WarningError } = require(`${BASE_DIR}/errors`);
-const { PREFIX } = require(`${BASE_DIR}/config`);
-
-module.exports = {
+export default {
   name: "anti-sticker",
   description:
     "Ativa/desativa o recurso de anti-sticker no grupo, apagando a figurinha se estiver ativo.",
@@ -15,34 +13,27 @@ module.exports = {
   usage: `${PREFIX}anti-sticker (1/0)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ remoteJid, isGroup, args, sendSuccessReply }) => {
     if (!isGroup) {
       throw new WarningError("Este comando só deve ser usado em grupos!");
     }
-
     if (!args.length) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
       );
     }
-
     const antiStickerOn = args[0] == "1";
     const antiStickerOff = args[0] == "0";
-
     if (!antiStickerOn && !antiStickerOff) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
       );
     }
-
     const hasActive =
       antiStickerOn && isActiveGroupRestriction(remoteJid, "anti-sticker");
-
     const hasInactive =
       antiStickerOff && !isActiveGroupRestriction(remoteJid, "anti-sticker");
-
     if (hasActive || hasInactive) {
       throw new WarningError(
         `O recurso de anti-sticker já está ${
@@ -50,11 +41,8 @@ module.exports = {
         }!`
       );
     }
-
     updateIsActiveGroupRestriction(remoteJid, "anti-sticker", antiStickerOn);
-
     const status = antiStickerOn ? "ativado" : "desativado";
-
     await sendSuccessReply(`Anti-sticker ${status} com sucesso!`);
   },
 };

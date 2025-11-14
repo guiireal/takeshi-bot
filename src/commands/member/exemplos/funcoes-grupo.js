@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "funcoes-grupo",
   description: "Exemplo de como usar as funções utilitárias de grupo",
   commands: ["funcoes-grupo"],
   usage: `${PREFIX}funcoes-grupo`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendReply,

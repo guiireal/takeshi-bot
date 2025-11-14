@@ -7,7 +7,6 @@
  *
  * @author Dev Gui
  */
-module.exports = {
-  welcomeMessage: "Seja bem vindo ao nosso grupo, @member!",
-  exitMessage: "Poxa, @member saiu do grupo... Sentiremos sua falta!",
-};
+export const welcomeMessage = "Seja bem vindo ao nosso grupo, @member!";
+export const exitMessage =
+  "Poxa, @member saiu do grupo... Sentiremos sua falta!";

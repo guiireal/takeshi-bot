@@ -1,10 +1,10 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const { errorLog } = require(`${BASE_DIR}/utils/logger`);
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import fs from "node:fs";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { errorLog } from "../../utils/logger.js";
 
-module.exports = {
+export default {
   name: "set-menu-image",
   description: "Altera a imagem do menu do bot",
   commands: [
@@ -18,7 +18,6 @@ module.exports = {
   usage: `${PREFIX}set-menu-image (responda a uma imagem)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     isImage,

@@ -14,29 +14,32 @@
  *
  * @author Dev Gui
  */
-const path = require("node:path");
-const { question, onlyNumbers } = require("./utils");
-const {
-  default: makeWASocket,
+import makeWASocket, {
   DisconnectReason,
-  useMultiFileAuthState,
   isJidBroadcast,
-  isJidStatusBroadcast,
   isJidNewsletter,
-} = require("baileys");
-const pino = require("pino");
-const { load } = require("./loader");
-const {
-  warningLog,
-  infoLog,
+  isJidStatusBroadcast,
+  useMultiFileAuthState,
+} from "baileys";
+import NodeCache from "node-cache";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import pino from "pino";
+import { PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
+import { load } from "./loader.js";
+import { badMacHandler } from "./utils/badMacHandler.js";
+import { onlyNumbers, question } from "./utils/index.js";
+import {
   errorLog,
+  infoLog,
   sayLog,
   successLog,
-} = require("./utils/logger");
-const NodeCache = require("node-cache");
-const { TEMP_DIR, PREFIX } = require("./config");
-const { badMacHandler } = require("./utils/badMacHandler");
-const fs = require("node:fs");
+  warningLog,
+} from "./utils/logger.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 if (!fs.existsSync(TEMP_DIR)) {
   fs.mkdirSync(TEMP_DIR, { recursive: true });
@@ -54,11 +57,11 @@ const msgRetryCounterCache = new NodeCache();
 const oneDay = 60 * 60 * 24;
 const groupCache = new NodeCache({ stdTTL: oneDay, checkperiod: 60 });
 
-function updateGroupMetadataCache(jid, metadata) {
-  groupCache.set(jid, metadata);
+export function updateGroupMetadataCache(groupJid, metadata) {
+  groupCache.set(groupJid, metadata);
 }
 
-async function connect() {
+export async function connect() {
   const baileysFolder = path.resolve(
     __dirname,
     "..",
@@ -68,11 +71,9 @@ async function connect() {
   );
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
-  const version = [2, 3000, 1029399661];
-  const isLatest = true;
 
   const socket = makeWASocket({
-    version,
+    version: WAWEB_VERSION,
     logger,
     defaultQueryTimeoutMs: undefined,
     retryRequestDelayMs: 5000,
@@ -140,7 +141,6 @@ async function connect() {
 
       if (statusCode === DisconnectReason.loggedOut) {
         errorLog("Bot desconectado!");
-        badMacErrorCount = 0;
       } else {
         switch (statusCode) {
           case DisconnectReason.badSession:
@@ -185,16 +185,12 @@ async function connect() {
       }
     } else if (connection === "open") {
       successLog("Fui conectado com sucesso!");
-      infoLog("Versão do WhatsApp Web: " + version.join("."));
-      infoLog(
-        "É a última versão do WhatsApp Web?: " + (isLatest ? "Sim" : "Não")
-      );
+      infoLog("Versão do WhatsApp Web: " + WAWEB_VERSION.join("."));
       successLog(
         `✅ Estou pronto para uso! 
 Verifique o prefixo, digitando a palavra "prefixo" no WhatsApp. 
 O prefixo padrão definido no config.js é ${PREFIX}`
       );
-      badMacErrorCount = 0;
       badMacHandler.resetErrorCount();
     } else {
       infoLog("Atualizando conexão...");
@@ -205,6 +201,3 @@ O prefixo padrão definido no config.js é ${PREFIX}`
 
   return socket;
 }
-
-exports.updateGroupMetadataCache = updateGroupMetadataCache;
-exports.connect = connect;

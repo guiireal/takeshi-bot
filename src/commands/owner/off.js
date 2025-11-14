@@ -1,22 +1,20 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { deactivateGroup } = require(`${BASE_DIR}/utils/database`);
+import { PREFIX } from "../../config.js";
+import { WarningError } from "../../errors/index.js";
+import { deactivateGroup } from "../../utils/database.js";
 
-module.exports = {
+export default {
   name: "off",
   description: "Desativa o bot no grupo",
   commands: ["off"],
   usage: `${PREFIX}off`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendSuccessReply, remoteJid, isGroup }) => {
     if (!isGroup) {
       throw new WarningError("Este comando deve ser usado dentro de um grupo.");
     }
-
     deactivateGroup(remoteJid);
-
     await sendSuccessReply("Bot desativado no grupo!");
   },
 };

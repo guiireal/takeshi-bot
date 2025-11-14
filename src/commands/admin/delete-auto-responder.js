@@ -1,12 +1,8 @@
-const {
-  removeAutoResponderItemByKey,
-  getAutoResponderItemByKey,
-} = require(`${BASE_DIR}/utils/database`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { removeAutoResponderItemByKey } from "../../utils/database.js";
 
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-
-module.exports = {
+export default {
   name: "delete-auto-responder",
   description: "Remove um termo do auto-responder pelo ID",
   commands: [
@@ -22,7 +18,6 @@ module.exports = {
   usage: `${PREFIX}delete-auto-responder 1`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendSuccessReply, args, prefix, sendErrorReply }) => {
     if (args.length !== 1) {

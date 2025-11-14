@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-mensagem-editada",
   description: "Exemplo de como enviar uma mensagem editada",
   commands: ["enviar-mensagem-editada"],
   usage: `${PREFIX}enviar-mensagem-editada"],`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendReact,

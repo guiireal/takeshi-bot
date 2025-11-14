@@ -1,16 +1,15 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-gif-de-url",
   description: "Exemplo de como enviar gifs a partir de URLs externas",
   commands: ["enviar-gif-de-url"],
   usage: `${PREFIX}enviar-gif-de-url`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendGifFromURL, sendReact, userJid }) => {
+  handle: async ({ sendReply, sendGifFromURL, sendReact, userLid }) => {
     await sendReact("🌐");
 
     await delay(3000);
@@ -42,8 +41,8 @@ module.exports = {
 
     await sendGifFromURL(
       "https://api.spiderx.com.br/storage/samples/sample-video.mp4",
-      `@${userJid.split("@")[0]} olha que legal este gif!`,
-      [userJid]
+      `@${userLid.split("@")[0]} olha que legal este gif!`,
+      [userLid]
     );
 
     await delay(3000);

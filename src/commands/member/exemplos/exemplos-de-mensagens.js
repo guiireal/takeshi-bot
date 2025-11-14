@@ -1,7 +1,7 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "exemplos-de-mensagens",
   description:
     "Lista todos os exemplos disponíveis de envio de mensagens para desenvolvedores",
@@ -17,7 +17,6 @@ module.exports = {
   usage: `${PREFIX}exemplos-de-mensagens`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendReact, prefix }) => {
     await sendReact("📚");

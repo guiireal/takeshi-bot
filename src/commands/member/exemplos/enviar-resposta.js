@@ -1,7 +1,7 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-resposta",
   description:
     "Exemplo de diferentes tipos de respostas (sucesso, erro, aviso, espera)",
@@ -9,7 +9,6 @@ module.exports = {
   usage: `${PREFIX}enviar-resposta`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendReply,

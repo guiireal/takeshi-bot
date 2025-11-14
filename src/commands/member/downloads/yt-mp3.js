@@ -1,16 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { download } = require(`${BASE_DIR}/services/spider-x-api`);
-const { WarningError } = require(`${BASE_DIR}/errors`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../../config.js";
+import { InvalidParameterError, WarningError } from "../../../errors/index.js";
+import { download } from "../../../services/spider-x-api.js";
 
-module.exports = {
+export default {
   name: "yt-mp3",
   description: "Faço o download de áudios do YouTube pelo link!",
   commands: ["yt-mp3", "youtube-mp3", "yt-audio", "youtube-audio", "mp3"],
   usage: `${PREFIX}yt-mp3 https://www.youtube.com/watch?v=mW8o_WDL91o`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendAudioFromURL,

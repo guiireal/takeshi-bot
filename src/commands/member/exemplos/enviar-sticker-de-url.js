@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-sticker-de-url",
   description: "Exemplo de como enviar um sticker a partir de uma URL",
   commands: ["enviar-sticker-de-url"],
   usage: `${PREFIX}enviar-sticker-de-url`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendStickerFromURL, sendReact }) => {
     await sendReact("🏷️");

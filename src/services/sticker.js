@@ -3,14 +3,14 @@
  *
  * @author MRX
  */
-const { TEMP_DIR } = require("../config");
-const path = require("node:path");
-const fs = require("node:fs");
-const webp = require("node-webpmux");
-const { getRandomName, getRandomNumber } = require("../utils");
-const { exec } = require("child_process");
+import { exec } from "child_process";
+import webp from "node-webpmux";
+import fs from "node:fs";
+import path from "node:path";
+import { TEMP_DIR } from "../config.js";
+import { getRandomName, getRandomNumber } from "../utils/index.js";
 
-async function addStickerMetadata(media, metadata) {
+export async function addStickerMetadata(media, metadata) {
   const tmpFileIn = getRandomName("webp");
   const tmpFileOut = getRandomName("webp");
 
@@ -41,9 +41,7 @@ async function addStickerMetadata(media, metadata) {
   return tmpFileOut;
 }
 
-exports.addStickerMetadata = addStickerMetadata;
-
-exports.isAnimatedSticker = async (filePath) => {
+export async function isAnimatedSticker(filePath) {
   return new Promise((resolve) => {
     exec(
       `ffprobe -v quiet -show_entries format=duration -of csv="p=0" "${filePath}"`,
@@ -57,9 +55,9 @@ exports.isAnimatedSticker = async (filePath) => {
       }
     );
   });
-};
+}
 
-exports.processStaticSticker = async (inputPath, metadata) => {
+export async function processStaticSticker(inputPath, metadata) {
   return new Promise((resolve, reject) => {
     const tempOutputPath = path.resolve(TEMP_DIR, getRandomName("webp"));
 
@@ -89,9 +87,9 @@ exports.processStaticSticker = async (inputPath, metadata) => {
       }
     });
   });
-};
+}
 
-exports.processAnimatedSticker = async (inputPath, metadata) => {
+export async function processAnimatedSticker(inputPath, metadata) {
   return new Promise((resolve, reject) => {
     const tempOutputPath = path.resolve(TEMP_DIR, getRandomName("webp"));
 
@@ -121,4 +119,4 @@ exports.processAnimatedSticker = async (inputPath, metadata) => {
       }
     });
   });
-};
+}

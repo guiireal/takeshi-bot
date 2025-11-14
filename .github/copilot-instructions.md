@@ -1,9 +1,7 @@
 # Takeshi Bot - AI Coding Assistant Instructions
 
 ## Project Overview
-Takeshi Bot is a modular WhatsApp bot built on Baileys (WhatsApp Web API) with a command-based architecture. The bot supports multi-function capabilities including media handling, admin controls, AI integrations, and group management.
-
-**Key Philosophy**: Commands are NOT "cases" in a giant switch statement. Each command is a separate file in role-based folders (`admin/`, `member/`, `owner/`). This maintains clean, maintainable code.
+Takeshi Bot is a modular WhatsApp bot built on Baileys (WhatsApp Web API) with a command-based architecture. Commands are NOT "cases" in a giant switch statement. Each command is a separate file in role-based folders (`admin/`, `member/`, `owner/`). This maintains clean, maintainable code.
 
 ## Architecture
 
@@ -17,9 +15,9 @@ Takeshi Bot is a modular WhatsApp bot built on Baileys (WhatsApp Web API) with a
 
 **Command template** (`src/commands/🤖-como-criar-comandos.js`):
 ```javascript
-const { PREFIX } = require(`${BASE_DIR}/config`);
+import { PREFIX } from "../../config.js";
 
-module.exports = {
+export default {
   name: "comando",
   description: "Descrição do comando",
   commands: ["comando1", "comando2"], // aliases
@@ -45,7 +43,7 @@ module.exports = {
   - `auto-responder.json` - Match/answer pairs
   - `muted.json` - Per-group muted members
 
-**Never** read/write JSON files directly. Use exported functions like `activateAntiLinkGroup()`, `getPrefix()`, `setBotNumber()`.
+**Never** read/write JSON files directly. Use exported functions like `activateAntiLinkGroup()`, `getPrefix()`.
 
 ## Critical Developer Patterns
 
@@ -88,7 +86,7 @@ await sendImageFromBuffer(buffer, "Caption");
 Use custom error classes from `src/errors/`:
 
 ```javascript
-const { InvalidParameterError, WarningError } = require("../errors");
+import { InvalidParameterError, WarningError } from "../../../errors/index.js";
 
 // Throws are caught by dynamicCommand and auto-formatted
 if (!args[0]) throw new InvalidParameterError("Missing required parameter");
@@ -101,9 +99,9 @@ Generic errors are caught and displayed with details. Axios errors show API-spec
 **Runtime settings** can override `src/config.js`:
 
 ```javascript
-const { getBotNumber, getPrefix, getSpiderApiToken } = require("./utils/database");
+import { getBotNumber, getPrefix, getSpiderApiToken } from "../../utils/database.js";
 
-// DON'T: const { PREFIX } = require("./config"); 
+// DON'T: import { PREFIX } from "../../config.js"; 
 // DO:
 const prefix = getPrefix(remoteJid); // Checks database first, falls back to config
 ```
@@ -116,7 +114,7 @@ The bot has automatic recovery for WhatsApp's "Bad MAC" errors via `src/utils/ba
 
 **Don't** add manual Bad MAC handling in commands.
 
-## Development Workflows
+## Developer Workflows
 
 ### Running the Bot
 ```bash
@@ -205,10 +203,10 @@ await sendReply(
 ## Example: Complete Command
 
 ```javascript
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require("../../errors");
+import { PREFIX } from "../../../config.js";
+import { InvalidParameterError } from "../../../errors/index.js";
 
-module.exports = {
+export default {
   name: "exemplo",
   description: "Demonstra padrões do Takeshi Bot",
   commands: ["exemplo", "ex"],

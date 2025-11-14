@@ -1,11 +1,11 @@
-const fs = require("node:fs");
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { upload } = require(`${BASE_DIR}/services/upload`);
-const { canvas } = require(`${BASE_DIR}/services/spider-x-api`);
-const { getRandomNumber } = require(`${BASE_DIR}/utils`);
+import fs from "node:fs";
+import { PREFIX } from "../../../config.js";
+import { InvalidParameterError } from "../../../errors/index.js";
+import { canvas } from "../../../services/spider-x-api.js";
+import { upload } from "../../../services/upload.js";
+import { getRandomNumber } from "../../../utils/index.js";
 
-module.exports = {
+export default {
   name: "rip",
   description:
     "Gero uma montagem estilo cova de cemitério com a imagem que você enviar",
@@ -13,7 +13,6 @@ module.exports = {
   usage: `${PREFIX}rip (marque a imagem) ou ${PREFIX}rip (responda a imagem)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     isImage,
@@ -21,6 +20,7 @@ module.exports = {
     sendSuccessReact,
     sendWaitReact,
     sendImageFromURL,
+    sendErrorReply,
     webMessage,
   }) => {
     if (!isImage) {

@@ -1,7 +1,7 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { errorLog } = require(`${BASE_DIR}/utils/logger`);
+import { PREFIX } from "../../config.js";
+import { errorLog } from "../../utils/logger.js";
 
-module.exports = {
+export default {
   name: "abrir",
   description: "Abre o grupo.",
   commands: [
@@ -17,7 +17,6 @@ module.exports = {
   usage: `${PREFIX}abrir`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ socket, remoteJid, sendSuccessReply, sendErrorReply }) => {
     try {

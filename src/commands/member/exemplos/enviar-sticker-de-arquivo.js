@@ -1,15 +1,14 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
+import { delay } from "baileys";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-sticker-de-arquivo",
   description: "Exemplo de como enviar um sticker a partir de um arquivo local",
   commands: ["enviar-sticker-de-arquivo"],
   usage: `${PREFIX}enviar-sticker-de-arquivo`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendStickerFromFile, sendReact }) => {
     await sendReact("🏷️");

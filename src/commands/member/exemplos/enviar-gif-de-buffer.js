@@ -1,19 +1,18 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
-const fs = require("node:fs");
-const { getBuffer } = require(`${BASE_DIR}/utils`);
+import { delay } from "baileys";
+import fs from "node:fs";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
+import { getBuffer } from "../../../utils/index.js";
 
-module.exports = {
+export default {
   name: "enviar-gif-de-buffer",
   description: "Exemplo de como enviar gifs a partir de buffers",
   commands: ["enviar-gif-de-buffer"],
   usage: `${PREFIX}enviar-gif-de-buffer`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendGifFromBuffer, sendReact, userJid }) => {
+  handle: async ({ sendReply, sendGifFromBuffer, sendReact, userLid }) => {
     await sendReact("💾");
 
     await delay(3000);
@@ -50,8 +49,8 @@ module.exports = {
 
     await sendGifFromBuffer(
       fileBuffer,
-      `@${userJid.split("@")[0]} este gif veio de um buffer!`,
-      [userJid]
+      `@${userLid.split("@")[0]} este gif veio de um buffer!`,
+      [userLid]
     );
 
     await delay(3000);

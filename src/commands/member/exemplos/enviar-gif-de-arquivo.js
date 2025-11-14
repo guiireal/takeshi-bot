@@ -1,17 +1,16 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
+import { delay } from "baileys";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-gif-de-arquivo",
   description: "Exemplo de como enviar gifs a partir de arquivos locais",
   commands: ["enviar-gif-de-arquivo"],
   usage: `${PREFIX}enviar-gif-de-arquivo`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendGifFromFile, sendReact, userJid }) => {
+  handle: async ({ sendReply, sendGifFromFile, sendReact, userLid }) => {
     await sendReact("🎬");
 
     await delay(3000);
@@ -41,8 +40,8 @@ module.exports = {
 
     await sendGifFromFile(
       path.join(ASSETS_DIR, "samples", "sample-video.mp4"),
-      `Olá @${userJid.split("@")[0]}! Este gif é para você!`,
-      [userJid]
+      `Olá @${userLid.split("@")[0]}! Este gif é para você!`,
+      [userLid]
     );
 
     await delay(3000);

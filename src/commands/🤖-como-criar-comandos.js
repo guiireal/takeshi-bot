@@ -13,18 +13,17 @@
  *
  * @author Dev Gui
  */
-const { PREFIX } = require(`${BASE_DIR}/config`);
+import { PREFIX } from "../../config.js";
 
-module.exports = {
+export default {
   name: "comando",
   description: "Descrição do comando",
   commands: ["comando1", "comando2"],
   usage: `${PREFIX}comando`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendAudioFromBuffer }) => {
+  handle: async ({}) => {
     // código do comando
   },
 };

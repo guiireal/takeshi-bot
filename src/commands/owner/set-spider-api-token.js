@@ -1,9 +1,8 @@
-const { setSpiderApiToken } = require(`${BASE_DIR}/utils/database`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { setSpiderApiToken } from "../../utils/database.js";
 
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-
-module.exports = {
+export default {
   name: "set-spider-api-token",
   description: "Mudo o token da API do Spider",
   commands: [
@@ -17,7 +16,6 @@ module.exports = {
   usage: `${PREFIX}set-spider-api-token token aqui`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ args, sendSuccessReply }) => {
     if (!args.length) {
