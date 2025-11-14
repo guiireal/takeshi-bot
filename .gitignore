@@ -1,0 +1,2 @@
+assets/auth/baileys
+.vscode
