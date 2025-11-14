@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
 
-module.exports = {
+export default {
   name: "delete",
   description: "Excluo mensagens",
   commands: ["delete", "d"],
   usage: `${PREFIX}delete (mencione uma mensagem)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ deleteMessage, webMessage, remoteJid }) => {
     if (!webMessage?.message?.extendedTextMessage?.contextInfo) {

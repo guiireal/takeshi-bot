@@ -43,7 +43,6 @@ Explique:
 - [ ] Inclui prints/screenshots do comando em funcionamento
 - [ ] Usa funções existentes da pasta `utils` (não reinventa a roda)
 - [ ] Importa `CommandHandleProps` corretamente
-- [ ] Usa `BASE_DIR` para imports nos comandos
 - [ ] Código comentado adequadamente
 
 ## 🔧 Criando novos comandos
@@ -53,16 +52,15 @@ Explique:
 Use o arquivo `🤖-como-criar-comandos.js` como base. **SEMPRE** copie este template:
 
 ```javascript
-const { PREFIX } = require(`${BASE_DIR}/config`);
+import { PREFIX } from `../../config`;
 
-module.exports = {
+export default {
   name: "comando",
   description: "Descrição do comando",
   commands: ["comando1", "comando2"],
   usage: `${PREFIX}comando`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({}) => {
     // código do comando
@@ -81,7 +79,6 @@ module.exports = {
 ### Código
 
 - [ ] Segue o template de comandos
-- [ ] Usa `BASE_DIR` nos imports
 - [ ] Importa `CommandHandleProps` corretamente
 - [ ] Utiliza funções existentes da pasta `utils`
 - [ ] Código bem comentado em português
@@ -112,7 +109,6 @@ Todo PR com novos comandos deve incluir:
 ## 🚫 O que NÃO fazer
 
 - ❌ Não reinvente funções que já existem
-- ❌ Não use `require()` absolutos, sempre use `BASE_DIR` se o que você estiver abrindo for um comando novo
 - ❌ Não ignore o template de comandos
 - ❌ Não esqueça de testar no Node.js 22
 - ❌ Não faça commits sem prints do funcionamento

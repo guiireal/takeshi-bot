@@ -4,23 +4,12 @@
  *
  * @author Dev Gui
  */
-const { toUserJidOrLid, onlyNumbers, toUserJid } = require(`${BASE_DIR}/utils`);
-const {
-  checkIfMemberIsMuted,
-  muteMember,
-  getOwnerNumber,
-  getOwnerLid,
-} = require(`${BASE_DIR}/utils/database`);
-let {
-  PREFIX,
-  BOT_NUMBER,
-  OWNER_NUMBER,
-  OWNER_LID,
-} = require(`${BASE_DIR}/config`);
+import { BOT_LID, OWNER_LID, PREFIX } from "../../config.js";
+import { DangerError } from "../../errors/index.js";
+import { checkIfMemberIsMuted, muteMember } from "../../utils/database.js";
+import { onlyNumbers } from "../../utils/index.js";
 
-const { DangerError } = require(`${BASE_DIR}/errors`);
-
-module.exports = {
+export default {
   name: "mute",
   description:
     "Silencia um usuário no grupo (apaga as mensagens do usuário automáticamente).",
@@ -28,12 +17,11 @@ module.exports = {
   usage: `${PREFIX}mute @usuario ou (responda à mensagem do usuário que deseja mutar)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     args,
     remoteJid,
-    replyJid,
+    replyLid,
     sendErrorReply,
     sendSuccessReply,
     getGroupMetadata,
@@ -43,34 +31,29 @@ module.exports = {
       throw new DangerError("Este comando só pode ser usado em grupos.");
     }
 
-    if (!args.length && !replyJid) {
+    if (!args.length && !replyLid) {
       throw new DangerError(
         `Você precisa mencionar um usuário ou responder à mensagem do usuário que deseja mutar.\n\nExemplo: ${PREFIX}mute @fulano`
       );
     }
 
-    const userId = replyJid ? replyJid : toUserJidOrLid(args[0]);
+    const userId = replyLid
+      ? replyLid
+      : args[0]
+      ? `${onlyNumbers(args[0])}@lid`
+      : null;
 
     const targetUserNumber = onlyNumbers(userId);
 
-    const ownerNumber = getOwnerNumber();
-    const ownerLid = getOwnerLid();
-
-    OWNER_NUMBER = ownerNumber ? ownerNumber : OWNER_NUMBER;
-    OWNER_LID = ownerLid ? ownerLid : OWNER_LID;
-
-    if (
-      [OWNER_NUMBER, OWNER_LID.replace("@lid", "")].includes(targetUserNumber)
-    ) {
+    if (OWNER_LID && userId === OWNER_LID) {
       throw new DangerError("Você não pode mutar o dono do bot!");
     }
 
-    if (userId === toUserJid(BOT_NUMBER)) {
+    if (BOT_LID && userId === BOT_LID) {
       throw new DangerError("Você não pode mutar o bot.");
     }
 
     const groupMetadata = await getGroupMetadata();
-
     const isUserInGroup = groupMetadata.participants.some(
       (participant) => participant.id === userId
     );

@@ -3,9 +3,9 @@
  *
  * @author Dev Gui
  */
-const { PREFIX } = require(`${BASE_DIR}/config`);
+import { PREFIX } from "../../config.js";
 
-module.exports = {
+export default {
   name: "ping",
   description:
     "Verificar se o bot está online, o tempo de resposta e o tempo de atividade.",
@@ -13,7 +13,6 @@ module.exports = {
   usage: `${PREFIX}ping`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendReact, startProcess, fullMessage }) => {
     const response = fullMessage.slice(1).startsWith("ping")

@@ -1,12 +1,12 @@
-const {
-  PROXY_USERNAME,
-  PROXY_PASSWORD,
-  PROXY_PROTOCOL,
+import {
   PROXY_HOST,
+  PROXY_PASSWORD,
   PROXY_PORT,
-} = require("../config");
+  PROXY_PROTOCOL,
+  PROXY_USERNAME,
+} from "../config.js";
 
-exports.getProxyData = () => {
+export function getProxyData() {
   const usernameEncoded = encodeURIComponent(PROXY_USERNAME);
   const passwordEncoded = encodeURIComponent(PROXY_PASSWORD);
 
@@ -22,4 +22,4 @@ exports.getProxyData = () => {
     },
     proxyConnectionString: `${PROXY_PROTOCOL}://${usernameEncoded}:${passwordEncoded}@${PROXY_HOST}:${PROXY_PORT}`,
   };
-};
+}

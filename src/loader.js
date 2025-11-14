@@ -6,14 +6,12 @@
  *
  * @author Dev Gui
  */
-const { TIMEOUT_IN_MILLISECONDS_BY_EVENT } = require("./config");
-const { onMessagesUpsert } = require("./middlewares/onMesssagesUpsert");
-const path = require("node:path");
-const { errorLog } = require("./utils/logger");
-const { badMacHandler } = require("./utils/badMacHandler");
+import { TIMEOUT_IN_MILLISECONDS_BY_EVENT } from "./config.js";
+import { onMessagesUpsert } from "./middlewares/onMesssagesUpsert.js";
+import { badMacHandler } from "./utils/badMacHandler.js";
+import { errorLog } from "./utils/logger.js";
 
-exports.load = (socket) => {
-  global.BASE_DIR = path.resolve(__dirname);
+export function load(socket) {
   const safeEventHandler = async (callback, data, eventName) => {
     try {
       await callback(data);
@@ -21,9 +19,7 @@ exports.load = (socket) => {
       if (badMacHandler.handleError(error, eventName)) {
         return;
       }
-
       errorLog(`Erro ao processar evento ${eventName}: ${error.message}`);
-
       if (error.stack) {
         errorLog(`Stack trace: ${error.stack}`);
       }
@@ -59,4 +55,4 @@ exports.load = (socket) => {
     }
     errorLog(`Promessa rejeitada não tratada: ${reason}`);
   });
-};
+}

@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-documento-de-url",
   description: "Exemplo de como enviar documentos a partir de URLs",
   commands: ["enviar-documento-de-url"],
   usage: `${PREFIX}enviar-documento-de-url`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendDocumentFromURL, sendReact }) => {
     await sendReact("📄");

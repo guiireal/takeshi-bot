@@ -1,15 +1,15 @@
-const fs = require("node:fs");
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError, DangerError } = require(`${BASE_DIR}/errors`);
-const {
-  isAnimatedSticker,
-  processStaticSticker,
-  processAnimatedSticker,
+import fs from "node:fs";
+import { PREFIX } from "../../config.js";
+import { DangerError, InvalidParameterError } from "../../errors/index.js";
+import {
   addStickerMetadata,
-} = require(`${BASE_DIR}/services/sticker`);
-const { getRandomName } = require(`${BASE_DIR}/utils`);
+  isAnimatedSticker,
+  processAnimatedSticker,
+  processStaticSticker,
+} from "../../services/sticker.js";
+import { getRandomName } from "../../utils/index.js";
 
-module.exports = {
+export default {
   name: "rename",
   description: "Adiciona novos meta-dados à figurinha.",
   commands: ["rename", "renomear", "rn"],

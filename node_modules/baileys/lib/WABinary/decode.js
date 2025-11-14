@@ -1,7 +1,7 @@
 import { promisify } from 'util';
 import { inflate } from 'zlib';
 import * as constants from './constants.js';
-import { jidEncode } from './jid-utils.js';
+import { jidEncode, WAJIDDomains } from './jid-utils.js';
 const inflatePromise = promisify(inflate);
 export const decompressingIfRequired = async (buffer) => {
     if (2 & buffer.readUInt8()) {
@@ -124,7 +124,17 @@ export const decodeDecompressedBinaryNode = (buffer, opts, indexRef = { index: 0
         const domainType = Number(rawDomainType);
         const device = readByte();
         const user = readString(readByte());
-        return jidEncode(user, domainType === 0 || domainType === 128 ? 's.whatsapp.net' : 'lid', device);
+        let server = 's.whatsapp.net'; // default whatsapp server
+        if (domainType === WAJIDDomains.LID) {
+            server = 'lid';
+        }
+        else if (domainType === WAJIDDomains.HOSTED) {
+            server = 'hosted';
+        }
+        else if (domainType === WAJIDDomains.HOSTED_LID) {
+            server = 'hosted.lid';
+        }
+        return jidEncode(user, server, device);
     };
     const readString = (tag) => {
         if (tag >= 1 && tag < SINGLE_BYTE_TOKENS.length) {

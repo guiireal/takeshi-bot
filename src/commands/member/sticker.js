@@ -4,16 +4,15 @@
  *
  * @author Dev Gui
  */
-const fs = require("node:fs");
-const path = require("node:path");
-const { exec } = require("node:child_process");
+import { exec as execChild } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { BOT_EMOJI, BOT_NAME, PREFIX, TEMP_DIR } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { addStickerMetadata } from "../../services/sticker.js";
+import { getRandomName } from "../../utils/index.js";
 
-const { getRandomName } = require(`${BASE_DIR}/utils`);
-const { addStickerMetadata } = require(`${BASE_DIR}/services/sticker`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { PREFIX, BOT_NAME, BOT_EMOJI, TEMP_DIR } = require(`${BASE_DIR}/config`);
-
-module.exports = {
+export default {
   name: "sticker",
   description: "Cria figurinhas de imagem, gif ou vídeo (máximo 10 segundos).",
   commands: ["f", "s", "sticker", "fig"],
@@ -28,7 +27,7 @@ module.exports = {
     sendWaitReact,
     sendSuccessReact,
     sendStickerFromFile,
-    userJid,
+    userLid,
   }) => {
     if (!isImage && !isVideo) {
       throw new InvalidParameterError(
@@ -41,7 +40,7 @@ module.exports = {
     const username =
       webMessage.pushName ||
       webMessage.notifyName ||
-      userJid.replace(/@s.whatsapp.net/, "");
+      userLid.replace(/@lid/, "");
 
     const metadata = {
       username: username,
@@ -76,7 +75,7 @@ module.exports = {
         await new Promise((resolve, reject) => {
           const cmd = `ffmpeg -i "${inputPath}" -vf "scale=512:512:force_original_aspect_ratio=decrease" -f webp -quality 90 "${outputTempPath}"`;
 
-          exec(cmd, (error, _, stderr) => {
+          execChild(cmd, (error, _, stderr) => {
             if (error) {
               console.error("FFmpeg error:", stderr);
               reject(error);
@@ -124,7 +123,7 @@ module.exports = {
         await new Promise((resolve, reject) => {
           const cmd = `ffmpeg -y -i "${inputPath}" -vcodec libwebp -fs 0.99M -filter_complex "[0:v] scale=512:512, fps=15, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse" -f webp "${outputTempPath}"`;
 
-          exec(cmd, (error, _, stderr) => {
+          execChild(cmd, (error, _, stderr) => {
             if (error) {
               console.error("FFmpeg error:", stderr);
               reject(error);

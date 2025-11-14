@@ -1,7 +1,7 @@
 import { Boom } from '@hapi/boom';
 import { proto } from '../../WAProto/index.js';
 import { LabelAssociationType } from '../Types/LabelAssociation.js';
-import { getBinaryNodeChild, getBinaryNodeChildren, isJidGroup, isJidUser, jidNormalizedUser } from '../WABinary/index.js';
+import { getBinaryNodeChild, getBinaryNodeChildren, isJidGroup, jidNormalizedUser } from '../WABinary/index.js';
 import { aesDecrypt, aesEncrypt, hkdf, hmacSign } from './crypto.js';
 import { toNumber } from './generics.js';
 import { LT_HASH_ANTI_TAMPERING } from './lt-hash.js';
@@ -499,6 +499,23 @@ export const chatModificationToAppPatch = (mod, jid) => {
             operation: OP.SET
         };
     }
+    else if ('quickReply' in mod) {
+        patch = {
+            syncAction: {
+                quickReplyAction: {
+                    count: 0,
+                    deleted: mod.quickReply.deleted || false,
+                    keywords: [],
+                    message: mod.quickReply.message || '',
+                    shortcut: mod.quickReply.shortcut || ''
+                }
+            },
+            index: ['quick_reply', mod.quickReply.timestamp || String(Math.floor(Date.now() / 1000))],
+            type: 'regular',
+            apiVersion: 2,
+            operation: OP.SET
+        };
+    }
     else if ('addLabel' in mod) {
         patch = {
             syncAction: {
@@ -653,7 +670,7 @@ export const processSyncAction = (syncAction, ev, me, initialSyncOpts, logger) =
                 id: id,
                 name: action.contactAction.fullName,
                 lid: action.contactAction.lidJid || undefined,
-                jid: isJidUser(id) ? id : undefined
+                phoneNumber: action.contactAction.pnJid || undefined
             }
         ]);
     }

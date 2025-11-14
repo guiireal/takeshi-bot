@@ -11,7 +11,7 @@ export type Event = {
     };
     weight: number;
     wamChannel: string;
-    privateStatsIdInt: number;
+    privateStatsIdInt?: number;
 };
 export type Global = {
     name: string;

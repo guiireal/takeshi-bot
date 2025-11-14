@@ -6,19 +6,19 @@
  *
  * @author Dev Gui
  */
-const { BOT_EMOJI, TIMEOUT_IN_MILLISECONDS_BY_EVENT } = require("../config");
-const {
-  extractDataFromMessage,
+import { delay } from "baileys";
+import fs from "node:fs";
+import { BOT_EMOJI, TIMEOUT_IN_MILLISECONDS_BY_EVENT } from "../config.js";
+import {
+  ajustAudioByBuffer,
   baileysIs,
   download,
+  extractDataFromMessage,
   onlyNumbers,
   removeFileWithTimeout,
-  ajustAudioByBuffer,
-} = require(".");
-const fs = require("node:fs");
-const { delay } = require("baileys");
+} from "./index.js";
 
-exports.loadCommonFunctions = ({ socket, webMessage }) => {
+export function loadCommonFunctions({ socket, webMessage }) {
   const {
     args,
     commandName,
@@ -27,8 +27,8 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     isReply,
     prefix,
     remoteJid,
-    replyJid,
-    userJid,
+    replyLid,
+    userLid,
     replyText,
   } = extractDataFromMessage(webMessage);
 
@@ -740,7 +740,7 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
   };
 
   const isGroup = !!remoteJid?.endsWith("@g.us");
-  const isGroupWithLid = !!userJid?.endsWith("@lid");
+  const isGroupWithLid = !!userLid?.endsWith("@lid");
 
   const deleteMessage = async (key) => {
     const { id, remoteJid, participant } = key;
@@ -815,9 +815,9 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     isVideo,
     prefix,
     remoteJid,
-    replyJid,
+    replyLid,
     socket,
-    userJid,
+    userLid,
     replyText,
     webMessage,
     deleteMessage,
@@ -867,4 +867,4 @@ exports.loadCommonFunctions = ({ socket, webMessage }) => {
     sendWarningReact,
     sendWarningReply,
   };
-};
+}

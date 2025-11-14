@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { consultarCep } = require("correios-brasil");
+import { consultarCep } from "correios-brasil";
+import { PREFIX } from "../../../config.js";
+import { InvalidParameterError } from "../../../errors/index.js";
 
-module.exports = {
+export default {
   name: "cep",
   description: "Consulta CEP",
   commands: ["cep"],
   usage: `${PREFIX}cep 01001-001`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ args, sendWarningReply, sendSuccessReply }) => {
     const cep = args[0];

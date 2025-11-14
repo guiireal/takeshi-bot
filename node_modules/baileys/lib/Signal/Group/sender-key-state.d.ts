@@ -21,10 +21,10 @@ interface SenderKeyStateStructure {
 export declare class SenderKeyState {
     private readonly MAX_MESSAGE_KEYS;
     private readonly senderKeyStateStructure;
-    constructor(id?: number | null, iteration?: number | null, chainKey?: Uint8Array | null, signatureKeyPair?: {
-        public: Uint8Array;
-        private: Uint8Array;
-    } | null, signatureKeyPublic?: Uint8Array | null, signatureKeyPrivate?: Uint8Array | null, senderKeyStateStructure?: SenderKeyStateStructure | null);
+    constructor(id?: number | null, iteration?: number | null, chainKey?: Uint8Array | null | string, signatureKeyPair?: {
+        public: Uint8Array | string;
+        private: Uint8Array | string;
+    } | null, signatureKeyPublic?: Uint8Array | string | null, signatureKeyPrivate?: Uint8Array | string | null, senderKeyStateStructure?: SenderKeyStateStructure | null);
     getKeyId(): number;
     getSenderChainKey(): SenderChainKey;
     setSenderChainKey(chainKey: SenderChainKey): void;

@@ -4,23 +4,23 @@
  *
  * @author Dev Gui
  */
-const {
-  isAtLeastMinutesInPast,
+import { DEVELOPER_MODE } from "../config.js";
+import { updateGroupMetadataCache } from "../connection.js";
+import { badMacHandler } from "../utils/badMacHandler.js";
+import { checkIfMemberIsMuted } from "../utils/database.js";
+import { dynamicCommand } from "../utils/dynamicCommand.js";
+import {
   GROUP_PARTICIPANT_ADD,
   GROUP_PARTICIPANT_LEAVE,
   isAddOrLeave,
-} = require("../utils");
-const { DEVELOPER_MODE } = require("../config");
-const { dynamicCommand } = require("../utils/dynamicCommand");
-const { loadCommonFunctions } = require("../utils/loadCommonFunctions");
-const { onGroupParticipantsUpdate } = require("./onGroupParticipantsUpdate");
-const { errorLog, infoLog } = require("../utils/logger");
-const { badMacHandler } = require("../utils/badMacHandler");
-const { checkIfMemberIsMuted } = require("../utils/database");
-const { messageHandler } = require("./messageHandler");
-const connection = require("../connection");
+  isAtLeastMinutesInPast,
+} from "../utils/index.js";
+import { loadCommonFunctions } from "../utils/loadCommonFunctions.js";
+import { errorLog, infoLog } from "../utils/logger.js";
+import { messageHandler } from "./messageHandler.js";
+import { onGroupParticipantsUpdate } from "./onGroupParticipantsUpdate.js";
 
-exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
+export async function onMessagesUpsert({ socket, messages, startProcess }) {
   if (!messages.length) {
     return;
   }
@@ -55,11 +55,13 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
           setTimeout(async () => {
             try {
               const remoteJid = webMessage?.key?.remoteJid;
+
               if (!remoteJid) {
                 return;
               }
+
               const data = await socket.groupMetadata(remoteJid);
-              connection.updateGroupMetadataCache(remoteJid, data);
+              updateGroupMetadataCache(remoteJid, data);
             } catch (error) {
               errorLog(
                 `Erro ao atualizar metadados do grupo: ${error.message}`
@@ -71,7 +73,7 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
         }
 
         await onGroupParticipantsUpdate({
-          userJid: webMessage.messageStubParameters[0],
+          userLid: webMessage.messageStubParameters[0],
           remoteJid: webMessage.key.remoteJid,
           socket,
           action,
@@ -128,4 +130,4 @@ exports.onMessagesUpsert = async ({ socket, messages, startProcess }) => {
       continue;
     }
   }
-};
+}

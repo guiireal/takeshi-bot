@@ -1,16 +1,14 @@
-const { addAutoResponderItem } = require(`${BASE_DIR}/utils/database`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { addAutoResponderItem } from "../../utils/database.js";
 
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-
-module.exports = {
+export default {
   name: "add-auto-responder",
   description: "Adiciona um termo no auto-responder",
   commands: ["add-auto-responder", "add-auto", "add-responder"],
   usage: `${PREFIX}add-auto-responder termo / o que eu devo responder`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendSuccessReply, prefix, sendErrorReply, fullArgs }) => {
     const parts = fullArgs.split(/\s\/\s/);

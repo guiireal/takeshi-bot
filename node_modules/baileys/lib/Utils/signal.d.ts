@@ -1,6 +1,6 @@
-import type { SignalRepository } from '../Types/index.js';
+import type { SignalRepositoryWithLIDStore } from '../Types/index.js';
 import type { AuthenticationCreds, AuthenticationState, KeyPair, SignalIdentity, SignalKeyStore, SignedKeyPair } from '../Types/Auth.js';
-import { type BinaryNode, type JidWithDevice } from '../WABinary/index.js';
+import { type BinaryNode, type FullJid } from '../WABinary/index.js';
 import type { USyncQueryResultList } from '../WAUSync/index.js';
 export declare const createSignalIdentity: (wid: string, accountSignatureKey: Uint8Array) => SignalIdentity;
 export declare const getPreKeys: ({ get }: SignalKeyStore, min: number, limit: number) => Promise<{
@@ -15,8 +15,8 @@ export declare const generateOrGetPreKeys: (creds: AuthenticationCreds, range: n
 };
 export declare const xmppSignedPreKey: (key: SignedKeyPair) => BinaryNode;
 export declare const xmppPreKey: (pair: KeyPair, id: number) => BinaryNode;
-export declare const parseAndInjectE2ESessions: (node: BinaryNode, repository: SignalRepository) => Promise<void>;
-export declare const extractDeviceJids: (result: USyncQueryResultList[], myJid: string, excludeZeroDevices: boolean) => JidWithDevice[];
+export declare const parseAndInjectE2ESessions: (node: BinaryNode, repository: SignalRepositoryWithLIDStore) => Promise<void>;
+export declare const extractDeviceJids: (result: USyncQueryResultList[], myJid: string, myLid: string, excludeZeroDevices: boolean) => FullJid[];
 /**
  * get the next N keys for upload or processing
  * @param count number of pre-keys to get or generate

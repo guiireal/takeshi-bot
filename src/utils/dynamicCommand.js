@@ -4,37 +4,37 @@
  *
  * @author Dev Gui
  */
-const {
+import { BOT_EMOJI, ONLY_GROUP_ID } from "../config.js";
+import {
   DangerError,
-  WarningError,
   InvalidParameterError,
-} = require("../errors");
-const { findCommandImport } = require(".");
-const {
-  verifyPrefix,
-  hasTypeAndCommand,
-  isLink,
-  isAdmin,
+  WarningError,
+} from "../errors/index.js";
+import {
   checkPermission,
+  hasTypeAndCommand,
+  isAdmin,
   isBotOwner,
-} = require("../middlewares");
-const {
-  isActiveGroup,
+  isLink,
+  verifyPrefix,
+} from "../middlewares/index.js";
+import { badMacHandler } from "./badMacHandler.js";
+import {
   getAutoResponderResponse,
-  isActiveAutoResponderGroup,
-  isActiveAntiLinkGroup,
-  isActiveOnlyAdmins,
   getPrefix,
-} = require("./database");
-const { errorLog } = require("../utils/logger");
-const { ONLY_GROUP_ID, BOT_EMOJI } = require("../config");
-const { badMacHandler } = require("./badMacHandler");
+  isActiveAntiLinkGroup,
+  isActiveAutoResponderGroup,
+  isActiveGroup,
+  isActiveOnlyAdmins,
+} from "./database.js";
+import { findCommandImport } from "./index.js";
+import { errorLog } from "./logger.js";
 
 /**
  * @param {CommandHandleProps} paramsHandler
  * @param {number} startProcess
  */
-exports.dynamicCommand = async (paramsHandler, startProcess) => {
+export async function dynamicCommand(paramsHandler, startProcess) {
   const {
     commandName,
     fullMessage,
@@ -45,19 +45,19 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     sendReply,
     sendWarningReply,
     socket,
-    userJid,
+    userLid,
     webMessage,
   } = paramsHandler;
 
   const activeGroup = isActiveGroup(remoteJid);
 
   if (activeGroup && isActiveAntiLinkGroup(remoteJid) && isLink(fullMessage)) {
-    if (!userJid) {
+    if (!userLid) {
       return;
     }
 
-    if (!(await isAdmin({ remoteJid, userJid, socket }))) {
-      await socket.groupParticipantsUpdate(remoteJid, [userJid], "remove");
+    if (!(await isAdmin({ remoteJid, userLid, socket }))) {
+      await socket.groupParticipantsUpdate(remoteJid, [userLid], "remove");
 
       await sendReply(
         "Anti-link ativado! Você foi removido por enviar um link!"
@@ -76,7 +76,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     }
   }
 
-  const { type, command } = findCommandImport(commandName);
+  const { type, command } = await findCommandImport(commandName);
 
   if (ONLY_GROUP_ID && ONLY_GROUP_ID !== remoteJid) {
     return;
@@ -115,7 +115,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
 
     if (
       isActiveOnlyAdmins(remoteJid) &&
-      !(await isAdmin({ remoteJid, userJid, socket }))
+      !(await isAdmin({ remoteJid, userLid, socket }))
     ) {
       await sendWarningReply(
         "Somente administradores podem executar comandos!"
@@ -124,7 +124,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     }
   }
 
-  if (!isBotOwner({ userJid }) && !activeGroup) {
+  if (!isBotOwner({ userLid }) && !activeGroup) {
     if (
       verifyPrefix(prefix, remoteJid) &&
       hasTypeAndCommand({ type, command })
@@ -222,4 +222,4 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
       );
     }
   }
-};
+}

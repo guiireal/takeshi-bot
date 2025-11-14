@@ -26,6 +26,6 @@ export declare class SenderKeyRecord {
         private: Uint8Array;
     }): void;
     serialize(): SenderKeyStateStructure[];
-    static deserialize(data: Uint8Array | string | SenderKeyStateStructure[]): SenderKeyRecord;
+    static deserialize(data: Uint8Array): SenderKeyRecord;
 }
 //# sourceMappingURL=sender-key-record.d.ts.map

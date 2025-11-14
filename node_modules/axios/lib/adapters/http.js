@@ -1,4 +1,3 @@
-import { connect, constants } from 'http2';
 import utils from './../utils.js';
 import settle from './../core/settle.js';
 import buildFullPath from '../core/buildFullPath.js';
@@ -6,6 +5,7 @@ import buildURL from './../helpers/buildURL.js';
 import proxyFromEnv from 'proxy-from-env';
 import http from 'http';
 import https from 'https';
+import http2 from 'http2';
 import util from 'util';
 import followRedirects from 'follow-redirects';
 import zlib from 'zlib';
@@ -36,13 +36,6 @@ const brotliOptions = {
   finishFlush: zlib.constants.BROTLI_OPERATION_FLUSH
 }
 
-const {
-  HTTP2_HEADER_SCHEME,
-  HTTP2_HEADER_METHOD,
-  HTTP2_HEADER_PATH,
-  HTTP2_HEADER_STATUS
-} = constants;
-
 const isBrotliSupported = utils.isFunction(zlib.createBrotliDecompress);
 
 const {http: httpFollow, https: httpsFollow} = followRedirects;
@@ -72,9 +65,9 @@ class Http2Sessions {
       sessionTimeout: 1000
     }, options);
 
-    let authoritySessions;
+    let authoritySessions = this.sessions[authority];
 
-    if ((authoritySessions = this.sessions[authority])) {
+    if (authoritySessions) {
       let len = authoritySessions.length;
 
       for (let i = 0; i < len; i++) {
@@ -85,7 +78,7 @@ class Http2Sessions {
       }
     }
 
-    const session = connect(authority, options);
+    const session = http2.connect(authority, options);
 
     let removed;
 
@@ -100,11 +93,12 @@ class Http2Sessions {
 
       while (i--) {
         if (entries[i][0] === session) {
-          entries.splice(i, 1);
           if (len === 1) {
             delete this.sessions[authority];
-            return;
+          } else {
+            entries.splice(i, 1);
           }
+          return;
         }
       }
     };
@@ -143,12 +137,12 @@ class Http2Sessions {
 
     session.once('close', removeSession);
 
-    let entries = this.sessions[authority], entry = [
-      session,
-      options
-    ];
+    let entry = [
+        session,
+        options
+      ];
 
-    entries ? this.sessions[authority].push(entry) : authoritySessions =  this.sessions[authority] = [entry];
+    authoritySessions ? authoritySessions.push(entry) : authoritySessions =  this.sessions[authority] = [entry];
 
     return session;
   }
@@ -275,6 +269,13 @@ const http2Transport = {
       const {http2Options, headers} = options;
 
       const session = http2Sessions.getSession(authority, http2Options);
+
+      const {
+        HTTP2_HEADER_SCHEME,
+        HTTP2_HEADER_METHOD,
+        HTTP2_HEADER_PATH,
+        HTTP2_HEADER_STATUS
+      } = http2.constants;
 
       const http2Headers = {
         [HTTP2_HEADER_SCHEME]: options.protocol.replace(':', ''),
@@ -857,6 +858,9 @@ export default isHttpAdapterSupported && function httpAdapter(config) {
           req
         ));
       });
+    } else {
+      // explicitly reset the socket timeout value for a possible `keep-alive` request
+      req.setTimeout(0);
     }
 
 

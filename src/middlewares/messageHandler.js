@@ -1,24 +1,17 @@
 /**
  * Validador de mensagens
  *
- * @author MRX
+ * @author Dev Gui
  */
-const { getContent, compareUserJidWithOtherNumber } = require("../utils");
-const { errorLog } = require("../utils/logger");
-const {
+import { OWNER_LID } from "../config.js";
+import {
   readGroupRestrictions,
   readRestrictedMessageTypes,
-  getOwnerNumber,
-  getBotNumber,
-  getOwnerLid,
-} = require("../utils/database");
-let { BOT_NUMBER, OWNER_NUMBER, OWNER_LID } = require("../config");
+} from "../utils/database.js";
+import { getContent } from "../utils/index.js";
+import { errorLog } from "../utils/logger.js";
 
-OWNER_NUMBER = getOwnerNumber() || OWNER_NUMBER;
-OWNER_LID = getOwnerLid() || OWNER_LID;
-BOT_NUMBER = getBotNumber() || BOT_NUMBER;
-
-exports.messageHandler = async (socket, webMessage) => {
+export async function messageHandler(socket, webMessage) {
   try {
     if (!webMessage?.key) {
       return;
@@ -30,16 +23,13 @@ exports.messageHandler = async (socket, webMessage) => {
       return;
     }
 
-    const userJid = webMessage.key?.participant;
+    const userLid = webMessage.key?.participant;
 
-    if (!userJid) {
+    if (!userLid) {
       return;
     }
 
-    const isBotOrOwner =
-      compareUserJidWithOtherNumber({ userJid, otherNumber: OWNER_NUMBER }) ||
-      compareUserJidWithOtherNumber({ userJid, otherNumber: BOT_NUMBER }) ||
-      userJid === OWNER_LID;
+    const isBotOrOwner = userLid === OWNER_LID;
 
     if (isBotOrOwner) {
       return;
@@ -66,7 +56,7 @@ exports.messageHandler = async (socket, webMessage) => {
         remoteJid,
         fromMe,
         id: messageId,
-        participant: userJid,
+        participant: userLid,
       },
     });
   } catch (error) {
@@ -74,4 +64,4 @@ exports.messageHandler = async (socket, webMessage) => {
       `Erro ao processar mensagem restrita. Verifique se eu estou como admin do grupo! Detalhes: ${error.message}`
     );
   }
-};
+}

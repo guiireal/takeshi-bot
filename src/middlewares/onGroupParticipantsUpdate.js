@@ -4,28 +4,28 @@
  *
  * @author Dev Gui
  */
-const fs = require("node:fs");
-const { getProfileImageData } = require("../services/baileys");
-const { onlyNumbers, getRandomNumber } = require("../utils");
-const {
-  isActiveWelcomeGroup,
+import fs from "node:fs";
+import { exitMessage, welcomeMessage } from "../messages.js";
+import { getProfileImageData } from "../services/baileys.js";
+import {
+  exit,
+  spiderAPITokenConfigured,
+  welcome,
+} from "../services/spider-x-api.js";
+import { upload } from "../services/upload.js";
+import {
   isActiveExitGroup,
   isActiveGroup,
-} = require("../utils/database");
-const { welcomeMessage, exitMessage } = require("../messages");
-const {
-  spiderAPITokenConfigured,
-  exit,
-  welcome,
-} = require("../services/spider-x-api");
-const { upload } = require("../services/upload");
+  isActiveWelcomeGroup,
+} from "../utils/database.js";
+import { getRandomNumber, onlyNumbers } from "../utils/index.js";
 
-exports.onGroupParticipantsUpdate = async ({
-  userJid,
+export async function onGroupParticipantsUpdate({
+  userLid,
   remoteJid,
   socket,
   action,
-}) => {
+}) {
   try {
     if (!remoteJid.endsWith("@g.us")) {
       return;
@@ -38,7 +38,7 @@ exports.onGroupParticipantsUpdate = async ({
     if (isActiveWelcomeGroup(remoteJid) && action === "add") {
       const { buffer, profileImage } = await getProfileImageData(
         socket,
-        userJid
+        userLid
       );
 
       const hasMemberMention = welcomeMessage.includes("@member");
@@ -49,9 +49,9 @@ exports.onGroupParticipantsUpdate = async ({
       if (hasMemberMention) {
         finalWelcomeMessage = welcomeMessage.replace(
           "@member",
-          `@${onlyNumbers(userJid)}`
+          `@${onlyNumbers(userLid)}`
         );
-        mentions.push(userJid);
+        mentions.push(userLid);
       }
 
       if (spiderAPITokenConfigured) {
@@ -110,7 +110,7 @@ exports.onGroupParticipantsUpdate = async ({
     } else if (isActiveExitGroup(remoteJid) && action === "remove") {
       const { buffer, profileImage } = await getProfileImageData(
         socket,
-        userJid
+        userLid
       );
 
       const hasMemberMention = exitMessage.includes("@member");
@@ -121,9 +121,9 @@ exports.onGroupParticipantsUpdate = async ({
       if (hasMemberMention) {
         finalExitMessage = exitMessage.replace(
           "@member",
-          `@${onlyNumbers(userJid)}`
+          `@${onlyNumbers(userLid)}`
         );
-        mentions.push(userJid);
+        mentions.push(userLid);
       }
 
       if (spiderAPITokenConfigured) {
@@ -168,6 +168,5 @@ exports.onGroupParticipantsUpdate = async ({
     }
   } catch (error) {
     console.error("Erro ao processar evento onGroupParticipantsUpdate:", error);
-    process.exit(1);
   }
-};
+}

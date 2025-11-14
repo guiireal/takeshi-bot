@@ -4,10 +4,12 @@
  *
  * @author Dev Gui
  */
-const axios = require("axios");
+import axios from "axios";
 
-let { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = require("../config");
-const { getSpiderApiToken } = require("../utils/database");
+import * as config from "../config.js";
+import { getSpiderApiToken } from "../utils/database.js";
+
+let { SPIDER_API_TOKEN, SPIDER_API_BASE_URL } = config;
 
 const spiderApiTokenConfig = getSpiderApiToken();
 
@@ -18,7 +20,7 @@ if (spiderApiTokenConfig) {
 /**
  * Não configure o token da Spider X API aqui, configure em: src/config.js
  */
-const spiderAPITokenConfigured =
+let spiderAPITokenConfigured =
   SPIDER_API_TOKEN && SPIDER_API_TOKEN !== "seu_token_aqui";
 
 const messageIfTokenNotConfigured = `Token da API do Spider X não configurado!
@@ -28,7 +30,7 @@ e edite o arquivo \`config.js\`:
 
 Procure por:
 
-\`exports.SPIDER_API_TOKEN = "seu_token_aqui";\`
+\`export const SPIDER_API_TOKEN = "seu_token_aqui";\`
 
 ou
 
@@ -42,9 +44,9 @@ Para obter o seu token,
 crie uma conta em: https://api.spiderx.com.br
 e contrate um plano!`;
 
-exports.spiderAPITokenConfigured = spiderAPITokenConfigured;
+export { spiderAPITokenConfigured };
 
-exports.play = async (type, search) => {
+export async function play(type, search) {
   if (!search) {
     throw new Error("Você precisa informar o que deseja buscar!");
   }
@@ -60,9 +62,9 @@ exports.play = async (type, search) => {
   );
 
   return data;
-};
+}
 
-exports.download = async (type, url) => {
+export async function download(type, url) {
   if (!url) {
     throw new Error(
       "Você precisa informar uma URL do YouTube do que deseja buscar!"
@@ -80,9 +82,9 @@ exports.download = async (type, url) => {
   );
 
   return data;
-};
+}
 
-exports.gemini = async (text) => {
+export async function gemini(text) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -99,9 +101,9 @@ exports.gemini = async (text) => {
   );
 
   return data.response;
-};
+}
 
-exports.attp = async (text) => {
+export async function attp(text) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -113,9 +115,9 @@ exports.attp = async (text) => {
   return `${SPIDER_API_BASE_URL}/stickers/attp?text=${encodeURIComponent(
     text
   )}&api_key=${SPIDER_API_TOKEN}`;
-};
+}
 
-exports.ttp = async (text) => {
+export async function ttp(text) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -127,9 +129,9 @@ exports.ttp = async (text) => {
   return `${SPIDER_API_BASE_URL}/stickers/ttp?text=${encodeURIComponent(
     text
   )}&api_key=${SPIDER_API_TOKEN}`;
-};
+}
 
-exports.search = async (type, search) => {
+export async function search(type, search) {
   if (!search) {
     throw new Error("Você precisa informar o parâmetro de pesquisa!");
   }
@@ -145,9 +147,9 @@ exports.search = async (type, search) => {
   );
 
   return data;
-};
+}
 
-exports.welcome = (title, description, imageURL) => {
+export function welcome(title, description, imageURL) {
   if (!title || !description || !imageURL) {
     throw new Error(
       "Você precisa informar o título, descrição e URL da imagem!"
@@ -163,9 +165,9 @@ exports.welcome = (title, description, imageURL) => {
   )}&description=${encodeURIComponent(
     description
   )}&image_url=${encodeURIComponent(imageURL)}&api_key=${SPIDER_API_TOKEN}`;
-};
+}
 
-exports.exit = (title, description, imageURL) => {
+export function exit(title, description, imageURL) {
   if (!title || !description || !imageURL) {
     throw new Error(
       "Você precisa informar o título, descrição e URL da imagem!"
@@ -181,9 +183,9 @@ exports.exit = (title, description, imageURL) => {
   )}&description=${encodeURIComponent(
     description
   )}&image_url=${encodeURIComponent(imageURL)}&api_key=${SPIDER_API_TOKEN}`;
-};
+}
 
-exports.imageAI = async (description) => {
+export async function imageAI(description) {
   if (!description) {
     throw new Error("Você precisa informar a descrição da imagem!");
   }
@@ -199,9 +201,9 @@ exports.imageAI = async (description) => {
   );
 
   return data;
-};
+}
 
-exports.canvas = (type, imageURL) => {
+export function canvas(type, imageURL) {
   if (!imageURL) {
     throw new Error("Você precisa informar a URL da imagem!");
   }
@@ -213,9 +215,9 @@ exports.canvas = (type, imageURL) => {
   return `${SPIDER_API_BASE_URL}/canvas/${type}?image_url=${encodeURIComponent(
     imageURL
   )}&api_key=${SPIDER_API_TOKEN}`;
-};
+}
 
-exports.setProxy = async (name) => {
+export async function setProxy(name) {
   try {
     if (!name) {
       throw new Error("Você precisa informar o nome da nova proxy!");
@@ -239,4 +241,16 @@ exports.setProxy = async (name) => {
       "Não foi possível definir a proxy! Verifique se o nome está correto e tente novamente!"
     );
   }
-};
+}
+
+export async function updatePlanUser(email, plan) {
+  const { data } = await axios.post(
+    `${SPIDER_API_BASE_URL}/internal/update-plan-user?api_key=${SPIDER_API_TOKEN}`,
+    {
+      email,
+      plan,
+    }
+  );
+
+  return data;
+}

@@ -4,7 +4,7 @@ export declare class SenderChainKey {
     private readonly CHAIN_KEY_SEED;
     private readonly iteration;
     private readonly chainKey;
-    constructor(iteration: number, chainKey: any);
+    constructor(iteration: number, chainKey: Uint8Array | Buffer);
     getIteration(): number;
     getSenderMessageKey(): SenderMessageKey;
     getNext(): SenderChainKey;

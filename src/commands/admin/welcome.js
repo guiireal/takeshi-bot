@@ -1,12 +1,12 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError, WarningError } = require(`${BASE_DIR}/errors`);
-const {
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError, WarningError } from "../../errors/index.js";
+import {
   activateWelcomeGroup,
   deactivateWelcomeGroup,
   isActiveWelcomeGroup,
-} = require(`${BASE_DIR}/utils/database`);
+} from "../../utils/database.js";
 
-module.exports = {
+export default {
   name: "welcome",
   description: "Ativo/desativo o recurso de boas-vindas no grupo.",
   commands: [
@@ -22,7 +22,6 @@ module.exports = {
   usage: `${PREFIX}welcome (1/0)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
@@ -30,19 +29,15 @@ module.exports = {
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
       );
     }
-
     const welcome = args[0] == "1";
     const notWelcome = args[0] == "0";
-
     if (!welcome && !notWelcome) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
       );
     }
-
     const hasActive = welcome && isActiveWelcomeGroup(remoteJid);
     const hasInactive = notWelcome && !isActiveWelcomeGroup(remoteJid);
-
     if (hasActive || hasInactive) {
       throw new WarningError(
         `O recurso de boas-vindas já está ${
@@ -50,17 +45,13 @@ module.exports = {
         }!`
       );
     }
-
     if (welcome) {
       activateWelcomeGroup(remoteJid);
     } else {
       deactivateWelcomeGroup(remoteJid);
     }
-
     await sendSuccessReact();
-
     const context = welcome ? "ativado" : "desativado";
-
     await sendReply(`Recurso de boas-vindas ${context} com sucesso!`);
   },
 };

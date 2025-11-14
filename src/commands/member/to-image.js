@@ -1,18 +1,16 @@
-const { PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
-const fs = require("fs");
-const path = require("path");
-const { exec } = require("child_process");
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { getRandomNumber } = require(`${BASE_DIR}/utils`);
+import { exec as execChild } from "node:child_process";
+import path from "node:path";
+import { PREFIX, TEMP_DIR } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { getRandomNumber } from "../../utils/index.js";
 
-module.exports = {
+export default {
   name: "toimage",
   description: "Transformo figurinhas estáticas em imagem",
   commands: ["toimage", "toimg"],
   usage: `${PREFIX}toimage (marque a figurinha) ou ${PREFIX}toimage (responda a figurinha)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     isSticker,
@@ -34,7 +32,7 @@ module.exports = {
       `${getRandomNumber(10_000, 99_999)}.png`
     );
 
-    exec(`ffmpeg -i ${inputPath} ${outputPath}`, async (error) => {
+    execChild(`ffmpeg -i ${inputPath} ${outputPath}`, async (error) => {
       if (error) {
         console.log(error);
         throw new Error(error);

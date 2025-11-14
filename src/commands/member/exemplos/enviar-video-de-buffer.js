@@ -1,19 +1,18 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
-const fs = require("node:fs");
-const { getBuffer } = require(`${BASE_DIR}/utils`);
+import { delay } from "baileys";
+import fs from "node:fs";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
+import { getBuffer } from "../../../utils/index.js";
 
-module.exports = {
+export default {
   name: "enviar-video-de-buffer",
   description: "Exemplo de como enviar um vídeo a partir de um buffer",
   commands: ["enviar-video-de-buffer"],
   usage: `${PREFIX}enviar-video-de-buffer`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendReact, sendVideoFromBuffer, userJid }) => {
+  handle: async ({ sendReply, sendReact, sendVideoFromBuffer, userLid }) => {
     await sendReact("🎥");
 
     await delay(3000);
@@ -62,8 +61,8 @@ module.exports = {
       await getBuffer(
         "https://api.spiderx.com.br/storage/samples/sample-video.mp4"
       ),
-      `Aqui está o vídeo que você pediu @${userJid.split("@")[0]}!`,
-      [userJid]
+      `Aqui está o vídeo que você pediu @${userLid.split("@")[0]}!`,
+      [userLid]
     );
 
     await delay(3000);

@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { play } = require(`${BASE_DIR}/services/spider-x-api`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../../config.js";
+import { InvalidParameterError } from "../../../errors/index.js";
+import { play } from "../../../services/spider-x-api.js";
 
-module.exports = {
+export default {
   name: "play-video",
   description: "Faço o download de vídeos",
   commands: ["play-video", "pv"],
   usage: `${PREFIX}play-video MC Hariel`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendVideoFromURL,

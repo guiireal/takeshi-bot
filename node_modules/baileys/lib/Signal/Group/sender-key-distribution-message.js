@@ -51,10 +51,10 @@ export class SenderKeyDistributionMessage extends CiphertextMessage {
         return this.iteration;
     }
     getChainKey() {
-        return typeof this.chainKey === 'string' ? Buffer.from(this.chainKey, 'base64') : this.chainKey;
+        return this.chainKey;
     }
     getSignatureKey() {
-        return typeof this.signatureKey === 'string' ? Buffer.from(this.signatureKey, 'base64') : this.signatureKey;
+        return this.signatureKey;
     }
     getId() {
         return this.id;

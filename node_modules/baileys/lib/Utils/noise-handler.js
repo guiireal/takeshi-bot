@@ -80,7 +80,8 @@ export const makeNoiseHandler = ({ keyPair: { private: privateKey, public: publi
             const decStaticContent = decrypt(serverHello.static);
             await mixIntoKey(Curve.sharedKey(privateKey, decStaticContent));
             const certDecoded = decrypt(serverHello.payload);
-            const { intermediate: certIntermediate } = proto.CertChain.decode(certDecoded);
+            const { intermediate: certIntermediate /*leaf*/ } = proto.CertChain.decode(certDecoded);
+            // TODO: handle this leaf stuff
             const { issuerSerial } = proto.CertChain.NoiseCertificate.Details.decode(certIntermediate.details);
             if (issuerSerial !== WA_CERT_DETAILS.SERIAL) {
                 throw new Boom('certification match failed', { statusCode: 400 });

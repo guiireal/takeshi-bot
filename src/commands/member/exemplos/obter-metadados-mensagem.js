@@ -1,8 +1,8 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const { onlyNumbers } = require(`${BASE_DIR}/utils`);
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
+import { onlyNumbers } from "../../../utils/index.js";
 
-module.exports = {
+export default {
   name: "obter-metadados-mensagem",
   description:
     "Exemplo avançado de como obter informações detalhadas da mensagem atual ou mensagem citada, incluindo análise de mídia, menções e metadados técnicos",
@@ -10,14 +10,13 @@ module.exports = {
   usage: `${PREFIX}obter-metadados-mensagem [responda uma mensagem para obter seus metadados detalhados]`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendReply,
     sendReact,
     sendText,
     webMessage,
-    userJid,
+    userLid,
     remoteJid,
     isGroup,
     isImage,
@@ -29,7 +28,7 @@ module.exports = {
     args,
     fullArgs,
     prefix,
-    replyJid,
+    replyLid,
     getGroupMetadata,
   }) => {
     await sendReply(JSON.stringify(webMessage, null, 2));
@@ -57,7 +56,7 @@ module.exports = {
           ...webMessage.key,
           participant:
             webMessage.message.extendedTextMessage.contextInfo.participant ||
-            replyJid,
+            replyLid,
           id: webMessage.message.extendedTextMessage.contextInfo.stanzaId,
         },
         messageTimestamp:
@@ -77,8 +76,8 @@ module.exports = {
 
     await delay(2000);
 
-    const targetUserJid = isAnalyzingReply ? replyJid : userJid;
-    const targetUserNumber = onlyNumbers(targetUserJid);
+    const targetUserLid = isAnalyzingReply ? replyLid : userLid;
+    const targetUserNumber = onlyNumbers(targetUserLid);
 
     const messageText = isAnalyzingReply
       ? getMessageText(targetMessage)
@@ -117,7 +116,7 @@ module.exports = {
 
 🆔 *Identificação:*
 • Usuário: @${targetUserNumber}
-• JID: \`${targetUserJid}\`
+• LID: \`${targetUserLid}\`
 • Chat: \`${remoteJid}\`
 • ID da mensagem: \`${targetMessage.key?.id || "N/A"}\`
 • Timestamp: ${new Date(
@@ -134,7 +133,7 @@ module.exports = {
 🏷️ *Flags de Mídia:*
 ${messageFlags}`;
 
-    await sendText(basicInfo, [targetUserJid]);
+    await sendText(basicInfo, [targetUserLid]);
 
     await delay(3000);
 
@@ -161,7 +160,7 @@ ${mediaInfo}
       try {
         const groupMetadata = await getGroupMetadata();
         const participant = groupMetadata?.participants?.find(
-          (p) => p.id === targetUserJid
+          (p) => p.id === targetUserLid
         );
 
         const groupInfo = `👥 *Informações do Grupo:*
@@ -189,7 +188,7 @@ ${mediaInfo}
       const replyInfo = `🔗 *Informações de Resposta:*
 
 📎 *Contexto:*
-• Respondendo para: @${onlyNumbers(replyJid)}
+• Respondendo para: @${onlyNumbers(replyLid)}
 • ID da mensagem original: \`${
         webMessage.message?.extendedTextMessage?.contextInfo?.stanzaId || "N/A"
       }\`
@@ -209,7 +208,7 @@ ${mediaInfo}
         (targetMessage.messageTimestamp || 0) * 1000
       ).toLocaleString("pt-BR")}`;
 
-      await sendText(replyInfo, [replyJid]);
+      await sendText(replyInfo, [replyLid]);
       await delay(3000);
     }
 
@@ -220,7 +219,7 @@ ${mediaInfo}
 
 🎯 *Para desenvolvedores:*
 • Use \`isReply\` para detectar respostas
-• \`replyJid\` contém o JID do usuário citado
+• \`replyLid\` contém o JID do usuário citado
 • \`webMessage.message.extendedTextMessage.contextInfo\` tem dados da mensagem citada
 • \`getGroupMetadata()\` fornece informações detalhadas do grupo
 

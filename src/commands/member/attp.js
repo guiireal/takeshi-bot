@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { attp } = require(`${BASE_DIR}/services/spider-x-api`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { attp } from "../../services/spider-x-api.js";
 
-module.exports = {
+export default {
   name: "attp",
   description: "Faz figurinhas animadas de texto.",
   commands: ["attp"],
   usage: `${PREFIX}attp teste`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     sendWaitReact,

@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-localizacao",
   description: "Exemplo de como enviar uma localização",
   commands: ["enviar-localizacao"],
   usage: `${PREFIX}enviar-localizacao`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendReact, sendLocation }) => {
     await sendReact("📍");

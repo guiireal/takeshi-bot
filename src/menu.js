@@ -3,12 +3,12 @@
  *
  * @author Dev Gui
  */
-const { BOT_NAME } = require("./config");
-const packageInfo = require("../package.json");
-const { readMore } = require("./utils");
-const { getPrefix } = require("./utils/database");
+import pkg from "../package.json" with { type: "json" };
+import { BOT_NAME } from "./config.js";
+import { getPrefix } from "./utils/database.js";
+import { readMore } from "./utils/index.js";
 
-exports.menuMessage = (groupJid) => {
+export function menuMessage(groupJid) {
   const date = new Date();
 
   const prefix = getPrefix(groupJid);
@@ -19,19 +19,17 @@ exports.menuMessage = (groupJid) => {
 ▢ • Data: ${date.toLocaleDateString("pt-br")}
 ▢ • Hora: ${date.toLocaleTimeString("pt-br")}
 ▢ • Prefixo: ${prefix}
-▢ • Versão: ${packageInfo.version}
+▢ • Versão: ${pkg.version}
 ▢
 ╰━━─「🪐」─━━
 
 ╭━━⪩ DONO ⪨━━
 ▢
 ▢ • ${prefix}exec
-▢ • ${prefix}get-id
+▢ • ${prefix}get-group-id
 ▢ • ${prefix}off
 ▢ • ${prefix}on
-▢ • ${prefix}set-bot-number
 ▢ • ${prefix}set-menu-image
-▢ • ${prefix}set-owner-number
 ▢ • ${prefix}set-prefix
 ▢ • ${prefix}set-spider-api-token
 ▢
@@ -79,13 +77,14 @@ exports.menuMessage = (groupJid) => {
 ▢ • ${prefix}exemplos-de-mensagens
 ▢ • ${prefix}fake-chat
 ▢ • ${prefix}gerar-link
-▢ • ${prefix}get-lid
+▢ • ${prefix}meu-lid
 ▢ • ${prefix}perfil
 ▢ • ${prefix}ping
 ▢ • ${prefix}raw-message
 ▢ • ${prefix}refresh
 ▢ • ${prefix}rename
 ▢ • ${prefix}sticker
+▢ • ${prefix}suporte
 ▢ • ${prefix}to-image
 ▢ • ${prefix}to-mp3
 ▢ • ${prefix}ttp

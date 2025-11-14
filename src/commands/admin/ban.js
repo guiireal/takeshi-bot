@@ -1,33 +1,27 @@
-const {
-  PREFIX,
-  BOT_NUMBER,
-  OWNER_NUMBER,
-  ONWER_LID,
-} = require(`${BASE_DIR}/config`);
-const { DangerError, InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const { toUserJidOrLid, onlyNumbers, toUserJid } = require(`${BASE_DIR}/utils`);
+import { BOT_LID, OWNER_LID, PREFIX } from "../../config.js";
+import { DangerError, InvalidParameterError } from "../../errors/index.js";
+import { onlyNumbers } from "../../utils/index.js";
 
-module.exports = {
+export default {
   name: "ban",
   description: "Removo um membro do grupo",
   commands: ["ban", "kick"],
   usage: `${PREFIX}ban @marcar_membro 
-  
+
 ou 
 
 ${PREFIX}ban (mencionando uma mensagem)`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     args,
     isReply,
     socket,
     remoteJid,
-    replyJid,
+    replyLid,
     sendReply,
-    userJid,
+    userLid,
     sendSuccessReact,
     sendErrorReply,
   }) => {
@@ -38,40 +32,41 @@ ${PREFIX}ban (mencionando uma mensagem)`,
         );
       }
 
-      const userId = toUserJidOrLid(args[0]);
+      if (args.length && !args[0].includes("@")) {
+        throw new InvalidParameterError(
+          'Você precisa mencionar um membro com "@"!'
+        );
+      }
 
-      const memberToRemoveJid = isReply ? replyJid : userId;
-      const memberToRemoveNumber = onlyNumbers(memberToRemoveJid);
+      const userId = args[0] ? `${onlyNumbers(args[0])}@lid` : null;
 
-      if (!memberToRemoveJid) {
+      const memberToRemoveLid = isReply ? replyLid : userId;
+
+      if (!memberToRemoveLid) {
         throw new InvalidParameterError("Membro inválido!");
       }
 
-      if (memberToRemoveJid === userJid) {
+      if (memberToRemoveLid === userLid) {
         throw new DangerError("Você não pode remover você mesmo!");
       }
 
-      if (
-        memberToRemoveNumber === OWNER_NUMBER ||
-        memberToRemoveNumber + "@lid" === ONWER_LID
-      ) {
+      const resolvedOwnerLid = OWNER_LID;
+
+      if (resolvedOwnerLid && memberToRemoveLid === resolvedOwnerLid) {
         throw new DangerError("Você não pode remover o dono do bot!");
       }
 
-      const botJid = toUserJid(BOT_NUMBER);
-
-      if (memberToRemoveJid === botJid) {
+      if (BOT_LID && memberToRemoveLid === BOT_LID) {
         throw new DangerError("Você não pode me remover!");
       }
 
       await socket.groupParticipantsUpdate(
         remoteJid,
-        [memberToRemoveJid],
+        [memberToRemoveLid],
         "remove"
       );
 
       await sendSuccessReact();
-
       await sendReply("Membro removido com sucesso!");
     } catch (error) {
       console.log(error);

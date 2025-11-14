@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-enquete",
   description: "Exemplo de como enviar enquetes/votações em grupos",
   commands: ["enviar-enquete", "poll-example", "exemplo-poll"],
   usage: `${PREFIX}enviar-enquete`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendPoll, sendReply, sendReact }) => {
     await sendReact("📊");

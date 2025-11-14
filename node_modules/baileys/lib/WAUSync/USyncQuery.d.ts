@@ -18,7 +18,7 @@ export declare class USyncQuery {
     withMode(mode: string): this;
     withContext(context: string): this;
     withUser(user: USyncUser): this;
-    parseUSyncQueryResult(result: BinaryNode): USyncQueryResult | undefined;
+    parseUSyncQueryResult(result: BinaryNode | undefined): USyncQueryResult | undefined;
     withDeviceProtocol(): this;
     withContactProtocol(): this;
     withStatusProtocol(): this;

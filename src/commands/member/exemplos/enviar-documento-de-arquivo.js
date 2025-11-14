@@ -1,15 +1,14 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
+import { delay } from "baileys";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-documento-de-arquivo",
   description: "Exemplo de como enviar documentos a partir de arquivos locais",
   commands: ["enviar-documento-de-arquivo"],
   usage: `${PREFIX}enviar-documento-de-arquivo`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendDocumentFromFile, sendReact }) => {
     await sendReact("📄");

@@ -4,9 +4,9 @@
  *
  * @author Dev Gui
  */
-const { PREFIX } = require(`${BASE_DIR}/config`);
+import { PREFIX } from "../../config.js";
 
-module.exports = {
+export default {
   name: "agendar-mensagem",
   description: "Agenda uma mensagem para ser enviada após um tempo definido.",
   commands: ["agendar", "agendar-mensagem"],
@@ -15,7 +15,6 @@ module.exports = {
 Exemplo: ${PREFIX}agendar-mensagem Reunião amanhã / 10m`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ args, sendErrorReply, sendSuccessReply, sendText }) => {
     if (args.length !== 2) {

@@ -5,7 +5,6 @@ export const encodeWAM = (binaryInfo) => {
     binaryInfo.buffer = [];
     encodeWAMHeader(binaryInfo);
     encodeEvents(binaryInfo);
-    console.log(binaryInfo.buffer);
     const totalSize = binaryInfo.buffer.map(a => a.length).reduce((a, b) => a + b);
     const buffer = Buffer.alloc(totalSize);
     let offset = 0;

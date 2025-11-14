@@ -1,7 +1,7 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-texto",
   description:
     "Exemplo de como enviar mensagens de texto simples e com menções",
@@ -9,9 +9,8 @@ module.exports = {
   usage: `${PREFIX}enviar-texto`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendText, sendReact, userJid }) => {
+  handle: async ({ sendReply, sendText, sendReact, userLid }) => {
     await sendReact("💬");
 
     await delay(3000);
@@ -25,8 +24,8 @@ module.exports = {
     await delay(3000);
 
     await sendText(
-      `Olá! Esta mensagem menciona você: @${userJid.split("@")[0]}`,
-      [userJid]
+      `Olá! Esta mensagem menciona você: @${userLid.split("@")[0]}`,
+      [userLid]
     );
 
     await delay(3000);

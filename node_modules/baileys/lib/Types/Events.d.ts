@@ -4,7 +4,7 @@ import type { AuthenticationCreds } from './Auth.js';
 import type { WACallEvent } from './Call.js';
 import type { Chat, ChatUpdate, PresenceData } from './Chat.js';
 import type { Contact } from './Contact.js';
-import type { GroupMetadata, ParticipantAction, RequestJoinAction, RequestJoinMethod } from './GroupMetadata.js';
+import type { GroupMetadata, GroupParticipant, ParticipantAction, RequestJoinAction, RequestJoinMethod } from './GroupMetadata.js';
 import type { Label } from './Label.js';
 import type { LabelAssociation } from './LabelAssociation.js';
 import type { MessageUpsertType, MessageUserReceiptUpdate, WAMessage, WAMessageKey, WAMessageUpdate } from './Message.js';
@@ -21,16 +21,16 @@ export type BaileysEventMap = {
         messages: WAMessage[];
         isLatest?: boolean;
         progress?: number | null;
-        syncType?: proto.HistorySync.HistorySyncType;
+        syncType?: proto.HistorySync.HistorySyncType | null;
         peerDataRequestSessionId?: string | null;
     };
     /** upsert chats */
     'chats.upsert': Chat[];
     /** update the given chats */
     'chats.update': ChatUpdate[];
-    'chats.phoneNumberShare': {
+    'lid-mapping.update': {
         lid: string;
-        jid: string;
+        pn: string;
     };
     /** delete chats with given ID */
     'chats.delete': string[];
@@ -80,13 +80,16 @@ export type BaileysEventMap = {
     'group-participants.update': {
         id: string;
         author: string;
-        participants: string[];
+        authorPn?: string;
+        participants: GroupParticipant[];
         action: ParticipantAction;
     };
     'group.join-request': {
         id: string;
         author: string;
+        authorPn?: string;
         participant: string;
+        participantPn?: string;
         action: RequestJoinAction;
         method: RequestJoinMethod;
     };

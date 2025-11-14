@@ -1,9 +1,6 @@
 import { GroupMetadata, proto } from "baileys";
 
 declare global {
-  /** Caminho base do projeto, usado para imports. */
-  const BASE_DIR: string;
-
   /**
    * Propriedades e funções disponíveis no objeto passado para a função handle
    * de cada comando. Você pode acessá-las com desestruturação:
@@ -86,7 +83,7 @@ declare global {
     /**
      * ID da mensagem que está sendo respondida.
      */
-    replyJid: string;
+    replyLid: string;
 
     /**
      * Texto da mensagem que vem de uma mensagem que você responde em cima.
@@ -110,8 +107,12 @@ declare global {
 
     /**
      * ID do usuário que está mandando a mensagem.
+     *
+     * O WhatsApp está migrando do antigo identificador JID (baseado em número de telefone) para o LID (Local Identifier),
+     * que é um identificador privado, aleatório e não revela o número do usuário. O LID reforça a privacidade, pois o número
+     * só é compartilhado se o próprio usuário permitir. Veja mais em: https://digisac.com.br/jid-lid-no-whatsapp/
      */
-    userJid: string;
+    userLid: string;
 
     /**
      * Informações detalhadas da mensagem do WhatsApp.
@@ -164,10 +165,10 @@ declare global {
      *
      * Exemplo:
      * ```javascript
-     * const { ASSETS_DIR } = require(`${BASE_DIR}/src/config`);
-     * const path = require("node:path");
+     * import { ASSETS_DIR } from "../../config.js";
+     * import path from "node:path";
      *
-     * const filePath = path.join(ASSETS_DIR, "samples" "sample-audio.mp3");
+     * const filePath = path.join(ASSETS_DIR, "samples", "sample-audio.mp3");
      * await sendAudioFromFile(filePath);
      * ```
      * @param filePath Caminho do arquivo
@@ -185,15 +186,15 @@ declare global {
      *
      * Exemplo:
      * ```javascript
-     * const { ASSETS_DIR } = require(`${BASE_DIR}/src/config`);
-     * const { getBuffer } = require(`${BASE_DIR}/src/utils`);
-     * const path = require("node:path");
-     * const fs = require("node:fs");
+     * import { ASSETS_DIR } from "../../config.js";
+     * import { getBuffer } from "../../utils/index.js";
+     * import path from "node:path";
+     * import fs from "node:fs";
      *
-     * const buffer = fs.readFileSync(path.join(ASSETS_DIR, "samples" "sample-audio.mp3"))
-     * ou
+     * const buffer = fs.readFileSync(path.join(ASSETS_DIR, "samples", "sample-audio.mp3"));
+     * // ou
      * const buffer = await getBuffer("https://exemplo.com/audio.mp3");
-     * await sendAudioFromBuffer(filePath);
+     * await sendAudioFromBuffer(buffer, true, false);
      * ```
      * @param buffer Buffer do arquivo de áudio
      * @param asVoice Se o áudio deve ser enviado como mensagem de voz (true ou false)
@@ -313,13 +314,13 @@ declare global {
      *
      * Exemplo:
      * ```javascript
-     * const { ASSETS_DIR } = require(`${BASE_DIR}/config`);
-     * const { getBuffer } = require(`${BASE_DIR}/utils`);
-     * const path = require("node:path");
-     * const fs = require("node:fs");
+     * import { ASSETS_DIR } from "../../config.js";
+     * import { getBuffer } from "../../utils/index.js";
+     * import path from "node:path";
+     * import fs from "node:fs";
      *
      * const buffer = fs.readFileSync(path.join(ASSETS_DIR, "samples", "sample-video.mp4"));
-     * ou
+     * // ou
      * const buffer = await getBuffer("https://exemplo.com/video.gif");
      * await sendGifFromBuffer(buffer, "Aqui está seu gif @5511920202020!", ["5511920202020@s.whatsapp.net"]);
      * ```
@@ -359,11 +360,11 @@ declare global {
      *
      * Exemplo:
      * ```javascript
-     * const fs = require("node:fs");
-     * const { getBuffer } = require(`${BASE_DIR}/utils`);
+     * import fs from "node:fs";
+     * import { getBuffer } from "../../utils/index.js";
      *
      * const buffer = fs.readFileSync("./assets/image.png");
-     * ou
+     * // ou
      * const buffer = await getBuffer("https://exemplo.com/imagem.png");
      * await sendImageFromBuffer(buffer, "Aqui está sua imagem @5511920202020!", ["5511920202020@s.whatsapp.net"]);
      * ```
@@ -562,13 +563,13 @@ declare global {
      *
      * Exemplo:
      * ```javascript
-     * const { ASSETS_DIR } = require(`${BASE_DIR}/config`);
-     * const { getBuffer } = require(`${BASE_DIR}/utils`);
-     * const path = require("node:path");
-     * const fs = require("node:fs");
+     * import { ASSETS_DIR } from "../../config.js";
+     * import { getBuffer } from "../../utils/index.js";
+     * import path from "node:path";
+     * import fs from "node:fs";
      *
      * const buffer = fs.readFileSync(path.join(ASSETS_DIR, "samples", "sample-sticker.webp"));
-     * ou
+     * // ou
      * const buffer = await getBuffer("https://exemplo.com/sticker.webp");
      * await sendStickerFromBuffer(buffer);
      * ```
@@ -635,13 +636,13 @@ declare global {
      *
      * Exemplo:
      * ```javascript
-     * const { ASSETS_DIR } = require(`${BASE_DIR}/config`);
-     * const { getBuffer } = require(`${BASE_DIR}/utils`);
-     * const path = require("node:path");
-     * const fs = require("node:fs");
+     * import { ASSETS_DIR } from "../../config.js";
+     * import { getBuffer } from "../../utils/index.js";
+     * import path from "node:path";
+     * import fs from "node:fs";
      *
      * const buffer = fs.readFileSync(path.join(ASSETS_DIR, "samples", "sample-video.mp4"));
-     * ou
+     * // ou
      * const buffer = await getBuffer("https://exemplo.com/video.mp4");
      * await sendVideoFromBuffer(buffer, "Aqui está o vídeo @5511920202020!", ["5511920202020@s.whatsapp.net"]);
      * ```
@@ -662,8 +663,8 @@ declare global {
      *
      * Exemplo:
      * ```javascript
-     * const { ASSETS_DIR } = require(`${BASE_DIR}/config`);
-     * const path = require("node:path");
+     * import { ASSETS_DIR } from "../../config.js";
+     * import path from "node:path";
      *
      * const filePath = path.join(ASSETS_DIR, "samples", "sample-document.pdf");
      * await sendDocumentFromFile(filePath, "application/pdf", "documento.pdf");
@@ -704,13 +705,13 @@ declare global {
      *
      * Exemplo:
      * ```javascript
-     * const { ASSETS_DIR } = require(`${BASE_DIR}/config`);
-     * const { getBuffer } = require(`${BASE_DIR}/utils`);
-     * const path = require("node:path");
-     * const fs = require("node:fs");
+     * import { ASSETS_DIR } from "../../config.js";
+     * import { getBuffer } from "../../utils/index.js";
+     * import path from "node:path";
+     * import fs from "node:fs";
      *
      * const buffer = fs.readFileSync(path.join(ASSETS_DIR, "samples", "sample-document.pdf"));
-     * ou
+     * // ou
      * const buffer = await getBuffer("https://exemplo.com/documento.pdf");
      * await sendDocumentFromBuffer(buffer, "application/pdf", "documento.pdf");
      * ```

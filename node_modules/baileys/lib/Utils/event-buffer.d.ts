@@ -28,7 +28,6 @@ type BaileysBufferableEventEmitter = BaileysEventEmitter & {
 /**
  * The event buffer logically consolidates different events into a single event
  * making the data processing more efficient.
- * @param ev the baileys event emitter
  */
 export declare const makeEventBuffer: (logger: ILogger) => BaileysBufferableEventEmitter;
 export {};

@@ -1,9 +1,5 @@
-const { WarningError } = require("./WarningError");
-const { DangerError } = require("./DangerError");
-const { InvalidParameterError } = require("./InvalidParameterError");
+import DangerError from "./DangerError.js";
+import InvalidParameterError from "./InvalidParameterError.js";
+import WarningError from "./WarningError.js";
 
-module.exports = {
-  WarningError,
-  DangerError,
-  InvalidParameterError,
-};
+export { DangerError, InvalidParameterError, WarningError };

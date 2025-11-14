@@ -1,6 +1,4 @@
-/* @ts-ignore */
 import { decrypt, encrypt } from 'libsignal/src/crypto.js';
-import queueJob from './queue-job.js';
 import { SenderKeyMessage } from './sender-key-message.js';
 import { SenderKeyName } from './sender-key-name.js';
 import { SenderKeyRecord } from './sender-key-record.js';
@@ -10,44 +8,37 @@ export class GroupCipher {
         this.senderKeyStore = senderKeyStore;
         this.senderKeyName = senderKeyName;
     }
-    queueJob(awaitable) {
-        return queueJob(this.senderKeyName.toString(), awaitable);
-    }
     async encrypt(paddedPlaintext) {
-        return await this.queueJob(async () => {
-            const record = await this.senderKeyStore.loadSenderKey(this.senderKeyName);
-            if (!record) {
-                throw new Error('No SenderKeyRecord found for encryption');
-            }
-            const senderKeyState = record.getSenderKeyState();
-            if (!senderKeyState) {
-                throw new Error('No session to encrypt message');
-            }
-            const iteration = senderKeyState.getSenderChainKey().getIteration();
-            const senderKey = this.getSenderKey(senderKeyState, iteration === 0 ? 0 : iteration + 1);
-            const ciphertext = await this.getCipherText(senderKey.getIv(), senderKey.getCipherKey(), paddedPlaintext);
-            const senderKeyMessage = new SenderKeyMessage(senderKeyState.getKeyId(), senderKey.getIteration(), ciphertext, senderKeyState.getSigningKeyPrivate());
-            await this.senderKeyStore.storeSenderKey(this.senderKeyName, record);
-            return senderKeyMessage.serialize();
-        });
+        const record = await this.senderKeyStore.loadSenderKey(this.senderKeyName);
+        if (!record) {
+            throw new Error('No SenderKeyRecord found for encryption');
+        }
+        const senderKeyState = record.getSenderKeyState();
+        if (!senderKeyState) {
+            throw new Error('No session to encrypt message');
+        }
+        const iteration = senderKeyState.getSenderChainKey().getIteration();
+        const senderKey = this.getSenderKey(senderKeyState, iteration === 0 ? 0 : iteration + 1);
+        const ciphertext = await this.getCipherText(senderKey.getIv(), senderKey.getCipherKey(), paddedPlaintext);
+        const senderKeyMessage = new SenderKeyMessage(senderKeyState.getKeyId(), senderKey.getIteration(), ciphertext, senderKeyState.getSigningKeyPrivate());
+        await this.senderKeyStore.storeSenderKey(this.senderKeyName, record);
+        return senderKeyMessage.serialize();
     }
     async decrypt(senderKeyMessageBytes) {
-        return await this.queueJob(async () => {
-            const record = await this.senderKeyStore.loadSenderKey(this.senderKeyName);
-            if (!record) {
-                throw new Error('No SenderKeyRecord found for decryption');
-            }
-            const senderKeyMessage = new SenderKeyMessage(null, null, null, null, senderKeyMessageBytes);
-            const senderKeyState = record.getSenderKeyState(senderKeyMessage.getKeyId());
-            if (!senderKeyState) {
-                throw new Error('No session found to decrypt message');
-            }
-            senderKeyMessage.verifySignature(senderKeyState.getSigningKeyPublic());
-            const senderKey = this.getSenderKey(senderKeyState, senderKeyMessage.getIteration());
-            const plaintext = await this.getPlainText(senderKey.getIv(), senderKey.getCipherKey(), senderKeyMessage.getCipherText());
-            await this.senderKeyStore.storeSenderKey(this.senderKeyName, record);
-            return plaintext;
-        });
+        const record = await this.senderKeyStore.loadSenderKey(this.senderKeyName);
+        if (!record) {
+            throw new Error('No SenderKeyRecord found for decryption');
+        }
+        const senderKeyMessage = new SenderKeyMessage(null, null, null, null, senderKeyMessageBytes);
+        const senderKeyState = record.getSenderKeyState(senderKeyMessage.getKeyId());
+        if (!senderKeyState) {
+            throw new Error('No session found to decrypt message');
+        }
+        senderKeyMessage.verifySignature(senderKeyState.getSigningKeyPublic());
+        const senderKey = this.getSenderKey(senderKeyState, senderKeyMessage.getIteration());
+        const plaintext = await this.getPlainText(senderKey.getIv(), senderKey.getCipherKey(), senderKeyMessage.getCipherText());
+        await this.senderKeyStore.storeSenderKey(this.senderKeyName, record);
+        return plaintext;
     }
     getSenderKey(senderKeyState, iteration) {
         let senderChainKey = senderKeyState.getSenderChainKey();
@@ -81,10 +72,7 @@ export class GroupCipher {
     }
     async getCipherText(iv, key, plaintext) {
         try {
-            const ivBuffer = typeof iv === 'string' ? Buffer.from(iv, 'base64') : iv;
-            const keyBuffer = typeof key === 'string' ? Buffer.from(key, 'base64') : key;
-            const plaintextBuffer = typeof plaintext === 'string' ? Buffer.from(plaintext) : plaintext;
-            return encrypt(keyBuffer, plaintextBuffer, ivBuffer);
+            return encrypt(key, plaintext, iv);
         }
         catch (e) {
             throw new Error('InvalidMessageException');

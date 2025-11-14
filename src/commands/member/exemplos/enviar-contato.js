@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-contato",
   description: "Exemplo de como enviar um contato",
   commands: ["enviar-contato"],
   usage: `${PREFIX}enviar-contato`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendReact, sendContact }) => {
     await sendReact("📲");

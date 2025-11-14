@@ -1,16 +1,15 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-imagem-de-url",
   description: "Exemplo de como enviar uma imagem a partir de uma URL",
   commands: ["enviar-imagem-de-url"],
   usage: `${PREFIX}enviar-imagem-de-url`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendImageFromURL, sendReact, userJid }) => {
+  handle: async ({ sendReply, sendImageFromURL, sendReact, userLid }) => {
     await sendReact("🖼️");
 
     await delay(3000);
@@ -42,8 +41,8 @@ module.exports = {
 
     await sendImageFromURL(
       "https://api.spiderx.com.br/storage/samples/sample-image.jpg",
-      `Logo do Takeshi Bot para você ${userJid.split("@")[0]}!`,
-      [userJid]
+      `Logo do Takeshi Bot para você ${userLid.split("@")[0]}!`,
+      [userLid]
     );
 
     await sendReply(

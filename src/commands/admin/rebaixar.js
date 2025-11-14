@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { isGroup, toUserJidOrLid } = require(`${BASE_DIR}/utils`);
-const { errorLog } = require(`${BASE_DIR}/utils/logger`);
+import { PREFIX } from "../../config.js";
+import { isGroup, onlyNumbers } from "../../utils/index.js";
+import { errorLog } from "../../utils/logger.js";
 
-module.exports = {
+export default {
   name: "rebaixar",
   description: "Rebaixa um administrador para membro comum",
   commands: ["rebaixar", "rebaixa", "demote"],
   usage: `${PREFIX}rebaixar @usuario`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     args,
@@ -22,15 +21,12 @@ module.exports = {
     if (!isGroup(remoteJid)) {
       return sendWarningReply("Este comando só pode ser usado em grupo !");
     }
-
     if (!args.length || !args[0]) {
       return sendWarningReply(
         "Por favor, marque um administrador para rebaixar."
       );
     }
-
-    const userId = toUserJidOrLid(args[0]);
-
+    const userId = args[0] ? `${onlyNumbers(args[0])}@lid` : null;
     try {
       await socket.groupParticipantsUpdate(remoteJid, [userId], "demote");
       await sendSuccessReply("Usuário rebaixado com sucesso!");

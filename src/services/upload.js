@@ -3,10 +3,10 @@
  *
  * @author Dev Gui
  */
-const FormData = require("form-data");
-const axios = require("axios");
+import axios from "axios";
+import FormData from "form-data";
 
-exports.upload = async (imageBuffer, filename) => {
+export async function upload(imageBuffer, filename) {
   try {
     if (!Buffer.isBuffer(imageBuffer)) {
       throw new Error("O primeiro parâmetro deve ser um Buffer válido!");
@@ -50,6 +50,7 @@ exports.upload = async (imageBuffer, filename) => {
 
     return result.image.url;
   } catch (error) {
+    console.log(error);
     console.error("Erro no upload da imagem:", error.message);
 
     if (error.response) {
@@ -69,4 +70,4 @@ exports.upload = async (imageBuffer, filename) => {
       };
     }
   }
-};
+}

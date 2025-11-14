@@ -1,13 +1,12 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "raw-message",
   description: "Obtem dados brutos da mensagem",
   commands: ["raw-message", "raw"],
   usage: `${PREFIX}raw-message`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ webMessage, sendReply }) => {
     await sendReply(JSON.stringify(webMessage, null, 2));

@@ -155,9 +155,9 @@ takeshi-bot/
 
 **Conteúdo principal:**
 ```javascript
-const { connect } = require("./src/connection");
-const { load } = require("./src/loader");
-const { badMacHandler } = require("./src/utils/badMacHandler");
+import { connect } from "./src/connection.js";
+import { load } from "./src/loader";
+import { badMacHandler } from "./src/utils/badMacHandler.js";
 
 async function startBot() {
   const socket = await connect();  // Conecta ao WhatsApp
@@ -300,7 +300,6 @@ rm -rf ./assets/auth/baileys  # Deleta pasta de autenticação
 - [ ] Inclui prints do comando funcionando
 - [ ] Usa funções existentes da pasta utils
 - [ ] Importa CommandHandleProps corretamente
-- [ ] Usa BASE_DIR para imports
 ```
 
 **Regras importantes:**
@@ -358,10 +357,9 @@ src/commands/
 │
 ├── 📁 owner/              # 🔐 DONO DO BOT/GRUPO
 │   ├── exec.js           # Executar comandos shell
-│   ├── get-id.js         # Obter ID do grupo
+│   ├── get-group-id.js         # Obter ID do grupo
 │   ├── off.js            # Desligar bot no grupo
 │   ├── on.js             # Ligar bot no grupo
-│   ├── set-bot-number.js
 │   ├── set-menu-image.js
 │   ├── set-prefix.js
 │   └── set-spider-api-token.js
@@ -441,26 +439,6 @@ src/commands/
         └── ... (24 arquivos totais)
 ```
 
-**Como funciona a verificação de permissão:**
-
-```javascript
-// src/utils/dynamicCommand.js (simplificado)
-
-if (command.category === "owner") {
-  if (!isOwner) {
-    throw new Error("Apenas o dono pode usar este comando!");
-  }
-}
-
-if (command.category === "admin") {
-  if (!isAdmin && !isOwner) {
-    throw new Error("Apenas admins podem usar este comando!");
-  }
-}
-
-// member = qualquer um pode usar
-```
-
 **Nota importante:** O desenvolvedor **NÃO precisa** verificar permissões manualmente. Basta colocar o comando na pasta correta!
 
 ---
@@ -503,11 +481,12 @@ if (command.category === "admin") {
 **Acesso via `src/utils/database.js`:**
 ```javascript
 // ❌ NUNCA faça isso:
-const data = JSON.parse(fs.readFileSync('database/config.json'));
+// import fs from 'fs';
+// const data = JSON.parse(fs.readFileSync('database/config.json'));
 
 // ✅ SEMPRE faça isso:
-const { getPrefix, setBotNumber } = require('./utils/database');
-const prefix = getPrefix(groupJid);  // Busca no DB, fallback para config
+import { getPrefix } from './utils/database';
+const prefix = getPrefix(groupLid);  // Busca no DB, fallback para config
 ```
 
 ---
@@ -519,38 +498,79 @@ const prefix = getPrefix(groupJid);  // Busca no DB, fallback para config
 **Configurações principais:**
 
 ```javascript
-// Prefixo padrão (pode ser sobrescrito por grupo)
-exports.PREFIX = "/";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-// Identidade do bot
-exports.BOT_EMOJI = "🤖";
-exports.BOT_NAME = "Takeshi Bot";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Números (apenas dígitos, sem símbolos)
-exports.BOT_NUMBER = "6285792267279";
-exports.OWNER_NUMBER = "5511996122056";
-exports.OWNER_LID = "134875512348681@lid";
+// Prefixo padrão dos comandos.
+export const PREFIX = "/";
 
-// API externa (Spider X API)
-exports.SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
-exports.SPIDER_API_TOKEN = "asOjDIpVROlnghw4jKDt";
+// Emoji do bot (mude se preferir).
+export const BOT_EMOJI = "🤖";
 
-// Grupo específico (deixe vazio para responder todos)
-exports.ONLY_GROUP_ID = "";
+// Nome do bot (mude se preferir).
+export const BOT_NAME = "Takeshi Bot";
 
-// Modo desenvolvedor (loga todas mensagens)
-exports.DEVELOPER_MODE = false;
+// LID do bot.
+// Para obter o LID do bot, use o comando <prefixo>lid respondendo em cima de uma mensagem do número do bot
+// Troque o <prefixo> pelo prefixo do bot (ex: /lid).
+export const BOT_LID = "12345678901234567890@lid";
 
-// Timeout anti-ban (ms)
-exports.TIMEOUT_IN_MILLISECONDS_BY_EVENT = 700;
+// LID do dono do bot.
+// Para obter o LID do dono do bot, use o comando <prefixo>meu-lid
+// Troque o <prefixo> pelo prefixo do bot (ex: /meu-lid).
+export const OWNER_LID = "12345678901234567890@lid";
+
+// Diretório dos comandos
+export const COMMANDS_DIR = path.join(__dirname, "commands");
+
+// Diretório de arquivos de mídia.
+export const DATABASE_DIR = path.resolve(__dirname, "..", "database");
+
+// Diretório de arquivos de mídia.
+export const ASSETS_DIR = path.resolve(__dirname, "..", "assets");
+
+// Diretório de arquivos temporários.
+export const TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
+
+// Timeout em milissegundos por evento (evita banimento).
+export const TIMEOUT_IN_MILLISECONDS_BY_EVENT = 700;
+
+// Plataforma de API's
+export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
+
+// Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
+export const SPIDER_API_TOKEN = "seu_token_aqui";
+
+// Caso queira responder apenas um grupo específico,
+// coloque o ID dele na configuração abaixo.
+// Para saber o ID do grupo, use o comando <prefixo>get-group-id
+// Troque o <prefixo> pelo prefixo do bot (ex: /get-group-id).
+export const ONLY_GROUP_ID = "";
+
+// Configuração para modo de desenvolvimento
+// mude o valor para ( true ) sem os parênteses
+// caso queira ver os logs de mensagens recebidas
+export const DEVELOPER_MODE = false;
+
+// Caso queira usar proxy.
+export const PROXY_PROTOCOL = "http";
+export const PROXY_HOST = "";
+export const PROXY_PORT = "";
+export const PROXY_USERNAME = "";
+export const PROXY_PASSWORD = "";
+
+// Chave da OpenAI para o comando de suporte
+export const OPENAI_API_KEY =
+  "";
 ```
 
 **Comandos para configurar em runtime:**
 
 ```bash
 /set-prefix #              # Muda prefixo do grupo
-/set-bot-number +5511...   # Define número do bot
-/set-owner-number +5511... # Define número do dono
 /set-spider-api-token ...  # Define token da API
 ```
 
@@ -562,7 +582,7 @@ exports.TIMEOUT_IN_MILLISECONDS_BY_EVENT = 700;
 
 **Estrutura:**
 ```javascript
-exports.menuMessage = (groupJid) => {
+export function menuMessage(groupJid) {
   const prefix = getPrefix(groupJid);  // Prefixo do grupo
   
   return `╭━━⪩ BEM VINDO! ⪨━━
@@ -575,7 +595,7 @@ exports.menuMessage = (groupJid) => {
 
 ╭━━⪩ DONO ⪨━━
 ▢ • ${prefix}exec
-▢ • ${prefix}get-id
+▢ • ${prefix}get-group-id
 ▢ • ${prefix}off
 ▢ • ${prefix}on
 ╰━━─「🌌」─━━
@@ -598,10 +618,8 @@ exports.menuMessage = (groupJid) => {
 **Arquivo:** `src/messages.js`
 
 ```javascript
-module.exports = {
-  welcomeMessage: "Seja bem vindo ao nosso grupo, @member!",
-  exitMessage: "Poxa, @member saiu do grupo... Sentiremos sua falta!",
-};
+export const welcomeMessage = "Seja bem vindo ao nosso grupo, @member!";
+export const exitMessage = "Poxa, @member saiu do grupo... Sentiremos sua falta!";
 ```
 
 **Tags especiais:**
@@ -742,7 +760,6 @@ Deseja continuar? (s/N):
 **Como assistir usuários:**
 1. **Criação de comandos:** Use template `🤖-como-criar-comandos.js`
 2. **Debugging:** Verifique `src/utils/logger.js` e `assets/temp/wa-logs.txt`
-3. **Estrutura:** Sempre use `BASE_DIR` para imports relativos
 4. **Permissões:** Crie comando na pasta correta (admin/member/owner)
 5. **Database:** Use funções de `src/utils/database.js`, nunca leia JSON diretamente
 6. **Tipos:** Consulte `src/@types/index.d.ts` para CommandHandleProps
@@ -758,7 +775,6 @@ Deseja continuar? (s/N):
 - [ ] Screenshots do comando funcionando
 - [ ] Usa template de comandos
 - [ ] Importa `CommandHandleProps`
-- [ ] Usa `BASE_DIR` para imports
 - [ ] Comentários em português
 - [ ] Segue uma responsabilidade por PR
 
@@ -841,10 +857,9 @@ Deseja continuar? (s/N):
 | Comando | Aliases | Função | Uso Técnico |
 |---------|---------|--------|-------------|
 | **exec** | - | Executa comandos shell no servidor | `${PREFIX}exec ls -la` - Proteções contra comandos destrutivos |
-| **get-id** | get-group-id, id-get, id-group | Obtém JID completo do grupo | `${PREFIX}get-id` - Retorna remoteJid para configurações |
+| **get-group-id** | get-group-id, id-get, id-group | Obtém LID completo do grupo | `${PREFIX}get-group-id` - Retorna remoteJid para configurações |
 | **off** | - | Desativa bot no grupo específico | `${PREFIX}off` - Adiciona grupo à `inactive-groups.json` |
 | **on** | - | Ativa bot no grupo específico | `${PREFIX}on` - Remove grupo da `inactive-groups.json` |
-| **set-bot-number** | altera-numero-bot, muda-numero-bot, etc | Define número do bot na config | `${PREFIX}set-bot-number 5511999999999` - Atualiza `config.json` |
 | **set-menu-image** | altera-imagem-menu, etc | Substitui imagem do menu | `${PREFIX}set-menu-image` (responder imagem) - Salva em `assets/images/` |
 | **set-prefix** | altera-prefix, muda-prefix, etc | Define prefixo para grupo | `${PREFIX}set-prefix =` - Atualiza `prefix-groups.json` |
 | **set-spider-api-token** | altera-token, muda-token, etc | Configura token da Spider X API | `${PREFIX}set-spider-api-token TOKEN` - Atualiza `config.json` |
@@ -981,10 +996,9 @@ Deseja continuar? (s/N):
 #### **⚙️ Configuração**
 | Comando | Aliases | Função | Uso Técnico |
 |---------|---------|--------|-------------|
-| **set-owner-number** | altera-numero-dono, etc | Define número do dono | `${PREFIX}set-owner-number 5511999999999` |
 | **rename** | - | Renomeia arquivo | `${PREFIX}rename novo-nome` - Altera fileName metadata |
 | **gerar-link** | - | Gera link de convite | `${PREFIX}gerar-link` - Cria invite temporário |
-| **get-lid** | - | Obtém LID do usuário | `${PREFIX}get-lid` - Metadata de LID |
+| **meu-lid** | - | Obtém LID do usuário | `${PREFIX}meu-lid` - Metadata de LID |
 
 #### **📚 Exemplos para Desenvolvedores (24 comandos)**
 *Pasta `src/commands/member/exemplos/`*
@@ -1093,12 +1107,12 @@ if (!isAdmin) {
    - Filtros avançados para evitar falsos positivos
    - Usado pelo anti-link
 
-3. **isAdmin(remoteJid, userJid, socket)**
+3. **isAdmin(remoteJid, userLid, socket)**
    - Verifica se usuário é admin do grupo
    - Suporta tanto admins quanto super-admins
    - Trata casos especiais (dono, bot owner)
 
-4. **checkPermission(type, socket, userJid, remoteJid)**
+4. **checkPermission(type, socket, userLid, remoteJid)**
    - Sistema principal de verificação de permissões
    - Tipos: "member", "admin", "owner"
    - Retorna boolean para autorizar comandos
@@ -1227,7 +1241,7 @@ if (!isAdmin) {
 
 #### **baileys.js - Funções WhatsApp**
 
-**getProfileImageData(socket, userJid)**
+**getProfileImageData(socket, userLid)**
 - Obtém foto de perfil do usuário
 - Fallback para imagem padrão
 - Salva em arquivo temporário
@@ -1413,7 +1427,7 @@ echo "Backup criado: backup_${DATE}.tar.gz"
 **1. Health Checks**
 ```javascript
 // health-check.js
-const fs = require('fs');
+import fs from 'node:fs';
 const logFile = 'assets/temp/wa-logs.txt';
 
 if (fs.existsSync(logFile)) {
@@ -1431,7 +1445,7 @@ if (fs.existsSync(logFile)) {
 **2. Alertas via Webhook**
 ```javascript
 // alerts.js
-const axios = require('axios');
+import axios from 'axios';
 
 const sendAlert = async (message) => {
   await axios.post('YOUR_WEBHOOK_URL', {
@@ -1509,7 +1523,7 @@ const sendAlert = async (message) => {
 #### **1. Ativando Logs Detalhados**
 ```javascript
 // src/config.js
-exports.DEVELOPER_MODE = true;
+export const DEVELOPER_MODE = true;
 ```
 
 **Logs salvos em:** `assets/temp/wa-logs.txt`
@@ -1523,7 +1537,7 @@ exports.DEVELOPER_MODE = true;
 #### **3. Verificando Estado do Database**
 ```javascript
 // Exemplo de debug
-const { isActiveGroup, getPrefix } = require('./utils/database');
+import { isActiveGroup, getPrefix } from './utils/database';
 console.log('Grupo ativo:', isActiveGroup(remoteJid));
 console.log('Prefixo:', getPrefix(remoteJid));
 ```
@@ -1567,15 +1581,13 @@ console.log('Prefixo:', getPrefix(remoteJid));
 - Personalização avançada
 
 **Comandos Críticos:**
-1. **set-owner-number** - SEMPRE configure primeiro
 2. **set-spider-api-token** - Necessário para IA e downloads
 3. **exec** - Use com EXTREMA cautela (proteções implementadas)
 
 **Boas Práticas:**
-- Configure owner number antes de outras operações
 - Mantenha token Spider X API atualizado
 - Use `exec` apenas para debugging/manutenção
-- Teste `get-id` para obter JIDs corretos
+- Teste `get-group-id` para obter JIDs corretos
 
 #### **👮 COMANDOS ADMIN - Guia de Moderação**
 
@@ -1655,17 +1667,16 @@ console.log('Uptime:', process.uptime());
 **Criação de comando:**
 ```javascript
 // Arquivo: src/commands/member/meu-comando.js
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from `../../errors`;
 
-module.exports = {
+export default {
   name: "meu-comando",
   description: "Faz algo legal",
   commands: ["meu-comando", "mc"],
   usage: `${PREFIX}meu-comando <argumento>`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, args, sendSuccessReact, sendErrorReply }) => {
     if (!args.length) {
@@ -1693,7 +1704,7 @@ module.exports = {
 - Testes: `npm test` executa `src/test.js`
 
 **Estrutura de permissões:**
-- `src/commands/owner/` - 8 comandos (exec, set-*, get-id, on/off)
+- `src/commands/owner/` - 8 comandos (exec, set-*, get-group-id, on/off)
 - `src/commands/admin/` - 30+ comandos (anti-*, ban, promote, auto-responder)
 - `src/commands/member/` - 70+ comandos organizados em subpastas:
   - `downloads/` - TikTok, YouTube, Play
@@ -1711,8 +1722,7 @@ module.exports = {
 - ❌ Misturar responsabilidades em um comando
 
 **Sempre faça:**
-- ✅ Use `BASE_DIR` para imports: `require(\`\${BASE_DIR}/config\`)`
-- ✅ Use funções de `utils/database.js`: `getPrefix()`, `setBotNumber()`
+- ✅ Use funções de `utils/database.js`: `getPrefix()`
 - ✅ Consulte `@types/index.d.ts` para API completa
 - ✅ Teste no Node.js 22+
 - ✅ Use error classes: `InvalidParameterError`, `WarningError`, `DangerError`
@@ -1777,37 +1787,6 @@ module.exports = {
 
 #### **⚙️ src/config.js - Configurações Centralizadas**
 
-**Variáveis principais:**
-
-```javascript
-// Identidade do bot
-exports.BOT_NAME = "Takeshi Bot";
-exports.BOT_EMOJI = "🤖";
-exports.PREFIX = "/";
-
-// Números (apenas dígitos)
-exports.BOT_NUMBER = "558112345678";
-exports.OWNER_NUMBER = "5521950502020";
-exports.OWNER_LID = "219999999999999@lid";
-
-// Diretórios do sistema
-exports.COMMANDS_DIR = path.join(__dirname, "commands");
-exports.DATABASE_DIR = path.resolve(__dirname, "..", "database");
-exports.ASSETS_DIR = path.resolve(__dirname, "..", "assets");
-exports.TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
-
-// API Externa
-exports.SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
-exports.SPIDER_API_TOKEN = "seu_token_aqui";
-
-// Performance
-exports.TIMEOUT_IN_MILLISECONDS_BY_EVENT = 1000; // Anti-ban
-exports.DEVELOPER_MODE = false; // Logs detalhados
-
-// Opcional
-exports.ONLY_GROUP_ID = ""; // Restringir a um grupo específico
-```
-
 **Configurações de Proxy (opcional):**
 - `PROXY_PROTOCOL`, `PROXY_HOST`, `PROXY_PORT`
 - `PROXY_USERNAME`, `PROXY_PASSWORD`
@@ -1822,10 +1801,9 @@ exports.ONLY_GROUP_ID = ""; // Restringir a um grupo específico
 **Função principal: load(socket)**
 
 **Responsabilidades:**
-1. **Define BASE_DIR global** para todos os comandos
-2. **Registra event listeners** do Baileys
-3. **Implementa timeout anti-ban** (TIMEOUT_IN_MILLISECONDS_BY_EVENT)
-4. **Error handling global** com badMacHandler
+1. **Registra event listeners** do Baileys
+2. **Implementa timeout anti-ban** (TIMEOUT_IN_MILLISECONDS_BY_EVENT)
+3. **Error handling global** com badMacHandler
 
 **Event Listeners registrados:**
 
@@ -1884,7 +1862,7 @@ return `╭━━⪩ BEM VINDO! ⪨━━${readMore()}
 **Mensagens configuráveis:**
 
 ```javascript
-module.exports = {
+export default {
   welcomeMessage: "Seja bem vindo ao nosso grupo, @member!",
   exitMessage: "Poxa, @member saiu do grupo... Sentiremos sua falta!",
 };
@@ -1906,11 +1884,11 @@ module.exports = {
 ```javascript
 (async () => {
   // Teste de funções específicas
-  const { isLink } = require('./middlewares');
+  import { isLink } from './middlewares';
   console.log(isLink('https://google.com')); // true
   
   // Teste de database functions
-  const { getPrefix } = require('./utils/database');
+  import { getPrefix } from './utils/database';
   console.log(getPrefix('grupo@g.us')); // "/" ou customizado
 })();
 ```
@@ -1968,17 +1946,7 @@ findCommandImport(commandName) // Busca comando nos diretórios
 readCommandImports() // Carrega todos os comandos {admin,member,owner}
 ```
 
-**4. Processamento de Números/JIDs:**
-
-```javascript
-onlyNumbers(text) // Remove tudo exceto dígitos
-toUserJid(number) // Converte para JID padrão
-toUserJidOrLid(userArg) // Inteligente: JID ou LID conforme tamanho
-normalizeToLid(socket, jid) // Converte JID → LID via onWhatsApp()
-compareUserJidWithOtherNumber() // Compara com variações (9º dígito)
-```
-
-**5. Processamento de Mídia:**
+**4. Processamento de Mídia:**
 
 ```javascript
 getBuffer(url, options) // Download via axios
@@ -1986,7 +1954,7 @@ ajustAudioByBuffer(buffer, isPtt) // Converte áudio via FFmpeg
 removeFileWithTimeout(path, 5000) // Cleanup automático
 ```
 
-**6. Utilitários Diversos:**
+**5. Utilitários Diversos:**
 
 ```javascript
 isAtLeastMinutesInPast(timestamp, 5) // Filtro de mensagens antigas
@@ -2253,8 +2221,6 @@ sayLog(message) // 💬 Cyan
 ```javascript
 getPrefix(groupJid) // Prefixo personalizado ou padrão
 setGroupPrefix(groupJid, prefix) // Define prefixo do grupo
-getBotNumber() / setBotNumber(number) // Número do bot
-getOwnerNumber() / setOwnerNumber(number) // Número do dono
 getSpiderApiToken() / setSpiderApiToken(token) // Token da API
 ```
 
@@ -2328,7 +2294,7 @@ fullArgs: string         // "arg1 / arg2" - string completa
 fullMessage: string      // Mensagem inteira incluindo comando
 prefix: string           // Prefixo configurado
 remoteJid: string        // ID do grupo/usuário
-userJid: string          // ID do usuário que mandou
+userLid: string          // ID do usuário que mandou
 ```
 
 **Detectores de tipo:**
@@ -2344,7 +2310,7 @@ isGroupWithLid: boolean  // Se grupo tem participantes com LID
 
 **Reply handling:**
 ```typescript
-replyJid: string         // ID de quem foi respondido
+replyLid: string         // ID de quem foi respondido
 replyText: string        // Texto da mensagem respondida
 ```
 
@@ -2408,11 +2374,11 @@ downloadVideo(webMessage, fileName: string): Promise<string>
 
 **Funções de grupo:**
 ```typescript
-getGroupMetadata(jid?: string): Promise<GroupMetadata | null>
-getGroupName(jid?: string): Promise<string>
-getGroupOwner(jid?: string): Promise<string>
-getGroupParticipants(jid?: string): Promise<any[]>
-getGroupAdmins(jid?: string): Promise<string[]>
+getGroupMetadata(lid?: string): Promise<GroupMetadata | null>
+getGroupName(lid?: string): Promise<string>
+getGroupOwner(lid?: string): Promise<string>
+getGroupParticipants(lid?: string): Promise<any[]>
+getGroupAdmins(lid?: string): Promise<string[]>
 ```
 
 **Comunicação avançada:**

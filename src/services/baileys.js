@@ -4,18 +4,18 @@
  *
  * @author Dev Gui
  */
-const { getBuffer, getRandomName } = require("../utils");
-const fs = require("node:fs");
-const path = require("node:path");
-const { TEMP_DIR, ASSETS_DIR } = require("../config");
+import fs from "node:fs";
+import path from "node:path";
+import { ASSETS_DIR, TEMP_DIR } from "../config.js";
+import { getBuffer, getRandomName } from "../utils/index.js";
 
-exports.getProfileImageData = async (socket, userJid) => {
+export async function getProfileImageData(socket, userLid) {
   let profileImage = "";
   let buffer = null;
   let success = true;
 
   try {
-    profileImage = await socket.profilePictureUrl(userJid, "image");
+    profileImage = await socket.profilePictureUrl(userLid, "image");
 
     buffer = await getBuffer(profileImage);
 
@@ -35,4 +35,4 @@ exports.getProfileImageData = async (socket, userJid) => {
   }
 
   return { buffer, profileImage, success };
-};
+}

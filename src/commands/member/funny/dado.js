@@ -4,22 +4,19 @@
  *
  * @author Dev Gui
  */
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
+import { DangerError } from "../../../errors/index.js";
+import { getRandomNumber } from "../../../utils/index.js";
 
-const { getRandomNumber } = require(`${BASE_DIR}/utils`);
-
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { DangerError } = require(`${BASE_DIR}/errors`);
-const path = require("node:path");
-
-module.exports = {
+export default {
   name: "dado",
   description: "Jogue um dado de 1 a 6 e tente acertar o número para ganhar!",
   commands: ["dado", "dice"],
   usage: `${PREFIX}dado número`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     args,

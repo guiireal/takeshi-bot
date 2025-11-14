@@ -3,6 +3,12 @@
 <div align='center'>Baileys is a WebSockets-based TypeScript library for interacting with the WhatsApp Web API.</div>
 
 
+> [!CAUTION]
+> NOTICE OF BREAKING CHANGE.
+> 
+> As of 7.0.0, multiple breaking changes were introduced into the library.
+> 
+> Please check out https://whiskey.so/migrate-latest for more information.
 
 > [!IMPORTANT]
 > I made a survey for users of the project to ask questions, and provide Baileys valuable insights regarding its users. I will be publishing the results of this form (after filtering) as well so we can study and understand where we need to work.
@@ -326,6 +332,9 @@ sock.ev.on('messages.upsert', ({ messages }) => {
 
 > [!NOTE]
 > This example includes basic auth storage too
+
+> [!NOTE]
+> For reliable serialization of the authentication state, especially when storing as JSON, always use the BufferJSON utility.
 
 ```ts
 import makeWASocket, { DisconnectReason, useMultiFileAuthState } from '@whiskeysockets/baileys'

@@ -1,19 +1,17 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const { exec } = require("node:child_process");
+import { exec as execChild } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { PREFIX, TEMP_DIR } from "../../../config.js";
+import { imageAI } from "../../../services/spider-x-api.js";
+import { getBuffer, getRandomName } from "../../../utils/index.js";
 
-const { PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
-const { getBuffer, getRandomName } = require(`${BASE_DIR}/utils`);
-const { imageAI } = require(`${BASE_DIR}/services/spider-x-api`);
-
-module.exports = {
+export default {
   name: "ia-sticker",
   description: "Cria uma figurinha com base em uma descrição",
   commands: ["ia-sticker", "ia-fig"],
   usage: `${PREFIX}ia-sticker descrição`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     args,
@@ -44,12 +42,12 @@ module.exports = {
 
       const cmd = `ffmpeg -i "${inputTempPath}" -vf "scale=512:512:force_original_aspect_ratio=decrease" -f webp -quality 90 "${outputTempPath}"`;
 
-      exec(cmd, async (error, _, stderr) => {
+      execChild(cmd, async (error, _, stderr) => {
         if (error) {
           console.error("FFmpeg error:", error);
           await sendErrorReply(
             `Houve um erro ao processar a imagem. Tente novamente mais tarde!
-
+            
 Detalhes: ${stderr}`
           );
         } else {

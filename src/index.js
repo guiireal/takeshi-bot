@@ -1,7 +1,4 @@
 /*
- * Este arquivo index.js é o mesmo existente em "src/index.js", ele só está aqui
- * para facilitar a execução do bot em algumas hosts.
- *
  * Se você clicou aqui é porque provavelmente já usou um bot de "case" e com um "index.js" de 20 mil linhas...
  * Eu sei, eu entendo você!
  * O que é melhor? Dar erro no seu play, você ir no arquivo "play.js" e corrigir
@@ -74,16 +71,16 @@
  *
  * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
-const { connect } = require("./connection");
-const { load } = require("./loader");
-const { badMacHandler } = require("./utils/badMacHandler");
-const {
-  successLog,
-  errorLog,
-  warningLog,
+import { connect } from "./connection.js";
+import { load } from "./loader.js";
+import { badMacHandler } from "./utils/badMacHandler.js";
+import {
   bannerLog,
+  errorLog,
   infoLog,
-} = require("./utils/logger");
+  successLog,
+  warningLog,
+} from "./utils/logger.js";
 
 process.on("uncaughtException", (error) => {
   if (badMacHandler.handleError(error, "uncaughtException")) {

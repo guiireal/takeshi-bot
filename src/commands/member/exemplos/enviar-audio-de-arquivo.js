@@ -1,14 +1,13 @@
-const { PREFIX, ASSETS_DIR } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
-const path = require("node:path");
-module.exports = {
+import { delay } from "baileys";
+import path from "node:path";
+import { ASSETS_DIR, PREFIX } from "../../../config.js";
+export default {
   name: "enviar-audio-de-arquivo",
   description: "Exemplo de como enviar um áudio através de um arquivo",
   commands: ["enviar-audio-de-arquivo"],
   usage: `${PREFIX}enviar-audio-de-arquivo`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendAudioFromFile, sendReact }) => {
     await sendReact("🔈");

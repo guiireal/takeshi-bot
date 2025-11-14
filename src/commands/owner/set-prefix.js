@@ -1,9 +1,8 @@
-const { setPrefix } = require(`${BASE_DIR}/utils/database`);
+import { PREFIX } from "../../config.js";
+import { InvalidParameterError } from "../../errors/index.js";
+import { setPrefix } from "../../utils/database.js";
 
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-
-module.exports = {
+export default {
   name: "set-prefix",
   description: "Mudo o prefixo de uso dos meus comandos",
   commands: [
@@ -21,21 +20,16 @@ module.exports = {
   usage: `${PREFIX}set-prefix =`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ remoteJid, args, sendSuccessReply }) => {
     if (!args.length) {
       throw new InvalidParameterError("Você deve fornecer um prefixo!");
     }
-
     if (args.length !== 1) {
       throw new InvalidParameterError("O prefixo deve ser apenas 1 caractere!");
     }
-
     const newPrefix = args[0];
-
     setPrefix(remoteJid, newPrefix);
-
     await sendSuccessReply(`Prefixo alterado para: ${newPrefix} neste grupo!`);
   },
 };

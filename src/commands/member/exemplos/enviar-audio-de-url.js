@@ -1,14 +1,13 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-audio-de-url",
   description: "Exemplo de como enviar um áudio através de um link/url",
   commands: ["enviar-audio-de-url"],
   usage: `${PREFIX}enviar-audio-de-url`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({ sendReply, sendAudioFromURL, sendReact }) => {
     await sendReact("🔈");

@@ -1,15 +1,14 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { isGroup, toUserJidOrLid } = require(`${BASE_DIR}/utils`);
-const { errorLog } = require(`${BASE_DIR}/utils/logger`);
+import { PREFIX } from "../../config.js";
+import { isGroup, onlyNumbers } from "../../utils/index.js";
+import { errorLog } from "../../utils/logger.js";
 
-module.exports = {
+export default {
   name: "promover",
   description: "Promove um usuário a administrador do grupo",
   commands: ["promover", "promove", "promote", "add-adm"],
   usage: `${PREFIX}promover @usuario`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
   handle: async ({
     args,
@@ -27,10 +26,10 @@ module.exports = {
       return sendWarningReply("Por favor, marque um usuário para promover.");
     }
 
-    const userId = toUserJidOrLid(args[0]);
+    const userLid = args[0] ? `${onlyNumbers(args[0])}@lid` : null;
 
     try {
-      await socket.groupParticipantsUpdate(remoteJid, [userId], "promote");
+      await socket.groupParticipantsUpdate(remoteJid, [userLid], "promote");
 
       await sendSuccessReply("Usuário promovido com sucesso!");
     } catch (error) {

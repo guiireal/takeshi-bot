@@ -1,16 +1,15 @@
-const { PREFIX } = require(`${BASE_DIR}/config`);
-const { delay } = require("baileys");
+import { delay } from "baileys";
+import { PREFIX } from "../../../config.js";
 
-module.exports = {
+export default {
   name: "enviar-video-de-url",
   description: "Exemplo de como enviar um vídeo a partir de uma URL",
   commands: ["enviar-video-de-url"],
   usage: `${PREFIX}enviar-video-de-url`,
   /**
    * @param {CommandHandleProps} props
-   * @returns {Promise<void>}
    */
-  handle: async ({ sendReply, sendVideoFromURL, sendReact, userJid }) => {
+  handle: async ({ sendReply, sendVideoFromURL, sendReact, userLid }) => {
     await sendReact("🎥");
 
     await delay(3000);
@@ -54,8 +53,8 @@ module.exports = {
 
     await sendVideoFromURL(
       "https://api.spiderx.com.br/storage/samples/sample-video.mp4",
-      `Aqui está o vídeo que você pediu @${userJid.split("@")[0]}!`,
-      [userJid]
+      `Aqui está o vídeo que você pediu @${userLid.split("@")[0]}!`,
+      [userLid]
     );
 
     await delay(3000);
