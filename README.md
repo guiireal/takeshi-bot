@@ -157,15 +157,15 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 
 **Hosts suportadas**:
 
-| Bronxys | Nexfuture |
-|---------|-----------|
-| [Grupo oficial](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM) | [Grupo oficial](https://chat.whatsapp.com/Fl5FzZQC00J5CZp07AZVwQ?mode=r_c) |
-| [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![Nexfuture](./assets/images/nexfuture.png)](https://nexfuture.com.br/) |
+| Bronxys | Nexfuture | Speed Cloud |
+|---------|-----------|-------------|
+| [Grupo oficial](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM) | [Grupo oficial](https://chat.whatsapp.com/Fl5FzZQC00J5CZp07AZVwQ?mode=r_c) | [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) |
+| [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![Nexfuture](./assets/images/nexfuture.png)](https://nexfuture.com.br/) | [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) |
 
-| Speed Cloud | Bores Host |
-|-------------| ------------ |
-| [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) | [Grupo oficial](https://chat.whatsapp.com/Ho2Zs63uKWuFwBwUdjV0cU) |
-| [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) | [![Bores Host](./assets/images/bores-host.png)](https://loja.botbores.shop/) |
+| Bores Host | TED Host |
+|------------|----------|
+| [Grupo oficial](https://chat.whatsapp.com/Ho2Zs63uKWuFwBwUdjV0cU) | [Grupo oficial](https://chat.whatsapp.com/DVDE1TCtHrKFatUKrlepjZ) |
+| [![Bores Host](./assets/images/bores-host.png)](https://loja.botbores.shop/) | [![TED Host](./assets/images/ted-host.png)](https://app.tedzinho.com.br/) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
