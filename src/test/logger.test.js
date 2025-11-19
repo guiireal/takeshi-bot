@@ -12,15 +12,12 @@ describe("Logger Functions", () => {
   let originalConsoleLog;
 
   beforeEach(() => {
-    // Salvar console.log original
     originalConsoleLog = console.log;
-    // Criar mock do console.log
     consoleLogMock = mock.fn();
     console.log = consoleLogMock;
   });
 
   afterEach(() => {
-    // Restaurar console.log original
     console.log = originalConsoleLog;
   });
 
@@ -139,7 +136,6 @@ describe("Logger Functions", () => {
     it("should display bot banner", () => {
       logger.bannerLog();
 
-      // Banner deve ter múltiplas linhas
       assert.ok(consoleLogMock.mock.calls.length > 3);
     });
 
@@ -149,7 +145,6 @@ describe("Logger Functions", () => {
       const calls = consoleLogMock.mock.calls;
       const firstLine = calls[0].arguments[0];
 
-      // Deve conter caracteres do banner
       assert.ok(typeof firstLine === "string");
       assert.ok(firstLine.length > 0);
     });
@@ -226,7 +221,6 @@ describe("Logger Functions", () => {
       logger.warningLog("test");
       colors.add(consoleLogMock.mock.calls[0].arguments[0]);
 
-      // Should have at least 4 different colors
       assert.ok(colors.size >= 4, "Should use different colors");
     });
   });
@@ -278,7 +272,6 @@ describe("Logger Functions", () => {
       logger.errorLog("test");
       identifiers.push(consoleLogMock.mock.calls[0].arguments[0]);
 
-      // Check that TALK, INPUT, INFO, SUCCESS, ERROR appear
       assert.ok(identifiers.some((id) => id.includes("TALK")));
       assert.ok(identifiers.some((id) => id.includes("INPUT")));
       assert.ok(identifiers.some((id) => id.includes("INFO")));
