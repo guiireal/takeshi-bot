@@ -332,10 +332,11 @@ describe("Utility Functions", () => {
 
     it("should generate different numbers", () => {
       const numbers = new Set();
+
       for (let i = 0; i < 100; i++) {
         numbers.add(utils.getRandomNumber(1, 100));
       }
-      // Deve ter gerado pelo menos alguns números diferentes
+
       assert.ok(numbers.size > 10);
     });
   });
@@ -364,19 +365,18 @@ describe("Utility Functions", () => {
     it("should generate different names", () => {
       const name1 = utils.getRandomName("png");
       const name2 = utils.getRandomName("png");
-      // Muito provavelmente serão diferentes
       assert.notStrictEqual(name1, name2);
     });
   });
 
   describe("isAtLeastMinutesInPast", () => {
     it("should return true for old timestamp", () => {
-      const oldTimestamp = Math.floor(Date.now() / 1000) - 600; // 10 minutos atrás
+      const oldTimestamp = Math.floor(Date.now() / 1000) - 600;
       assert.strictEqual(utils.isAtLeastMinutesInPast(oldTimestamp, 5), true);
     });
 
     it("should return false for recent timestamp", () => {
-      const recentTimestamp = Math.floor(Date.now() / 1000) - 60; // 1 minuto atrás
+      const recentTimestamp = Math.floor(Date.now() / 1000) - 60;
       assert.strictEqual(
         utils.isAtLeastMinutesInPast(recentTimestamp, 5),
         false

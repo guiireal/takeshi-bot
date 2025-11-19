@@ -92,7 +92,6 @@ describe("BadMacHandler", () => {
 
     it("should update lastReset timestamp", () => {
       const beforeReset = handler.lastReset;
-      // Aguardar um pouco para garantir diferença no timestamp
       setTimeout(() => {
         handler.resetErrorCount();
         assert.ok(handler.lastReset > beforeReset);
@@ -213,9 +212,7 @@ describe("BadMacHandler", () => {
 
   describe("clearProblematicSessionFiles", () => {
     it("should return false if baileys folder does not exist", () => {
-      // Teste com caminho que não existe
       const result = handler.clearProblematicSessionFiles();
-      // O resultado depende se a pasta existe ou não
       assert.ok(typeof result === "boolean");
     });
   });
