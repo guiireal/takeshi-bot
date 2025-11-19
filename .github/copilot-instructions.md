@@ -225,7 +225,6 @@ export default {
 
     if (isImage) {
       const imagePath = await downloadImage(webMessage, "exemplo");
-      // Process image...
       await sendSuccessReply("Imagem processada!");
     } else {
       await sendSuccessReply(`Argumento recebido: ${args[0]}`);
