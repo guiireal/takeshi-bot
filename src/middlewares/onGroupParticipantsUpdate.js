@@ -18,10 +18,15 @@ import {
   isActiveGroup,
   isActiveWelcomeGroup,
 } from "../utils/database.js";
-import { getRandomNumber, onlyNumbers } from "../utils/index.js";
+import {
+  extractUserLid,
+  getRandomNumber,
+  onlyNumbers,
+} from "../utils/index.js";
+import { errorLog } from "../utils/logger.js";
 
 export async function onGroupParticipantsUpdate({
-  userLid,
+  data,
   remoteJid,
   socket,
   action,
@@ -35,6 +40,8 @@ export async function onGroupParticipantsUpdate({
       return;
     }
 
+    const userLid = extractUserLid(data);
+
     if (isActiveWelcomeGroup(remoteJid) && action === "add") {
       const { buffer, profileImage } = await getProfileImageData(
         socket,
@@ -42,14 +49,15 @@ export async function onGroupParticipantsUpdate({
       );
 
       const hasMemberMention = welcomeMessage.includes("@member");
-      const mentions = [];
 
+      const mentions = [];
       let finalWelcomeMessage = welcomeMessage;
 
       if (hasMemberMention) {
+        const userNumber = onlyNumbers(userLid);
         finalWelcomeMessage = welcomeMessage.replace(
           "@member",
-          `@${onlyNumbers(userLid)}`
+          `@${userNumber}`
         );
         mentions.push(userLid);
       }
@@ -62,7 +70,6 @@ export async function onGroupParticipantsUpdate({
               caption: finalWelcomeMessage,
               mentions,
             });
-
             return;
           }
 
@@ -89,7 +96,6 @@ export async function onGroupParticipantsUpdate({
             mentions,
           });
         } catch (error) {
-          console.error("Erro ao fazer upload da imagem:", error);
           await socket.sendMessage(remoteJid, {
             image: buffer,
             caption: finalWelcomeMessage,
@@ -114,15 +120,13 @@ export async function onGroupParticipantsUpdate({
       );
 
       const hasMemberMention = exitMessage.includes("@member");
-      const mentions = [];
 
+      const mentions = [];
       let finalExitMessage = exitMessage;
 
       if (hasMemberMention) {
-        finalExitMessage = exitMessage.replace(
-          "@member",
-          `@${onlyNumbers(userLid)}`
-        );
+        const userNumber = onlyNumbers(userLid);
+        finalExitMessage = exitMessage.replace("@member", `@${userNumber}`);
         mentions.push(userLid);
       }
 
@@ -147,7 +151,6 @@ export async function onGroupParticipantsUpdate({
             mentions,
           });
         } catch (error) {
-          console.error("Erro ao fazer upload da imagem:", error);
           await socket.sendMessage(remoteJid, {
             image: buffer,
             caption: finalExitMessage,
@@ -167,6 +170,7 @@ export async function onGroupParticipantsUpdate({
       }
     }
   } catch (error) {
-    console.error("Erro ao processar evento onGroupParticipantsUpdate:", error);
+    console.log(error);
+    errorLog(`Erro em onGroupParticipantsUpdate: ${error.message}`);
   }
 }

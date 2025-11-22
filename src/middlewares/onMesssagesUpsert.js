@@ -5,7 +5,6 @@
  * @author Dev Gui
  */
 import { DEVELOPER_MODE } from "../config.js";
-import { updateGroupMetadataCache } from "../connection.js";
 import { badMacHandler } from "../utils/badMacHandler.js";
 import { checkIfMemberIsMuted } from "../utils/database.js";
 import { dynamicCommand } from "../utils/dynamicCommand.js";
@@ -51,29 +50,12 @@ export async function onMessagesUpsert({ socket, messages, startProcess }) {
         let action = "";
         if (webMessage.messageStubType === GROUP_PARTICIPANT_ADD) {
           action = "add";
-          const randomTimeout = Math.floor(Math.random() * 10000) + 1000;
-          setTimeout(async () => {
-            try {
-              const remoteJid = webMessage?.key?.remoteJid;
-
-              if (!remoteJid) {
-                return;
-              }
-
-              const data = await socket.groupMetadata(remoteJid);
-              updateGroupMetadataCache(remoteJid, data);
-            } catch (error) {
-              errorLog(
-                `Erro ao atualizar metadados do grupo: ${error.message}`
-              );
-            }
-          }, randomTimeout);
         } else if (webMessage.messageStubType === GROUP_PARTICIPANT_LEAVE) {
           action = "remove";
         }
 
         await onGroupParticipantsUpdate({
-          userLid: webMessage.messageStubParameters[0],
+          data: webMessage.messageStubParameters[0],
           remoteJid: webMessage.key.remoteJid,
           socket,
           action,
