@@ -9,8 +9,8 @@ export declare abstract class AbstractSocketClient extends EventEmitter {
     abstract get isClosing(): boolean;
     abstract get isConnecting(): boolean;
     constructor(url: URL, config: SocketConfig);
-    abstract connect(): Promise<void>;
-    abstract close(): Promise<void>;
+    abstract connect(): void;
+    abstract close(): void;
     abstract send(str: Uint8Array | string, cb?: (err?: Error) => void): boolean;
 }
 //# sourceMappingURL=types.d.ts.map

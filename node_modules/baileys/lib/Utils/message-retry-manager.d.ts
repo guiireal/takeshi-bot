@@ -14,9 +14,7 @@ export interface SessionRecreateHistory {
 export interface RetryCounter {
     [messageId: string]: number;
 }
-export interface PendingPhoneRequest {
-    [messageId: string]: NodeJS.Timeout;
-}
+export type PendingPhoneRequest = Record<string, ReturnType<typeof setTimeout>>;
 export interface RetryStatistics {
     totalRetries: number;
     successfulRetries: number;
@@ -28,6 +26,7 @@ export interface RetryStatistics {
 export declare class MessageRetryManager {
     private logger;
     private recentMessagesMap;
+    private messageKeyIndex;
     private sessionRecreateHistory;
     private retryCounters;
     private pendingPhoneRequests;
@@ -78,5 +77,6 @@ export declare class MessageRetryManager {
      */
     cancelPendingPhoneRequest(messageId: string): void;
     private keyToString;
+    private removeRecentMessage;
 }
 //# sourceMappingURL=message-retry-manager.d.ts.map

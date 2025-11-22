@@ -94,8 +94,8 @@ export const makeEventBuffer = (logger) => {
     }
     return {
         process(handler) {
-            const listener = (map) => {
-                handler(map);
+            const listener = async (map) => {
+                await handler(map);
             };
             ev.on('event', listener);
             return () => {

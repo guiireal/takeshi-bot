@@ -45,6 +45,8 @@ export declare const updateMessageWithReceipt: (msg: Pick<WAMessage, "userReceip
 export declare const updateMessageWithReaction: (msg: Pick<WAMessage, "reactions">, reaction: proto.IReaction) => void;
 /** Update the message with a new poll update */
 export declare const updateMessageWithPollUpdate: (msg: Pick<WAMessage, "pollUpdates">, update: proto.IPollUpdate) => void;
+/** Update the message with a new event response */
+export declare const updateMessageWithEventResponse: (msg: Pick<WAMessage, "eventResponses">, update: proto.IEventResponse) => void;
 type VoteAggregation = {
     name: string;
     voters: string[];
@@ -56,6 +58,17 @@ type VoteAggregation = {
  * @returns A list of options & their voters
  */
 export declare function getAggregateVotesInPollMessage({ message, pollUpdates }: Pick<WAMessage, 'pollUpdates' | 'message'>, meId?: string): VoteAggregation[];
+type ResponseAggregation = {
+    response: string;
+    responders: string[];
+};
+/**
+ * Aggregates all event responses in an event message.
+ * @param msg the event creation message
+ * @param meId your jid
+ * @returns A list of response types & their responders
+ */
+export declare function getAggregateResponsesInEventMessage({ eventResponses }: Pick<WAMessage, 'eventResponses'>, meId?: string): ResponseAggregation[];
 /** Given a list of message keys, aggregates them by chat & sender. Useful for sending read receipts in bulk */
 export declare const aggregateMessageKeysNotFromMe: (keys: WAMessageKey[]) => {
     jid: string;

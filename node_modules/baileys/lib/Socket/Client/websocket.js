@@ -18,7 +18,7 @@ export class WebSocketClient extends AbstractSocketClient {
     get isConnecting() {
         return this.socket?.readyState === WebSocket.CONNECTING;
     }
-    async connect() {
+    connect() {
         if (this.socket) {
             return;
         }
@@ -35,7 +35,7 @@ export class WebSocketClient extends AbstractSocketClient {
             this.socket?.on(event, (...args) => this.emit(event, ...args));
         }
     }
-    async close() {
+    close() {
         if (!this.socket) {
             return;
         }

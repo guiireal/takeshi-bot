@@ -157,6 +157,7 @@ export function decodeMessageNode(stanza, meId, meLid) {
     };
     const fullMessage = {
         key,
+        category: stanza.attrs.category,
         messageTimestamp: +stanza.attrs.t,
         pushName: pushname,
         broadcast: isJidBroadcast(from)
@@ -187,6 +188,9 @@ export const decryptMessageNode = (stanza, meId, meLid, repository, logger) => {
                     }
                     if (tag === 'unavailable' && attrs.type === 'view_once') {
                         fullMessage.key.isViewOnce = true; // TODO: remove from here and add a STUB TYPE
+                    }
+                    if (attrs.count && tag === 'enc') {
+                        fullMessage.retryCount = Number(attrs.count);
                     }
                     if (tag !== 'enc' && tag !== 'plaintext') {
                         continue;
@@ -262,7 +266,7 @@ export const decryptMessageNode = (stanza, meId, meLid, repository, logger) => {
                 }
             }
             // if nothing was found to decrypt
-            if (!decryptables) {
+            if (!decryptables && !fullMessage.key?.isViewOnce) {
                 fullMessage.messageStubType = proto.WebMessageInfo.StubType.CIPHERTEXT;
                 fullMessage.messageStubParameters = [NO_MESSAGE_FOUND_ERROR_TEXT];
             }

@@ -12,7 +12,7 @@ export function makeLibSignalRepository(auth, logger, pnToLIDFunc) {
     const storage = signalStorage(auth, lidMapping);
     const parsedKeys = auth.keys;
     const migratedSessionCache = new LRUCache({
-        ttl: 7 * 24 * 60 * 60 * 1000, // 7 days
+        ttl: 3 * 24 * 60 * 60 * 1000, // 7 days
         ttlAutopurge: true,
         updateAgeOnGet: true
     });

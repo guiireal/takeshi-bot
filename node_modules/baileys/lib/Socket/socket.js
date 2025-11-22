@@ -5,9 +5,9 @@ import { promisify } from 'util';
 import { proto } from '../../WAProto/index.js';
 import { DEF_CALLBACK_PREFIX, DEF_TAG_PREFIX, INITIAL_PREKEY_COUNT, MIN_PREKEY_COUNT, MIN_UPLOAD_INTERVAL, NOISE_WA_HEADER, UPLOAD_TIMEOUT } from '../Defaults/index.js';
 import { DisconnectReason } from '../Types/index.js';
-import { addTransactionCapability, aesEncryptCTR, bindWaitForConnectionUpdate, bytesToCrockford, configureSuccessfulPairing, Curve, derivePairingCodeKey, generateLoginNode, generateMdTagPrefix, generateRegistrationNode, getCodeFromWSError, getErrorCodeFromStreamError, getNextPreKeysNode, makeEventBuffer, makeNoiseHandler, promiseTimeout } from '../Utils/index.js';
+import { addTransactionCapability, aesEncryptCTR, bindWaitForConnectionUpdate, bytesToCrockford, configureSuccessfulPairing, Curve, derivePairingCodeKey, generateLoginNode, generateMdTagPrefix, generateRegistrationNode, getCodeFromWSError, getErrorCodeFromStreamError, getNextPreKeysNode, makeEventBuffer, makeNoiseHandler, promiseTimeout, signedKeyPair, xmppSignedPreKey } from '../Utils/index.js';
 import { getPlatformId } from '../Utils/browser-utils.js';
-import { assertNodeErrorFree, binaryNodeToString, encodeBinaryNode, getBinaryNodeChild, getBinaryNodeChildren, isLidUser, jidDecode, jidEncode, S_WHATSAPP_NET } from '../WABinary/index.js';
+import { assertNodeErrorFree, binaryNodeToString, encodeBinaryNode, getAllBinaryNodeChildren, getBinaryNodeChild, getBinaryNodeChildren, isLidUser, jidDecode, jidEncode, S_WHATSAPP_NET } from '../WABinary/index.js';
 import { BinaryInfo } from '../WAM/BinaryInfo.js';
 import { USyncQuery, USyncUser } from '../WAUSync/index.js';
 import { WebSocketClient } from './Client/index.js';
@@ -127,6 +127,37 @@ export const makeSocket = (config) => {
             assertNodeErrorFree(result);
         }
         return result;
+    };
+    // Validate current key-bundle on server; on failure, trigger pre-key upload and rethrow
+    const digestKeyBundle = async () => {
+        const res = await query({
+            tag: 'iq',
+            attrs: { to: S_WHATSAPP_NET, type: 'get', xmlns: 'encrypt' },
+            content: [{ tag: 'digest', attrs: {} }]
+        });
+        const digestNode = getBinaryNodeChild(res, 'digest');
+        if (!digestNode) {
+            await uploadPreKeys();
+            throw new Error('encrypt/get digest returned no digest node');
+        }
+    };
+    // Rotate our signed pre-key on server; on failure, run digest as fallback and rethrow
+    const rotateSignedPreKey = async () => {
+        const newId = (creds.signedPreKey.keyId || 0) + 1;
+        const skey = await signedKeyPair(creds.signedIdentityKey, newId);
+        await query({
+            tag: 'iq',
+            attrs: { to: S_WHATSAPP_NET, type: 'set', xmlns: 'encrypt' },
+            content: [
+                {
+                    tag: 'rotate',
+                    attrs: {},
+                    content: [xmppSignedPreKey(skey)]
+                }
+            ]
+        });
+        // Persist new signed pre-key in creds
+        ev.emit('creds.update', { signedPreKey: skey });
     };
     const executeUSyncQuery = async (usyncQuery) => {
         if (usyncQuery.protocols.length === 0) {
@@ -290,7 +321,7 @@ export const makeSocket = (config) => {
                 payload: payloadEnc
             }
         }).finish());
-        noise.finishInit();
+        await noise.finishInit();
         startKeepAliveRequest();
     };
     const getAvailablePreKeysOnServer = async () => {
@@ -406,8 +437,8 @@ export const makeSocket = (config) => {
             // Don't throw - allow connection to continue even if pre-key check fails
         }
     };
-    const onMessageReceived = (data) => {
-        noise.decodeFrame(data, frame => {
+    const onMessageReceived = async (data) => {
+        await noise.decodeFrame(data, frame => {
             // reset ping timeout
             lastDateRecv = new Date();
             let anyTriggered = false;
@@ -703,6 +734,13 @@ export const makeSocket = (config) => {
         try {
             await uploadPreKeysToServerIfRequired();
             await sendPassiveIq('active');
+            // After successful login, validate our key-bundle against server
+            try {
+                await digestKeyBundle();
+            }
+            catch (e) {
+                logger.warn({ e }, 'failed to run digest after login');
+            }
         }
         catch (err) {
             logger.warn({ err }, 'failed to send initial passive iq');
@@ -736,9 +774,10 @@ export const makeSocket = (config) => {
         }
     });
     ws.on('CB:stream:error', (node) => {
-        logger.error({ node }, 'stream errored out');
+        const [reasonNode] = getAllBinaryNodeChildren(node);
+        logger.error({ reasonNode, fullErrorNode: node }, 'stream errored out');
         const { reason, statusCode } = getErrorCodeFromStreamError(node);
-        end(new Boom(`Stream Errored (${reason})`, { statusCode, data: node }));
+        end(new Boom(`Stream Errored (${reason})`, { statusCode, data: reasonNode || node }));
     });
     // stream fail, possible logout
     ws.on('CB:failure', (node) => {
@@ -748,9 +787,9 @@ export const makeSocket = (config) => {
     ws.on('CB:ib,,downgrade_webclient', () => {
         end(new Boom('Multi-device beta not joined', { statusCode: DisconnectReason.multideviceMismatch }));
     });
-    ws.on('CB:ib,,offline_preview', (node) => {
+    ws.on('CB:ib,,offline_preview', async (node) => {
         logger.info('offline preview received', JSON.stringify(node));
-        sendNode({
+        await sendNode({
             tag: 'ib',
             attrs: {},
             content: [{ tag: 'offline_batch', attrs: { count: '100' } }]
@@ -820,6 +859,8 @@ export const makeSocket = (config) => {
         onUnexpectedError,
         uploadPreKeys,
         uploadPreKeysToServerIfRequired,
+        digestKeyBundle,
+        rotateSignedPreKey,
         requestPairingCode,
         wamBuffer: publicWAMBuffer,
         /** Waits for the connection to WA to reach a state */

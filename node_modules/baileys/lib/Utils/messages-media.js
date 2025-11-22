@@ -155,7 +155,7 @@ export const generateProfilePicture = async (mediaUpload, dimensions) => {
         })
             .toBuffer();
     }
-    else if ('jimp' in lib && typeof lib.jimp?.Jimp === 'object') {
+    else if ('jimp' in lib && typeof lib.jimp?.Jimp === 'function') {
         const jimp = await lib.jimp.Jimp.read(buffer);
         const min = Math.min(jimp.width, jimp.height);
         const cropped = jimp.crop({ x: 0, y: 0, w: min, h: min });
@@ -304,7 +304,7 @@ export const getHttpStream = async (url, options = {}) => {
         throw new Boom(`Failed to fetch stream from ${url}`, { statusCode: response.status, data: { url } });
     }
     // @ts-ignore Node18+ Readable.fromWeb exists
-    return Readable.fromWeb(response.body);
+    return response.body instanceof Readable ? response.body : Readable.fromWeb(response.body);
 };
 export const encryptedStream = async (media, mediaType, { logger, saveOriginalFileIfRequired, opts } = {}) => {
     const { stream, type } = await getStream(media, opts);

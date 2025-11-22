@@ -76,6 +76,10 @@ export type SignalDataTypeMap = {
     'app-state-sync-version': LTHashState;
     'lid-mapping': string;
     'device-list': string[];
+    tctoken: {
+        token: Buffer;
+        timestamp?: string;
+    };
 };
 export type SignalDataSet = {
     [T in keyof SignalDataTypeMap]?: {

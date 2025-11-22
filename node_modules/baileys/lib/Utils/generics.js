@@ -30,7 +30,7 @@ export const BufferJSON = {
         return value;
     }
 };
-export const getKeyAuthor = (key, meId = 'me') => (key?.fromMe ? meId : key?.participant || key?.remoteJid) || '';
+export const getKeyAuthor = (key, meId = 'me') => (key?.fromMe ? meId : key?.participantAlt || key?.remoteJidAlt || key?.participant || key?.remoteJid) || '';
 export const writeRandomPadMax16 = (msg) => {
     const pad = randomBytes(1);
     const padLength = (pad[0] & 0x0f) + 1;

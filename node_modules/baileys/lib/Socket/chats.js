@@ -12,7 +12,7 @@ import { USyncQuery, USyncUser } from '../WAUSync/index.js';
 import { makeSocket } from './socket.js';
 const MAX_SYNC_ATTEMPTS = 2;
 export const makeChatsSocket = (config) => {
-    const { logger, markOnlineOnConnect, fireInitQueries, appStateMacVerification, shouldIgnoreJid, shouldSyncHistoryMessage } = config;
+    const { logger, markOnlineOnConnect, fireInitQueries, appStateMacVerification, shouldIgnoreJid, shouldSyncHistoryMessage, getMessage } = config;
     const sock = makeSocket(config);
     const { ev, ws, authState, generateMessageTag, sendNode, query, signalRepository, onUnexpectedError } = sock;
     let privacySettings;
@@ -801,7 +801,8 @@ export const makeChatsSocket = (config) => {
         }
         const historyMsg = getHistoryMsg(msg.message);
         const shouldProcessHistoryMsg = historyMsg
-            ? shouldSyncHistoryMessage(historyMsg) && PROCESSABLE_HISTORY_TYPES.includes(historyMsg.syncType)
+            ? shouldSyncHistoryMessage(historyMsg) &&
+                PROCESSABLE_HISTORY_TYPES.includes(historyMsg.syncType)
             : false;
         // State machine: decide on sync and flush
         if (historyMsg && syncState === SyncState.AwaitingInitialSync) {
@@ -846,7 +847,8 @@ export const makeChatsSocket = (config) => {
                 creds: authState.creds,
                 keyStore: authState.keys,
                 logger,
-                options: config.options
+                options: config.options,
+                getMessage
             })
         ]);
         // If the app state key arrives and we are waiting to sync, trigger the sync now.

@@ -10,7 +10,6 @@ export * from './history.js';
 export * from './chat-utils.js';
 export * from './lt-hash.js';
 export * from './auth-utils.js';
-export * from './baileys-event-stream.js';
 export * from './use-multi-file-auth-state.js';
 export * from './link-preview.js';
 export * from './event-buffer.js';
