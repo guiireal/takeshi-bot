@@ -6,7 +6,6 @@
  */
 import { PREFIX } from "../../config.js";
 import { InvalidParameterError } from "../../errors/index.js";
-// Nenhum import de JID necessário
 
 export default {
   name: "fake-chat",
