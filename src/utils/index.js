@@ -408,6 +408,28 @@ export function getLastTimestampCreds() {
   return credsJson.lastAccountSyncTimestamp;
 }
 
+export function extractUserLid(data) {
+  if (typeof data === "string") {
+    try {
+      const parsed = JSON.parse(data);
+
+      if (parsed.id) {
+        return parsed.id;
+      }
+    } catch (e) {
+      return data;
+    }
+  }
+
+  if (typeof data === "object" && data !== null) {
+    if (data.id) {
+      return data.id;
+    }
+  }
+
+  return data;
+}
+
 export const GROUP_PARTICIPANT_ADD = 27;
 export const GROUP_PARTICIPANT_LEAVE = 32;
 export const isAddOrLeave = [27, 32];

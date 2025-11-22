@@ -929,7 +929,6 @@ Deseja continuar? (s/N):
 | **menu** | help | Exibe menu principal | `${PREFIX}menu` - `sendImageFromFile()` + `menuMessage()` |
 | **ping** | pong | Testa latência e uptime | `${PREFIX}ping` - Calcula diferença timestamp |
 | **perfil** | profile | Mostra info do usuário | `${PREFIX}perfil @user` - Metadados do contato |
-| **refresh** | - | Atualiza cache de grupos | `${PREFIX}refresh` - Limpa NodeCache |
 
 #### **📥 Downloads (5 comandos)**
 | Comando | Aliases | Função | Uso Técnico |

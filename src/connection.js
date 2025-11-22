@@ -54,13 +54,6 @@ logger.level = "error";
 
 const msgRetryCounterCache = new NodeCache();
 
-const oneDay = 60 * 60 * 24;
-const groupCache = new NodeCache({ stdTTL: oneDay, checkperiod: 60 });
-
-export function updateGroupMetadataCache(groupJid, metadata) {
-  groupCache.set(groupJid, metadata);
-}
-
 export async function connect() {
   const baileysFolder = path.resolve(
     __dirname,
@@ -88,7 +81,6 @@ export async function connect() {
     emitOwnEvents: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
-    cachedGroupMetadata: (jid) => groupCache.get(jid),
   });
 
   if (!socket.authState.creds.registered) {

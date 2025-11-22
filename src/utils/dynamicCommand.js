@@ -108,7 +108,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
 
     if (!(await checkPermission({ type, ...paramsHandler }))) {
       await sendErrorReply(
-        `Você não tem permissão para executar este comando!\n\nCaso você acredite que tenha, use o comando ${prefix}refresh para atualizar os dados do grupo!`
+        "Você não tem permissão para executar este comando!"
       );
       return;
     }
@@ -138,7 +138,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
 
       if (!(await checkPermission({ type, ...paramsHandler }))) {
         await sendErrorReply(
-          `Você não tem permissão para executar este comando!\n\nCaso você acredite que tenha, use o comando ${prefix}refresh para atualizar os dados do grupo!`
+          "Você não tem permissão para executar este comando!"
         );
         return;
       }
