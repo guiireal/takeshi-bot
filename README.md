@@ -3,7 +3,7 @@
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
 [![Version](https://img.shields.io/badge/Vers%C3%A3o-7.0.1-blue)](https://github.com/guiireal/takeshi-bot)
-[![Tests](https://github.com/guiireal/takeshi-bot/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot/actions/workflows/test.yml)
+[![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
@@ -288,9 +288,7 @@ pm2 start npm --name "takeshi-bot" -- start
 
 ![tutorial-vps-8](./assets/images/tutorial-vps-8.png)
 
-23 - Aqui você pode configurar de duas formas (23.1 ou 23.2):
-
-23.1 - Primeira forma: aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+23 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
 
 Depois, Configure o arquivo `config.js` que está dentro da pasta `src`.
 
@@ -304,24 +302,16 @@ export const BOT_EMOJI = "🤖";
 // Nome do bot (mude se preferir).
 export const BOT_NAME = "Takeshi Bot";
 
-// LID do bot.
+// LID do bot (no caso, o que você rodará o bot).
 // Para obter o LID do bot, use o comando <prefixo>lid respondendo em cima de uma mensagem do número do bot
 // Troque o <prefixo> pelo prefixo do bot (ex: /lid).
 export const BOT_LID = "12345678901234567890@lid";
 
-// LID do dono do bot.
+// LID do dono do bot (no caso, o seu!).
 // Para obter o LID do dono do bot, use o comando <prefixo>meu-lid
 // Troque o <prefixo> pelo prefixo do bot (ex: /meu-lid).
 export const OWNER_LID = "12345678901234567890@lid";
 ```
-
-23.2 - Segunda forma: configure o número do dono do bot e número do bot pelo próprio WhatsApp, com os comandos:
-
-`/numero-dono +55 11 99999999`
-
-e
-
-`/numero-bot +55 11 88888888`
 
 Lembre-se de trocar os números acima pelos seus números, obviamente e tbm ver se o seu prefixo é a barra /.
 
