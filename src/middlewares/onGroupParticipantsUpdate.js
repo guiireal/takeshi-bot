@@ -170,7 +170,7 @@ export async function onGroupParticipantsUpdate({
       }
     }
   } catch (error) {
-    console.log(error);
     errorLog(`Erro em onGroupParticipantsUpdate: ${error.message}`);
+    errorLog(JSON.stringify(error, null, 2));
   }
 }

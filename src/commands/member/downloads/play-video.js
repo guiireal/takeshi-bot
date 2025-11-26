@@ -1,6 +1,7 @@
 import { PREFIX } from "../../../config.js";
 import { InvalidParameterError } from "../../../errors/index.js";
 import { play } from "../../../services/spider-x-api.js";
+import { errorLog } from "../../../utils/logger.js";
 
 export default {
   name: "play-video",
@@ -53,7 +54,7 @@ export default {
 
       await sendVideoFromURL(data.url);
     } catch (error) {
-      console.log(error);
+      errorLog(JSON.stringify(error, null, 2));
       await sendErrorReply(JSON.stringify(error.message));
     }
   },

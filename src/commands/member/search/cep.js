@@ -1,6 +1,7 @@
 import { consultarCep } from "correios-brasil";
 import { PREFIX } from "../../../config.js";
 import { InvalidParameterError } from "../../../errors/index.js";
+import { errorLog } from "../../../utils/logger.js";
 
 export default {
   name: "cep",
@@ -37,7 +38,7 @@ export default {
 *UF*: ${data.uf}
 *IBGE*: ${data.ibge}`);
     } catch (error) {
-      console.log(error);
+      errorLog(JSON.stringify(error, null, 2));
       throw new Error(error.message);
     }
   },

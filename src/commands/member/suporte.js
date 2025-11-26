@@ -190,8 +190,6 @@ Se alguém te pedir o link de alguma Host, envie!`,
       max_completion_tokens: 4096,
     });
 
-    console.log(JSON.stringify(response, null, 2));
-
     const answer = response.choices[0].message.content.trim();
 
     if (!answer) {

@@ -1,6 +1,7 @@
 import { PREFIX } from "../../../config.js";
 import { InvalidParameterError, WarningError } from "../../../errors/index.js";
 import { download } from "../../../services/spider-x-api.js";
+import { errorLog } from "../../../utils/logger.js";
 
 export default {
   name: "tik-tok",
@@ -39,7 +40,7 @@ export default {
 
       await sendVideoFromURL(data.download_link);
     } catch (error) {
-      console.log(error);
+      errorLog(JSON.stringify(error, null, 2));
       await sendErrorReply(error.message);
     }
   },
