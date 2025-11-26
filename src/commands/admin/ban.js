@@ -1,6 +1,7 @@
 import { BOT_LID, OWNER_LID, PREFIX } from "../../config.js";
 import { DangerError, InvalidParameterError } from "../../errors/index.js";
 import { onlyNumbers } from "../../utils/index.js";
+import { errorLog } from "../../utils/logger.js";
 
 export default {
   name: "ban",
@@ -69,7 +70,7 @@ ${PREFIX}ban (mencionando uma mensagem)`,
       await sendSuccessReact();
       await sendReply("Membro removido com sucesso!");
     } catch (error) {
-      console.log(error);
+      errorLog(JSON.stringify(error, null, 2));
       await sendErrorReply(
         `Ocorreu um erro ao remover o membro: ${error.message}`
       );

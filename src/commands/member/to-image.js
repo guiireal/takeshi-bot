@@ -3,6 +3,7 @@ import path from "node:path";
 import { PREFIX, TEMP_DIR } from "../../config.js";
 import { InvalidParameterError } from "../../errors/index.js";
 import { getRandomNumber } from "../../utils/index.js";
+import { errorLog } from "../../utils/logger.js";
 
 export default {
   name: "toimage",
@@ -34,7 +35,7 @@ export default {
 
     execChild(`ffmpeg -i ${inputPath} ${outputPath}`, async (error) => {
       if (error) {
-        console.log(error);
+        errorLog(JSON.stringify(error, null, 2));
         throw new Error(error);
       }
 

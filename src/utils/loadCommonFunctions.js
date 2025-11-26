@@ -254,13 +254,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
       : {};
-    console.log({
-      remoteJid,
-      data: {
-        sticker: { url },
-      },
-      add: { url, ...quotedObject },
-    });
+
     return await socket.sendMessage(
       remoteJid,
       {

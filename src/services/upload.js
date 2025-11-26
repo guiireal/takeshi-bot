@@ -5,6 +5,7 @@
  */
 import axios from "axios";
 import FormData from "form-data";
+import { errorLog } from "../utils/logger.js";
 
 export async function upload(imageBuffer, filename) {
   try {
@@ -50,8 +51,7 @@ export async function upload(imageBuffer, filename) {
 
     return result.image.url;
   } catch (error) {
-    console.log(error);
-    console.error("Erro no upload da imagem:", error.message);
+    errorLog(JSON.stringify(error, null, 2));
 
     if (error.response) {
       return {

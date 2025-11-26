@@ -4,6 +4,7 @@ import path from "node:path";
 import { PREFIX, TEMP_DIR } from "../../config.js";
 import { InvalidParameterError } from "../../errors/index.js";
 import { getRandomName, getRandomNumber } from "../../utils/index.js";
+import { errorLog } from "../../utils/logger.js";
 
 async function extractAudio(videoPath) {
   const audioPath = path.resolve(
@@ -18,7 +19,7 @@ async function extractAudio(videoPath) {
         fs.unlinkSync(videoPath);
 
         if (error) {
-          console.log(error);
+          errorLog(JSON.stringify(error, null, 2));
           reject(error);
         }
 

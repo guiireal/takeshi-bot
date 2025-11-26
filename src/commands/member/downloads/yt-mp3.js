@@ -1,6 +1,7 @@
 import { PREFIX } from "../../../config.js";
 import { InvalidParameterError, WarningError } from "../../../errors/index.js";
 import { download } from "../../../services/spider-x-api.js";
+import { errorLog } from "../../../utils/logger.js";
 
 export default {
   name: "yt-mp3",
@@ -51,7 +52,7 @@ export default {
 
       await sendAudioFromURL(data.url);
     } catch (error) {
-      console.log(error);
+      errorLog(JSON.stringify(error, null, 2));
       await sendErrorReply(error.message);
     }
   },
