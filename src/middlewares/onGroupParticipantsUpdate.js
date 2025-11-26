@@ -8,21 +8,11 @@ import fs from "node:fs";
 import { exitMessage, welcomeMessage } from "../messages.js";
 import { getProfileImageData } from "../services/baileys.js";
 import {
-  exit,
-  spiderAPITokenConfigured,
-  welcome,
-} from "../services/spider-x-api.js";
-import { upload } from "../services/upload.js";
-import {
   isActiveExitGroup,
   isActiveGroup,
   isActiveWelcomeGroup,
 } from "../utils/database.js";
-import {
-  extractUserLid,
-  getRandomNumber,
-  onlyNumbers,
-} from "../utils/index.js";
+import { extractUserLid, onlyNumbers } from "../utils/index.js";
 import { errorLog } from "../utils/logger.js";
 
 export async function onGroupParticipantsUpdate({
@@ -62,50 +52,22 @@ export async function onGroupParticipantsUpdate({
         mentions.push(userLid);
       }
 
-      if (spiderAPITokenConfigured) {
+      if (buffer) {
         try {
-          if (!buffer) {
-            await socket.sendMessage(remoteJid, {
-              image: buffer,
-              caption: finalWelcomeMessage,
-              mentions,
-            });
-            return;
-          }
-
-          const link = await upload(
-            buffer,
-            `${getRandomNumber(10_000, 99_9999)}.png`
-          );
-
-          if (!link) {
-            throw new Error(
-              "Não consegui fazer o upload da imagem, tente novamente mais tarde!"
-            );
-          }
-
-          const url = welcome(
-            "participante",
-            "Você é o mais novo membro do grupo!",
-            link
-          );
-
-          await socket.sendMessage(remoteJid, {
-            image: { url },
-            caption: finalWelcomeMessage,
-            mentions,
-          });
-        } catch (error) {
           await socket.sendMessage(remoteJid, {
             image: buffer,
             caption: finalWelcomeMessage,
             mentions,
           });
+        } catch (error) {
+          await socket.sendMessage(remoteJid, {
+            text: finalWelcomeMessage,
+            mentions,
+          });
         }
       } else {
         await socket.sendMessage(remoteJid, {
-          image: buffer,
-          caption: finalWelcomeMessage,
+          text: finalWelcomeMessage,
           mentions,
         });
       }
@@ -130,37 +92,22 @@ export async function onGroupParticipantsUpdate({
         mentions.push(userLid);
       }
 
-      if (spiderAPITokenConfigured) {
+      if (buffer) {
         try {
-          const link = await upload(
-            buffer,
-            `${getRandomNumber(10_000, 99_9999)}.png`
-          );
-
-          if (!link) {
-            throw new Error(
-              "Não consegui fazer o upload da imagem, tente novamente mais tarde!"
-            );
-          }
-
-          const url = exit("membro", "Você foi um bom membro", link);
-
-          await socket.sendMessage(remoteJid, {
-            image: { url },
-            caption: finalExitMessage,
-            mentions,
-          });
-        } catch (error) {
           await socket.sendMessage(remoteJid, {
             image: buffer,
             caption: finalExitMessage,
             mentions,
           });
+        } catch (error) {
+          await socket.sendMessage(remoteJid, {
+            text: finalExitMessage,
+            mentions,
+          });
         }
       } else {
         await socket.sendMessage(remoteJid, {
-          image: buffer,
-          caption: finalExitMessage,
+          text: finalExitMessage,
           mentions,
         });
       }

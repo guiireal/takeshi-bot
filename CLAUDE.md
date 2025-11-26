@@ -766,6 +766,326 @@ Deseja continuar? (s/N):
 
 ---
 
+## 🎨 CUSTOM MIDDLEWARE - PERSONALIZAÇÃO SEM MODIFICAR CORE
+
+### Conceito
+
+O `src/middlewares/customMiddleware.js` é um **ponto de injeção seguro** para customizações sem modificar arquivos principais do bot.
+
+**Por que usar?**
+- ✅ Evita conflitos em atualizações do bot
+- ✅ Mantém código customizado separado
+- ✅ Acesso total às funções do bot
+- ✅ Hooks em pontos estratégicos
+
+### Arquitetura de Hooks
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ onMessagesUpsert.js - Processa TODAS as mensagens      │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│ HOOK 1: customMiddleware({ type: "message" })          │
+│ - Executado ANTES de processar comandos                │
+│ - Tem acesso a commonFunctions                         │
+│ - Pode interceptar/modificar comportamento             │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│ dynamicCommand() - Processa comandos normalmente       │
+└─────────────────────────────────────────────────────────┘
+
+                          OU
+
+┌─────────────────────────────────────────────────────────┐
+│ HOOK 2: customMiddleware({ type: "participant" })      │
+│ - Executado ANTES de processar add/remove              │
+│ - commonFunctions é null                               │
+│ - Pode adicionar lógica extra                          │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│ onGroupParticipantsUpdate() - Processa eventos         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Assinatura da Função
+
+```javascript
+export async function customMiddleware({
+  socket,           // Socket do Baileys
+  webMessage,       // Mensagem completa do WhatsApp
+  type,             // "message" | "participant"
+  commonFunctions,  // Object | null (null em eventos de participantes)
+  action,           // "add" | "remove" (apenas em type: "participant")
+  data,             // String (dados do participante)
+}) {
+  // Sua lógica aqui
+}
+```
+
+### Exemplos Técnicos Avançados
+
+#### 1. Sistema de Boas-vindas Personalizado por Grupo
+
+```javascript
+export async function customMiddleware({ type, action, commonFunctions, webMessage }) {
+  if (type !== "participant" || action !== "add") return;
+
+  const gruposVIP = {
+    "120363025800347367@g.us": {
+      mensagem: "🌟 Bem-vindo ao Grupo VIP Premium!",
+      regras: "📋 Leia as regras fixadas!"
+    },
+    "120363123456789012@g.us": {
+      mensagem: "👋 Olá! Seja bem-vindo ao nosso grupo!",
+      regras: null
+    }
+  };
+
+  const grupoAtual = webMessage.key.remoteJid;
+  const config = gruposVIP[grupoAtual];
+
+  if (!config) return; // Grupo não está na lista
+
+  await socket.sendMessage(grupoAtual, {
+    text: config.mensagem
+  });
+
+  if (config.regras) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await socket.sendMessage(grupoAtual, {
+      text: config.regras
+    });
+  }
+}
+```
+
+#### 2. Auto-reação a Comandos Específicos
+
+```javascript
+export async function customMiddleware({ type, commonFunctions, webMessage, socket }) {
+  if (type !== "message" || !commonFunctions) return;
+
+  const { command } = commonFunctions;
+
+  const reacoesComandos = {
+    "play": "🎵",
+    "sticker": "🎨",
+    "gemini": "🤖",
+    "ban": "🔨",
+    "menu": "📋"
+  };
+
+  const emoji = reacoesComandos[command];
+
+  if (emoji) {
+    await socket.sendMessage(webMessage.key.remoteJid, {
+      react: { text: emoji, key: webMessage.key }
+    });
+  }
+}
+```
+
+#### 3. Sistema de Log Avançado
+
+```javascript
+import fs from "node:fs";
+import path from "node:path";
+
+export async function customMiddleware({ type, commonFunctions, webMessage, action }) {
+  const logDir = path.resolve("./logs");
+  if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+
+  const hoje = new Date().toISOString().split('T')[0];
+  const logFile = path.join(logDir, `${hoje}.log`);
+
+  let logEntry = "";
+
+  if (type === "message" && commonFunctions) {
+    const { command, args, userMessageText, remoteJid } = commonFunctions;
+    logEntry = `[${new Date().toISOString()}] MESSAGE | Grupo: ${remoteJid} | Comando: ${command || "N/A"} | Args: ${args.join(", ")} | Texto: ${userMessageText}\n`;
+  } else if (type === "participant") {
+    const { remoteJid } = webMessage.key;
+    logEntry = `[${new Date().toISOString()}] PARTICIPANT | Grupo: ${remoteJid} | Ação: ${action} | Dados: ${JSON.stringify(data)}\n`;
+  }
+
+  fs.appendFileSync(logFile, logEntry);
+}
+```
+
+#### 4. Bloqueio de Comandos em Horários Específicos
+
+```javascript
+export async function customMiddleware({ type, commonFunctions }) {
+  if (type !== "message" || !commonFunctions) return;
+
+  const { command, sendWarningReply } = commonFunctions;
+
+  // Comandos bloqueados entre 22h e 6h
+  const comandosBloqueados = ["play", "yt-mp3", "yt-mp4"];
+  const horaAtual = new Date().getHours();
+
+  if (comandosBloqueados.includes(command) && (horaAtual >= 22 || horaAtual < 6)) {
+    await sendWarningReply("⏰ Este comando está bloqueado entre 22h e 6h!");
+    throw new Error("Comando bloqueado por horário");
+  }
+}
+```
+
+#### 5. Contador de Uso de Comandos
+
+```javascript
+import fs from "node:fs";
+import path from "node:path";
+
+const statsFile = path.resolve("./database/command-stats.json");
+
+function loadStats() {
+  if (!fs.existsSync(statsFile)) return {};
+  return JSON.parse(fs.readFileSync(statsFile, "utf-8"));
+}
+
+function saveStats(stats) {
+  fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+}
+
+export async function customMiddleware({ type, commonFunctions }) {
+  if (type !== "message" || !commonFunctions) return;
+
+  const { command } = commonFunctions;
+  if (!command) return;
+
+  const stats = loadStats();
+  stats[command] = (stats[command] || 0) + 1;
+  saveStats(stats);
+}
+```
+
+#### 6. Respostas Automáticas Inteligentes
+
+```javascript
+export async function customMiddleware({ type, commonFunctions, socket, webMessage }) {
+  if (type !== "message" || !commonFunctions) return;
+
+  const { userMessageText, command } = commonFunctions;
+  
+  // Só responde se NÃO for um comando
+  if (command) return;
+
+  const respostas = {
+    "bom dia": "☀️ Bom dia! Como posso ajudar?",
+    "boa tarde": "🌤️ Boa tarde! Em que posso ser útil?",
+    "boa noite": "🌙 Boa noite! Precisa de algo?",
+    "obrigado": "😊 Por nada! Estou aqui para ajudar!",
+    "valeu": "👍 Disponha!"
+  };
+
+  const textoLower = userMessageText?.toLowerCase() || "";
+
+  for (const [trigger, resposta] of Object.entries(respostas)) {
+    if (textoLower.includes(trigger)) {
+      await socket.sendMessage(webMessage.key.remoteJid, {
+        text: resposta
+      });
+      break;
+    }
+  }
+}
+```
+
+### Acesso ao commonFunctions
+
+Quando `type === "message"`, você tem acesso completo a todas as funções do bot:
+
+```javascript
+const {
+  // Identificação
+  botNumber,
+  remoteJid,
+  isGroup,
+  
+  // Comando
+  command,
+  prefix,
+  args,
+  fullArgs,
+  
+  // Mensagem
+  userMessageText,
+  webMessage,
+  
+  // Tipos de mensagem
+  isImage,
+  isVideo,
+  isSticker,
+  isAudio,
+  // ... e muitos outros
+  
+  // Funções de envio
+  sendReply,
+  sendSuccessReply,
+  sendErrorReply,
+  sendWarningReply,
+  sendText,
+  sendReact,
+  
+  // Funções de mídia
+  sendImageFromURL,
+  sendVideoFromBuffer,
+  sendAudioFromFile,
+  // ... todas as 50+ funções disponíveis
+  
+  // Funções de grupo
+  getGroupAdmins,
+  getGroupMetadata,
+  isOwner,
+  isGroupAdmin,
+  
+  // Downloads
+  downloadImage,
+  downloadVideo,
+  downloadSticker,
+  // ... etc
+} = commonFunctions;
+```
+
+### Boas Práticas
+
+**✅ Fazer:**
+- Verificar `type` antes de acessar propriedades
+- Validar `commonFunctions` não é null
+- Usar try/catch para erros
+- Documentar lógica customizada
+- Retornar cedo quando não aplicável
+
+**❌ Evitar:**
+- Modificar `webMessage` diretamente
+- Bloquear execução com loops infinitos
+- Fazer chamadas síncronas bloqueantes
+- Lançar erros sem tratamento
+- Modificar arquivos core do bot
+
+### Debugging
+
+```javascript
+export async function customMiddleware(params) {
+  // Log completo dos parâmetros
+  console.log("[CustomMiddleware]", JSON.stringify({
+    type: params.type,
+    action: params.action,
+    hasCommonFunctions: !!params.commonFunctions,
+    command: params.commonFunctions?.command,
+    remoteJid: params.webMessage?.key?.remoteJid
+  }, null, 2));
+  
+  // Sua lógica aqui
+}
+```
+
+---
+
 ## 🔧 CONTRIBUINDO
 
 ### Checklist para PRs
