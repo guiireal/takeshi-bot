@@ -2,7 +2,7 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.0.2-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.1.0-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
@@ -356,7 +356,7 @@ export const SPIDER_API_TOKEN = "seu_token_aqui";
 | Ligar/desligar boas vindas | Admin | ❌ |
 | Ligar/desligar saída de grupo | Admin | ❌ |
 | Limpar chat | Admin | ❌ |
-| Marcar todos | Admin | ❌ |
+| Marcar todos (hide-tag) | Admin | ❌ |
 | Mudar nome do grupo | Admin | ❌ |
 | Mute/unmute | Admin | ❌ |
 | Obter o link do grupo | Admin | ❌ |
@@ -512,6 +512,87 @@ O menu do bot fica dentro da pasta `src` no arquivo chamado `menu.js`
 ## Onde modifico a mensagem de boas vindas e quando alguém sai do grupo?
 
 As mensagens ficam dentro da pasta `src` no arquivo chamado `messages.js`
+
+## Custom Middleware - Personalize o bot sem modificar arquivos principais
+
+O arquivo `src/middlewares/customMiddleware.js` permite adicionar lógica personalizada sem mexer nos arquivos core do bot.
+
+### Quando usar?
+
+- ✅ Adicionar comportamentos personalizados
+- ✅ Criar logs customizados
+- ✅ Implementar lógica específica por grupo
+- ✅ Reagir a eventos automáticos
+
+### Exemplos práticos
+
+#### Exemplo 1: Reagir automaticamente a mensagens
+
+```javascript
+export async function customMiddleware({ socket, webMessage, type, commonFunctions }) {
+  if (type === "message" && commonFunctions) {
+    const { userMessageText } = commonFunctions;
+    if (userMessageText?.toLowerCase() === "oi") {
+      await socket.sendMessage(webMessage.key.remoteJid, {
+        react: { text: "👋", key: webMessage.key }
+      });
+    }
+  }
+}
+```
+
+#### Exemplo 2: Log quando alguém entra no grupo
+
+```javascript
+export async function customMiddleware({ webMessage, type, action }) {
+  if (type === "participant" && action === "add") {
+    console.log("Novo membro:", webMessage.messageStubParameters[0]);
+  }
+}
+```
+
+#### Exemplo 3: Mensagem personalizada em grupo específico
+
+```javascript
+export async function customMiddleware({ type, action, commonFunctions }) {
+  const grupoVIP = "120363123456789012@g.us";
+  
+  if (type === "participant" && action === "add" && commonFunctions?.remoteJid === grupoVIP) {
+    const { sendReply } = commonFunctions;
+    await sendReply("🎉 Bem-vindo ao grupo VIP!");
+  }
+}
+```
+
+#### Exemplo 4: Usar funções avançadas do bot
+
+```javascript
+export async function customMiddleware({ type, commonFunctions }) {
+  if (type === "message" && commonFunctions) {
+    const {
+      sendReply,
+      sendSuccessReply,
+      args,
+      userMessageText,
+      isImage,
+      downloadImage,
+    } = commonFunctions;
+    
+    // Sua lógica personalizada aqui
+  }
+}
+```
+
+### Parâmetros disponíveis
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|----------|
+| `socket` | Object | Socket do Baileys para enviar mensagens |
+| `webMessage` | Object | Mensagem completa do WhatsApp |
+| `type` | String | "message" ou "participant" |
+| `commonFunctions` | Object/null | Todas as funções do bot (null para eventos de participantes) |
+| `action` | String | "add" ou "remove" (apenas em eventos de participantes) |
+| `data` | String | Dados do participante (apenas em eventos de participantes) |
 
 ## Implementação técnica dos exemplos
 

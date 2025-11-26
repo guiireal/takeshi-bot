@@ -30,9 +30,10 @@ export default {
 
 ### Message Flow
 1. **Entry**: `src/middlewares/onMesssagesUpsert.js` - Receives all WhatsApp messages
-2. **Common functions**: `src/utils/loadCommonFunctions.js` - Extracts message data, provides send* helpers
-3. **Router**: `src/utils/dynamicCommand.js` - Matches commands, enforces permissions, handles errors
-4. **Execution**: Individual command file's `handle()` function
+2. **Custom Hook**: `src/middlewares/customMiddleware.js` - User customizations (BEFORE command processing)
+3. **Common functions**: `src/utils/loadCommonFunctions.js` - Extracts message data, provides send* helpers
+4. **Router**: `src/utils/dynamicCommand.js` - Matches commands, enforces permissions, handles errors
+5. **Execution**: Individual command file's `handle()` function
 
 ### Database System
 - **Format**: JSON files in `database/` directory
@@ -65,7 +66,29 @@ handle: async ({
 
 **Rule**: Always destructure only what you need. Check `src/@types/index.d.ts` for full API.
 
-### 2. Media Handling Pattern
+### 2. Custom Middleware Pattern
+`src/middlewares/customMiddleware.js` is the SAFE ZONE for user customizations:
+
+```javascript
+export async function customMiddleware({ type, commonFunctions, socket, webMessage, action, data }) {
+  // type: "message" | "participant"
+  // commonFunctions: Available when type === "message", null for participant events
+  // action: "add" | "remove" (only for participant events)
+  
+  if (type === "message" && commonFunctions) {
+    const { sendReply, userMessageText } = commonFunctions;
+    // Custom logic for messages
+  }
+  
+  if (type === "participant" && action === "add") {
+    // Custom logic for new members
+  }
+}
+```
+
+**See**: `CustomMiddlewareProps` in `src/@types/index.d.ts` for full type definitions.
+
+### 3. Media Handling Pattern
 Three variants for each media type (audio, image, video, sticker, document, gif):
 
 ```javascript
@@ -82,7 +105,7 @@ await sendImageFromBuffer(buffer, "Caption");
 
 **Important**: Audio uses `sendAudioFrom*` with `asVoice` boolean parameter for PTT (Push-to-Talk).
 
-### 3. Error Handling
+### 4. Error Handling
 Use custom error classes from `src/errors/`:
 
 ```javascript
@@ -95,7 +118,7 @@ if (notAllowed) throw new WarningError("Action not permitted");
 
 Generic errors are caught and displayed with details. Axios errors show API-specific messages.
 
-### 4. Configuration Access
+### 5. Configuration Access
 **Runtime settings** can override `src/config.js`:
 
 ```javascript
@@ -106,7 +129,7 @@ import { getBotNumber, getPrefix, getSpiderApiToken } from "../../utils/database
 const prefix = getPrefix(remoteJid); // Checks database first, falls back to config
 ```
 
-### 5. Bad MAC Error Handling
+### 6. Bad MAC Error Handling
 The bot has automatic recovery for WhatsApp's "Bad MAC" errors via `src/utils/badMacHandler.js`:
 - Tracks error count with 15-attempt limit
 - Auto-clears session files when limit reached
@@ -130,6 +153,12 @@ bash reset-qr-auth.sh # Delete session files and reconnect
 2. Copy template from `🤖-como-criar-comandos.js`
 3. Implement `handle` function with destructured props
 4. **No restart needed** - dynamic loader picks it up
+
+### Customizing Bot Behavior
+1. Edit `src/middlewares/customMiddleware.js` (NOT core files)
+2. Use `type` parameter to distinguish message vs participant events
+3. Access `commonFunctions` for full bot API when `type === "message"`
+4. See examples in `README.md` and `CLAUDE.md`
 
 ### Testing Commands
 - Use `/exemplos-de-mensagens` to see 24 working examples of send functions
@@ -188,7 +217,7 @@ await sendReply(
 ```
 
 ### Prefix System
-- Default: `=` (configured in `src/config.js`)
+- Default: `/` (configured in `src/config.js`)
 - Per-group override: Stored in `database/prefix-groups.json`
 - Always use `getPrefix(remoteJid)` to get effective prefix
 
@@ -199,6 +228,7 @@ await sendReply(
 3. **Media downloads create temp files** - Use `removeFileWithTimeout()` after processing
 4. **Auto-responder runs when no command matches** - Check `database/auto-responder.json`
 5. **Group metadata is cached** - Use `getGroupMetadata()` helper, not raw `socket.groupMetadata()`
+6. **Customizations go in customMiddleware.js** - Don't modify `onMesssagesUpsert.js` or `onGroupParticipantsUpdate.js`
 
 ## Example: Complete Command
 
@@ -217,7 +247,8 @@ export default {
     sendSuccessReply, 
     sendErrorReply,
     downloadImage,
-    sendImageFromBuffer 
+    sendImageFromBuffer,
+    webMessage
   }) => {
     if (!args[0] && !isImage) {
       throw new InvalidParameterError("Envie uma imagem ou argumento");

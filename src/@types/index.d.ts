@@ -1,6 +1,65 @@
-import { GroupMetadata, proto } from "baileys";
+import { GroupMetadata, proto, WAMessage, WASocket } from "baileys";
 
 declare global {
+  /**
+   * Parâmetros do customMiddleware disponíveis para personalização do bot.
+   * Use este middleware para adicionar lógica customizada sem modificar arquivos principais.
+   *
+   * @example
+   * ```javascript
+   * export async function customMiddleware({ type, commonFunctions, socket, webMessage }) {
+   *   if (type === "message" && commonFunctions) {
+   *     const { sendReply, userMessageText } = commonFunctions;
+   *     if (userMessageText?.toLowerCase() === "oi") {
+   *       await sendReply("Olá! 👋");
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  interface CustomMiddlewareProps {
+    /**
+     * Socket do Baileys para operações avançadas.
+     */
+    socket: WASocket;
+
+    /**
+     * Mensagem completa do WhatsApp.
+     */
+    webMessage: WAMessage;
+
+    /**
+     * Tipo do evento sendo processado.
+     * - "message": Mensagem normal do usuário
+     * - "participant": Evento de adicionar/remover participante
+     */
+    type: "message" | "participant";
+
+    /**
+     * Todas as funções comuns do bot (sendReply, args, isImage, etc.).
+     * Disponível apenas quando type === "message".
+     * Será null quando type === "participant".
+     *
+     * @see CommandHandleProps para lista completa de funções disponíveis
+     */
+    commonFunctions: CommandHandleProps | null;
+
+    /**
+     * Ação do participante no grupo.
+     * Disponível apenas quando type === "participant".
+     * - "add": Participante foi adicionado ao grupo
+     * - "remove": Participante foi removido/saiu do grupo
+     */
+    action?: "add" | "remove";
+
+    /**
+     * Dados do participante (LID).
+     * Disponível apenas quando type === "participant".
+     * Exemplo: "12345678901234567890@lid"
+     */
+    data?: string;
+  }
+
   /**
    * Propriedades e funções disponíveis no objeto passado para a função handle
    * de cada comando. Você pode acessá-las com desestruturação:
@@ -93,7 +152,7 @@ declare global {
     /**
      * Socket do baileys para operações avançadas.
      */
-    socket: any;
+    socket: WASocket;
 
     /**
      * Timestamp em que o comando foi iniciado.
@@ -117,7 +176,7 @@ declare global {
     /**
      * Informações detalhadas da mensagem do WhatsApp.
      */
-    webMessage: any;
+    webMessage: WAMessage;
 
     /**
      * Exclui uma mensagem de um participante do WhatsApp.
