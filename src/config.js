@@ -39,7 +39,8 @@ export const TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
 export const TIMEOUT_IN_MILLISECONDS_BY_EVENT = 700;
 
 // Plataforma de API's
-export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
+export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";vEUaUooSdjo0CJn3DhTH
+
 
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
 export const SPIDER_API_TOKEN = "seu_token_aqui";
