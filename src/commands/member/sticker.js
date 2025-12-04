@@ -121,7 +121,7 @@ export default {
         }
 
         await new Promise((resolve, reject) => {
-          const cmd = `ffmpeg -y -i "${inputPath}" -vcodec libwebp -fs 0.99M -filter_complex "[0:v] scale=512:512, fps=15, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse" -f webp "${outputTempPath}"`;
+          const cmd = `ffmpeg -y -i "${inputPath}" -vf "scale=350:350,fps=15" -c:v libwebp -loop 0 -quality 8 -compression_level 6 -method 6 -preset picture -an -f webp "${outputTempPath}"`;
 
           execChild(cmd, (error, _, stderr) => {
             if (error) {
