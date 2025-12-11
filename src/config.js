@@ -63,7 +63,7 @@ export const PROXY_USERNAME = "";
 export const PROXY_PASSWORD = "";
 
 // Versão do WhatsApp Web
-export const WAWEB_VERSION = [2, 3000, 1030370089];
+export const WAWEB_VERSION = [2, 3000, 1030831524];
 
 // Chave da OpenAI para o comando de suporte
 export const OPENAI_API_KEY = "";

@@ -430,6 +430,14 @@ export function extractUserLid(data) {
   return data;
 }
 
+export function hasDirectMedia(webMessage, context) {
+  return (
+    webMessage?.message?.[`${context}Message`] ||
+    webMessage?.message?.viewOnceMessage?.message?.[`${context}Message`] ||
+    webMessage?.message?.viewOnceMessageV2?.message?.[`${context}Message`]
+  );
+}
+
 export const GROUP_PARTICIPANT_ADD = 27;
 export const GROUP_PARTICIPANT_LEAVE = 32;
 export const isAddOrLeave = [27, 32];

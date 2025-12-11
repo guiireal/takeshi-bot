@@ -8,8 +8,9 @@ import {
   readGroupRestrictions,
   readRestrictedMessageTypes,
 } from "../utils/database.js";
-import { getContent } from "../utils/index.js";
+import { hasDirectMedia } from "../utils/index.js";
 import { errorLog } from "../utils/logger.js";
+import { isAdmin } from "./index.js";
 
 export async function messageHandler(socket, webMessage) {
   try {
@@ -35,10 +36,16 @@ export async function messageHandler(socket, webMessage) {
       return;
     }
 
+    const userIsAdmin = await isAdmin({ remoteJid, userLid, socket });
+
+    if (userIsAdmin) {
+      return;
+    }
+
     const antiGroups = readGroupRestrictions();
 
     const messageType = Object.keys(readRestrictedMessageTypes()).find((type) =>
-      getContent(webMessage, type)
+      hasDirectMedia(webMessage, type)
     );
 
     if (!messageType) {
