@@ -356,7 +356,7 @@ export const SPIDER_API_TOKEN = "seu_token_aqui";
 | Ligar/desligar boas vindas | Admin | ❌ |
 | Ligar/desligar saída de grupo | Admin | ❌ |
 | Limpar chat | Admin | ❌ |
-| Marcar todos (hide-tag) | Admin | ❌ |
+| Marcar todos | Admin | ❌ |
 | Mudar nome do grupo | Admin | ❌ |
 | Mute/unmute | Admin | ❌ |
 | Obter o link do grupo | Admin | ❌ |
@@ -715,6 +715,7 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
 
 ## Estrutura de pastas
 
+- 📁 .github ➔ _workflows de CI/CD e arquivo para o agente copilot_
 - 📁 assets ➔ _arquivos de mídia_
   - 📁 auth ➔ _arquivos da conexão do bot_
   - 📁 images ➔ _arquivos de imagem_
@@ -742,9 +743,10 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
   - 📝 menu.js ➔ _menu do bot_
   - 📝 messages.js ➔ _arquivos de mensagens de boas vindas e saída_
   - 📝 test.js ➔ _script de testes_
-- 📝 ⚡-cases-estao-aqui.js ➔ _easter egg_
-- 📝 CONTRIBUTING.md ➔ _eguia de contribuição_
 - 📝 .gitignore ➔ _arquivo para não subir certas pastas no GitHub_
+- 📝 ⚡-cases-estao-aqui.js ➔ _easter egg_
+- 📝 CLAUDE.md ➔ _arquivo de instruções para o Claude Code_
+- 📝 CONTRIBUTING.md ➔ _eguia de contribuição_
 - 📝 LICENSE ➔ _arquivo de licença_
 - 📝 package-lock.json ➔ _arquivo de cache das dependências do bot_
 - 📝 package.json ➔ _arquivo de definição das dependências do bot_
