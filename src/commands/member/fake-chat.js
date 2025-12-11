@@ -44,14 +44,14 @@ export default {
     const fakeQuoted = {
       key: {
         fromMe: false,
-        participant: mentionedJid,
+        participant: mentionedLid,
         remoteJid,
       },
       message: {
         extendedTextMessage: {
           text: quotedText,
           contextInfo: {
-            mentionedJid: [mentionedJid],
+            mentionedJid: [mentionedLid],
           },
         },
       },

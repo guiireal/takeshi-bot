@@ -1,6 +1,6 @@
 {
   "name": "takeshi-bot",
-  "version": "7.1.1",
+  "version": "7.1.2",
   "description": "Um bot de WhatsApp multifunções.",
   "main": "index.js",
   "type": "module",
