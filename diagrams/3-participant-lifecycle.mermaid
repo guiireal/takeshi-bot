@@ -1,0 +1,53 @@
+sequenceDiagram
+    autonumber
+    participant Admin as 👮 Admin
+    participant Bot as 🤖 Takeshi Bot
+    participant User as 👤 Novo Membro
+
+    Note over Admin,User: 🚀 QUANDO ALGUÉM ENTRA OU SAI DO GRUPO
+
+    %% ========== ALGUÉM ENTRA ==========
+    rect rgb(230, 240, 255)
+        Note over Admin,User: ✅ Alguém entra no grupo
+        
+        Admin->>Bot: Adiciona @João ao grupo
+        Bot->>Bot: Detecta que alguém entrou
+        
+        Bot->>Bot: Boas-vindas está ativada?<br/>(comando: /welcome on)
+        
+        alt Boas-vindas ativada
+            Bot->>Bot: Pega mensagem de boas-vindas
+            Note over Bot: Substitui:<br/>{nome} → João<br/>{grupo} → Nome do grupo
+            Bot->>User: 👋 "Bem-vindo João ao grupo XYZ!"
+            Note over User: ✅ Novo membro recebe mensagem
+        else Boas-vindas desativada
+            Note over Bot: ℹ️ Não faz nada
+        end
+    end
+
+    %% ========== ALGUÉM SAI ==========
+    rect rgb(240, 255, 240)
+        Note over Admin,User: ❌ Alguém sai do grupo
+        
+        Admin->>Bot: Remove @Maria do grupo
+        Bot->>Bot: Detecta que alguém saiu
+        
+        Bot->>Bot: Mensagem de saída está ativada?<br/>(comando: /exit on)
+        
+        alt Mensagem de saída ativada
+            Bot->>Bot: Pega mensagem de despedida
+            Note over Bot: Substitui:<br/>{nome} → Maria<br/>{grupo} → Nome do grupo
+            Bot->>Admin: 👋 "Maria saiu do grupo XYZ"
+            Note over Admin: ✅ Grupo recebe notificação
+        else Mensagem de saída desativada
+            Note over Bot: ℹ️ Não faz nada
+        end
+        
+        Bot->>Bot: Limpa dados de Maria<br/>(se ela estava mutada, etc)
+    end
+
+    %% ========== RESUMO ==========
+    rect rgb(255, 255, 230)
+        Note over Admin,User: 📝 RESUMO SIMPLES
+        Note over Admin,User: 1️⃣ Alguém entra ou sai do grupo<br/>2️⃣ Bot detecta automaticamente<br/>3️⃣ Se configurado, envia mensagem personalizada<br/>4️⃣ Limpa dados de quem saiu<br/><br/>💡 ATIVAR: /welcome on ou /exit on<br/>💡 DESATIVAR: /welcome off ou /exit off
+    end
