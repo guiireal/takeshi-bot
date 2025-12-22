@@ -740,6 +740,7 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
   - 📁 samples ➔ _arquivos de exemplo para testes_
   - 📁 temp ➔ _arquivos temporários_
 - 📁 database ➔ _arquivos de dados_
+- 📁 diagrams ➔ _diagramas de fluxos de dados e execução do Bot_
 - 📁 node_modules ➔ _módulos do Node.js_
 - 📁 src ➔ _código fonte do bot (geralmente você mexerá mais aqui)_
   - 📁 @types ➔ _pasta onde fica as definições de tipos_
