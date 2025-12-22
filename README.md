@@ -38,7 +38,7 @@
     - [Mensagens de boas vindas](#onde-modifico-a-mensagem-de-boas-vindas-e-quando-alguém-sai-do-grupo)
 9. [📊 Diagrama de como os comandos funcionam](#diagrama-de-como-os-comandos-funcionam)
 10. [📊 Diagrama de como funcionam os middlewares](#diagrama-de-como-funcionam-os-middlewares-interceptadores-de-recepção-e-saída)
-11. [💻 Custom Middleware](#custom-middleware---personalize-o-bot-sem-modificar-arquivos-principais)
+11. [💻 Custom Middleware - Personalize o bot sem modificar arquivos principais](#custom-middleware---personalize-o-bot-sem-modificar-arquivos-principais)
 12. [🛠️ Implementação técnica dos exemplos](#implementação-técnica-dos-exemplos)
 13. [📁 Estrutura de pastas](#estrutura-de-pastas)
 14. [🔄 Atualizar o bot](#atualizar-o-bot)
