@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import { PREFIX } from "../../../config.js";
 import { DangerError, InvalidParameterError } from "../../../errors/index.js";
+import { upload } from "../../../services/linker.js";
 import { canvas } from "../../../services/spider-x-api.js";
-import { upload } from "../../../services/upload.js";
 import { getRandomNumber } from "../../../utils/index.js";
 
 export default {

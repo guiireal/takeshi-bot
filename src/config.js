@@ -44,6 +44,12 @@ export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
 export const SPIDER_API_TOKEN = "seu_token_aqui";
 
+// Plataforma de geração de links a partir de imagens
+export const LINKER_BASE_URL = "https://linker.devgui.dev/api";
+
+// Obtenha sua chave em: https://linker.devgui.dev.
+export const LINKER_API_KEY = "seu_token_aqui";
+
 // Caso queira responder apenas um grupo específico,
 // coloque o ID dele na configuração abaixo.
 // Para saber o ID do grupo, use o comando <prefixo>get-group-id

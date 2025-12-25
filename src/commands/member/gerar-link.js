@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { PREFIX } from "../../config.js";
 import { InvalidParameterError } from "../../errors/index.js";
-import { upload } from "../../services/upload.js";
+import { upload } from "../../services/linker.js";
 import { getRandomNumber } from "../../utils/index.js";
 
 export default {
