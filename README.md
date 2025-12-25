@@ -2,7 +2,7 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.2.0-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.3.0-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
@@ -336,6 +336,15 @@ Para obter seu token, acesse: [https://api.spiderx.com.br](https://api.spiderx.c
 ```js
 export const SPIDER_API_TOKEN = "seu_token_aqui";
 ```
+
+Para comandos de **canvas** e **gerar-link**, é necessário configurar a API do **Linker**:
+
+```js
+export const LINKER_BASE_URL = "https://linker.devgui.dev/api";
+export const LINKER_API_KEY = "seu_token_aqui";
+```
+
+Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 
 ## Funcionalidades gerais
 

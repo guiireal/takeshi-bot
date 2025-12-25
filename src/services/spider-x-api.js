@@ -21,7 +21,9 @@ if (spiderApiTokenConfig) {
  * Não configure o token da Spider X API aqui, configure em: src/config.js
  */
 let spiderAPITokenConfigured =
-  SPIDER_API_TOKEN && SPIDER_API_TOKEN !== "seu_token_aqui";
+  SPIDER_API_TOKEN &&
+  SPIDER_API_TOKEN.trim() !== "" &&
+  SPIDER_API_TOKEN !== "seu_token_aqui";
 
 const messageIfTokenNotConfigured = `Token da API do Spider X não configurado!
       

@@ -544,6 +544,12 @@ export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
 export const SPIDER_API_TOKEN = "seu_token_aqui";
 
+// Plataforma Linker (upload de imagens e geração de link).
+export const LINKER_BASE_URL = "https://linker.devgui.dev/api";
+
+// Obtenha sua chave em: https://linker.devgui.dev.
+export const LINKER_API_KEY = "g6KoTWXZ";
+
 // Caso queira responder apenas um grupo específico,
 // coloque o ID dele na configuração abaixo.
 // Para saber o ID do grupo, use o comando <prefixo>get-group-id
@@ -573,6 +579,8 @@ export const OPENAI_API_KEY =
 /set-prefix #              # Muda prefixo do grupo
 /set-spider-api-token ...  # Define token da API
 ```
+
+**Observação:** a API Key do Linker é configurada diretamente em `src/config.js` e é usada pelos comandos de **canvas** e **gerar-link**.
 
 ---
 
