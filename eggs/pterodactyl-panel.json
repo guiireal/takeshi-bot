@@ -1,0 +1,31 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-12-31T18:47:01-03:00",
+    "name": "Takeshi Bot",
+    "author": "dev@openai.com",
+    "description": "Egg para executar o Takeshi-Bot (WhatsApp bot)",
+    "features": null,
+    "docker_images": {
+        "Nodejs 23": "ghcr.io\/parkervcp\/yolks:nodejs_23"
+    },
+    "file_denylist": [],
+    "startup": "npm install && npm start",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Conectado com sucesso\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# Script de Instala\u00e7\u00e3o do Takeshi-Bot (Vers\u00e3o Corrigida e Melhorada)\r\n\r\n# =================================================================\r\n# Configura\u00e7\u00f5es Iniciais\r\n# =================================================================\r\n\r\n# Encerra o script imediatamente se um comando falhar.\r\nset -e\r\n\r\n# Defini\u00e7\u00e3o de cores para uma sa\u00edda mais amig\u00e1vel.\r\nAMARELO='\\033[1;33m'\r\nVERDE='\\033[0;32m'\r\nVERMELHO='\\033[0;31m'\r\nCIANO='\\033[0;36m'\r\nSEM_COR='\\033[0m'\r\n\r\n# =================================================================\r\n# In\u00edcio da Instala\u00e7\u00e3o\r\n# =================================================================\r\n\r\nclear\r\nprintf \"${CIANO}Iniciando o script de instala\u00e7\u00e3o do Takeshi-Bot...${SEM_COR}\\n\\n\"\r\n\r\n# --- 1. Atualizando pacotes e instalando depend\u00eancias do sistema ---\r\nprintf \"${AMARELO}Passo 1: Atualizando lista de pacotes e instalando depend\u00eancias...${SEM_COR}\\n\"\r\napt update\r\napt install -y git curl unzip make gcc g++ ffmpeg imagemagick yarn\r\nprintf \"${VERDE}Depend\u00eancias do sistema instaladas com sucesso!${SEM_COR}\\n\\n\"\r\n\r\n# --- 2. Preparando o diret\u00f3rio e baixando\/atualizando o c\u00f3digo-fonte ---\r\nprintf \"${AMARELO}Passo 2: Acessando o diret\u00f3rio \/mnt\/server...${SEM_COR}\\n\"\r\ncd \/mnt\/server\r\n\r\nprintf \"${AMARELO}Verificando o reposit\u00f3rio Git...${SEM_COR}\\n\"\r\nif [ -d .git ]; then\r\n  printf \"${CIANO}Reposit\u00f3rio j\u00e1 existe. Atualizando com 'git pull'...${SEM_COR}\\n\"\r\n  git pull\r\nelse\r\n  printf \"${CIANO}Reposit\u00f3rio n\u00e3o encontrado. Clonando de 'https:\/\/github.com\/guiireal\/takeshi-bot.git'...${SEM_COR}\\n\"\r\n  git clone https:\/\/github.com\/guiireal\/takeshi-bot.git .\r\nfi\r\nprintf \"${VERDE}C\u00f3digo-fonte pronto!${SEM_COR}\\n\\n\"\r\n\r\n# --- 3. Instalando depend\u00eancias do Node.js ---\r\nprintf \"${AMARELO}Passo 3: Instalando depend\u00eancias do projeto com 'npm install'...${SEM_COR}\\n\"\r\nnpm install\r\nprintf \"${VERDE}Depend\u00eancias do Node.js instaladas com sucesso!${SEM_COR}\\n\\n\"\r\n\r\n\r\n# --- Conclus\u00e3o ---\r\nprintf \"\\n${VERDE}\ud83d\ude80 Instala\u00e7\u00e3o do Takeshi-Bot conclu\u00edda com sucesso! \ud83d\ude80${SEM_COR}\\n\\n\"",
+            "container": "ghcr.io\/parkervcp\/installers:ubuntu",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": []
+}
