@@ -175,7 +175,7 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | Galax Host |
 | ---------- |
 | [Grupo oficial](https://chat.whatsapp.com/Jhiaw6uRdwc6knaitKBaV4) |
-| [![Galax Host](https://galaxhost.com)] |
+| [![Galax Host](./assets/images/galax.png)](https://galaxhost.com) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
