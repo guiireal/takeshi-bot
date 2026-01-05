@@ -175,7 +175,7 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | Galax Host | Nodz Host |
 | ---------- | ---- |
 | [Grupo oficial](https://chat.whatsapp.com/Jhiaw6uRdwc6knaitKBaV4) | [Grupo oficial](https://chat.whatsapp.com/I5d5tCyZsV4J7Cjn51IkbV) |
-| [![Galax Host](./assets/images/galax.png)](https://galaxhost.com) | | [![Nodz Host](./assets/images/nodz.jpeg)](loja.nodzhostinger.com.br) |
+| [![Galax Host](./assets/images/galax.png)](https://galaxhost.com) | [![Nodz Host](./assets/images/nodz.png)](loja.nodzhostinger.com.br) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
