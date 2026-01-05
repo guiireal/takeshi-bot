@@ -6,7 +6,7 @@
     },
     "exported_at": "2025-12-31T18:47:01-03:00",
     "name": "Takeshi Bot",
-    "author": "Dev Gui",
+    "author": "aldebarandevtech@gmail.com",
     "description": "Egg para executar o Takeshi-Bot (WhatsApp bot)",
     "features": null,
     "docker_images": {
