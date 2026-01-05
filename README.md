@@ -172,10 +172,10 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | [Grupo oficial](https://chat.whatsapp.com/Ho2Zs63uKWuFwBwUdjV0cU) | [Grupo oficial](https://chat.whatsapp.com/DVDE1TCtHrKFatUKrlepjZ) | [Grupo oficial](https://chat.whatsapp.com/I5Vd7Ail01T8qK2xdrHXix?mode=wwt) |
 | [![Bores Host](./assets/images/bores-host.png)](https://loja.botbores.shop/) | [![TED Host](./assets/images/ted-host.png)](https://app.tedzinho.com.br/) | [![Lume](./assets/images/lume.png)](https://lumecloud.site/) |
 
-| Galax Host |
-| ---------- |
-| [Grupo oficial](https://chat.whatsapp.com/Jhiaw6uRdwc6knaitKBaV4) |
-| [![Galax Host](./assets/images/galax.png)](https://galaxhost.com) |
+| Galax Host | Nodz Host |
+| ---------- | ---- |
+| [Grupo oficial](https://chat.whatsapp.com/Jhiaw6uRdwc6knaitKBaV4) | [Grupo oficial](https://chat.whatsapp.com/I5d5tCyZsV4J7Cjn51IkbV) |
+| [![Galax Host](./assets/images/galax.png)](https://galaxhost.com) | | [![Nodz Host](./assets/images/nodz.jpeg)](loja.nodzhostinger.com.br) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
