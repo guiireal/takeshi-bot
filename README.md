@@ -173,7 +173,7 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | [![Bores Host](./assets/images/bores-host.png)](https://loja.botbores.shop/) | [![TED Host](./assets/images/ted-host.png)](https://app.tedzinho.com.br/) | [![Lume](./assets/images/lume.png)](https://lumecloud.site/) |
 
 | Galax Host | Nodz Host |
-| ---------- | ---- |
+| ---------- | --------- |
 | [Grupo oficial](https://chat.whatsapp.com/Jhiaw6uRdwc6knaitKBaV4) | [Grupo oficial](https://chat.whatsapp.com/I5d5tCyZsV4J7Cjn51IkbV) |
 | [![Galax Host](./assets/images/galax.png)](https://galaxhost.com) | [![Nodz Host](./assets/images/nodz.png)](loja.nodzhostinger.com.br) |
 
