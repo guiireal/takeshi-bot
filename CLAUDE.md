@@ -378,6 +378,7 @@ src/commands/
 │   ├── anti-image.js
 │   ├── anti-video.js
 │   ├── anti-sticker.js
+│   ├── auto-sticker.js   # Auto-sticker (1/0)
 │   ├── welcome.js        # Boas-vindas (1/0)
 │   ├── exit.js           # Despedida (1/0)
 │   ├── auto-responder.js
@@ -393,6 +394,7 @@ src/commands/
     ├── ttp.js            # Sticker texto
     │
     ├── 📁 downloads/      # Download de mídia
+    │   ├── instagram.js
     │   ├── play-audio.js
     │   ├── play-video.js
     │   ├── tik-tok.js
@@ -401,6 +403,7 @@ src/commands/
     │
     ├── 📁 ia/             # Inteligência Artificial
     │   ├── gemini.js
+    │   ├── gpt-5-mini.js
     │   ├── flux.js
     │   └── ia-sticker.js
     │
@@ -455,6 +458,7 @@ src/commands/
 | `anti-link-groups.json` | Grupos com anti-link ativo |
 | `auto-responder.json` | Pares de pergunta/resposta |
 | `auto-responder-groups.json` | Grupos com auto-responder ativo |
+| `auto-sticker-groups.json` | Grupos com auto-sticker ativo |
 | `exit-groups.json` | Grupos com mensagem de saída ativa |
 | `inactive-groups.json` | Grupos onde bot está desligado |
 | `muted.json` | Membros mutados por grupo |
@@ -548,7 +552,7 @@ export const SPIDER_API_TOKEN = "seu_token_aqui";
 export const LINKER_BASE_URL = "https://linker.devgui.dev/api";
 
 // Obtenha sua chave em: https://linker.devgui.dev.
-export const LINKER_API_KEY = "g6KoTWXZ";
+export const LINKER_API_KEY = "seu_token_aqui";
 
 // Caso queira responder apenas um grupo específico,
 // coloque o ID dele na configuração abaixo.
@@ -1232,6 +1236,7 @@ export async function customMiddleware(params) {
 | **add-auto-responder** | add-auto | Adiciona resposta automática | `${PREFIX}add-auto-responder oi / olá` - Atualiza `auto-responder.json` |
 | **delete-auto-responder** | del-auto | Remove resposta automática | `${PREFIX}delete-auto-responder oi` - Remove entrada |
 | **list-auto-responder** | list-auto | Lista todas as respostas | `${PREFIX}list-auto-responder` - Mostra pares pergunta/resposta |
+| **auto-sticker** | auto-figu, auto-stick | Auto conversão de mídia | `${PREFIX}auto-sticker 1` - Middleware `processAutoSticker` |
 
 #### **Mensagens de Boas-vindas**
 | Comando | Aliases | Função | Uso Técnico |
@@ -1258,19 +1263,21 @@ export async function customMiddleware(params) {
 | **ping** | pong | Testa latência e uptime | `${PREFIX}ping` - Calcula diferença timestamp |
 | **perfil** | profile | Mostra info do usuário | `${PREFIX}perfil @user` - Metadados do contato |
 
-#### **📥 Downloads (5 comandos)**
+#### **📥 Downloads (6 comandos)**
 | Comando | Aliases | Função | Uso Técnico |
 |---------|---------|--------|-------------|
+| **instagram** | ig, inst, insta | Download Instagram | `${PREFIX}instagram URL` - Spider X API `/instagram` |
 | **tik-tok** | ttk | Download vídeos TikTok | `${PREFIX}tik-tok URL` - Spider X API `/tik-tok` |
 | **yt-mp3** | - | Download áudio YouTube | `${PREFIX}yt-mp3 URL` - Extração MP3 via API |
 | **yt-mp4** | - | Download vídeo YouTube | `${PREFIX}yt-mp4 URL` - Qualidade automática |
 | **play-audio** | - | Busca e baixa áudio | `${PREFIX}play-audio música` - Search + download |
 | **play-video** | - | Busca e baixa vídeo | `${PREFIX}play-video clipe` - Search + download |
 
-#### **🤖 Inteligência Artificial (3 comandos)**
+#### **🤖 Inteligência Artificial (4 comandos)**
 | Comando | Aliases | Função | Uso Técnico |
 |---------|---------|--------|-------------|
 | **gemini** | takeshi | Chat com Google Gemini | `${PREFIX}gemini pergunta` - API Gemini Pro |
+| **gpt-5-mini** | gpt-5, gpt | Chat com GPT-5 Mini | `${PREFIX}gpt-5-mini pergunta` - API GPT-5 Mini |
 | **flux** | - | Geração de imagens IA | `${PREFIX}flux descrição` - Modelo Flux.1 |
 | **ia-sticker** | - | Sticker gerado por IA | `${PREFIX}ia-sticker prompt` - Sticker + IA |
 
@@ -1491,7 +1498,12 @@ if (!isAdmin) {
    const response = await gemini("Como fazer um bot?");
    ```
 
-4. **imageAI(description)** - Geração de imagens IA
+4. **gpt5Mini(text)** - IA Conversacional GPT-5
+   ```javascript
+   const response = await gpt5Mini("Explique a relatividade");
+   ```
+
+5. **imageAI(description)** - Geração de imagens IA
    ```javascript
    const imageUrl = await imageAI("Gato cyberpunk em cidade neon");
    ```
@@ -1940,12 +1952,14 @@ console.log('Prefixo:', getPrefix(remoteJid));
 **Por Categoria de Uso:**
 
 **Downloads (`/downloads`):**
+- **instagram**: Download de Reels e posts
 - **tik-tok**: URL completa necessária
 - **yt-mp3/mp4**: Suporta URLs e search
 - **play-audio/video**: Busca automática + download
 
 **IA (`/ia`):**
 - **gemini**: Conversação natural
+- **gpt-5-mini**: IA de última geração
 - **flux**: Descrição detalhada = melhor resultado
 - **ia-sticker**: Combina prompt + sticker
 

@@ -18,12 +18,14 @@ import {
   isLink,
   verifyPrefix,
 } from "../middlewares/index.js";
+import { processAutoSticker } from "../services/sticker.js";
 import { badMacHandler } from "./badMacHandler.js";
 import {
   getAutoResponderResponse,
   getPrefix,
   isActiveAntiLinkGroup,
   isActiveAutoResponderGroup,
+  isActiveAutoStickerGroup,
   isActiveGroup,
   isActiveOnlyAdmins,
 } from "./database.js";
@@ -72,6 +74,14 @@ export async function dynamicCommand(paramsHandler, startProcess) {
         },
       });
 
+      return;
+    }
+  }
+
+  if (activeGroup && isActiveAutoStickerGroup(remoteJid)) {
+    const processed = await processAutoSticker(paramsHandler);
+
+    if (processed) {
       return;
     }
   }

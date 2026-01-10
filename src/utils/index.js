@@ -30,25 +30,14 @@ export function extractDataFromMessage(webMessage) {
   const imageTextMessage = webMessage.message?.imageMessage?.caption;
   const videoTextMessage = webMessage.message?.videoMessage?.caption;
 
-  const fullMessage =
+  let fullMessage =
     textMessage ||
     extendedTextMessageText ||
     imageTextMessage ||
     videoTextMessage;
 
   if (!fullMessage) {
-    return {
-      args: [],
-      commandName: null,
-      fullArgs: null,
-      fullMessage: null,
-      isReply: false,
-      prefix: null,
-      remoteJid: null,
-      replyLid: null,
-      userLid: null,
-      replyText: null,
-    };
+    fullMessage = "#auto-command";
   }
 
   const isReply =

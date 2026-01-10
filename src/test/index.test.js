@@ -221,7 +221,7 @@ describe("Utility Functions", () => {
       assert.strictEqual(data.replyText, "mensagem original");
     });
 
-    it("should return null values for message without content", () => {
+    it("should return #auto-command values for message without content", () => {
       const webMessage = {
         key: {
           remoteJid: "123456789@g.us",
@@ -231,9 +231,7 @@ describe("Utility Functions", () => {
 
       const data = utils.extractDataFromMessage(webMessage);
 
-      assert.strictEqual(data.fullMessage, null);
-      assert.strictEqual(data.commandName, null);
-      assert.strictEqual(data.prefix, null);
+      assert.strictEqual(data.fullMessage, "#auto-command");
     });
 
     it("should process image message with caption", () => {

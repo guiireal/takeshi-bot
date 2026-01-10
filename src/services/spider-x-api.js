@@ -68,9 +68,7 @@ export async function play(type, search) {
 
 export async function download(type, url) {
   if (!url) {
-    throw new Error(
-      "Você precisa informar uma URL do YouTube do que deseja buscar!"
-    );
+    throw new Error("Você precisa informar uma URL do que deseja buscar!");
   }
 
   if (!spiderAPITokenConfigured) {
@@ -97,6 +95,25 @@ export async function gemini(text) {
 
   const { data } = await axios.post(
     `${SPIDER_API_BASE_URL}/ai/gemini?api_key=${SPIDER_API_TOKEN}`,
+    {
+      text,
+    }
+  );
+
+  return data.response;
+}
+
+export async function gpt5Mini(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  if (!spiderAPITokenConfigured) {
+    throw new Error(messageIfTokenNotConfigured);
+  }
+
+  const { data } = await axios.post(
+    `${SPIDER_API_BASE_URL}/ai/gpt-5-mini?api_key=${SPIDER_API_TOKEN}`,
     {
       text,
     }

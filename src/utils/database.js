@@ -17,6 +17,7 @@ const databasePath = path.resolve(__dirname, "..", "..", "database");
 const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const AUTO_RESPONDER_FILE = "auto-responder";
 const AUTO_RESPONDER_GROUPS_FILE = "auto-responder-groups";
+const AUTO_STICKER_GROUPS_FILE = "auto-sticker-groups";
 const CONFIG_FILE = "config";
 const EXIT_GROUPS_FILE = "exit-groups";
 const GROUP_RESTRICTIONS_FILE = "group-restrictions";
@@ -245,6 +246,42 @@ export function isActiveAntiLinkGroup(groupId) {
   const antiLinkGroups = readJSON(filename);
 
   return antiLinkGroups.includes(groupId);
+}
+
+export function activateAutoStickerGroup(groupId) {
+  const filename = AUTO_STICKER_GROUPS_FILE;
+
+  const autoStickerGroups = readJSON(filename);
+
+  if (!autoStickerGroups.includes(groupId)) {
+    autoStickerGroups.push(groupId);
+  }
+
+  writeJSON(filename, autoStickerGroups);
+}
+
+export function deactivateAutoStickerGroup(groupId) {
+  const filename = AUTO_STICKER_GROUPS_FILE;
+
+  const autoStickerGroups = readJSON(filename);
+
+  const index = autoStickerGroups.indexOf(groupId);
+
+  if (index === -1) {
+    return;
+  }
+
+  autoStickerGroups.splice(index, 1);
+
+  writeJSON(filename, autoStickerGroups);
+}
+
+export function isActiveAutoStickerGroup(groupId) {
+  const filename = AUTO_STICKER_GROUPS_FILE;
+
+  const autoStickerGroups = readJSON(filename);
+
+  return autoStickerGroups.includes(groupId);
 }
 
 export function muteMember(groupId, memberId) {
