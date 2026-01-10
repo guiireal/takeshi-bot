@@ -49,6 +49,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}anti-sticker (1/0)
 ▢ • ${prefix}anti-video (1/0)
 ▢ • ${prefix}auto-responder (1/0)
+▢ • ${prefix}auto-sticker (1/0)
 ▢ • ${prefix}ban
 ▢ • ${prefix}delete
 ▢ • ${prefix}delete-auto-responder
@@ -94,6 +95,7 @@ export function menuMessage(groupJid) {
 
 ╭━━⪩ DOWNLOADS ⪨━━
 ▢
+▢ • ${prefix}instagram
 ▢ • ${prefix}play-audio
 ▢ • ${prefix}play-video
 ▢ • ${prefix}tik-tok
@@ -118,6 +120,7 @@ export function menuMessage(groupJid) {
 ▢
 ▢ • ${prefix}flux
 ▢ • ${prefix}gemini
+▢ • ${prefix}gpt-5-mini
 ▢ • ${prefix}ia-sticker
 ▢
 ╰━━─「🚀」─━━
