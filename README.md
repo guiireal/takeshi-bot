@@ -3,7 +3,7 @@
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
 [![Version](https://img.shields.io/badge/Vers%C3%A3o-7.4.0-blue)](https://github.com/guiireal/takeshi-bot)
-[![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
+[![Tests](https://github.com/guiireal/takeshi-bot/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
@@ -780,6 +780,7 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
   - 📁 errors ➔ _classes de erros usadas nos comandos_
   - 📁 middlewares ➔ _interceptadores de requisições_
   - 📁 services ➔ _serviços diversos_
+  - 📁 test ➔ _testes_
   - 📁 utils ➔ _utilitários_
   - 📝 config.js ➔ _arquivo de configurações do bot_
   - 📝 connection.js ➔ _script de conexão do bot com a biblioteca Baileys_
