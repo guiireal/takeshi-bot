@@ -50,9 +50,7 @@
 
 ## 🌐 Acesse o Takeshi Bot em outros idiomas
 
-- 🇺🇸 [**English version**](https://github.com/guiireal/takeshi-bot-english)
 - 🇪🇸 [**Versión en Español**](https://github.com/guiireal/takeshi-bot-espanol)
-- 🇮🇩 [**Versi Bahasa Indonesia**](https://github.com/guiireal/takeshi-bot-bahasa-indonesia)
 
 ## ⚠ Atenção
 
