@@ -165,15 +165,10 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | [Grupo oficial](https://chat.whatsapp.com/J5OewHvweK1Kf7RGXAwIYM) | [Grupo oficial](https://chat.whatsapp.com/Fl5FzZQC00J5CZp07AZVwQ?mode=r_c) | [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) |
 | [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![Nexfuture](./assets/images/nexfuture.png)](https://nexfuture.com.br/) | [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) |
 
-| Bores Host | TED Host |
-|------------|----------|
-| [Grupo oficial](https://chat.whatsapp.com/Ho2Zs63uKWuFwBwUdjV0cU) | [Grupo oficial](https://chat.whatsapp.com/DVDE1TCtHrKFatUKrlepjZ) |
-| [![Bores Host](./assets/images/bores-host.png)](https://loja.botbores.shop/) | [![TED Host](./assets/images/ted-host.png)](https://loja.tedhost.com.br/) |
-
-| Galax Host | Nodz Host |
-| ---------- | --------- |
-| [Grupo oficial](https://chat.whatsapp.com/Jhiaw6uRdwc6knaitKBaV4) | [Grupo oficial](https://chat.whatsapp.com/I5d5tCyZsV4J7Cjn51IkbV) |
-| [![Galax Host](./assets/images/galax.png)](https://galaxhost.com) | [![Nodz Host](./assets/images/nodz.png)](loja.nodzhostinger.com.br) |
+| Bores Host | TED Host | Nodz Host |
+|------------|----------| --------- |
+| [Grupo oficial](https://chat.whatsapp.com/Ho2Zs63uKWuFwBwUdjV0cU) | [Grupo oficial](https://chat.whatsapp.com/DVDE1TCtHrKFatUKrlepjZ) | [Grupo oficial](https://chat.whatsapp.com/I5d5tCyZsV4J7Cjn51IkbV) |
+| [![Bores Host](./assets/images/bores-host.png)](https://loja.botbores.shop/) | [![TED Host](./assets/images/ted-host.png)](https://loja.tedhost.com.br/) | [![Nodz Host](./assets/images/nodz.png)](loja.nodzhostinger.com.br) |
 
 
 ## Instalação em VPS (Debian/Ubuntu)
