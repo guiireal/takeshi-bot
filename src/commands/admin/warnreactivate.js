@@ -1,11 +1,10 @@
-// src/commands/admin/warnreactivate.js
 import { BOT_LID, OWNER_LID } from "../../config.js";
 import { DangerError, InvalidParameterError } from "../../errors/index.js";
 import { onlyNumbers } from "../../utils/index.js";
 import {
-  ADVT_getAllWarns,
-  ADVT_reactivateWarnByIndex,
-} from "../../utils/ADVT_warnSystem.js";
+  getAllWarns,
+  reactivateWarnByIndex,
+} from "../../utils/warnSystem.js";
 import { errorLog } from "../../utils/logger.js";
 
 export default {
@@ -37,7 +36,7 @@ export default {
       }
 
       const action = args[1]?.toLowerCase();
-      const allWarns = ADVT_getAllWarns(remoteJid, targetLid);
+      const allWarns = getAllWarns(remoteJid, targetLid);
       const invalidWarns = allWarns.filter(w => !w.valid);
 
       if (invalidWarns.length === 0) {
@@ -56,14 +55,14 @@ export default {
       if (action && !isNaN(action)) {
         const index = parseInt(action, 10) - 1;
         if (index >= 0 && index < invalidWarns.length) {
-          if (ADVT_reactivateWarnByIndex(remoteJid, targetLid, index)) {
+          if (reactivateWarnByIndex(remoteJid, targetLid, index)) {
             return sendReply(`✅ Advertência #${index + 1} reativada.`);
           }
         }
       }
 
       const lastIndex = invalidWarns.length - 1;
-      if (ADVT_reactivateWarnByIndex(remoteJid, targetLid, lastIndex)) {
+      if (reactivateWarnByIndex(remoteJid, targetLid, lastIndex)) {
         await sendReply(`✅ Última advertência inválida reativada.`);
       } else {
         await sendReply("❌ Falha ao reativar advertência.");

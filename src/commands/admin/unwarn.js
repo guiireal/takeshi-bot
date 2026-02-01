@@ -1,12 +1,11 @@
-// src/commands/admin/unwarn.js
 import { BOT_LID, OWNER_LID } from "../../config.js";
 import { DangerError, InvalidParameterError } from "../../errors/index.js";
 import { onlyNumbers } from "../../utils/index.js";
 import {
-  ADVT_getAllWarns,
-  ADVT_removeLastValidWarn,
-  ADVT_revokeWarnByIndex,
-} from "../../utils/ADVT_warnSystem.js";
+  getAllWarns,
+  removeLastWarn,
+  revokeWarnByIndex,
+} from "../../utils/warnSystem.js";
 import { errorLog } from "../../utils/logger.js";
 
 export default {
@@ -37,7 +36,7 @@ export default {
       }
 
       const action = args[1]?.toLowerCase();
-      const allWarns = ADVT_getAllWarns(remoteJid, targetLid);
+      const allWarns = getAllWarns(remoteJid, targetLid);
       const validWarns = allWarns.filter(w => w.valid);
 
       if (validWarns.length === 0) {
@@ -56,12 +55,12 @@ export default {
       if (action && !isNaN(action)) {
         const index = parseInt(action, 10) - 1;
         if (index >= 0 && index < validWarns.length) {
-          ADVT_revokeWarnByIndex(remoteJid, targetLid, index);
+          revokeWarnByIndex(remoteJid, targetLid, index);
           return sendReply(`✅ Advertência #${index + 1} removida.`);
         }
       }
 
-      ADVT_removeLastValidWarn(remoteJid, targetLid);
+      removeLastWarn(remoteJid, targetLid);
       await sendReply(`✅ Última advertência removida.`);
     } catch (error) {
       errorLog(JSON.stringify(error, null, 2));

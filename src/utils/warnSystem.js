@@ -1,12 +1,16 @@
-// src/utils/ADVT_warnSystem.js
-// © Sistema ADVT – Inspirado na Aleatory-MD v4.7
+/**
+ * Sistema de advertências progressivas
+ * Inspirado no Aleatory-MD v4.7
+ * @author HunterTheCraft-OFICIAL
+ */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DB_PATH = path.join(__dirname, "../../database/ADVT_warns.json");
+const DB_PATH = path.join(__dirname, "../../database/warns.json");
+const INITIAL_WARN_LIMIT = 3;
 
 function loadDB() {
   if (!fs.existsSync(DB_PATH)) {
@@ -23,7 +27,7 @@ function saveDB(data) {
 function ensureGroup(db, groupId) {
   if (!db[groupId]) {
     db[groupId] = {
-      warnLimit: 3, // Padrão inicial
+      warnLimit: INITIAL_WARN_LIMIT,
       warns: {},
     };
   }
@@ -36,25 +40,24 @@ function ensureUser(db, groupId, userLid) {
   return group.warns[userLid];
 }
 
-// --- CORE ---
-export function ADVT_addWarn(groupId, userLid, reason = "Advertência genérica") {
+export function addWarn(groupId, userLid, reason = "Advertência genérica") {
   const db = loadDB();
   const user = ensureUser(db, groupId, userLid);
   user.push({ reason, timestamp: Date.now(), valid: true });
   saveDB(db);
   return user.filter(w => w.valid).length;
 }
-
-export function ADVT_getAllWarns(groupId, userLid) {
+export function getAllWarns(groupId, userLid) {
   const db = loadDB();
-  return db[groupId]?.warns?.[userLid] || [];}
-
-export function ADVT_getWarnLimit(groupId) {
-  const db = loadDB();
-  return db[groupId]?.warnLimit || 3;
+  return db[groupId]?.warns?.[userLid] || [];
 }
 
-export function ADVT_removeLastValidWarn(groupId, userLid) {
+export function getWarnLimit(groupId) {
+  const db = loadDB();
+  return db[groupId]?.warnLimit || INITIAL_WARN_LIMIT;
+}
+
+export function removeLastWarn(groupId, userLid) {
   const db = loadDB();
   const user = db[groupId]?.warns?.[userLid];
   if (!user) return 0;
@@ -66,10 +69,10 @@ export function ADVT_removeLastValidWarn(groupId, userLid) {
     }
   }
   saveDB(db);
-  return ADVT_getAllWarns(groupId, userLid).filter(w => w.valid).length;
+  return getAllWarns(groupId, userLid).filter(w => w.valid).length;
 }
 
-export function ADVT_revokeWarnByIndex(groupId, userLid, index) {
+export function revokeWarnByIndex(groupId, userLid, index) {
   const db = loadDB();
   const user = db[groupId]?.warns?.[userLid];
   if (!user) return false;
@@ -91,12 +94,12 @@ export function ADVT_revokeWarnByIndex(groupId, userLid, index) {
   return false;
 }
 
-export function ADVT_reactivateWarnByIndex(groupId, userLid, index) {
+export function reactivateWarnByIndex(groupId, userLid, index) {
   const db = loadDB();
-  const user = db[groupId]?.warns?.[userLid];
-  if (!user) return false;
+  const user = db[groupId]?.warns?.[userLid];  if (!user) return false;
 
-  const invalidWarns = user.filter(w => !w.valid);  if (index < 0 || index >= invalidWarns.length) return false;
+  const invalidWarns = user.filter(w => !w.valid);
+  if (index < 0 || index >= invalidWarns.length) return false;
 
   let found = 0;
   for (let i = 0; i < user.length; i++) {
