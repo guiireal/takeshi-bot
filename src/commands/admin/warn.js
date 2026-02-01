@@ -1,8 +1,7 @@
-// src/commands/admin/warn.js
 import { BOT_LID, OWNER_LID } from "../../config.js";
 import { DangerError, InvalidParameterError } from "../../errors/index.js";
 import { onlyNumbers } from "../../utils/index.js";
-import { ADVT_addWarn, ADVT_getWarnLimit } from "../../utils/ADVT_warnSystem.js";
+import { addWarn, getWarnLimit } from "../../utils/warnSystem.js";
 import { errorLog } from "../../utils/logger.js";
 
 export default {
@@ -36,8 +35,8 @@ export default {
       }
 
       const reason = args.slice(1).join(" ") || "Advertência genérica";
-      const newCount = ADVT_addWarn(remoteJid, targetLid, reason);
-      const limit = ADVT_getWarnLimit(remoteJid);
+      const newCount = addWarn(remoteJid, targetLid, reason);
+      const limit = getWarnLimit(remoteJid);
 
       await sendReply(
         `⚠️ *@${targetLid.split("@")[0]}* foi advertido!\n` +
