@@ -1,0 +1,21 @@
+{
+  "name": "{{example}}",
+  "version": "0.1.0",
+  "description": "{{example}}",
+  "author": "{{author}}",
+  "main": "index",
+  "dependencies": {
+    "ecstatic": "~0.3.0",
+    "mapping-stream": "~0.1.0",
+    "insert": "~0.1.1",
+    "reconnect": "~0.3.1"
+  },
+  "devDependencies": {
+    "browserify-server": "~2.1.4",
+    "wr": "~1.2.1",
+    "live-reload": "~0.2.0"
+  },
+  "scripts": {
+    "build": "make all"
+  }
+}

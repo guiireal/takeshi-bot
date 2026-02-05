@@ -1,13 +1,16 @@
 'use strict'
 
-const { once } = require('events')
-const { Transform, pipeline } = require('stream')
+const test = require('node:test')
+const assert = require('node:assert')
+const { once } = require('node:events')
+const { Transform, pipeline } = require('node:stream')
+const tspl = require('@matteo.collina/tspl')
 
-const { test } = require('tap')
+const match = require('./match')
 const build = require('../')
 
-test('parse newlined delimited JSON', ({ same, plan }) => {
-  plan(2)
+test('parse newlined delimited JSON', async (t) => {
+  const plan = tspl(t, { plan: 2 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -25,17 +28,19 @@ test('parse newlined delimited JSON', ({ same, plan }) => {
 
   const stream = build(function (source) {
     source.on('data', function (line) {
-      same(expected.shift(), line)
+      match(expected.shift(), line, { assert: plan })
     })
   })
 
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('parse newlined delimited JSON', ({ same, plan }) => {
-  plan(2)
+test('parse newline delimited JSON', async (t) => {
+  const plan = tspl(t, { plan: 2 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -53,7 +58,7 @@ test('parse newlined delimited JSON', ({ same, plan }) => {
 
   const stream = build(function (source) {
     source.on('data', function (line) {
-      same(expected.shift(), line)
+      match(expected.shift(), line, { assert: plan })
     })
   }, { parse: 'json' })
 
@@ -62,49 +67,55 @@ test('parse newlined delimited JSON', ({ same, plan }) => {
   stream.end()
 })
 
-test('null support', ({ same, plan }) => {
-  plan(1)
+test('null support', async (t) => {
+  const plan = tspl(t, { plan: 1 })
   const stream = build(function (source) {
     source.on('unknown', function (line) {
-      same('null', line)
+      match('null', line, { assert: plan })
     })
   })
 
   stream.write('null\n')
   stream.end()
+
+  await plan
 })
 
-test('broken json', ({ match, same, plan }) => {
-  plan(2)
+test('broken json', async (t) => {
+  const plan = tspl(t, { plan: 2 })
   const expected = '{ "truncated'
   const stream = build(function (source) {
     source.on('unknown', function (line, error) {
-      same(expected, line)
+      match(expected, line, { assert: plan })
       const regex = /^(Unexpected end of JSON input|Unterminated string in JSON at position 12)( \(line 1 column 13\))?$/
-      match(error.message, regex)
+      plan.match(error.message, regex)
     })
   })
 
   stream.write(expected + '\n')
   stream.end()
+
+  await plan
 })
 
-test('pure values', ({ same, ok, plan }) => {
-  plan(3)
+test('pure values', async (t) => {
+  const plan = tspl(t, { plan: 3 })
   const stream = build(function (source) {
     source.on('data', function (line) {
-      same(line.data, 42)
-      ok(line.time)
-      same(new Date(line.time).getTime(), line.time)
+      plan.equal(line.data, 42)
+      plan.ok(line.time)
+      plan.equal(new Date(line.time).getTime(), line.time)
     })
   })
 
   stream.write('42\n')
   stream.end()
+
+  await plan
 })
 
-test('support async iteration', ({ same, plan }) => {
-  plan(2)
+test('support async iteration', async (t) => {
+  const plan = tspl(t, { plan: 2 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -122,33 +133,34 @@ test('support async iteration', ({ same, plan }) => {
 
   const stream = build(async function (source) {
     for await (const line of source) {
-      same(expected.shift(), line)
+      match(expected.shift(), line, { assert: plan })
     }
   })
 
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('rejecting errors the stream', async ({ same, plan }) => {
+test('rejecting errors the stream', async () => {
   const stream = build(async function (source) {
     throw new Error('kaboom')
   })
 
   const [err] = await once(stream, 'error')
-  same(err.message, 'kaboom')
+  assert.equal(err.message, 'kaboom')
 })
 
-test('emits an error if the transport expects pino to send the config, but pino is not going to', async function ({ plan, same }) {
-  plan(1)
+test('emits an error if the transport expects pino to send the config, but pino is not going to', async function () {
   const stream = build(() => {}, { expectPinoConfig: true })
   const [err] = await once(stream, 'error')
-  same(err.message, 'This transport is not compatible with the current version of pino. Please upgrade pino to the latest version.')
+  assert.equal(err.message, 'This transport is not compatible with the current version of pino. Please upgrade pino to the latest version.')
 })
 
-test('set metadata', ({ same, plan, equal }) => {
-  plan(9)
+test('set metadata', async (t) => {
+  const plan = tspl(t, { plan: 9 })
 
   const expected = [{
     level: 30,
@@ -168,21 +180,23 @@ test('set metadata', ({ same, plan, equal }) => {
   const stream = build(function (source) {
     source.on('data', function (line) {
       const obj = expected.shift()
-      same(this.lastLevel, obj.level)
-      same(this.lastTime, obj.time)
-      same(this.lastObj, obj)
-      same(obj, line)
+      plan.equal(this.lastLevel, obj.level)
+      plan.equal(this.lastTime, obj.time)
+      match(this.lastObj, obj, { assert: plan })
+      match(obj, line, { assert: plan })
     })
   }, { metadata: true })
 
-  equal(stream[Symbol.for('pino.metadata')], true)
+  plan.equal(stream[Symbol.for('pino.metadata')], true)
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('parse lines', ({ same, plan, equal }) => {
-  plan(9)
+test('parse lines', async (t) => {
+  const plan = tspl(t, { plan: 9 })
 
   const expected = [{
     level: 30,
@@ -202,21 +216,23 @@ test('parse lines', ({ same, plan, equal }) => {
   const stream = build(function (source) {
     source.on('data', function (line) {
       const obj = expected.shift()
-      same(this.lastLevel, obj.level)
-      same(this.lastTime, obj.time)
-      same(this.lastObj, obj)
-      same(JSON.stringify(obj), line)
+      plan.equal(this.lastLevel, obj.level)
+      plan.equal(this.lastTime, obj.time)
+      match(this.lastObj, obj, { assert: plan })
+      match(JSON.stringify(obj), line, { assert: plan })
     })
   }, { metadata: true, parse: 'lines' })
 
-  equal(stream[Symbol.for('pino.metadata')], true)
+  plan.equal(stream[Symbol.for('pino.metadata')], true)
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('custom parse line function', ({ same, plan, equal }) => {
-  plan(11)
+test('custom parse line function', async (t) => {
+  const plan = tspl(t, { plan: 11 })
 
   const expected = [{
     level: 30,
@@ -236,29 +252,31 @@ test('custom parse line function', ({ same, plan, equal }) => {
 
   function parseLine (str) {
     const obj = JSON.parse(str)
-    same(expected[num], obj)
+    match(expected[num], obj, { assert: plan })
     return obj
   }
 
   const stream = build(function (source) {
     source.on('data', function (line) {
       const obj = expected[num]
-      same(this.lastLevel, obj.level)
-      same(this.lastTime, obj.time)
-      same(this.lastObj, obj)
-      same(obj, line)
+      plan.equal(this.lastLevel, obj.level)
+      plan.equal(this.lastTime, obj.time)
+      match(this.lastObj, obj, { assert: plan })
+      match(obj, line, { assert: plan })
       num++
     })
   }, { metadata: true, parseLine })
 
-  equal(stream[Symbol.for('pino.metadata')], true)
+  plan.equal(stream[Symbol.for('pino.metadata')], true)
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('set metadata (default)', ({ same, plan, equal }) => {
-  plan(9)
+test('set metadata (default)', async (t) => {
+  const plan = tspl(t, { plan: 9 })
 
   const expected = [{
     level: 30,
@@ -278,21 +296,23 @@ test('set metadata (default)', ({ same, plan, equal }) => {
   const stream = build(function (source) {
     source.on('data', function (line) {
       const obj = expected.shift()
-      same(this.lastLevel, obj.level)
-      same(this.lastTime, obj.time)
-      same(this.lastObj, obj)
-      same(obj, line)
+      plan.equal(this.lastLevel, obj.level)
+      plan.equal(this.lastTime, obj.time)
+      match(this.lastObj, obj, { assert: plan })
+      match(obj, line, { assert: plan })
     })
   })
 
-  equal(stream[Symbol.for('pino.metadata')], true)
+  plan.equal(stream[Symbol.for('pino.metadata')], true)
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('do not set metadata', ({ same, plan, equal }) => {
-  plan(9)
+test('do not set metadata', async (t) => {
+  const plan = tspl(t, { plan: 9 })
 
   const expected = [{
     level: 30,
@@ -312,21 +332,23 @@ test('do not set metadata', ({ same, plan, equal }) => {
   const stream = build(function (source) {
     source.on('data', function (line) {
       const obj = expected.shift()
-      same(this.lastLevel, undefined)
-      same(this.lastTime, undefined)
-      same(this.lastObj, undefined)
-      same(obj, line)
+      plan.equal(this.lastLevel, undefined)
+      plan.equal(this.lastTime, undefined)
+      plan.equal(this.lastObj, undefined)
+      match(obj, line, { assert: plan })
     })
   }, { metadata: false })
 
-  equal(stream[Symbol.for('pino.metadata')], undefined)
+  plan.equal(stream[Symbol.for('pino.metadata')], undefined)
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('close logic', ({ same, plan, pass }) => {
-  plan(3)
+test('close logic', async (t) => {
+  const plan = tspl(t, { plan: 3 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -344,11 +366,11 @@ test('close logic', ({ same, plan, pass }) => {
 
   const stream = build(function (source) {
     source.on('data', function (line) {
-      same(expected.shift(), line)
+      match(expected.shift(), line, { assert: plan })
     })
   }, {
     close (err, cb) {
-      pass('close called')
+      plan.ok('close called')
       process.nextTick(cb, err)
     }
   })
@@ -356,10 +378,12 @@ test('close logic', ({ same, plan, pass }) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('close with promises', ({ same, plan, pass }) => {
-  plan(3)
+test('close with promises', async (t) => {
+  const plan = tspl(t, { plan: 3 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -377,21 +401,23 @@ test('close with promises', ({ same, plan, pass }) => {
 
   const stream = build(function (source) {
     source.on('data', function (line) {
-      same(expected.shift(), line)
+      match(expected.shift(), line, { assert: plan })
     })
   }, {
     async close () {
-      pass('close called')
+      plan.ok('close called')
     }
   })
 
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+
+  await plan
 })
 
-test('support Transform streams', ({ same, plan, error }) => {
-  plan(7)
+test('support Transform streams', async (t) => {
+  const plan = tspl(t, { plan: 7 })
 
   const expected1 = [{
     level: 30,
@@ -415,7 +441,7 @@ test('support Transform streams', ({ same, plan, error }) => {
       objectMode: true,
       autoDestroy: true,
       transform (chunk, enc, cb) {
-        same(expected1.shift(), chunk)
+        match(expected1.shift(), chunk, { assert: plan })
         chunk.service = 'from transform'
         expected2.push(chunk)
         cb(null, JSON.stringify(chunk) + '\n')
@@ -429,17 +455,19 @@ test('support Transform streams', ({ same, plan, error }) => {
 
   const stream2 = build(function (source) {
     source.on('data', function (line) {
-      same(expected2.shift(), line)
+      match(expected2.shift(), line, { assert: plan })
     })
   })
 
   pipeline(stream1, stream2, function (err) {
-    error(err)
-    same(expected1, [])
-    same(expected2, [])
+    plan.equal(err, undefined)
+    plan.deepStrictEqual(expected1, [])
+    plan.deepStrictEqual(expected2, [])
   })
 
   const lines = expected1.map(JSON.stringify).join('\n')
   stream1.write(lines)
   stream1.end()
+
+  await plan
 })

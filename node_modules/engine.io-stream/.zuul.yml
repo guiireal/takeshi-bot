@@ -1,0 +1,2 @@
+ui: mocha-qunit
+server: ./test/support/server.js

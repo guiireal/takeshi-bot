@@ -1,0 +1,62 @@
+{
+  "name": "engine.io-client",
+  "description": "Client for the realtime Engine",
+  "version": "0.7.12",
+  "homepage": "https://github.com/LearnBoost/engine.io-client",
+  "contributors": [
+    {
+      "name": "Guillermo Rauch",
+      "email": "rauchg@gmail.com"
+    },
+    {
+      "name": "Vladimir Dronnikov",
+      "email": "dronnikov@gmail.com"
+    },
+    {
+      "name": "Christoph Dorn",
+      "web": "https://github.com/cadorn"
+    }
+  ],
+  "dependencies": {
+    "global": "https://github.com/component/global/archive/v2.0.1.tar.gz",
+    "has-cors": "https://github.com/component/has-cors/archive/v1.0.2.tar.gz",
+    "ws": "0.4.31",
+    "xmlhttprequest": "https://github.com/LearnBoost/node-XMLHttpRequest/archive/0f36d0b5ebc03d85f860d42a64ae9791e1daa433.tar.gz",
+    "emitter": "http://github.com/component/emitter/archive/1.0.1.tar.gz",
+    "indexof": "0.0.1",
+    "engine.io-parser": "0.3.0",
+    "debug": "0.7.2"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "serve": "*",
+    "expect.js": "*",
+    "istanbul": "*",
+    "browserify": "2.35.1"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "browser": {
+    "xmlhttprequest": "./lib/xmlhttprequest.js"
+  },
+  "component": {
+    "scripts": {
+      "engine.io/index.js": "lib/index.js",
+      "engine.io/socket.js": "lib/socket.js",
+      "engine.io/transport.js": "lib/transport.js",
+      "engine.io/emitter.js": "lib/emitter.js",
+      "engine.io/util.js": "lib/util.js",
+      "engine.io/transports/index.js": "lib/transports/index.js",
+      "engine.io/transports/polling.js": "lib/transports/polling.js",
+      "engine.io/transports/polling-xhr.js": "lib/transports/polling-xhr.js",
+      "engine.io/transports/polling-jsonp.js": "lib/transports/polling-jsonp.js",
+      "engine.io/transports/websocket.js": "lib/transports/websocket.js",
+      "engine.io/transports/flashsocket.js": "lib/transports/flashsocket.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LearnBoost/engine.io-client.git"
+  }
+}

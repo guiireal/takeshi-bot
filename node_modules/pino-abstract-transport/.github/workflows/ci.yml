@@ -24,7 +24,7 @@ jobs:
       contents: read
     steps:
       - name: Check out repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
 
@@ -38,17 +38,17 @@ jobs:
       contents: read
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [20, 22, 24]
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
 
       - name: Setup Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -57,29 +57,12 @@ jobs:
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('package.json') }}
-  
+
       - name: Install dependencies
         run: npm i --ignore-scripts
 
       - name: Run Tests
         run: npm run test-ci
-
-      - name: Coveralls Parallel
-        uses: coverallsapp/github-action@v2.1.2
-        with:
-          github-token: ${{ secrets.github_token }}
-          parallel: true
-          flag-name: run-${{ matrix.node-version }}-${{ matrix.os }}
-
-  coverage:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2.1.2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
 
   automerge:
     name: Automerge Dependabot PRs

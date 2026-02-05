@@ -185,7 +185,7 @@ test('serializes aggregate errors', { skip: !global.AggregateError }, () => {
   const foo = new Error('foo')
   const bar = new Error('bar')
   for (const aggregate of [
-    new AggregateError([foo, bar], 'aggregated message'), // eslint-disable-line no-undef
+    new AggregateError([foo, bar], 'aggregated message'),
     { errors: [foo, bar], message: 'aggregated message', stack: 'err.test.js:' }
   ]) {
     const serialized = serializer(aggregate)

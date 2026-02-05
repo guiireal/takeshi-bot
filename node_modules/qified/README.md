@@ -305,6 +305,169 @@ await qified.on(QifiedEvents.error, async (error) => {
 await qified.publish('topic', { id: '1', data: { test: true } });
 ```
 
+# Hooks
+
+Qified provides before and after hooks for all major operations, allowing you to intercept and modify data before an operation executes, or perform actions after it completes. Hooks are powered by [Hookified](https://hookified.org).
+
+## Available Hooks
+
+The following hooks are available via the `QifiedHooks` enum:
+
+| Hook | Description | Context Properties |
+|------|-------------|-------------------|
+| `beforeSubscribe` | Called before subscribing to a topic | `{ topic, handler }` |
+| `afterSubscribe` | Called after subscribing to a topic | `{ topic, handler }` |
+| `beforePublish` | Called before publishing a message | `{ topic, message }` |
+| `afterPublish` | Called after publishing a message | `{ topic, message }` |
+| `beforeUnsubscribe` | Called before unsubscribing from a topic | `{ topic, id }` |
+| `afterUnsubscribe` | Called after unsubscribing from a topic | `{ topic, id }` |
+| `beforeDisconnect` | Called before disconnecting from providers | `{ providerCount }` |
+| `afterDisconnect` | Called after disconnecting from providers | `{ providerCount }` |
+
+## Using Hooks
+
+Use the `onHook()` method to register a hook handler:
+
+```js
+import { Qified, MemoryMessageProvider, QifiedHooks } from 'qified';
+
+const qified = new Qified({
+  messageProviders: new MemoryMessageProvider()
+});
+
+// Register a before hook
+qified.onHook(QifiedHooks.beforePublish, async (context) => {
+  console.log('About to publish to:', context.topic);
+});
+
+// Register an after hook
+qified.onHook(QifiedHooks.afterPublish, async (context) => {
+  console.log('Published message:', context.message.id);
+});
+```
+
+## Modifying Data with Before Hooks
+
+Before hooks receive a mutable context object. Any changes you make to the context will be applied to the operation:
+
+```js
+import { Qified, MemoryMessageProvider, QifiedHooks } from 'qified';
+
+const qified = new Qified({
+  messageProviders: new MemoryMessageProvider()
+});
+
+// Add timestamp and headers to all messages
+qified.onHook(QifiedHooks.beforePublish, async (context) => {
+  // Add timestamp if not present
+  context.message.timestamp = context.message.timestamp ?? Date.now();
+
+  // Add custom headers
+  context.message.headers = {
+    ...context.message.headers,
+    'x-processed-by': 'qified',
+    'x-environment': process.env.NODE_ENV
+  };
+});
+
+// Modify message data
+qified.onHook(QifiedHooks.beforePublish, async (context) => {
+  // Add metadata to the message data
+  context.message.data = {
+    ...context.message.data,
+    _meta: {
+      version: '1.0',
+      source: 'api'
+    }
+  };
+});
+
+// Subscribe to receive messages
+await qified.subscribe('events', {
+  id: 'handler1',
+  handler: async (message) => {
+    // Message will have timestamp, headers, and modified data
+    console.log('Timestamp:', message.timestamp);
+    console.log('Headers:', message.headers);
+    console.log('Data:', message.data);
+  }
+});
+
+// Publish a message - hooks will modify it before sending
+await qified.publish('events', {
+  id: 'msg-1',
+  data: { text: 'Hello!' }
+});
+```
+
+## Modifying Topics with Before Hooks
+
+You can also modify the topic in before hooks:
+
+```js
+// Route all messages to a prefixed topic
+qified.onHook(QifiedHooks.beforePublish, async (context) => {
+  context.topic = `production/${context.topic}`;
+});
+
+// Subscribe to the prefixed topic
+await qified.subscribe('production/events', {
+  id: 'handler1',
+  handler: async (message) => {
+    console.log('Received:', message.data);
+  }
+});
+
+// This publishes to 'production/events' due to the hook
+await qified.publish('events', {
+  id: 'msg-1',
+  data: { text: 'Hello!' }
+});
+```
+
+## Multiple Hooks
+
+Multiple hooks for the same event execute in the order they were registered:
+
+```js
+// First hook - runs first
+qified.onHook(QifiedHooks.beforePublish, async (context) => {
+  context.message.timestamp = Date.now();
+});
+
+// Second hook - runs second, can see changes from first hook
+qified.onHook(QifiedHooks.beforePublish, async (context) => {
+  context.message.headers = { 'x-timestamp': String(context.message.timestamp) };
+});
+
+// Third hook - runs third
+qified.onHook(QifiedHooks.beforePublish, async (context) => {
+  console.log('Final message:', context.message);
+});
+```
+
+## Hooks vs Events
+
+Both hooks and events are available, but they serve different purposes:
+
+| Feature | Hooks | Events |
+|---------|-------|--------|
+| Timing | Before and after operations | After operations only |
+| Data modification | Yes (before hooks) | No |
+| Use case | Intercepting/transforming data | Logging, monitoring, side effects |
+
+```js
+// Hook - can modify the message before it's published
+qified.onHook(QifiedHooks.beforePublish, async (context) => {
+  context.message.timestamp = Date.now();
+});
+
+// Event - notified after publish completes (cannot modify)
+qified.on(QifiedEvents.publish, async (data) => {
+  console.log('Published:', data.message.id);
+});
+```
+
 # Providers
 
 There are multiple providers available to use:

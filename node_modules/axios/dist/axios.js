@@ -1,4 +1,4 @@
-/*! Axios v1.13.2 Copyright (c) 2025 Matt Zabriskie and contributors */
+/*! Axios v1.13.4 Copyright (c) 2026 Matt Zabriskie and contributors */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -138,6 +138,24 @@
   }
   function _awaitAsyncGenerator(e) {
     return new _OverloadYield(e, 0);
+  }
+  function _callSuper(t, o, e) {
+    return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+  }
+  function _construct(t, e, r) {
+    if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments);
+    var o = [null];
+    o.push.apply(o, e);
+    var p = new (t.bind.apply(t, o))();
+    return r && _setPrototypeOf(p, r.prototype), p;
+  }
+  function _isNativeReflectConstruct() {
+    try {
+      var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+    } catch (t) {}
+    return (_isNativeReflectConstruct = function () {
+      return !!t;
+    })();
   }
   function _iterableToArrayLimit(r, l) {
     var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
@@ -582,6 +600,82 @@
     }
     return obj;
   }
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        writable: true,
+        configurable: true
+      }
+    });
+    Object.defineProperty(subClass, "prototype", {
+      writable: false
+    });
+    if (superClass) _setPrototypeOf(subClass, superClass);
+  }
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
+  }
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+    return _setPrototypeOf(o, p);
+  }
+  function _isNativeFunction(fn) {
+    try {
+      return Function.toString.call(fn).indexOf("[native code]") !== -1;
+    } catch (e) {
+      return typeof fn === "function";
+    }
+  }
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : undefined;
+    _wrapNativeSuper = function _wrapNativeSuper(Class) {
+      if (Class === null || !_isNativeFunction(Class)) return Class;
+      if (typeof Class !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class)) return _cache.get(Class);
+        _cache.set(Class, Wrapper);
+      }
+      function Wrapper() {
+        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class.prototype, {
+        constructor: {
+          value: Wrapper,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      });
+      return _setPrototypeOf(Wrapper, Class);
+    };
+    return _wrapNativeSuper(Class);
+  }
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self;
+  }
+  function _possibleConstructorReturn(self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    } else if (call !== void 0) {
+      throw new TypeError("Derived constructors may only return object or undefined");
+    }
+    return _assertThisInitialized(self);
+  }
   function _slicedToArray(arr, i) {
     return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
   }
@@ -938,10 +1032,11 @@
    * If 'obj' is an Object callback will be called passing
    * the value, key, and complete object for each property.
    *
-   * @param {Object|Array} obj The object to iterate
+   * @param {Object|Array<unknown>} obj The object to iterate
    * @param {Function} fn The callback to invoke for each item
    *
-   * @param {Boolean} [allOwnKeys = false]
+   * @param {Object} [options]
+   * @param {Boolean} [options.allOwnKeys = false]
    * @returns {any}
    */
   function forEach(obj, fn) {
@@ -1016,7 +1111,7 @@
    * Example:
    *
    * ```js
-   * var result = merge({foo: 123}, {foo: 456});
+   * const result = merge({foo: 123}, {foo: 456});
    * console.log(result.foo); // outputs 456
    * ```
    *
@@ -1055,7 +1150,8 @@
    * @param {Object} b The object to copy properties from
    * @param {Object} thisArg The object to bind function to
    *
-   * @param {Boolean} [allOwnKeys]
+   * @param {Object} [options]
+   * @param {Boolean} [options.allOwnKeys]
    * @returns {Object} The resulting value of object a
    */
   var extend = function extend(a, b, thisArg) {
@@ -1063,9 +1159,19 @@
       allOwnKeys = _ref3.allOwnKeys;
     forEach(b, function (val, key) {
       if (thisArg && isFunction$1(val)) {
-        a[key] = bind(val, thisArg);
+        Object.defineProperty(a, key, {
+          value: bind(val, thisArg),
+          writable: true,
+          enumerable: true,
+          configurable: true
+        });
       } else {
-        a[key] = val;
+        Object.defineProperty(a, key, {
+          value: val,
+          writable: true,
+          enumerable: true,
+          configurable: true
+        });
       }
     }, {
       allOwnKeys: allOwnKeys
@@ -1098,7 +1204,12 @@
    */
   var inherits = function inherits(constructor, superConstructor, props, descriptors) {
     constructor.prototype = Object.create(superConstructor.prototype, descriptors);
-    constructor.prototype.constructor = constructor;
+    Object.defineProperty(constructor.prototype, 'constructor', {
+      value: constructor,
+      writable: true,
+      enumerable: false,
+      configurable: true
+    });
     Object.defineProperty(constructor, 'super', {
       value: superConstructor.prototype
     });
@@ -1435,94 +1546,80 @@
     isIterable: isIterable
   };
 
-  /**
-   * Create an Error with the specified message, config, error code, request and response.
-   *
-   * @param {string} message The error message.
-   * @param {string} [code] The error code (for example, 'ECONNABORTED').
-   * @param {Object} [config] The config.
-   * @param {Object} [request] The request.
-   * @param {Object} [response] The response.
-   *
-   * @returns {Error} The created error.
-   */
-  function AxiosError(message, code, config, request, response) {
-    Error.call(this);
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    } else {
-      this.stack = new Error().stack;
+  var AxiosError = /*#__PURE__*/function (_Error) {
+    _inherits(AxiosError, _Error);
+    /**
+     * Create an Error with the specified message, config, error code, request and response.
+     *
+     * @param {string} message The error message.
+     * @param {string} [code] The error code (for example, 'ECONNABORTED').
+     * @param {Object} [config] The config.
+     * @param {Object} [request] The request.
+     * @param {Object} [response] The response.
+     *
+     * @returns {Error} The created error.
+     */
+    function AxiosError(message, code, config, request, response) {
+      var _this;
+      _classCallCheck(this, AxiosError);
+      _this = _callSuper(this, AxiosError, [message]);
+      _this.name = 'AxiosError';
+      _this.isAxiosError = true;
+      code && (_this.code = code);
+      config && (_this.config = config);
+      request && (_this.request = request);
+      if (response) {
+        _this.response = response;
+        _this.status = response.status;
+      }
+      return _this;
     }
-    this.message = message;
-    this.name = 'AxiosError';
-    code && (this.code = code);
-    config && (this.config = config);
-    request && (this.request = request);
-    if (response) {
-      this.response = response;
-      this.status = response.status ? response.status : null;
-    }
-  }
-  utils$1.inherits(AxiosError, Error, {
-    toJSON: function toJSON() {
-      return {
-        // Standard
-        message: this.message,
-        name: this.name,
-        // Microsoft
-        description: this.description,
-        number: this.number,
-        // Mozilla
-        fileName: this.fileName,
-        lineNumber: this.lineNumber,
-        columnNumber: this.columnNumber,
-        stack: this.stack,
-        // Axios
-        config: utils$1.toJSONObject(this.config),
-        code: this.code,
-        status: this.status
-      };
-    }
-  });
-  var prototype$1 = AxiosError.prototype;
-  var descriptors = {};
-  ['ERR_BAD_OPTION_VALUE', 'ERR_BAD_OPTION', 'ECONNABORTED', 'ETIMEDOUT', 'ERR_NETWORK', 'ERR_FR_TOO_MANY_REDIRECTS', 'ERR_DEPRECATED', 'ERR_BAD_RESPONSE', 'ERR_BAD_REQUEST', 'ERR_CANCELED', 'ERR_NOT_SUPPORT', 'ERR_INVALID_URL'
-  // eslint-disable-next-line func-names
-  ].forEach(function (code) {
-    descriptors[code] = {
-      value: code
-    };
-  });
-  Object.defineProperties(AxiosError, descriptors);
-  Object.defineProperty(prototype$1, 'isAxiosError', {
-    value: true
-  });
-
-  // eslint-disable-next-line func-names
-  AxiosError.from = function (error, code, config, request, response, customProps) {
-    var axiosError = Object.create(prototype$1);
-    utils$1.toFlatObject(error, axiosError, function filter(obj) {
-      return obj !== Error.prototype;
-    }, function (prop) {
-      return prop !== 'isAxiosError';
-    });
-    var msg = error && error.message ? error.message : 'Error';
-
-    // Prefer explicit code; otherwise copy the low-level error's code (e.g. ECONNREFUSED)
-    var errCode = code == null && error ? error.code : code;
-    AxiosError.call(axiosError, msg, errCode, config, request, response);
-
-    // Chain the original error on the standard field; non-enumerable to avoid JSON noise
-    if (error && axiosError.cause == null) {
-      Object.defineProperty(axiosError, 'cause', {
-        value: error,
-        configurable: true
-      });
-    }
-    axiosError.name = error && error.name || 'Error';
-    customProps && Object.assign(axiosError, customProps);
-    return axiosError;
-  };
+    _createClass(AxiosError, [{
+      key: "toJSON",
+      value: function toJSON() {
+        return {
+          // Standard
+          message: this.message,
+          name: this.name,
+          // Microsoft
+          description: this.description,
+          number: this.number,
+          // Mozilla
+          fileName: this.fileName,
+          lineNumber: this.lineNumber,
+          columnNumber: this.columnNumber,
+          stack: this.stack,
+          // Axios
+          config: utils$1.toJSONObject(this.config),
+          code: this.code,
+          status: this.status
+        };
+      }
+    }], [{
+      key: "from",
+      value: function from(error, code, config, request, response, customProps) {
+        var axiosError = new AxiosError(error.message, code || error.code, config, request, response);
+        axiosError.cause = error;
+        axiosError.name = error.name;
+        customProps && Object.assign(axiosError, customProps);
+        return axiosError;
+      }
+    }]);
+    return AxiosError;
+  }( /*#__PURE__*/_wrapNativeSuper(Error)); // This can be changed to static properties as soon as the parser options in .eslint.cjs are updated.
+  AxiosError.ERR_BAD_OPTION_VALUE = 'ERR_BAD_OPTION_VALUE';
+  AxiosError.ERR_BAD_OPTION = 'ERR_BAD_OPTION';
+  AxiosError.ECONNABORTED = 'ECONNABORTED';
+  AxiosError.ETIMEDOUT = 'ETIMEDOUT';
+  AxiosError.ERR_NETWORK = 'ERR_NETWORK';
+  AxiosError.ERR_FR_TOO_MANY_REDIRECTS = 'ERR_FR_TOO_MANY_REDIRECTS';
+  AxiosError.ERR_DEPRECATED = 'ERR_DEPRECATED';
+  AxiosError.ERR_BAD_RESPONSE = 'ERR_BAD_RESPONSE';
+  AxiosError.ERR_BAD_REQUEST = 'ERR_BAD_REQUEST';
+  AxiosError.ERR_CANCELED = 'ERR_CANCELED';
+  AxiosError.ERR_NOT_SUPPORT = 'ERR_NOT_SUPPORT';
+  AxiosError.ERR_INVALID_URL = 'ERR_INVALID_URL';
+  var AxiosError$1 = AxiosError;
 
   // eslint-disable-next-line strict
   var httpAdapter = null;
@@ -1640,7 +1737,7 @@
         return value.toString();
       }
       if (!useBlob && utils$1.isBlob(value)) {
-        throw new AxiosError('Blob is not supported. Use a Buffer instead.');
+        throw new AxiosError$1('Blob is not supported. Use a Buffer instead.');
       }
       if (utils$1.isArrayBuffer(value) || utils$1.isTypedArray(value)) {
         return useBlob && typeof Blob === 'function' ? new Blob([value]) : Buffer.from(value);
@@ -1780,22 +1877,19 @@
    * @returns {string} The formatted url
    */
   function buildURL(url, params, options) {
-    /*eslint no-param-reassign:0*/
     if (!params) {
       return url;
     }
     var _encode = options && options.encode || encode;
-    if (utils$1.isFunction(options)) {
-      options = {
-        serialize: options
-      };
-    }
-    var serializeFn = options && options.serialize;
+    var _options = utils$1.isFunction(options) ? {
+      serialize: options
+    } : options;
+    var serializeFn = _options && _options.serialize;
     var serializedParams;
     if (serializeFn) {
-      serializedParams = serializeFn(params, options);
+      serializedParams = serializeFn(params, _options);
     } else {
-      serializedParams = utils$1.isURLSearchParams(params) ? params.toString() : new AxiosURLSearchParams(params, options).toString(_encode);
+      serializedParams = utils$1.isURLSearchParams(params) ? params.toString() : new AxiosURLSearchParams(params, _options).toString(_encode);
     }
     if (serializedParams) {
       var hashmarkIndex = url.indexOf("#");
@@ -1818,6 +1912,7 @@
      *
      * @param {Function} fulfilled The function to handle `then` for a `Promise`
      * @param {Function} rejected The function to handle `reject` for a `Promise`
+     * @param {Object} options The options for the interceptor, synchronous and runWhen
      *
      * @return {Number} An ID used to remove interceptor later
      */
@@ -2126,7 +2221,7 @@
         } catch (e) {
           if (strictJSONParsing) {
             if (e.name === 'SyntaxError') {
-              throw AxiosError.from(e, AxiosError.ERR_BAD_RESPONSE, this, null, this.response);
+              throw AxiosError$1.from(e, AxiosError$1.ERR_BAD_RESPONSE, this, null, this.response);
             }
             throw e;
           }
@@ -2526,23 +2621,28 @@
     return !!(value && value.__CANCEL__);
   }
 
-  /**
-   * A `CanceledError` is an object that is thrown when an operation is canceled.
-   *
-   * @param {string=} message The message.
-   * @param {Object=} config The config.
-   * @param {Object=} request The request.
-   *
-   * @returns {CanceledError} The created error.
-   */
-  function CanceledError(message, config, request) {
-    // eslint-disable-next-line no-eq-null,eqeqeq
-    AxiosError.call(this, message == null ? 'canceled' : message, AxiosError.ERR_CANCELED, config, request);
-    this.name = 'CanceledError';
-  }
-  utils$1.inherits(CanceledError, AxiosError, {
-    __CANCEL__: true
-  });
+  var CanceledError = /*#__PURE__*/function (_AxiosError) {
+    _inherits(CanceledError, _AxiosError);
+    /**
+     * A `CanceledError` is an object that is thrown when an operation is canceled.
+     *
+     * @param {string=} message The message.
+     * @param {Object=} config The config.
+     * @param {Object=} request The request.
+     *
+     * @returns {CanceledError} The created error.
+     */
+    function CanceledError(message, config, request) {
+      var _this;
+      _classCallCheck(this, CanceledError);
+      _this = _callSuper(this, CanceledError, [message == null ? 'canceled' : message, AxiosError$1.ERR_CANCELED, config, request]);
+      _this.name = 'CanceledError';
+      _this.__CANCEL__ = true;
+      return _this;
+    }
+    return _createClass(CanceledError);
+  }(AxiosError$1);
+  var CanceledError$1 = CanceledError;
 
   /**
    * Resolve or reject a Promise based on response status.
@@ -2558,7 +2658,7 @@
     if (!response.status || !validateStatus || validateStatus(response.status)) {
       resolve(response);
     } else {
-      reject(new AxiosError('Request failed with status code ' + response.status, [AxiosError.ERR_BAD_REQUEST, AxiosError.ERR_BAD_RESPONSE][Math.floor(response.status / 100) - 4], response.config, response.request, response));
+      reject(new AxiosError$1('Request failed with status code ' + response.status, [AxiosError$1.ERR_BAD_REQUEST, AxiosError$1.ERR_BAD_RESPONSE][Math.floor(response.status / 100) - 4], response.config, response.request, response));
     }
   }
 
@@ -2820,8 +2920,6 @@
       }
       return source;
     }
-
-    // eslint-disable-next-line consistent-return
     function mergeDeepProperties(a, b, prop, caseless) {
       if (!utils$1.isUndefined(b)) {
         return getMergedValue(a, b, prop, caseless);
@@ -3024,7 +3122,7 @@
         if (!request) {
           return;
         }
-        reject(new AxiosError('Request aborted', AxiosError.ECONNABORTED, config, request));
+        reject(new AxiosError$1('Request aborted', AxiosError$1.ECONNABORTED, config, request));
 
         // Clean up request
         request = null;
@@ -3036,7 +3134,7 @@
         // (message may be empty; when present, surface it)
         // See https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/error_event
         var msg = event && event.message ? event.message : 'Network Error';
-        var err = new AxiosError(msg, AxiosError.ERR_NETWORK, config, request);
+        var err = new AxiosError$1(msg, AxiosError$1.ERR_NETWORK, config, request);
         // attach the underlying event for consumers who want details
         err.event = event || null;
         reject(err);
@@ -3050,7 +3148,7 @@
         if (_config.timeoutErrorMessage) {
           timeoutErrorMessage = _config.timeoutErrorMessage;
         }
-        reject(new AxiosError(timeoutErrorMessage, transitional.clarifyTimeoutError ? AxiosError.ETIMEDOUT : AxiosError.ECONNABORTED, config, request));
+        reject(new AxiosError$1(timeoutErrorMessage, transitional.clarifyTimeoutError ? AxiosError$1.ETIMEDOUT : AxiosError$1.ECONNABORTED, config, request));
 
         // Clean up request
         request = null;
@@ -3101,7 +3199,7 @@
           if (!request) {
             return;
           }
-          reject(!cancel || cancel.type ? new CanceledError(null, config, request) : cancel);
+          reject(!cancel || cancel.type ? new CanceledError$1(null, config, request) : cancel);
           request.abort();
           request = null;
         };
@@ -3112,7 +3210,7 @@
       }
       var protocol = parseProtocol(_config.url);
       if (protocol && platform.protocols.indexOf(protocol) === -1) {
-        reject(new AxiosError('Unsupported protocol ' + protocol + ':', AxiosError.ERR_BAD_REQUEST, config));
+        reject(new AxiosError$1('Unsupported protocol ' + protocol + ':', AxiosError$1.ERR_BAD_REQUEST, config));
         return;
       }
 
@@ -3132,12 +3230,12 @@
           aborted = true;
           unsubscribe();
           var err = reason instanceof Error ? reason : this.reason;
-          controller.abort(err instanceof AxiosError ? err : new CanceledError(err instanceof Error ? err.message : err));
+          controller.abort(err instanceof AxiosError$1 ? err : new CanceledError$1(err instanceof Error ? err.message : err));
         }
       };
       var timer = timeout && setTimeout(function () {
         timer = null;
-        onabort(new AxiosError("timeout ".concat(timeout, " of ms exceeded"), AxiosError.ETIMEDOUT));
+        onabort(new AxiosError$1("timeout of ".concat(timeout, "ms exceeded"), AxiosError$1.ETIMEDOUT));
       }, timeout);
       var unsubscribe = function unsubscribe() {
         if (signals) {
@@ -3458,7 +3556,7 @@
           if (method) {
             return method.call(res);
           }
-          throw new AxiosError("Response type '".concat(type, "' is not supported"), AxiosError.ERR_NOT_SUPPORT, config);
+          throw new AxiosError$1("Response type '".concat(type, "' is not supported"), AxiosError$1.ERR_NOT_SUPPORT, config);
         });
       });
     }();
@@ -3641,11 +3739,11 @@
                 _context4.next = 41;
                 break;
               }
-              throw Object.assign(new AxiosError('Network Error', AxiosError.ERR_NETWORK, config, request), {
+              throw Object.assign(new AxiosError$1('Network Error', AxiosError$1.ERR_NETWORK, config, request), {
                 cause: _context4.t2.cause || _context4.t2
               });
             case 41:
-              throw AxiosError.from(_context4.t2, _context4.t2 && _context4.t2.code, config, request);
+              throw AxiosError$1.from(_context4.t2, _context4.t2 && _context4.t2.code, config, request);
             case 42:
             case "end":
               return _context4.stop();
@@ -3756,7 +3854,7 @@
       if (!isResolvedHandle(nameOrAdapter)) {
         adapter = knownAdapters[(id = String(nameOrAdapter)).toLowerCase()];
         if (adapter === undefined) {
-          throw new AxiosError("Unknown adapter '".concat(id, "'"));
+          throw new AxiosError$1("Unknown adapter '".concat(id, "'"));
         }
       }
       if (adapter && (utils$1.isFunction(adapter) || (adapter = adapter.get(config)))) {
@@ -3772,7 +3870,7 @@
         return "adapter ".concat(id, " ") + (state === false ? 'is not supported by the environment' : 'is not available in the build');
       });
       var s = length ? reasons.length > 1 ? 'since :\n' + reasons.map(renderReason).join('\n') : ' ' + renderReason(reasons[0]) : 'as no adapter specified';
-      throw new AxiosError("There is no suitable adapter to dispatch the request " + s, 'ERR_NOT_SUPPORT');
+      throw new AxiosError$1("There is no suitable adapter to dispatch the request " + s, 'ERR_NOT_SUPPORT');
     }
     return adapter;
   }
@@ -3805,7 +3903,7 @@
       config.cancelToken.throwIfRequested();
     }
     if (config.signal && config.signal.aborted) {
-      throw new CanceledError(null, config);
+      throw new CanceledError$1(null, config);
     }
   }
 
@@ -3847,7 +3945,7 @@
     });
   }
 
-  var VERSION = "1.13.2";
+  var VERSION = "1.13.4";
 
   var validators$1 = {};
 
@@ -3876,7 +3974,7 @@
     // eslint-disable-next-line func-names
     return function (value, opt, opts) {
       if (validator === false) {
-        throw new AxiosError(formatMessage(opt, ' has been removed' + (version ? ' in ' + version : '')), AxiosError.ERR_DEPRECATED);
+        throw new AxiosError$1(formatMessage(opt, ' has been removed' + (version ? ' in ' + version : '')), AxiosError$1.ERR_DEPRECATED);
       }
       if (version && !deprecatedWarnings[opt]) {
         deprecatedWarnings[opt] = true;
@@ -3906,7 +4004,7 @@
 
   function assertOptions(options, schema, allowUnknown) {
     if (_typeof(options) !== 'object') {
-      throw new AxiosError('options must be an object', AxiosError.ERR_BAD_OPTION_VALUE);
+      throw new AxiosError$1('options must be an object', AxiosError$1.ERR_BAD_OPTION_VALUE);
     }
     var keys = Object.keys(options);
     var i = keys.length;
@@ -3917,12 +4015,12 @@
         var value = options[opt];
         var result = value === undefined || validator(value, opt, options);
         if (result !== true) {
-          throw new AxiosError('option ' + opt + ' must be ' + result, AxiosError.ERR_BAD_OPTION_VALUE);
+          throw new AxiosError$1('option ' + opt + ' must be ' + result, AxiosError$1.ERR_BAD_OPTION_VALUE);
         }
         continue;
       }
       if (allowUnknown !== true) {
-        throw new AxiosError('Unknown option ' + opt, AxiosError.ERR_BAD_OPTION);
+        throw new AxiosError$1('Unknown option ' + opt, AxiosError$1.ERR_BAD_OPTION);
       }
     }
   }
@@ -4199,7 +4297,7 @@
           // Cancellation has already been requested
           return;
         }
-        token.reason = new CanceledError(message, config, request);
+        token.reason = new CanceledError$1(message, config, request);
         resolvePromise(token.reason);
       });
     }
@@ -4289,7 +4387,7 @@
    *
    *  ```js
    *  function f(x, y, z) {}
-   *  var args = [1, 2, 3];
+   *  const args = [1, 2, 3];
    *  f.apply(null, args);
    *  ```
    *
@@ -4434,14 +4532,14 @@
   axios.Axios = Axios$1;
 
   // Expose Cancel & CancelToken
-  axios.CanceledError = CanceledError;
+  axios.CanceledError = CanceledError$1;
   axios.CancelToken = CancelToken$1;
   axios.isCancel = isCancel;
   axios.VERSION = VERSION;
   axios.toFormData = toFormData;
 
   // Expose AxiosError class
-  axios.AxiosError = AxiosError;
+  axios.AxiosError = AxiosError$1;
 
   // alias for CanceledError for backward compatibility
   axios.Cancel = axios.CanceledError;

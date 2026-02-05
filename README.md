@@ -2,8 +2,8 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.4.0-blue)](https://github.com/guiireal/takeshi-bot)
-[![Tests](https://github.com/guiireal/takeshi-bot/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot/actions/workflows/test.yml)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.5.0-blue)](https://github.com/guiireal/takeshi-bot)
+[![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
@@ -169,7 +169,6 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 |------------|----------| --------- |
 | [Grupo oficial](https://chat.whatsapp.com/Ho2Zs63uKWuFwBwUdjV0cU) | [Grupo oficial](https://chat.whatsapp.com/DVDE1TCtHrKFatUKrlepjZ) | [Grupo oficial](https://chat.whatsapp.com/I5d5tCyZsV4J7Cjn51IkbV) |
 | [![Bores Host](./assets/images/bores-host.png)](https://loja.botbores.shop/) | [![TED Host](./assets/images/ted-host.png)](https://loja.tedhost.com.br/) | [![Nodz Host](./assets/images/nodz.png)](loja.nodzhostinger.com.br) |
-
 
 ## Instalação em VPS (Debian/Ubuntu)
 
@@ -356,6 +355,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Modificar o prefixo por grupo | Dono | ❌ |
 | Obter o ID do grupo | Dono | ❌ |
 | Abrir grupo | Admin | ❌ |
+| Advertir | Admin | ❌ |
 | Agendar mensagem | Admin | ❌ |
 | Anti audio | Admin | ❌ |
 | Anti documento | Admin | ❌ |
@@ -366,6 +366,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Anti sticker | Admin | ❌ |
 | Anti video | Admin | ❌ |
 | Banir membros | Admin | ❌ |
+| Bloquear número no WhatsApp | Admin | ❌ |
 | Excluir mensagens | Admin | ❌ |
 | Fechar grupo | Admin | ❌ |
 | Gestão de mensagens do auto-responder | Admin | ❌ |
@@ -377,6 +378,8 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Mudar nome do grupo | Admin | ❌ |
 | Mute/unmute | Admin | ❌ |
 | Obter o link do grupo | Admin | ❌ |
+| Reativar advertência | Admin | ❌ |
+| Remover advertência | Admin | ❌ |
 | Revelar | Admin | ❌ |
 | Somente admins | Admin | ❌ |
 | Ver saldo | Admin | ❌ |

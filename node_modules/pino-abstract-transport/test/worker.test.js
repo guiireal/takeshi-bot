@@ -1,17 +1,21 @@
 'use strict'
 
-const { once } = require('events')
-const { join } = require('path')
+const test = require('node:test')
+const assert = require('node:assert')
+const { once } = require('node:events')
+const { join } = require('node:path')
+const { MessageChannel } = require('node:worker_threads')
 const ThreadStream = require('thread-stream')
-const { MessageChannel } = require('worker_threads')
-const { test } = require('tap')
+const tspl = require('@matteo.collina/tspl')
+
+const match = require('./match')
 
 workerTest('transport-on-data.js')
 workerTest('transport-async-iteration.js', ' when using async iteration')
 
 function workerTest (filename, description = '') {
-  test(`does not wait for pino to send config by default${description}`, function ({ same, plan }) {
-    plan(4)
+  test(`does not wait for pino to send config by default${description}`, async function (t) {
+    const plan = tspl(t, { plan: 4 })
     const { port1, port2 } = new MessageChannel()
     const stream = new ThreadStream({
       filename: join(__dirname, 'fixtures', filename),
@@ -43,17 +47,19 @@ function workerTest (filename, description = '') {
     }
 
     port2.on('message', function (message) {
-      same(expected.shift(), message.data)
-      same(emptyPinoConfig, message.pinoConfig)
+      match(expected.shift(), message.data, { assert: plan })
+      match(emptyPinoConfig, message.pinoConfig, { assert: plan })
     })
 
     const lines = expected.map(JSON.stringify).join('\n')
     stream.write(lines)
     stream.end()
+
+    await plan
   })
 
-  test(`does not wait for pino to send config if transport is not expecting it${description}`, function ({ same, plan }) {
-    plan(4)
+  test(`does not wait for pino to send config if transport is not expecting it${description}`, async function (t) {
+    const plan = tspl(t, { plan: 4 })
     const { port1, port2 } = new MessageChannel()
     const stream = new ThreadStream({
       filename: join(__dirname, 'fixtures', filename),
@@ -99,17 +105,19 @@ function workerTest (filename, description = '') {
     stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
 
     port2.on('message', function (message) {
-      same(expected.shift(), message.data)
-      same(emptyPinoConfig, message.pinoConfig)
+      match(expected.shift(), message.data, { assert: plan })
+      match(emptyPinoConfig, message.pinoConfig, { assert: plan })
     })
 
     const lines = expected.map(JSON.stringify).join('\n')
     stream.write(lines)
     stream.end()
+
+    await plan
   })
 
-  test(`waits for the pino config when pino intends to send it and the transport requests it${description}`, function ({ same, plan }) {
-    plan(4)
+  test(`waits for the pino config when pino intends to send it and the transport requests it${description}`, async function (t) {
+    const plan = tspl(t, { plan: 4 })
     const { port1, port2 } = new MessageChannel()
     const stream = new ThreadStream({
       filename: join(__dirname, 'fixtures', filename),
@@ -150,18 +158,20 @@ function workerTest (filename, description = '') {
     }
 
     port2.on('message', function (message) {
-      same(expected.shift(), message.data)
-      same(pinoConfig, message.pinoConfig)
+      match(expected.shift(), message.data, { assert: plan })
+      match(pinoConfig, message.pinoConfig, { assert: plan })
     })
 
     const lines = expected.map(JSON.stringify).join('\n')
     stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
     stream.write(lines)
     stream.end()
+
+    await plan
   })
 
-  test(`continues to listen if it receives a message that is not PINO_CONFIG${description}`, function ({ same, plan }) {
-    plan(4)
+  test(`continues to listen if it receives a message that is not PINO_CONFIG${description}`, async function (t) {
+    const plan = tspl(t, { plan: 4 })
     const { port1, port2 } = new MessageChannel()
     const stream = new ThreadStream({
       filename: join(__dirname, 'fixtures', 'transport-on-data.js'),
@@ -202,8 +212,8 @@ function workerTest (filename, description = '') {
     }
 
     port2.on('message', function (message) {
-      same(expected.shift(), message.data)
-      same(pinoConfig, message.pinoConfig)
+      match(expected.shift(), message.data, { assert: plan })
+      match(pinoConfig, message.pinoConfig, { assert: plan })
     })
 
     const lines = expected.map(JSON.stringify).join('\n')
@@ -212,10 +222,12 @@ function workerTest (filename, description = '') {
     stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
     stream.write(lines)
     stream.end()
+
+    await plan
   })
 
-  test(`waits for the pino config even if it is sent after write${description}`, function ({ same, plan }) {
-    plan(4)
+  test(`waits for the pino config even if it is sent after write${description}`, async function (t) {
+    const plan = tspl(t, { plan: 4 })
     const { port1, port2 } = new MessageChannel()
     const stream = new ThreadStream({
       filename: join(__dirname, 'fixtures', filename),
@@ -256,18 +268,19 @@ function workerTest (filename, description = '') {
     }
 
     port2.on('message', function (message) {
-      same(expected.shift(), message.data)
-      same(pinoConfig, message.pinoConfig)
+      match(expected.shift(), message.data, { assert: plan })
+      match(pinoConfig, message.pinoConfig, { assert: plan })
     })
 
     const lines = expected.map(JSON.stringify).join('\n')
     stream.write(lines)
     stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
     stream.end()
+
+    await plan
   })
 
-  test(`emits an error if the transport expects pino to send the config, but pino is not going to${description}`, async function ({ plan, same, ok }) {
-    plan(2)
+  test(`emits an error if the transport expects pino to send the config, but pino is not going to${description}`, async function () {
     const stream = new ThreadStream({
       filename: join(__dirname, 'fixtures', filename),
       workerData: {
@@ -277,13 +290,13 @@ function workerTest (filename, description = '') {
       }
     })
     const [err] = await once(stream, 'error')
-    same(err.message, 'This transport is not compatible with the current version of pino. Please upgrade pino to the latest version.')
-    ok(stream.destroyed)
+    assert.equal(err.message, 'This transport is not compatible with the current version of pino. Please upgrade pino to the latest version.')
+    assert.ok(stream.destroyed)
   })
 }
 
-test('waits for the pino config when pipelining', function ({ same, plan }) {
-  plan(2)
+test('waits for the pino config when pipelining', async function (t) {
+  const plan = tspl(t, { plan: 2 })
   const { port1, port2 } = new MessageChannel()
   const stream = new ThreadStream({
     filename: join(__dirname, 'fixtures', 'worker-pipeline.js'),
@@ -348,10 +361,12 @@ test('waits for the pino config when pipelining', function ({ same, plan }) {
   }
 
   port2.on('message', function (message) {
-    same(expected.shift(), message.data)
+    match(expected.shift(), message.data, { assert: plan })
   })
 
   stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
   stream.write(lines)
   stream.end()
+
+  await plan
 })
