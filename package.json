@@ -1,6 +1,6 @@
 {
   "name": "takeshi-bot",
-  "version": "7.4.0",
+  "version": "7.5.0",
   "description": "Um bot de WhatsApp multifunções.",
   "main": "index.js",
   "type": "module",
@@ -24,6 +24,7 @@
     "node-webpmux": "^3.2.1",
     "openai": "^6.9.0",
     "pino": "^10.1.0",
-    "tiktoken": "^1.0.21"
+    "tiktoken": "^1.0.21",
+    "verbose": "^0.2.3"
   }
 }

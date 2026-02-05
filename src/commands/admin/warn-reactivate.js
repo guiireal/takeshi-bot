@@ -1,43 +1,55 @@
 import { BOT_LID, OWNER_LID } from "../../config.js";
 import { DangerError, InvalidParameterError } from "../../errors/index.js";
 import { onlyNumbers } from "../../utils/index.js";
-import {
-  getAllWarns,
-  reactivateWarnByIndex,
-} from "../../utils/warnSystem.js";
 import { errorLog } from "../../utils/logger.js";
+import { getAllWarns, reactivateWarnByIndex } from "../../utils/warnSystem.js";
 
 export default {
-  name: "warnreactivate",
+  name: "warn-reactivate",
   description: "Reativa uma advertência inválida.",
-  commands: ["warnreactivate", "reativarwarn", "reativaradvertencia", "reativaradvt"],
+  commands: [
+    "warn-reactivate",
+    "reativarwarn",
+    "reativaradvertencia",
+    "reativaradvt",
+  ],
+  /**
+   * @param {CommandHandleProps} props
+   */
   handle: async ({
     args,
     isReply,
     replyLid,
     remoteJid,
-    userLid,
     sendReply,
     sendErrorReply,
   }) => {
     try {
       let targetLid = null;
+
       if (isReply && replyLid) {
         targetLid = replyLid;
       } else if (args[0]?.includes("@")) {
         targetLid = `${onlyNumbers(args[0])}@lid`;
       } else {
-        throw new InvalidParameterError("Mencione um usuário ou responda a uma mensagem.");
+        throw new InvalidParameterError(
+          "Mencione um usuário ou responda a uma mensagem.",
+        );
       }
 
-      if (!targetLid) throw new InvalidParameterError("Membro inválido!");
+      if (!targetLid) {
+        throw new InvalidParameterError("Membro inválido!");
+      }
+
       if (targetLid === BOT_LID || targetLid === OWNER_LID) {
-        throw new DangerError("Não é possível alterar advertências deste usuário.");
+        throw new DangerError(
+          "Não é possível alterar advertências deste usuário.",
+        );
       }
 
       const action = args[1]?.toLowerCase();
       const allWarns = getAllWarns(remoteJid, targetLid);
-      const invalidWarns = allWarns.filter(w => !w.valid);
+      const invalidWarns = allWarns.filter((w) => !w.valid);
 
       if (invalidWarns.length === 0) {
         return sendReply("Usuário não tem advertências inválidas.");
@@ -49,7 +61,7 @@ export default {
           const date = new Date(w.timestamp).toLocaleDateString("pt-BR");
           msg += `${i + 1}. "${w.reason}" (${date})\n`;
         });
-        return sendReply(msg);
+        return sendReply(msg, [targetLid]);
       }
 
       if (action && !isNaN(action)) {
@@ -62,12 +74,12 @@ export default {
       }
 
       const lastIndex = invalidWarns.length - 1;
+
       if (reactivateWarnByIndex(remoteJid, targetLid, lastIndex)) {
         await sendReply(`✅ Última advertência inválida reativada.`);
       } else {
         await sendReply("❌ Falha ao reativar advertência.");
       }
-
     } catch (error) {
       errorLog(JSON.stringify(error, null, 2));
       await sendErrorReply(`Erro: ${error.message}`);

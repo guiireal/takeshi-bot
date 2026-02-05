@@ -138,4 +138,4 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}rip
 ▢
 ╰━━─「❇」─━━`;
-};
+}

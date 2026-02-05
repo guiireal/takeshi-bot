@@ -31,9 +31,9 @@ import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { onlyNumbers, question } from "./utils/index.js";
 import {
+  bannerLog,
   errorLog,
   infoLog,
-  sayLog,
   successLog,
   warningLog,
 } from "./utils/logger.js";
@@ -47,12 +47,23 @@ if (!fs.existsSync(TEMP_DIR)) {
 
 const logger = pino(
   { timestamp: () => `,"time":"${new Date().toJSON()}"` },
-  pino.destination(path.join(TEMP_DIR, "wa-logs.txt"))
+  pino.destination(path.join(TEMP_DIR, "wa-logs.txt")),
 );
 
 logger.level = "error";
 
 const msgRetryCounterCache = new NodeCache();
+
+function formatPairingCode(code) {
+  if (!code) return code;
+
+  return code?.match(/.{1,4}/g)?.join("-") || code;
+}
+
+function clearScreenWithBanner() {
+  console.clear();
+  bannerLog();
+}
 
 export async function connect() {
   const baileysFolder = path.resolve(
@@ -60,7 +71,7 @@ export async function connect() {
     "..",
     "assets",
     "auth",
-    "baileys"
+    "baileys",
   );
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
@@ -84,15 +95,16 @@ export async function connect() {
   });
 
   if (!socket.authState.creds.registered) {
-    warningLog("Credenciais ainda não configuradas!");
+    clearScreenWithBanner();
+    console.log(
+      'Informe o número do bot (SP/RJ exigem 9º dígito). \nExemplo: "+5511912345678", demais estados: "+554112345678":',
+    );
 
-    infoLog('Informe o número de telefone do bot (exemplo: "5511920202020"):');
-
-    const phoneNumber = await question("Informe o número de telefone do bot: ");
+    const phoneNumber = await question("Número: ");
 
     if (!phoneNumber) {
       errorLog(
-        'Número de telefone inválido! Tente novamente com o comando "npm start".'
+        'Número de telefone inválido! Tente novamente com o comando "npm start".',
       );
 
       process.exit(1);
@@ -100,7 +112,7 @@ export async function connect() {
 
     const code = await socket.requestPairingCode(onlyNumbers(phoneNumber));
 
-    sayLog(`Código de pareamento: ${code}`);
+    console.log(`Código de pareamento: ${formatPairingCode(code)}`);
   }
 
   socket.ev.on("connection.update", async (update) => {
@@ -119,7 +131,7 @@ export async function connect() {
         if (badMacHandler.handleError(error, "connection.update")) {
           if (badMacHandler.hasReachedLimit()) {
             warningLog(
-              "Limite de erros Bad MAC atingido. Limpando arquivos de sessão problemáticos..."
+              "Limite de erros Bad MAC atingido. Limpando arquivos de sessão problemáticos...",
             );
             badMacHandler.clearProblematicSessionFiles();
             badMacHandler.resetErrorCount();
@@ -142,7 +154,7 @@ export async function connect() {
             if (badMacHandler.handleError(sessionError, "badSession")) {
               if (badMacHandler.hasReachedLimit()) {
                 warningLog(
-                  "Limite de erros de sessão atingido. Limpando arquivos de sessão..."
+                  "Limite de erros de sessão atingido. Limpando arquivos de sessão...",
                 );
                 badMacHandler.clearProblematicSessionFiles();
                 badMacHandler.resetErrorCount();
@@ -176,14 +188,18 @@ export async function connect() {
         load(newSocket);
       }
     } else if (connection === "open") {
+      clearScreenWithBanner();
+      successLog("✅ Bot iniciado com sucesso!");
       successLog("Fui conectado com sucesso!");
       infoLog("Versão do WhatsApp Web: " + WAWEB_VERSION.join("."));
       successLog(
         `✅ Estou pronto para uso! 
 Verifique o prefixo, digitando a palavra "prefixo" no WhatsApp. 
-O prefixo padrão definido no config.js é ${PREFIX}`
+O prefixo padrão definido no config.js é ${PREFIX}`,
       );
       badMacHandler.resetErrorCount();
+    } else if (connection === "connecting") {
+      infoLog("Conectando...");
     } else {
       infoLog("Atualizando conexão...");
     }
