@@ -61,7 +61,7 @@ export function extractDataFromMessage(webMessage) {
 
   const userLid = webMessage?.key?.participant?.replace(
     /:[0-9][0-9]|:[0-9]/g,
-    ""
+    "",
   );
 
   const [command, ...args] = fullMessage.split(" ");
@@ -95,7 +95,7 @@ export function splitByCharacters(str, characters) {
 
 export function formatCommand(text) {
   return onlyLettersAndNumbers(
-    removeAccentsAndSpecialCharacters(text.toLocaleLowerCase().trim())
+    removeAccentsAndSpecialCharacters(text.toLocaleLowerCase().trim()),
   );
 }
 
@@ -188,7 +188,7 @@ export async function findCommandImport(commandName) {
       const targetCommand = commands.find((cmd) => {
         if (!cmd?.commands || !Array.isArray(cmd.commands)) {
           errorLog(
-            `Erro no comando do tipo "${type}": A propriedade "commands" precisa existir ser um ["array"] com os nomes dos comandos! Arquivo errado: ${cmd.name}.js`
+            `Erro no comando do tipo "${type}": A propriedade "commands" precisa existir ser um ["array"] com os nomes dos comandos! Arquivo errado: ${cmd.name}.js`,
           );
 
           return false;
@@ -236,11 +236,11 @@ export async function readCommandImports() {
             console.error(`Erro ao importar ${filePath}:`, err);
             return null;
           }
-        })
+        }),
       );
 
       commandImports[subdir] = files.filter(Boolean);
-    })
+    }),
   );
 
   return commandImports;
@@ -250,6 +250,10 @@ export const onlyNumbers = (text) => text.replace(/[^0-9]/g, "");
 
 export function toUserLid(value) {
   return `${onlyNumbers(value)}@lid`;
+}
+
+export function toUserJid(value) {
+  return `${onlyNumbers(value)}@s.whatsapp.net`;
 }
 
 export function getBuffer(url, options) {
@@ -308,14 +312,14 @@ export async function ajustAudioByBuffer(audioBuffer, isPtt = true) {
   return new Promise((resolve, reject) => {
     const tempPath = path.resolve(
       TEMP_DIR,
-      getRandomName(isPtt ? "ogg" : "mp3")
+      getRandomName(isPtt ? "ogg" : "mp3"),
     );
 
     fs.writeFileSync(tempPath, audioBuffer);
 
     const outputPath = path.resolve(
       TEMP_DIR,
-      getRandomName(isPtt ? "ogg" : "mp3")
+      getRandomName(isPtt ? "ogg" : "mp3"),
     );
 
     const command = isPtt
@@ -358,7 +362,7 @@ export async function getImageBuffer(url, options = {}) {
 
     if (!response.ok) {
       throw new Error(
-        `Falha ao obter imagem: ${response.status} ${response.statusText}`
+        `Falha ao obter imagem: ${response.status} ${response.statusText}`,
       );
     }
 
@@ -390,8 +394,8 @@ export function getLastTimestampCreds() {
   const credsJson = JSON.parse(
     fs.readFileSync(
       path.resolve(ASSETS_DIR, "auth", "baileys", "creds.json"),
-      "utf-8"
-    )
+      "utf-8",
+    ),
   );
 
   return credsJson.lastAccountSyncTimestamp;
