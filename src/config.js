@@ -63,10 +63,10 @@ export const DEVELOPER_MODE = false;
 
 // Caso queira usar proxy.
 export const PROXY_PROTOCOL = "http";
-export const PROXY_HOST = "";
-export const PROXY_PORT = "";
-export const PROXY_USERNAME = "";
-export const PROXY_PASSWORD = "";
+export const PROXY_HOST = "185.59.233.143";
+export const PROXY_PORT = "8000";
+export const PROXY_USERNAME = "6bWV3r";
+export const PROXY_PASSWORD = "yHbHqg";
 
 // Versão do WhatsApp Web
 export const WAWEB_VERSION = [2, 3000, 1032862259];
