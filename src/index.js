@@ -71,6 +71,7 @@
  *
  * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
+import { Agent, setGlobalDispatcher } from "undici";
 import { connect } from "./connection.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
@@ -113,6 +114,8 @@ process.on("unhandledRejection", (reason) => {
 
 async function startBot() {
   try {
+    setGlobalDispatcher(new Agent({ allowH2: false }));
+
     process.setMaxListeners(1500);
 
     bannerLog();
