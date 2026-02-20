@@ -21,13 +21,12 @@ import makeWASocket, {
   isJidStatusBroadcast,
   useMultiFileAuthState,
 } from "baileys";
-import { HttpsProxyAgent } from "https-proxy-agent";
 import NodeCache from "node-cache";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
-import { PREFIX, PROXY_USERNAME, TEMP_DIR, WAWEB_VERSION } from "./config.js";
+import { PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { onlyNumbers, question } from "./utils/index.js";
@@ -38,7 +37,6 @@ import {
   successLog,
   warningLog,
 } from "./utils/logger.js";
-import { getProxyData } from "./utils/proxy.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,24 +65,7 @@ function clearScreenWithBanner() {
   bannerLog();
 }
 
-function isProxyFailure(error) {
-  const errorMessage = [error?.message, error?.toString?.()]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-
-  return [
-    "proxy",
-    "econnrefused",
-    "etimedout",
-    "ehostunreach",
-    "socket hang up",
-    "tunneling socket could not be established",
-    "407",
-  ].some((keyword) => errorMessage.includes(keyword));
-}
-
-export async function connect(forceNoProxy = false) {
+export async function connect() {
   const baileysFolder = path.resolve(
     __dirname,
     "..",
@@ -95,10 +76,7 @@ export async function connect(forceNoProxy = false) {
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
 
-  const shouldUseProxyAgent = PROXY_USERNAME !== "gui" && !forceNoProxy;
-  const { proxyConnectionString } = getProxyData();
-
-  const socketConfig = {
+  const socket = makeWASocket({
     version: WAWEB_VERSION,
     logger,
     defaultQueryTimeoutMs: undefined,
@@ -114,24 +92,7 @@ export async function connect(forceNoProxy = false) {
     emitOwnEvents: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
-  };
-
-  if (shouldUseProxyAgent) {
-    socketConfig.agent = new HttpsProxyAgent(proxyConnectionString);
-  }
-
-  let socket;
-
-  try {
-    socket = makeWASocket(socketConfig);
-  } catch (error) {
-    if (!shouldUseProxyAgent) {
-      throw error;
-    }
-
-    warningLog("Falha ao iniciar conexão com proxy. Tentando sem proxy...");
-    socket = makeWASocket({ ...socketConfig, agent: undefined });
-  }
+  });
 
   if (!socket.authState.creds.registered) {
     clearScreenWithBanner();
@@ -160,13 +121,6 @@ export async function connect(forceNoProxy = false) {
     if (connection === "close") {
       const error = lastDisconnect?.error;
       const statusCode = error?.output?.statusCode;
-
-      if (shouldUseProxyAgent && isProxyFailure(error)) {
-        warningLog("Proxy falhou. Reconectando sem proxy...");
-        const newSocket = await connect(true);
-        load(newSocket);
-        return;
-      }
 
       if (
         error?.message?.includes("Bad MAC") ||

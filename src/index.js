@@ -116,7 +116,7 @@ async function startBot() {
     const stats = badMacHandler.getStats();
     if (stats.errorCount > 0) {
       warningLog(
-        `BadMacHandler stats: ${stats.errorCount}/${stats.maxRetries} erros`
+        `BadMacHandler stats: ${stats.errorCount}/${stats.maxRetries} erros`,
       );
     }
 
@@ -130,7 +130,7 @@ async function startBot() {
       const currentStats = badMacHandler.getStats();
       if (currentStats.errorCount > 0) {
         warningLog(
-          `BadMacHandler stats: ${currentStats.errorCount}/${currentStats.maxRetries} erros`
+          `BadMacHandler stats: ${currentStats.errorCount}/${currentStats.maxRetries} erros`,
         );
       }
     }, 300_000);
