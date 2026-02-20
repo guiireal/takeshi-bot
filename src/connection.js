@@ -92,7 +92,6 @@ export async function connect(useProxy = true) {
         throw new Error("Proxy não configurada.");
       }
 
-      // ProxyAgent do undici — compatível com dispatcher do Baileys
       dispatcher = new ProxyAgent({
         uri: proxyConnectionString,
         allowH2: false,
