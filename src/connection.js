@@ -67,7 +67,24 @@ function clearScreenWithBanner() {
   bannerLog();
 }
 
-export async function connect() {
+function isProxyFailure(error) {
+  const errorMessage = [error?.message, error?.toString?.()]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return [
+    "proxy",
+    "econnrefused",
+    "etimedout",
+    "ehostunreach",
+    "socket hang up",
+    "tunneling socket could not be established",
+    "407",
+  ].some((keyword) => errorMessage.includes(keyword));
+}
+
+export async function connect(forceNoProxy = false) {
   const baileysFolder = path.resolve(
     __dirname,
     "..",
@@ -78,7 +95,7 @@ export async function connect() {
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
 
-  const shouldUseProxyAgent = PROXY_USERNAME !== "gui";
+  const shouldUseProxyAgent = PROXY_USERNAME !== "gui" && !forceNoProxy;
   const { proxyConnectionString } = getProxyData();
 
   const socketConfig = {
@@ -97,12 +114,24 @@ export async function connect() {
     emitOwnEvents: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
-    ...(shouldUseProxyAgent
-      ? { agent: new HttpsProxyAgent(proxyConnectionString) }
-      : {}),
   };
 
-  const socket = makeWASocket(socketConfig);
+  if (shouldUseProxyAgent) {
+    socketConfig.agent = new HttpsProxyAgent(proxyConnectionString);
+  }
+
+  let socket;
+
+  try {
+    socket = makeWASocket(socketConfig);
+  } catch (error) {
+    if (!shouldUseProxyAgent) {
+      throw error;
+    }
+
+    warningLog("Falha ao iniciar conexão com proxy. Tentando sem proxy...");
+    socket = makeWASocket({ ...socketConfig, agent: undefined });
+  }
 
   if (!socket.authState.creds.registered) {
     clearScreenWithBanner();
@@ -131,6 +160,13 @@ export async function connect() {
     if (connection === "close") {
       const error = lastDisconnect?.error;
       const statusCode = error?.output?.statusCode;
+
+      if (shouldUseProxyAgent && isProxyFailure(error)) {
+        warningLog("Proxy falhou. Reconectando sem proxy...");
+        const newSocket = await connect(true);
+        load(newSocket);
+        return;
+      }
 
       if (
         error?.message?.includes("Bad MAC") ||
