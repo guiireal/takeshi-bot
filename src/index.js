@@ -90,10 +90,15 @@ process.on("uncaughtException", (error) => {
   errorLog(`Erro crítico não capturado: ${error.message}`);
   errorLog(error.stack);
 
-  if (
-    !error.message.includes("ENOTFOUND") &&
-    !error.message.includes("timeout")
-  ) {
+  const message = error?.message || "";
+  const isTransientNetworkError =
+    message.includes("ENOTFOUND") || message.includes("timeout");
+  const isTransientMediaUploadError =
+    (message.includes("Media upload failed on all hosts") ||
+      message.includes("no such file or directory")) &&
+    message.includes("-enc");
+
+  if (!isTransientNetworkError && !isTransientMediaUploadError) {
     process.exit(1);
   }
 });
