@@ -13,7 +13,7 @@
         "Nodejs 22": "ghcr.io/parkervcp/yolks:nodejs_22"
     },
     "file_denylist": [],
-    "startup": "npm install && npm start",
+    "startup": "git pull && npm install && npm start",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"Conectado com sucesso\"\r\n}",

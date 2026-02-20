@@ -28,7 +28,7 @@ import net from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
-import { ASSETS_DIR, PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
+import { PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { onlyNumbers, question } from "./utils/index.js";
@@ -110,19 +110,7 @@ export async function connect() {
       const { proxyConnectionString } = getProxyData();
 
       if (proxyConnectionString?.trim()) {
-        const certPath = path.resolve(ASSETS_DIR, "_.whatsapp.net.crt");
-        const cert = fs.existsSync(certPath)
-          ? fs.readFileSync(certPath, "utf-8")
-          : undefined;
-
-        proxyAgent = cert
-          ? new HttpsProxyAgent(proxyConnectionString, { ca: cert })
-          : new HttpsProxyAgent(proxyConnectionString);
-
-        if (!cert) {
-          warningLog("Certificado da proxy não encontrado. Usando TLS padrão.");
-        }
-
+        proxyAgent = new HttpsProxyAgent(proxyConnectionString);
         infoLog("Conexão via proxy habilitada.");
       } else {
         warningLog("Proxy não configurada. Conectando sem proxy.");

@@ -108,6 +108,8 @@ process.on("unhandledRejection", (reason) => {
 
 async function startBot() {
   try {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
     process.setMaxListeners(1500);
 
     bannerLog();
