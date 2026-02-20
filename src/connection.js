@@ -26,7 +26,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
-import { Agent, ProxyAgent } from "undici";
 import { PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
@@ -38,7 +37,6 @@ import {
   successLog,
   warningLog,
 } from "./utils/logger.js";
-import { getProxyData } from "./utils/proxy.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -56,9 +54,6 @@ logger.level = "error";
 
 const msgRetryCounterCache = new NodeCache();
 
-// Dispatcher undici com HTTP/1.1 forçado (sem proxy)
-const http1Dispatcher = new Agent({ allowH2: false });
-
 function formatPairingCode(code) {
   if (!code) return code;
 
@@ -70,7 +65,7 @@ function clearScreenWithBanner() {
   bannerLog();
 }
 
-export async function connect(useProxy = true) {
+export async function connect() {
   const baileysFolder = path.resolve(
     __dirname,
     "..",
@@ -80,34 +75,6 @@ export async function connect(useProxy = true) {
   );
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
-
-  let dispatcher;
-  let hasConnected = false;
-
-  if (useProxy) {
-    try {
-      const { proxyConnectionString } = getProxyData();
-
-      if (!proxyConnectionString?.trim()) {
-        throw new Error("Proxy não configurada.");
-      }
-
-      dispatcher = new ProxyAgent({
-        uri: proxyConnectionString,
-        allowH2: false,
-      });
-
-      infoLog("Conectando com proxy (tentativa principal).");
-    } catch (error) {
-      warningLog("Falha ao configurar proxy. Tentando conexão direta.");
-      errorLog(error?.message || String(error));
-      dispatcher = http1Dispatcher;
-      useProxy = false;
-    }
-  } else {
-    infoLog("Conectando sem proxy.");
-    dispatcher = http1Dispatcher;
-  }
 
   const socket = makeWASocket({
     version: WAWEB_VERSION,
@@ -125,8 +92,6 @@ export async function connect(useProxy = true) {
     emitOwnEvents: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
-    agent: dispatcher,
-    fetchAgent: dispatcher,
   });
 
   if (!socket.authState.creds.registered) {
@@ -156,15 +121,6 @@ export async function connect(useProxy = true) {
     if (connection === "close") {
       const error = lastDisconnect?.error;
       const statusCode = error?.output?.statusCode;
-
-      if (useProxy && !hasConnected) {
-        warningLog(
-          "Falha ao conectar com proxy. Aplicando fallback para conexão direta...",
-        );
-        const newSocket = await connect(false);
-        load(newSocket);
-        return;
-      }
 
       if (
         error?.message?.includes("Bad MAC") ||
@@ -232,7 +188,6 @@ export async function connect(useProxy = true) {
         load(newSocket);
       }
     } else if (connection === "open") {
-      hasConnected = true;
       clearScreenWithBanner();
       successLog("✅ Bot iniciado com sucesso!");
       successLog("Fui conectado com sucesso!");

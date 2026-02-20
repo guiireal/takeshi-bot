@@ -71,17 +71,10 @@
  *
  * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
-import { Agent, setGlobalDispatcher } from "undici";
 import { connect } from "./connection.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
-import {
-  bannerLog,
-  errorLog,
-  infoLog,
-  successLog,
-  warningLog,
-} from "./utils/logger.js";
+import { bannerLog, errorLog, infoLog, warningLog } from "./utils/logger.js";
 
 process.on("uncaughtException", (error) => {
   if (badMacHandler.handleError(error, "uncaughtException")) {
@@ -91,15 +84,10 @@ process.on("uncaughtException", (error) => {
   errorLog(`Erro crítico não capturado: ${error.message}`);
   errorLog(error.stack);
 
-  const message = error?.message || "";
-  const isTransientNetworkError =
-    message.includes("ENOTFOUND") || message.includes("timeout");
-  const isTransientMediaUploadError =
-    (message.includes("Media upload failed on all hosts") ||
-      message.includes("no such file or directory")) &&
-    message.includes("-enc");
-
-  if (!isTransientNetworkError && !isTransientMediaUploadError) {
+  if (
+    !error.message.includes("ENOTFOUND") &&
+    !error.message.includes("timeout")
+  ) {
     process.exit(1);
   }
 });
@@ -114,8 +102,6 @@ process.on("unhandledRejection", (reason) => {
 
 async function startBot() {
   try {
-    setGlobalDispatcher(new Agent({ allowH2: false }));
-
     process.setMaxListeners(1500);
 
     bannerLog();
@@ -131,8 +117,6 @@ async function startBot() {
     const socket = await connect();
 
     load(socket);
-
-    successLog("✅ Bot iniciado com sucesso!");
 
     setInterval(() => {
       const currentStats = badMacHandler.getStats();
