@@ -27,7 +27,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
-import { ASSETS_DIR, PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
+import { PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { onlyNumbers, question } from "./utils/index.js";
@@ -67,7 +67,7 @@ function clearScreenWithBanner() {
   bannerLog();
 }
 
-export async function connect() {
+export async function connect(useProxy = true) {
   const baileysFolder = path.resolve(
     __dirname,
     "..",
@@ -79,33 +79,27 @@ export async function connect() {
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
 
   let proxyAgent;
+  let hasConnected = false;
 
-  try {
-    const { proxyConnectionString } = getProxyData();
+  if (useProxy) {
+    try {
+      const { proxyConnectionString } = getProxyData();
 
-    if (!proxyConnectionString?.trim()) {
-      throw new Error("Proxy não configurada.");
+      if (!proxyConnectionString?.trim()) {
+        throw new Error("Proxy não configurada.");
+      }
+
+      proxyAgent = new HttpsProxyAgent(proxyConnectionString);
+
+      infoLog("Conectando com proxy (tentativa principal).");
+    } catch (error) {
+      warningLog("Falha ao configurar proxy. Tentando conexão direta.");
+      errorLog(error?.message || String(error));
+      proxyAgent = undefined;
+      useProxy = false;
     }
-
-    const certPath = path.resolve(ASSETS_DIR, "_.whatsapp.net.crt");
-    const cert = fs.existsSync(certPath)
-      ? fs.readFileSync(certPath, "utf-8")
-      : undefined;
-
-    proxyAgent = cert
-      ? new HttpsProxyAgent(proxyConnectionString, { ca: cert })
-      : new HttpsProxyAgent(proxyConnectionString);
-
-    if (!cert) {
-      warningLog("Certificado da proxy não encontrado. Usando TLS padrão.");
-    }
-
-    infoLog("Modo estrito ativado: conexão apenas via proxy.");
-    infoLog("Conexão via proxy habilitada.");
-  } catch (error) {
-    errorLog("Falha ao configurar proxy. A conexão sem proxy está desativada.");
-    errorLog(error?.message || String(error));
-    process.exit(1);
+  } else {
+    infoLog("Conectando sem proxy.");
   }
 
   const socket = makeWASocket({
@@ -155,6 +149,15 @@ export async function connect() {
     if (connection === "close") {
       const error = lastDisconnect?.error;
       const statusCode = error?.output?.statusCode;
+
+      if (useProxy && !hasConnected) {
+        warningLog(
+          "Falha ao conectar com proxy. Aplicando fallback para conexão direta...",
+        );
+        const newSocket = await connect(false);
+        load(newSocket);
+        return;
+      }
 
       if (
         error?.message?.includes("Bad MAC") ||
@@ -222,6 +225,7 @@ export async function connect() {
         load(newSocket);
       }
     } else if (connection === "open") {
+      hasConnected = true;
       clearScreenWithBanner();
       successLog("✅ Bot iniciado com sucesso!");
       successLog("Fui conectado com sucesso!");
