@@ -89,7 +89,9 @@ export async function connect(useProxy = true) {
         throw new Error("Proxy não configurada.");
       }
 
-      proxyAgent = new HttpsProxyAgent(proxyConnectionString);
+      proxyAgent = new HttpsProxyAgent(proxyConnectionString, {
+        ALPNProtocols: ["http/1.1"],
+      });
 
       infoLog("Conectando com proxy (tentativa principal).");
     } catch (error) {
@@ -101,6 +103,8 @@ export async function connect(useProxy = true) {
   } else {
     infoLog("Conectando sem proxy.");
   }
+
+  const agent = proxyAgent || http1Agent;
 
   const socket = makeWASocket({
     version: WAWEB_VERSION,
@@ -118,8 +122,8 @@ export async function connect(useProxy = true) {
     emitOwnEvents: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
-    agent: proxyAgent,
-    fetchAgent: proxyAgent,
+    agent,
+    fetchAgent: agent,
   });
 
   if (!socket.authState.creds.registered) {
