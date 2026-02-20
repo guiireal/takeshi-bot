@@ -24,11 +24,10 @@ import makeWASocket, {
 import { HttpsProxyAgent } from "https-proxy-agent";
 import NodeCache from "node-cache";
 import fs from "node:fs";
-import net from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
-import { PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
+import { ASSETS_DIR, PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { onlyNumbers, question } from "./utils/index.js";
@@ -68,27 +67,6 @@ function clearScreenWithBanner() {
   bannerLog();
 }
 
-async function isDirectConnectionWorking() {
-  return new Promise((resolve) => {
-    const socket = net.connect(443, "web.whatsapp.com", () => {
-      socket.end();
-      resolve(true);
-    });
-
-    socket.setTimeout(5000);
-
-    socket.on("error", () => {
-      socket.destroy();
-      resolve(false);
-    });
-
-    socket.on("timeout", () => {
-      socket.destroy();
-      resolve(false);
-    });
-  });
-}
-
 export async function connect() {
   const baileysFolder = path.resolve(
     __dirname,
@@ -101,26 +79,33 @@ export async function connect() {
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
 
   let proxyAgent;
-  const isDirectOk = await isDirectConnectionWorking();
 
-  if (!isDirectOk) {
-    warningLog("Conexão direta falhou. Tentando conectar via proxy...");
+  try {
+    const { proxyConnectionString } = getProxyData();
 
-    try {
-      const { proxyConnectionString } = getProxyData();
-
-      if (proxyConnectionString?.trim()) {
-        proxyAgent = new HttpsProxyAgent(proxyConnectionString);
-        infoLog("Conexão via proxy habilitada.");
-      } else {
-        warningLog("Proxy não configurada. Conectando sem proxy.");
-      }
-    } catch (error) {
-      warningLog("Falha ao configurar proxy. Conectando sem proxy.");
-      errorLog(error?.message || String(error));
+    if (!proxyConnectionString?.trim()) {
+      throw new Error("Proxy não configurada.");
     }
-  } else {
-    successLog("Conexão direta disponível. Proxy desativada.");
+
+    const certPath = path.resolve(ASSETS_DIR, "_.whatsapp.net.crt");
+    const cert = fs.existsSync(certPath)
+      ? fs.readFileSync(certPath, "utf-8")
+      : undefined;
+
+    proxyAgent = cert
+      ? new HttpsProxyAgent(proxyConnectionString, { ca: cert })
+      : new HttpsProxyAgent(proxyConnectionString);
+
+    if (!cert) {
+      warningLog("Certificado da proxy não encontrado. Usando TLS padrão.");
+    }
+
+    infoLog("Modo estrito ativado: conexão apenas via proxy.");
+    infoLog("Conexão via proxy habilitada.");
+  } catch (error) {
+    errorLog("Falha ao configurar proxy. A conexão sem proxy está desativada.");
+    errorLog(error?.message || String(error));
+    process.exit(1);
   }
 
   const socket = makeWASocket({
