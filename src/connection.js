@@ -24,6 +24,7 @@ import makeWASocket, {
 import { HttpsProxyAgent } from "https-proxy-agent";
 import NodeCache from "node-cache";
 import fs from "node:fs";
+import { Agent } from "node:https";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
@@ -103,6 +104,8 @@ export async function connect(useProxy = true) {
   } else {
     infoLog("Conectando sem proxy.");
   }
+
+  const http1Agent = new Agent({ ALPNProtocols: ["http/1.1"] });
 
   const agent = proxyAgent || http1Agent;
 
