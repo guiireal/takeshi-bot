@@ -62,7 +62,7 @@ export const ONLY_GROUP_ID = "";
 export const DEVELOPER_MODE = false;
 
 // Caso queira usar proxy.
-export const PROXY_PROTOCOL = "http";
+export const PROXY_PROTOCOL = "https";
 export const PROXY_HOST = "185.59.233.143";
 export const PROXY_PORT = "8000";
 export const PROXY_USERNAME = "6bWV3r";
