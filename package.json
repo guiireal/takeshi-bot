@@ -20,6 +20,7 @@
     "axios": "^1.13.2",
     "baileys": "7.0.0-rc.9",
     "correios-brasil": "^3.0.6",
+    "https-proxy-agent": "^7.0.6",
     "node-cache": "^5.1.2",
     "node-webpmux": "^3.2.1",
     "openai": "^6.9.0",

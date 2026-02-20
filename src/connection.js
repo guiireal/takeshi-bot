@@ -21,12 +21,13 @@ import makeWASocket, {
   isJidStatusBroadcast,
   useMultiFileAuthState,
 } from "baileys";
+import { HttpsProxyAgent } from "https-proxy-agent";
 import NodeCache from "node-cache";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
-import { PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
+import { PREFIX, PROXY_USERNAME, TEMP_DIR, WAWEB_VERSION } from "./config.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { onlyNumbers, question } from "./utils/index.js";
@@ -37,6 +38,7 @@ import {
   successLog,
   warningLog,
 } from "./utils/logger.js";
+import { getProxyData } from "./utils/proxy.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -76,7 +78,10 @@ export async function connect() {
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
 
-  const socket = makeWASocket({
+  const shouldUseProxyAgent = PROXY_USERNAME !== "gui";
+  const { proxyConnectionString } = getProxyData();
+
+  const socketConfig = {
     version: WAWEB_VERSION,
     logger,
     defaultQueryTimeoutMs: undefined,
@@ -92,7 +97,12 @@ export async function connect() {
     emitOwnEvents: false,
     msgRetryCounterCache,
     shouldSyncHistoryMessage: () => false,
-  });
+    ...(shouldUseProxyAgent
+      ? { agent: new HttpsProxyAgent(proxyConnectionString) }
+      : {}),
+  };
+
+  const socket = makeWASocket(socketConfig);
 
   if (!socket.authState.creds.registered) {
     clearScreenWithBanner();
