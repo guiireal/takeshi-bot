@@ -154,7 +154,7 @@ export async function download(webMessage, fileName, context, extension) {
   return filePath;
 }
 
-function readDirectoryRecursive(dir) {
+export function readDirectoryRecursive(dir) {
   const results = [];
   const list = fs.readdirSync(dir, { withFileTypes: true });
 
