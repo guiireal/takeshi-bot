@@ -1,10 +1,10 @@
-/** 
- * @author MRX 
+/**
+ * @author MRX
  */
-import { WarningError, InvalidParameterError } from "../../errors/index.js";
-import { readDirectoryRecursive } from "../../utils/index.js";
-import { PREFIX, COMMANDS_DIR } from "../../config.js";
 import path from "path";
+import { COMMANDS_DIR, PREFIX } from "../../config.js";
+import { InvalidParameterError, WarningError } from "../../errors/index.js";
+import { readDirectoryRecursive } from "../../utils/index.js";
 
 export default {
   name: "info",
@@ -43,10 +43,10 @@ export default {
 - *Uso:* _${cmd.default.usage}_
 `;
 
-      await sendReply(info);
       await sendSuccessReact();
+      await sendReply(info);
     } catch (error) {
       throw new WarningError(`Erro ao buscar comando, ${error.message}`);
     }
-  }
+  },
 };
