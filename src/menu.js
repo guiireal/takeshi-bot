@@ -78,6 +78,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}exemplos-de-mensagens
 ▢ • ${prefix}fake-chat
 ▢ • ${prefix}gerar-link
+▢ • ${prefix}info
 ▢ • ${prefix}meu-lid
 ▢ • ${prefix}perfil
 ▢ • ${prefix}ping
