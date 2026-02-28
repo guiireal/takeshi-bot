@@ -59,8 +59,8 @@ export async function play(type, search) {
 
   const { data } = await axios.get(
     `${SPIDER_API_BASE_URL}/downloads/play-${type}?search=${encodeURIComponent(
-      search
-    )}&api_key=${SPIDER_API_TOKEN}`
+      search,
+    )}&api_key=${SPIDER_API_TOKEN}`,
   );
 
   return data;
@@ -77,11 +77,15 @@ export async function download(type, url) {
 
   const { data } = await axios.get(
     `${SPIDER_API_BASE_URL}/downloads/${type}?url=${encodeURIComponent(
-      url
-    )}&api_key=${SPIDER_API_TOKEN}`
+      url,
+    )}&api_key=${SPIDER_API_TOKEN}`,
   );
 
   return data;
+}
+
+export async function facebook(url) {
+  return download("facebook", url);
 }
 
 export async function gemini(text) {
@@ -97,7 +101,7 @@ export async function gemini(text) {
     `${SPIDER_API_BASE_URL}/ai/gemini?api_key=${SPIDER_API_TOKEN}`,
     {
       text,
-    }
+    },
   );
 
   return data.response;
@@ -116,7 +120,7 @@ export async function gpt5Mini(text) {
     `${SPIDER_API_BASE_URL}/ai/gpt-5-mini?api_key=${SPIDER_API_TOKEN}`,
     {
       text,
-    }
+    },
   );
 
   return data.response;
@@ -132,7 +136,7 @@ export async function attp(text) {
   }
 
   return `${SPIDER_API_BASE_URL}/stickers/attp?text=${encodeURIComponent(
-    text
+    text,
   )}&api_key=${SPIDER_API_TOKEN}`;
 }
 
@@ -146,7 +150,7 @@ export async function ttp(text) {
   }
 
   return `${SPIDER_API_BASE_URL}/stickers/ttp?text=${encodeURIComponent(
-    text
+    text,
   )}&api_key=${SPIDER_API_TOKEN}`;
 }
 
@@ -161,8 +165,8 @@ export async function search(type, search) {
 
   const { data } = await axios.get(
     `${SPIDER_API_BASE_URL}/search/${type}?search=${encodeURIComponent(
-      search
-    )}&api_key=${SPIDER_API_TOKEN}`
+      search,
+    )}&api_key=${SPIDER_API_TOKEN}`,
   );
 
   return data;
@@ -171,7 +175,7 @@ export async function search(type, search) {
 export function welcome(title, description, imageURL) {
   if (!title || !description || !imageURL) {
     throw new Error(
-      "Você precisa informar o título, descrição e URL da imagem!"
+      "Você precisa informar o título, descrição e URL da imagem!",
     );
   }
 
@@ -180,16 +184,16 @@ export function welcome(title, description, imageURL) {
   }
 
   return `${SPIDER_API_BASE_URL}/canvas/welcome?title=${encodeURIComponent(
-    title
+    title,
   )}&description=${encodeURIComponent(
-    description
+    description,
   )}&image_url=${encodeURIComponent(imageURL)}&api_key=${SPIDER_API_TOKEN}`;
 }
 
 export function exit(title, description, imageURL) {
   if (!title || !description || !imageURL) {
     throw new Error(
-      "Você precisa informar o título, descrição e URL da imagem!"
+      "Você precisa informar o título, descrição e URL da imagem!",
     );
   }
 
@@ -198,9 +202,9 @@ export function exit(title, description, imageURL) {
   }
 
   return `${SPIDER_API_BASE_URL}/canvas/goodbye?title=${encodeURIComponent(
-    title
+    title,
   )}&description=${encodeURIComponent(
-    description
+    description,
   )}&image_url=${encodeURIComponent(imageURL)}&api_key=${SPIDER_API_TOKEN}`;
 }
 
@@ -215,8 +219,8 @@ export async function imageAI(description) {
 
   const { data } = await axios.get(
     `${SPIDER_API_BASE_URL}/ai/flux?text=${encodeURIComponent(
-      description
-    )}&api_key=${SPIDER_API_TOKEN}`
+      description,
+    )}&api_key=${SPIDER_API_TOKEN}`,
   );
 
   return data;
@@ -232,7 +236,7 @@ export function canvas(type, imageURL) {
   }
 
   return `${SPIDER_API_BASE_URL}/canvas/${type}?image_url=${encodeURIComponent(
-    imageURL
+    imageURL,
   )}&api_key=${SPIDER_API_TOKEN}`;
 }
 
@@ -250,14 +254,14 @@ export async function setProxy(name) {
       `${SPIDER_API_BASE_URL}/internal/set-node-js-proxy-active?api_key=${SPIDER_API_TOKEN}`,
       {
         name,
-      }
+      },
     );
 
     return data.success;
   } catch (error) {
     console.error("Erro ao definir a proxy:", error);
     throw new Error(
-      "Não foi possível definir a proxy! Verifique se o nome está correto e tente novamente!"
+      "Não foi possível definir a proxy! Verifique se o nome está correto e tente novamente!",
     );
   }
 }
@@ -268,7 +272,7 @@ export async function updatePlanUser(email, plan) {
     {
       email,
       plan,
-    }
+    },
   );
 
   return data;
@@ -294,7 +298,7 @@ export async function toGif(buffer) {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    }
+    },
   );
 
   return data.url;
