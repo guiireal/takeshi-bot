@@ -96,6 +96,7 @@ export function menuMessage(groupJid) {
 
 ╭━━⪩ DOWNLOADS ⪨━━
 ▢
+▢ • ${prefix}facebook
 ▢ • ${prefix}instagram
 ▢ • ${prefix}play-audio
 ▢ • ${prefix}play-video
