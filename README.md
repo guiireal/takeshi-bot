@@ -170,10 +170,10 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | [Grupo oficial](https://chat.whatsapp.com/Ho2Zs63uKWuFwBwUdjV0cU) | [Grupo oficial](https://chat.whatsapp.com/DVDE1TCtHrKFatUKrlepjZ) | [Grupo oficial](https://chat.whatsapp.com/I5d5tCyZsV4J7Cjn51IkbV) |
 | [![Bores Host](./assets/images/bores-host.png)](https://loja.botbores.shop/) | [![TED Host](./assets/images/ted-host.png)](https://loja.tedhost.com.br/) | [![Nodz Host](./assets/images/nodz.png)](loja.nodzhostinger.com.br) |
 
-| Host Cloud |
-|------------|
-| [Grupo oficial](https://chat.whatsapp.com/Kh1xWK2nbe0BrPOC5gvo7q) |
-| [![Host Cloud](./assets/images/host-cloud.png)](https://hostcloud.space/) |
+| Host Cloud | Cebolinha Host |
+|------------|----------------|
+| [Grupo oficial](https://chat.whatsapp.com/Kh1xWK2nbe0BrPOC5gvo7q) | [Grupo oficial](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) |
+| [![Host Cloud](./assets/images/host-cloud.png)](https://hostcloud.space/) | [![Cebolinha Host](./assets/images/cebolinha-host.jpeg)](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
