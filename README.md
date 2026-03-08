@@ -2,7 +2,7 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.7.0-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.8.0-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
@@ -389,6 +389,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Somente admins | Admin | ❌ |
 | Ver saldo | Admin | ❌ |
 | Borrar imagem | Membro | ❌ |
+| Brat (imagem com texto) | Membro | ✅ |
 | Busca CEP | Membro | ❌ |
 | Canvas Bolsonaro | Membro | ✅ |
 | Canvas cadeia | Membro | ✅ |
@@ -411,6 +412,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Imagem preto/branco | Membro | ❌ |
 | Informações de um comando | Membro | ❌ |
 | Instagram download | Membro | ✅ |
+| Pinterest download (carrossel) | Membro | ✅ |
 | Ping | Membro | ❌ |
 | Play áudio | Membro | ✅ |
 | Play vídeo | Membro | ✅ |
