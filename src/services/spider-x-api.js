@@ -154,6 +154,38 @@ export async function ttp(text) {
   )}&api_key=${SPIDER_API_TOKEN}`;
 }
 
+export async function brat(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  if (!spiderAPITokenConfigured) {
+    throw new Error(messageIfTokenNotConfigured);
+  }
+
+  return `${SPIDER_API_BASE_URL}/stickers/brat?text=${encodeURIComponent(
+    text,
+  )}&api_key=${SPIDER_API_TOKEN}`;
+}
+
+export async function pinterest(search) {
+  if (!search) {
+    throw new Error("Você precisa informar o parâmetro de pesquisa!");
+  }
+
+  if (!spiderAPITokenConfigured) {
+    throw new Error(messageIfTokenNotConfigured);
+  }
+
+  const { data } = await axios.get(
+    `${SPIDER_API_BASE_URL}/downloads/pinterest?search=${encodeURIComponent(
+      search,
+    )}&api_key=${SPIDER_API_TOKEN}`,
+  );
+
+  return data;
+}
+
 export async function search(type, search) {
   if (!search) {
     throw new Error("Você precisa informar o parâmetro de pesquisa!");

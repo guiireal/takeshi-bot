@@ -74,6 +74,7 @@ export function menuMessage(groupJid) {
 ╭━━⪩ PRINCIPAL ⪨━━
 ▢
 ▢ • ${prefix}attp
+▢ • ${prefix}brat
 ▢ • ${prefix}cep
 ▢ • ${prefix}exemplos-de-mensagens
 ▢ • ${prefix}fake-chat
@@ -100,6 +101,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}instagram
 ▢ • ${prefix}play-audio
 ▢ • ${prefix}play-video
+▢ • ${prefix}pinterest
 ▢ • ${prefix}tik-tok
 ▢ • ${prefix}yt-mp3
 ▢ • ${prefix}yt-mp4

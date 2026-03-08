@@ -33,19 +33,19 @@ Você também pode escrever o texto e responder a mensagem com o comando ${PREFI
   }) => {
     if (!OPENAI_API_KEY) {
       throw new WarningError(
-        "O suporte inteligente não está disponível no momento. Entre em contato com o administrador do bot!"
+        "O suporte inteligente não está disponível no momento. Entre em contato com o administrador do bot!",
       );
     }
 
     if (isVideo) {
       throw new WarningError(
-        "Não consigo interpretar vídeos ainda! Envie uma imagem ou texto!"
+        "Não consigo interpretar vídeos ainda! Envie uma imagem ou texto!",
       );
     }
 
     if (isAudio) {
       throw new WarningError(
-        "Não consigo interpretar áudios ainda! Envie uma imagem ou texto!"
+        "Não consigo interpretar áudios ainda! Envie uma imagem ou texto!",
       );
     }
 
@@ -65,7 +65,7 @@ Faça sua pergunta sobre mim que eu te ajudarei!
 - ${PREFIX}suporte bot desliga sozinho
 - ${PREFIX}suporte como instalar no Termux?
 - ${PREFIX}suporte erro 401 API Spider X
-- Envie uma imagem com ${PREFIX}suporte para análise visual`
+- Envie uma imagem com ${PREFIX}suporte para análise visual`,
       );
 
       return;
@@ -86,13 +86,13 @@ Faça sua pergunta sobre mim que eu te ajudarei!
 
       if (finalText.length < minLength) {
         throw new DangerError(
-          `O texto deve ter no mínimo ${minLength} caracteres.`
+          `O texto deve ter no mínimo ${minLength} caracteres.`,
         );
       }
 
       if (finalText.length > maxLength) {
         throw new DangerError(
-          `O texto deve ter no máximo ${maxLength} caracteres.`
+          `O texto deve ter no máximo ${maxLength} caracteres.`,
         );
       }
     }
@@ -127,8 +127,8 @@ Se alguém te pedir o link de alguma Host, envie!`,
     messages.push({
       role: "system",
       content: fs.readFileSync(
-        path.resolve(__dirname, "..", "..", "..", "CLAUDE.md"),
-        "utf-8"
+        path.resolve(__dirname, "..", "..", "..", "HELP.md"),
+        "utf-8",
       ),
     });
 
@@ -185,7 +185,7 @@ Se alguém te pedir o link de alguma Host, envie!`,
     messages.push(userMessage);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-5-nano",
+      model: "gpt-5-mini",
       messages: messages,
       max_completion_tokens: 4096,
     });
@@ -196,7 +196,7 @@ Se alguém te pedir o link de alguma Host, envie!`,
       throw new DangerError(
         `Não consegui encontrar uma resposta para sua pergunta. Tente reformular ou ser mais específico!
 
-Não respondo assuntos fora do meu escopo de tecnologia!`
+Não respondo assuntos fora do meu escopo de tecnologia!`,
       );
     }
 
