@@ -1166,7 +1166,6 @@ export async function customMiddleware(params) {
 - [Bronxys](https://bronxyshost.com/)
 - [Nexfuture](https://nexfuture.com.br/)
 - [Speed Cloud](https://speedhosting.cloud/)
-- [Bores Host](https://loja.botbores.shop/)
 
 ---
 
