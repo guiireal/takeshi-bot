@@ -27,7 +27,7 @@ const estimateInitialMaxCompletionTokens = ({
   hasImage = false,
 }) => {
   const textWeight = Math.ceil(textLength / 4);
-  const imageWeight = hasImage ? 512 : 0;
+  const imageWeight = hasImage ? 1024 : 0;
   const estimated = COMPLETION_TOKENS_MIN + textWeight + imageWeight;
 
   return Math.min(
@@ -154,7 +154,7 @@ Faça sua pergunta sobre mim que eu te ajudarei!
 
     if (finalText) {
       const minLength = 5;
-      const maxLength = 4096;
+      const maxLength = 2048;
 
       if (finalText.length < minLength) {
         throw new DangerError(
