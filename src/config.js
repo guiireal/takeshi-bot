@@ -36,7 +36,7 @@ export const ASSETS_DIR = path.resolve(__dirname, "..", "assets");
 export const TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
 
 // Timeout em milissegundos por evento (evita banimento).
-export const TIMEOUT_IN_MILLISECONDS_BY_EVENT = 700;
+export const TIMEOUT_IN_MILLISECONDS_BY_EVENT = 1000;
 
 // Plataforma de API's
 export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
@@ -69,7 +69,7 @@ export const PROXY_USERNAME = "";
 export const PROXY_PASSWORD = "";
 
 // Versão do WhatsApp Web
-export const WAWEB_VERSION = [2, 3000, 1034740716];
+export const WAWEB_VERSION = [2, 3000, 1035691214];
 
 // Chave da OpenAI para o comando de suporte
 export const OPENAI_API_KEY = "";
