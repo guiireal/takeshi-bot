@@ -137,7 +137,7 @@ Faça sua pergunta sobre mim que eu te ajudarei!
     }
 
     const maxLength = 1024;
-    if (text.length > maxLength) {
+    if (text?.length > maxLength) {
       throw new WarningError(
         `O texto deve ter no máximo ${maxLength} caracteres. Tente ser mais objetivo!`,
       );
