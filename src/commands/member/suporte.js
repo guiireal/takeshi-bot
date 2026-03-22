@@ -6,6 +6,71 @@ import { BOT_EMOJI, OPENAI_API_KEY, PREFIX } from "../../config.js";
 import { DangerError, WarningError } from "../../errors/index.js";
 import { getRandomName } from "../../utils/index.js";
 
+const COMPLETION_TOKENS_MIN = 4096;
+const COMPLETION_TOKENS_MAX = 16384;
+const COMPLETION_TOKENS_STEP = 2048;
+
+const isMaxTokensError = (error) => {
+  const message = `${error?.message ?? ""}`.toLowerCase();
+
+  return (
+    message.includes("max_tokens") ||
+    message.includes("max completion") ||
+    message.includes("max_completion_tokens") ||
+    message.includes("output limit was reached") ||
+    message.includes("model output limit")
+  );
+};
+
+const estimateInitialMaxCompletionTokens = ({
+  textLength = 0,
+  hasImage = false,
+}) => {
+  const textWeight = Math.ceil(textLength / 4);
+  const imageWeight = hasImage ? 512 : 0;
+  const estimated = COMPLETION_TOKENS_MIN + textWeight + imageWeight;
+
+  return Math.min(
+    Math.max(estimated, COMPLETION_TOKENS_MIN),
+    COMPLETION_TOKENS_MAX,
+  );
+};
+
+const createSupportCompletionWithDynamicTokens = async ({
+  openai,
+  model,
+  messages,
+  initialMaxTokens,
+}) => {
+  let currentMaxTokens = initialMaxTokens;
+
+  while (currentMaxTokens <= COMPLETION_TOKENS_MAX) {
+    try {
+      return await openai.chat.completions.create({
+        model,
+        messages,
+        max_completion_tokens: currentMaxTokens,
+      });
+    } catch (error) {
+      const shouldRetry = isMaxTokensError(error);
+      const canIncrease = currentMaxTokens < COMPLETION_TOKENS_MAX;
+
+      if (!shouldRetry || !canIncrease) {
+        throw error;
+      }
+
+      currentMaxTokens = Math.min(
+        currentMaxTokens + COMPLETION_TOKENS_STEP,
+        COMPLETION_TOKENS_MAX,
+      );
+    }
+  }
+
+  throw new DangerError(
+    "Não foi possível gerar resposta dentro do limite de tokens.",
+  );
+};
+
 export default {
   name: "suporte",
   description: "Suporte inteligente do Takeshi usando IA treinada",
@@ -191,10 +256,16 @@ Se alguém te pedir o link de alguma Host, envie!`,
 
     messages.push(userMessage);
 
-    const response = await openai.chat.completions.create({
+    const initialMaxTokens = estimateInitialMaxCompletionTokens({
+      textLength: finalText?.length ?? 0,
+      hasImage: Boolean(imagePath),
+    });
+
+    const response = await createSupportCompletionWithDynamicTokens({
+      openai,
       model: "gpt-5-mini",
-      messages: messages,
-      max_completion_tokens: 4096,
+      messages,
+      initialMaxTokens,
     });
 
     const answer = response.choices[0].message.content.trim();
