@@ -71,6 +71,13 @@ Faça sua pergunta sobre mim que eu te ajudarei!
       return;
     }
 
+    const maxLength = 1024;
+    if (text.length > maxLength) {
+      throw new WarningError(
+        `O texto deve ter no máximo ${maxLength} caracteres. Tente ser mais objetivo!`,
+      );
+    }
+
     await sendWaitReply("Analisando sua pergunta...");
 
     const __filename = fileURLToPath(import.meta.url);
