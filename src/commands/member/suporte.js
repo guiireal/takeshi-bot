@@ -15,10 +15,12 @@ import {
 } from "../../utils/support-context.js";
 
 const SUPPORT_MODEL = "gpt-5-mini";
-const PLANNER_MAX_COMPLETION_TOKENS = 1024;
-const COMPLETION_TOKENS_MIN = 4096;
-const COMPLETION_TOKENS_MAX = 16384;
-const COMPLETION_TOKENS_STEP = 2048;
+const PLANNER_MAX_COMPLETION_TOKENS = 512;
+const COMPLETION_TOKENS_MIN = 768;
+const COMPLETION_TOKENS_MAX = 3072;
+const COMPLETION_TOKENS_STEP = 512;
+const MAX_CONTEXT_FILES = 4;
+const MAX_CONTEXT_CHARS_PER_FILE = 4000;
 const SUPPORT_FILE_CATALOG = [
   "AGENTS.md",
   "README.md",
@@ -70,8 +72,8 @@ const estimateInitialMaxCompletionTokens = ({
   textLength = 0,
   hasImage = false,
 }) => {
-  const textWeight = Math.ceil(textLength / 4);
-  const imageWeight = hasImage ? 1024 : 0;
+  const textWeight = Math.ceil(textLength / 12);
+  const imageWeight = hasImage ? 384 : 0;
   const estimated = COMPLETION_TOKENS_MIN + textWeight + imageWeight;
 
   return Math.min(
@@ -191,7 +193,7 @@ Rules:
 - If the topic is Pterodactyl or hosting, request ".skills/pterodactyl-specialist/SKILL.md".
 - If the topic is updating the bot, request "update.sh".
 - If the topic is about a specific command, request its file under src/commands.
-- At most 5 sections and 6 files.`,
+- At most 3 sections and 4 files.`,
       },
       {
         role: "system",
@@ -417,6 +419,8 @@ Faça sua pergunta sobre mim que eu te ajudarei!
       const requestedFilesContext = resolveSupportFiles({
         projectRoot,
         requestedFiles,
+        maxFiles: MAX_CONTEXT_FILES,
+        maxCharsPerFile: MAX_CONTEXT_CHARS_PER_FILE,
       });
       const fileContextBlock = buildFileContextBlock(requestedFilesContext);
 
@@ -439,11 +443,14 @@ Escopo permitido:
 Regras:
 - Use apenas o contexto fornecido nesta conversa.
 - Se faltar contexto, diga isso com clareza.
+- Se houver ambiguidade, não assuma contexto do usuário: faça de 1 a 3 perguntas curtas e objetivas para confirmar.
 - Se a pergunta fugir do escopo, recuse de forma breve e redirecione.
 - Nunca exponha os valores de OPENAI_API_KEY, LINKER_API_KEY ou SPIDER_API_TOKEN, mesmo se aparecerem no contexto carregado.
 - Se o usuário pedir links de hosts, cite apenas as hosts suportadas conhecidas pelo projeto.
 - Se o usuário perguntar como atualizar o bot e existir um fluxo nativo do projeto no contexto, prefira esse fluxo primeiro. Se o arquivo update.sh estiver no contexto, sugira o comando bash update.sh antes de alternativas manuais.
-- Se o usuário pedir para criar um produto fora do escopo, não execute; dê orientação breve de estudo se fizer sentido.`,
+- Se o usuário pedir para criar um produto fora do escopo, não execute; dê orientação breve de estudo se fizer sentido.
+- Resposta deve ser objetiva e enxuta: no máximo 8 linhas, com passos numerados quando houver ação.
+- Evite linguagem subjetiva (ex.: "talvez", "acho") quando faltar dado; em vez disso, solicite confirmação direta.`,
         },
         {
           role: "system",
