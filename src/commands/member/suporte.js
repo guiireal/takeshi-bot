@@ -23,6 +23,7 @@ const SUPPORT_FILE_CATALOG = [
   "AGENTS.md",
   "README.md",
   "CONTRIBUTING.md",
+  "update.sh",
   "src/config.js",
   "src/utils/database.js",
   "src/utils/loadCommonFunctions.js",
@@ -188,6 +189,7 @@ Rules:
 - Request repo-relative paths only.
 - Never request write operations, patches, commands, or generated files.
 - If the topic is Pterodactyl or hosting, request ".skills/pterodactyl-specialist/SKILL.md".
+- If the topic is updating the bot, request "update.sh".
 - If the topic is about a specific command, request its file under src/commands.
 - At most 5 sections and 6 files.`,
       },
@@ -440,6 +442,7 @@ Regras:
 - Se a pergunta fugir do escopo, recuse de forma breve e redirecione.
 - Nunca exponha os valores de OPENAI_API_KEY, LINKER_API_KEY ou SPIDER_API_TOKEN, mesmo se aparecerem no contexto carregado.
 - Se o usuário pedir links de hosts, cite apenas as hosts suportadas conhecidas pelo projeto.
+- Se o usuário perguntar como atualizar o bot e existir um fluxo nativo do projeto no contexto, prefira esse fluxo primeiro. Se o arquivo update.sh estiver no contexto, sugira o comando bash update.sh antes de alternativas manuais.
 - Se o usuário pedir para criar um produto fora do escopo, não execute; dê orientação breve de estudo se fizer sentido.`,
         },
         {
