@@ -132,5 +132,14 @@ Stack content
 
       assert.ok(plan.files.includes("README.md"));
     });
+
+    it("should include update.sh for bot update questions", () => {
+      const plan = buildSupportFallbackPlan({
+        projectRoot,
+        text: "como atualizar o bot?",
+      });
+
+      assert.ok(plan.files.includes("update.sh"));
+    });
   });
 });
