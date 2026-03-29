@@ -838,6 +838,21 @@ bash reset-qr-auth.sh
 Depois, remova o dispositivo do WhatsApp indo nas configurações do WhatsApp em "dispositivos conectados" e repita
 o procedimento de iniciar o bot com `npm start`.
 
+### ⏱️ Erro `rate-overlimit` após muito tempo offline
+
+Quando o bot fica muito tempo desligado (por exemplo, horas ou um dia inteiro), ao religar ele pode tentar processar muitas mensagens acumuladas de uma vez.
+Isso pode disparar erro de `rate-overlimit` durante a sincronização.
+
+![erro comum 3](./assets/images/erro-comum-3.png)
+
+Para corrigir, reinicie a autenticação do Baileys:
+
+```sh
+bash reset-qr-auth.sh
+```
+
+Em seguida, conecte o número novamente no WhatsApp em "dispositivos conectados".
+
 ### 🔐 Permission denied (permissão negada) ao acessar `cd /sdcard`
 
 ![erro comum 2](./assets/images/erro-comum-2.png)
