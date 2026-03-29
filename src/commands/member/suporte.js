@@ -15,10 +15,10 @@ import {
 } from "../../utils/support-context.js";
 
 const SUPPORT_MODEL = "gpt-5-mini";
-const PLANNER_MAX_COMPLETION_TOKENS = 512;
-const COMPLETION_TOKENS_MIN = 768;
-const COMPLETION_TOKENS_MAX = 3072;
-const COMPLETION_TOKENS_STEP = 512;
+const PLANNER_MAX_COMPLETION_TOKENS = 768;
+const COMPLETION_TOKENS_MIN = 1024;
+const COMPLETION_TOKENS_MAX = 4096;
+const COMPLETION_TOKENS_STEP = 1024;
 const MAX_CONTEXT_FILES = 4;
 const MAX_CONTEXT_CHARS_PER_FILE = 4000;
 const SUPPORT_FILE_CATALOG = [
@@ -493,9 +493,11 @@ Regras:
 
       if (!answer) {
         throw new DangerError(
-          `Não consegui encontrar uma resposta para sua pergunta. Tente reformular ou ser mais específico!
+          `Não consegui encontrar uma resposta para sua pergunta. 
+          
+Tente reformular ou ser mais específico!
 
-Não respondo assuntos fora do meu escopo de tecnologia!`,
+Não respondo assuntos fora do Takeshi Bot!`,
         );
       }
 
