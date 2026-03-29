@@ -5,10 +5,53 @@ import OpenAI from "openai";
 import { BOT_EMOJI, OPENAI_API_KEY, PREFIX } from "../../config.js";
 import { DangerError, WarningError } from "../../errors/index.js";
 import { getRandomName } from "../../utils/index.js";
+import {
+  buildSupportFallbackPlan,
+  DEFAULT_SUPPORT_FILES,
+  DEFAULT_SUPPORT_SECTIONS,
+  extractMarkdownSections,
+  parseSupportPlannerResponse,
+  resolveSupportFiles,
+} from "../../utils/support-context.js";
 
+const SUPPORT_MODEL = "gpt-5-mini";
+const PLANNER_MAX_COMPLETION_TOKENS = 1024;
 const COMPLETION_TOKENS_MIN = 4096;
 const COMPLETION_TOKENS_MAX = 16384;
 const COMPLETION_TOKENS_STEP = 2048;
+const SUPPORT_FILE_CATALOG = [
+  "AGENTS.md",
+  "README.md",
+  "CONTRIBUTING.md",
+  "src/config.js",
+  "src/utils/database.js",
+  "src/utils/loadCommonFunctions.js",
+  "src/utils/dynamicCommand.js",
+  "src/services/spider-x-api.js",
+  "src/services/sticker.js",
+  "src/services/ffmpeg.js",
+  "src/middlewares/customMiddleware.js",
+  "src/connection.js",
+  "src/loader.js",
+  "src/@types/index.d.ts",
+  ".skills/pterodactyl-specialist/SKILL.md",
+  "Any command file under src/commands/**/*.js",
+];
+const AGENTS_SECTION_CATALOG = [
+  "PROJECT_OVERVIEW",
+  "ARCHITECTURE",
+  "CORE_FILES",
+  "COMMAND_GUIDE",
+  "TYPING_AND_MIDDLEWARE",
+  "DATA_RULES",
+  "SERVICES",
+  "STACK",
+  "COMMAND_CATALOG",
+  "HOSTING_AND_PTERODACTYL",
+  "STABILITY_AND_ERRORS",
+  "AGENT_RULES",
+  "SKILLS",
+];
 
 const isMaxTokensError = (error) => {
   const message = `${error?.message ?? ""}`.toLowerCase();
@@ -71,9 +114,110 @@ const createSupportCompletionWithDynamicTokens = async ({
   );
 };
 
+function getTextContent(messageContent) {
+  if (!messageContent) {
+    return "";
+  }
+
+  if (typeof messageContent === "string") {
+    return messageContent.trim();
+  }
+
+  if (Array.isArray(messageContent)) {
+    return messageContent
+      .filter((item) => item?.type === "text" && typeof item.text === "string")
+      .map((item) => item.text)
+      .join("\n")
+      .trim();
+  }
+
+  return "";
+}
+
+function mergeSupportPlans(...plans) {
+  const sections = new Set();
+  const files = new Set();
+
+  for (const plan of plans) {
+    for (const section of plan?.sections || []) {
+      if (section) {
+        sections.add(section);
+      }
+    }
+
+    for (const file of plan?.files || []) {
+      if (file) {
+        files.add(file);
+      }
+    }
+  }
+
+  return {
+    sections: [...sections],
+    files: [...files],
+  };
+}
+
+function buildFileContextBlock(files = []) {
+  if (!files.length) {
+    return "";
+  }
+
+  return files
+    .map(
+      ({ path: filePath, content }) =>
+        `### FILE: ${filePath}\n\`\`\`\n${content}\n\`\`\``,
+    )
+    .join("\n\n");
+}
+
+async function createPlannerPlan({ openai, userContent, agentsBaseContext }) {
+  const response = await openai.chat.completions.create({
+    model: SUPPORT_MODEL,
+    messages: [
+      {
+        role: "system",
+        content: `You are a read-only repository context planner for the Takeshi Bot support assistant.
+
+Return JSON only with this shape:
+{"sections":["SECTION_NAME"],"files":["repo/relative/path.ext"]}
+
+Rules:
+- Request only the minimum context needed to answer well.
+- Prefer AGENTS.md sections before raw files when they are enough.
+- Request repo-relative paths only.
+- Never request write operations, patches, commands, or generated files.
+- If the topic is Pterodactyl or hosting, request ".skills/pterodactyl-specialist/SKILL.md".
+- If the topic is about a specific command, request its file under src/commands.
+- At most 5 sections and 6 files.`,
+      },
+      {
+        role: "system",
+        content: `Available AGENTS sections:
+${AGENTS_SECTION_CATALOG.map((section) => `- ${section}`).join("\n")}
+
+Available high-signal files:
+${SUPPORT_FILE_CATALOG.map((filePath) => `- ${filePath}`).join("\n")}
+
+Base AGENTS context:
+${agentsBaseContext || "No base AGENTS context available."}`,
+      },
+      {
+        role: "user",
+        content: userContent,
+      },
+    ],
+    max_completion_tokens: PLANNER_MAX_COMPLETION_TOKENS,
+  });
+
+  return parseSupportPlannerResponse(
+    getTextContent(response.choices[0]?.message?.content),
+  );
+}
+
 export default {
   name: "suporte",
-  description: "Suporte inteligente do Takeshi usando IA treinada",
+  description: "Suporte inteligente do Takeshi usando IA",
   commands: ["suporte", "help", "ajuda"],
   usage: `${PREFIX}suporte como instalar o Takeshi no Termux?
 
@@ -147,6 +291,8 @@ Faça sua pergunta sobre mim que eu te ajudarei!
 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
+    const projectRoot = path.resolve(__dirname, "..", "..", "..");
+    const agentsPath = path.resolve(projectRoot, "AGENTS.md");
 
     const finalText = doubleContext
       ? `Contexto anterior: ${replyText}\n\nNova questão: ${text}`
@@ -154,7 +300,7 @@ Faça sua pergunta sobre mim que eu te ajudarei!
 
     if (finalText) {
       const minLength = 5;
-      const maxLength = 4096;
+      const maxQuestionLength = 4096;
 
       if (finalText.length < minLength) {
         throw new DangerError(
@@ -162,137 +308,193 @@ Faça sua pergunta sobre mim que eu te ajudarei!
         );
       }
 
-      if (finalText.length > maxLength) {
+      if (finalText.length > maxQuestionLength) {
         throw new DangerError(
-          `O texto deve ter no máximo ${maxLength} caracteres.`,
+          `O texto deve ter no máximo ${maxQuestionLength} caracteres.`,
         );
       }
     }
 
     let imagePath = null;
 
-    if (isImage) {
-      imagePath = await downloadImage(webMessage, getRandomName());
-    }
-
-    const openai = new OpenAI({
-      apiKey: OPENAI_API_KEY,
-    });
-
-    const messages = [
-      {
-        role: "system",
-        content: `Você é um assistente especializado em suporte técnico do Takeshi Bot.
-
-Responda apenas em português do Brasil.
-Seja direto e objetivo nas respostas, salvo se o usuário solicitar explicações mais aprofundadas.
-
-Quando receber imagens, analise o conteúdo visual primeiro e interprete-o considerando o contexto técnico do Takeshi Bot.
-
-Se alguém te pedir o link de alguma Host, envie as que você conhece!
-
-# IMPORTANTE
-
-- Não responda perguntas fora do escopo técnico do Takeshi Bot ou da Spider API.
-- Se pedirem pra criar um SAAS ou algo do tipo, responda que não vai criar
-mas dê dicas de como a pessoa pode criar sozinha, pois podem se aproveitar 
-de você pra criar coisas que não são legais e/ou pra tirar vantagem pessoal, sendo que você é apenas pra suporte. 
-Você deve se limitar a responder apenas sobre o escopo técnico do Takeshi Bot.
-- Você não cria produtos, mas pode ajudar as pessoas a aprenderem a criar por conta própria, dando dicas, sugestões de tecnologias, frameworks, bibliotecas, etc.
-- Se pedirem pra criar um código, crie, mas seja breve e direto, sem enrolação, porém, 
-tente interpretar as intenções da pessoa, se é pro Takeshi Bot ou pra Spider API, ok.
-- Pessoas podem se aproveitar das suas capacidades pra outras finalidades, mas você deve se limitar a responder apenas sobre o escopo técnico do Takeshi Bot e/ou da Spider API. 
-- Se a pergunta for fora do escopo, responda que não pode ajudar com isso e oriente a pessoa a procurar um especialista no assunto.`,
-      },
-    ];
-
-    messages.push({
-      role: "system",
-      content: fs.readFileSync(
-        path.resolve(__dirname, "..", "..", "..", "HELP.md"),
-        "utf-8",
-      ),
-    });
-
-    const userMessage = {
-      role: "user",
-      content: [],
-    };
-
-    if (finalText) {
-      userMessage.content.push({
-        type: "text",
-        text: finalText,
-      });
-    }
-
-    if (imagePath && fs.existsSync(imagePath)) {
-      const buffer = fs.readFileSync(imagePath);
-      const base64 = buffer.toString("base64");
-      const ext = path.extname(imagePath).toLowerCase();
-
-      let mimeType = "image/jpeg";
-      switch (ext) {
-        case ".png":
-          mimeType = "image/png";
-          break;
-        case ".jpg":
-        case ".jpeg":
-          mimeType = "image/jpeg";
-          break;
-        case ".webp":
-          mimeType = "image/webp";
-          break;
-        case ".gif":
-          mimeType = "image/gif";
-          break;
+    try {
+      if (isImage) {
+        imagePath = await downloadImage(webMessage, getRandomName());
       }
 
-      userMessage.content.push({
-        type: "image_url",
-        image_url: {
-          url: `data:${mimeType};base64,${base64}`,
-          detail: "low",
+      const openai = new OpenAI({
+        apiKey: OPENAI_API_KEY,
+      });
+
+      const agentsMarkdown = fs.existsSync(agentsPath)
+        ? fs.readFileSync(agentsPath, "utf-8")
+        : "";
+      const agentsBaseContext = extractMarkdownSections(
+        agentsMarkdown,
+        DEFAULT_SUPPORT_SECTIONS,
+      );
+
+      const userContent = [];
+
+      if (finalText) {
+        userContent.push({
+          type: "text",
+          text: finalText,
+        });
+      }
+
+      if (imagePath && fs.existsSync(imagePath)) {
+        const buffer = fs.readFileSync(imagePath);
+        const base64 = buffer.toString("base64");
+        const ext = path.extname(imagePath).toLowerCase();
+
+        let mimeType = "image/jpeg";
+        switch (ext) {
+          case ".png":
+            mimeType = "image/png";
+            break;
+          case ".jpg":
+          case ".jpeg":
+            mimeType = "image/jpeg";
+            break;
+          case ".webp":
+            mimeType = "image/webp";
+            break;
+          case ".gif":
+            mimeType = "image/gif";
+            break;
+        }
+
+        userContent.push({
+          type: "image_url",
+          image_url: {
+            url: `data:${mimeType};base64,${base64}`,
+            detail: "low",
+          },
+        });
+      }
+
+      if (!finalText && isImage) {
+        userContent.unshift({
+          type: "text",
+          text: "Analise esta imagem no contexto de suporte técnico do Takeshi Bot.",
+        });
+      }
+
+      const plannerPlan = await createPlannerPlan({
+        openai,
+        userContent,
+        agentsBaseContext,
+      }).catch(() => ({
+        sections: [],
+        files: [],
+      }));
+
+      const fallbackPlan = buildSupportFallbackPlan({
+        projectRoot,
+        text: finalText,
+      });
+
+      const mergedPlan = mergeSupportPlans(plannerPlan, fallbackPlan);
+      const requestedSections = mergedPlan.sections.length
+        ? mergedPlan.sections
+        : DEFAULT_SUPPORT_SECTIONS;
+      const requestedFiles = [
+        ...new Set([
+          ...DEFAULT_SUPPORT_FILES,
+          ...(mergedPlan.files.length ? mergedPlan.files : []),
+        ]),
+      ];
+
+      const extraAgentsContext = extractMarkdownSections(
+        agentsMarkdown,
+        requestedSections.filter(
+          (section) => !DEFAULT_SUPPORT_SECTIONS.includes(section),
+        ),
+      );
+      const requestedFilesContext = resolveSupportFiles({
+        projectRoot,
+        requestedFiles,
+      });
+      const fileContextBlock = buildFileContextBlock(requestedFilesContext);
+
+      const messages = [
+        {
+          role: "system",
+          content: `Você é um assistente especializado em suporte técnico do Takeshi Bot.
+
+Responda apenas em português do Brasil.
+Seja direto e objetivo, salvo se o usuário pedir mais profundidade.
+Seu trabalho é estritamente de leitura e suporte: você não executa comandos, não modifica arquivos e não afirma que fez mudanças no projeto.
+Você pode explicar, resumir, diagnosticar, sugerir correções e dar exemplos curtos de código quando isso ajudar.
+
+Escopo permitido:
+- Takeshi Bot
+- Spider X API
+- Comandos, serviços, configuração, banco JSON e fluxo interno do projeto
+- Hospedagem, VPS, hosts compatíveis e Pterodactyl
+
+Regras:
+- Use apenas o contexto fornecido nesta conversa.
+- Se faltar contexto, diga isso com clareza.
+- Se a pergunta fugir do escopo, recuse de forma breve e redirecione.
+- Nunca exponha os valores de OPENAI_API_KEY, LINKER_API_KEY ou SPIDER_API_TOKEN, mesmo se aparecerem no contexto carregado.
+- Se o usuário pedir links de hosts, cite apenas as hosts suportadas conhecidas pelo projeto.
+- Se o usuário pedir para criar um produto fora do escopo, não execute; dê orientação breve de estudo se fizer sentido.`,
         },
+        {
+          role: "system",
+          content: `## BASE_AGENTS_CONTEXT\n${agentsBaseContext || "Sem contexto base do AGENTS.md."}`,
+        },
+      ];
+
+      if (extraAgentsContext) {
+        messages.push({
+          role: "system",
+          content: `## EXTRA_AGENTS_CONTEXT\n${extraAgentsContext}`,
+        });
+      }
+
+      if (fileContextBlock) {
+        messages.push({
+          role: "system",
+          content: `## REQUESTED_FILES_CONTEXT\n${fileContextBlock}`,
+        });
+      }
+
+      messages.push({
+        role: "user",
+        content: userContent,
       });
-    }
 
-    if (!finalText && isImage) {
-      userMessage.content.unshift({
-        type: "text",
-        text: "O que você vê nesta imagem?",
+      const initialMaxTokens = estimateInitialMaxCompletionTokens({
+        textLength: finalText?.length ?? 0,
+        hasImage: Boolean(imagePath),
       });
-    }
 
-    messages.push(userMessage);
+      const response = await createSupportCompletionWithDynamicTokens({
+        openai,
+        model: SUPPORT_MODEL,
+        messages,
+        initialMaxTokens,
+      });
 
-    const initialMaxTokens = estimateInitialMaxCompletionTokens({
-      textLength: finalText?.length ?? 0,
-      hasImage: Boolean(imagePath),
-    });
+      const answer = getTextContent(response.choices[0]?.message?.content);
 
-    const response = await createSupportCompletionWithDynamicTokens({
-      openai,
-      model: "gpt-5-mini",
-      messages,
-      initialMaxTokens,
-    });
-
-    const answer = response.choices[0].message.content.trim();
-
-    if (!answer) {
-      throw new DangerError(
-        `Não consegui encontrar uma resposta para sua pergunta. Tente reformular ou ser mais específico!
+      if (!answer) {
+        throw new DangerError(
+          `Não consegui encontrar uma resposta para sua pergunta. Tente reformular ou ser mais específico!
 
 Não respondo assuntos fora do meu escopo de tecnologia!`,
-      );
-    }
+        );
+      }
 
-    await sendReact(BOT_EMOJI);
-    await sendReply(answer);
-
-    if (imagePath && fs.existsSync(imagePath)) {
-      fs.unlinkSync(imagePath);
+      await sendReact(BOT_EMOJI);
+      await sendReply(answer);
+    } finally {
+      if (imagePath && fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
     }
   },
 };
