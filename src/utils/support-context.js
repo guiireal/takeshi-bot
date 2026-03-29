@@ -9,6 +9,8 @@ export const DEFAULT_SUPPORT_SECTIONS = [
   "SKILLS",
 ];
 export const DEFAULT_SUPPORT_FILES = ["README.md"];
+const UPDATE_KEYWORDS =
+  /(atualizar|atualizacao|atualização|update|upgrade|updater)/i;
 const SUPPORTED_HOST_KEYWORDS = [
   "bronxys",
   "nexfuture",
@@ -168,6 +170,10 @@ export function buildSupportFallbackPlan({ projectRoot, text = "" }) {
     sections.add("SERVICES");
     files.add("src/services/sticker.js");
     files.add("src/services/ffmpeg.js");
+  }
+
+  if (UPDATE_KEYWORDS.test(normalizedText)) {
+    files.add("update.sh");
   }
 
   if (
