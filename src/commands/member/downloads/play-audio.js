@@ -1,6 +1,10 @@
 import { PREFIX } from "../../../config.js";
 import { InvalidParameterError } from "../../../errors/index.js";
 import { play } from "../../../services/spider-x-api.js";
+import {
+  formatSecondsToMinutesAndSeconds,
+  getRandomNumber,
+} from "../../../utils/index.js";
 
 export default {
   name: "play-audio",
@@ -20,13 +24,13 @@ export default {
   }) => {
     if (!fullArgs.length) {
       throw new InvalidParameterError(
-        "Você precisa me dizer o que deseja buscar!"
+        "Você precisa me dizer o que deseja buscar!",
       );
     }
 
     if (fullArgs.includes("http://") || fullArgs.includes("https://")) {
       throw new InvalidParameterError(
-        `Você não pode usar links para baixar músicas! Use ${PREFIX}yt-mp3 link`
+        `Você não pode usar links para baixar músicas! Use ${PREFIX}yt-mp3 link`,
       );
     }
 
@@ -41,13 +45,20 @@ export default {
 
     await sendSuccessReact();
 
+    const randomSeconds = getRandomNumber(10, 20);
+    const videoDuration = formatSecondsToMinutesAndSeconds(
+      data.total_duration_in_seconds,
+    );
+    const fakePlayer = `0:${randomSeconds} ━━●──────${videoDuration} ↻ ⊲ Ⅱ ⊳ ↺
+ılı.lıllılı.ıllı..ılı.lıllılı.ıllı`;
+
     await sendImageFromURL(
       data.thumbnail,
       `*Título*: ${data.title}
         
 *Descrição*: ${data.description}
-*Duração em segundos*: ${data.total_duration_in_seconds}
-*Canal*: ${data.channel.name}`
+*Player*: ${fakePlayer}
+*Canal*: ${data.channel.name}`,
     );
 
     await sendAudioFromURL(data.url);

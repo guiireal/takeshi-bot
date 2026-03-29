@@ -281,6 +281,14 @@ export function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+export function formatSecondsToMinutesAndSeconds(totalSeconds) {
+  const safeSeconds = Math.max(0, Math.floor(Number(totalSeconds) || 0));
+  const minutes = Math.floor(safeSeconds / 60);
+  const seconds = safeSeconds % 60;
+
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
 export function readMore() {
   const invisibleBreak = "\u200B".repeat(950);
   return invisibleBreak;
@@ -433,4 +441,4 @@ export function hasDirectMedia(webMessage, context) {
 
 export const GROUP_PARTICIPANT_ADD = 27;
 export const GROUP_PARTICIPANT_LEAVE = 32;
-export const isAddOrLeave = [27, 32];
+export const isAddOrLeave = [GROUP_PARTICIPANT_ADD, GROUP_PARTICIPANT_LEAVE];
