@@ -6,7 +6,7 @@ import { errorLog } from "../../../utils/logger.js";
 export default {
   name: "tik-tok",
   description: "Faço o download de vídeos do TikTok",
-  commands: ["tik-tok", "ttk"],
+  commands: ["tik-tok", "ttk", "tik"],
   usage: `${PREFIX}tik-tok https://www.tiktok.com/@yrrefutavel/video/7359413022483287301`,
   /**
    * @param {CommandHandleProps} props

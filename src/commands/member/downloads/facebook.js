@@ -6,7 +6,7 @@ import { errorLog } from "../../../utils/logger.js";
 export default {
   name: "facebook",
   description: "Faço o download de vídeos do Facebook",
-  commands: ["facebook", "fb"],
+  commands: ["facebook", "face", "fb"],
   usage: `${PREFIX}facebook https://www.facebook.com/reel/123456789012345`,
   /**
    * @param {CommandHandleProps} props

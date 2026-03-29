@@ -21,13 +21,13 @@ export default {
   }) => {
     if (!fullArgs.length) {
       throw new InvalidParameterError(
-        "Você precisa me dizer o que deseja buscar!"
+        "Você precisa me dizer o que deseja buscar!",
       );
     }
 
     if (fullArgs.includes("http://") || fullArgs.includes("https://")) {
       throw new InvalidParameterError(
-        `Você não pode usar links para baixar vídeos! Use ${PREFIX}yt-mp4 link`
+        `Você não pode usar links para baixar vídeos! Use ${PREFIX}yt-mp4 link`,
       );
     }
 
@@ -49,7 +49,7 @@ export default {
         
 *Descrição*: ${data.description}
 *Duração em segundos*: ${data.total_duration_in_seconds}
-*Canal*: ${data.channel.name}`
+*Canal*: ${data.channel.name}`,
       );
 
       await sendVideoFromURL(data.url);
