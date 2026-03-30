@@ -49,16 +49,16 @@ export default {
     const videoDuration = formatSecondsToMinutesAndSeconds(
       data.total_duration_in_seconds,
     );
-    const fakePlayer = `0:${randomSeconds} ━━●──────${videoDuration} ↻ ⊲ Ⅱ ⊳ ↺
-ılı.lıllılı.ıllı..ılı.lıllılı.ıllı`;
 
     await sendImageFromURL(
       data.thumbnail,
       `*Título*: ${data.title}
         
 *Descrição*: ${data.description}
-*Player*: ${fakePlayer}
-*Canal*: ${data.channel.name}`,
+*Canal*: ${data.channel.name}
+
+> 0:${randomSeconds} ━━●──────${videoDuration} ↻ ⊲ Ⅱ ⊳ ↺
+> ılı.lıllılı.ıllı..ılı.lıllılı.ıllı`,
     );
 
     await sendAudioFromURL(data.url);
