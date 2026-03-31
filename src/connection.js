@@ -16,6 +16,7 @@
  */
 import makeWASocket, {
   DisconnectReason,
+  fetchLatestBaileysVersion,
   isJidBroadcast,
   isJidNewsletter,
   isJidStatusBroadcast,
@@ -26,7 +27,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
-import { PREFIX, TEMP_DIR, WAWEB_VERSION } from "./config.js";
+import { PREFIX, TEMP_DIR } from "./config.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { onlyNumbers, question } from "./utils/index.js";
@@ -76,8 +77,10 @@ export async function connect() {
 
   const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
 
+  const { version } = await fetchLatestBaileysVersion();
+
   const socket = makeWASocket({
-    version: WAWEB_VERSION,
+    version,
     logger,
     defaultQueryTimeoutMs: undefined,
     retryRequestDelayMs: 5000,
@@ -191,7 +194,7 @@ export async function connect() {
       clearScreenWithBanner();
       successLog("✅ Bot iniciado com sucesso!");
       successLog("Fui conectado com sucesso!");
-      infoLog("Versão do WhatsApp Web: " + WAWEB_VERSION.join("."));
+      infoLog("Versão do WhatsApp Web: " + version.join("."));
       successLog(
         `✅ Estou pronto para uso! 
 Verifique o prefixo, digitando a palavra "prefixo" no WhatsApp. 
