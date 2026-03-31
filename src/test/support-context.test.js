@@ -1,9 +1,12 @@
 import assert from "node:assert";
+import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 import {
   DEFAULT_SUPPORT_FILES,
+  DEFAULT_SUPPORT_MAX_CHARS_PER_FILE,
   buildSupportFallbackPlan,
   extractMarkdownSections,
   parseSupportPlannerResponse,
@@ -101,6 +104,24 @@ Stack content
       assert.strictEqual(files.length, 1);
       assert.strictEqual(files[0].path, "src/config.js");
     });
+
+    it("should include the supported hosts section from README in the default support file window", () => {
+      const files = resolveSupportFiles({
+        projectRoot,
+        requestedFiles: ["README.md"],
+        maxCharsPerFile: DEFAULT_SUPPORT_MAX_CHARS_PER_FILE,
+      });
+
+      assert.strictEqual(files.length, 1);
+      assert.strictEqual(files[0].path, "README.md");
+      assert.match(files[0].content, /\*\*Hosts suportadas\*\*/);
+      assert.match(files[0].content, /Bronxys/);
+      assert.match(files[0].content, /NexFuture/);
+      assert.match(files[0].content, /Speed Cloud/);
+      assert.match(files[0].content, /https:\/\/bronxyshost\.com\//);
+      assert.match(files[0].content, /https:\/\/nexfuture\.com\.br\//);
+      assert.match(files[0].content, /https:\/\/speedhosting\.cloud\//);
+    });
   });
 
   describe("buildSupportFallbackPlan", () => {
@@ -130,6 +151,37 @@ Stack content
         text: "manda o link do grupo da bronxys",
       });
 
+      assert.ok(plan.files.includes("README.md"));
+    });
+
+    it("should detect supported hosts dynamically from README", () => {
+      const tempRoot = fs.mkdtempSync(
+        path.join(os.tmpdir(), "takeshi-support-context-"),
+      );
+
+      fs.mkdirSync(path.join(tempRoot, "src", "commands"), {
+        recursive: true,
+      });
+      fs.writeFileSync(
+        path.join(tempRoot, "README.md"),
+        `# README
+
+## Instalação nas principais hosts do Brasil
+
+**Hosts suportadas**:
+
+        | Aurora Cloud | Outra Plataforma |
+        |---------------|------------------|
+        | [Painel](https://aurora.example.com) | [Painel](https://outra.example.com) |
+`,
+      );
+
+      const plan = buildSupportFallbackPlan({
+        projectRoot: tempRoot,
+        text: "traga o link da Aurora Cloud",
+      });
+
+      assert.ok(plan.sections.includes("HOSTING_AND_PTERODACTYL"));
       assert.ok(plan.files.includes("README.md"));
     });
 

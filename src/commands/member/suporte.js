@@ -8,6 +8,7 @@ import { getRandomName } from "../../utils/index.js";
 import {
   buildSupportFallbackPlan,
   DEFAULT_SUPPORT_FILES,
+  DEFAULT_SUPPORT_MAX_CHARS_PER_FILE,
   DEFAULT_SUPPORT_SECTIONS,
   extractMarkdownSections,
   parseSupportPlannerResponse,
@@ -20,7 +21,6 @@ const COMPLETION_TOKENS_MIN = 1024;
 const COMPLETION_TOKENS_MAX = 4096;
 const COMPLETION_TOKENS_STEP = 1024;
 const MAX_CONTEXT_FILES = 4;
-const MAX_CONTEXT_CHARS_PER_FILE = 4096;
 const SUPPORT_FILE_CATALOG = [
   "AGENTS.md",
   "README.md",
@@ -420,7 +420,7 @@ Faça sua pergunta sobre mim que eu te ajudarei!
         projectRoot,
         requestedFiles,
         maxFiles: MAX_CONTEXT_FILES,
-        maxCharsPerFile: MAX_CONTEXT_CHARS_PER_FILE,
+        maxCharsPerFile: DEFAULT_SUPPORT_MAX_CHARS_PER_FILE,
       });
       const fileContextBlock = buildFileContextBlock(requestedFilesContext);
 
