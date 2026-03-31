@@ -309,16 +309,8 @@ Examples:
 
 ## HOSTING_AND_PTERODACTYL
 
-The project README currently highlights these supported hosts:
-
-- Bronxys
-- NexFuture
-- Speed Cloud
-- TED Host
-- Nodz Host
-- Cebolinha Host
-- Raikken
-- Imperio Cloud
+The project README currently highlights the supported hosts in its installation section.
+Treat `README.md` as the source of truth for host names and links.
 
 Installation tutorials stay in `README.md`.
 

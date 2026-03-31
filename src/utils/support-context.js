@@ -9,22 +9,10 @@ export const DEFAULT_SUPPORT_SECTIONS = [
   "SKILLS",
 ];
 export const DEFAULT_SUPPORT_FILES = ["README.md"];
+export const DEFAULT_SUPPORT_MAX_CHARS_PER_FILE = 8192;
 const UPDATE_KEYWORDS =
   /(atualizar|atualizacao|atualização|update|upgrade|updater)/i;
-const SUPPORTED_HOST_KEYWORDS = [
-  "bronxys",
-  "nexfuture",
-  "speed cloud",
-  "speedhosting",
-  "ted host",
-  "tedhost",
-  "nodz host",
-  "nodzhostinger",
-  "cebolinha host",
-  "raikken",
-  "imperio cloud",
-  "imperiocloud",
-];
+const supportedHostKeywordsCache = new Map();
 
 function redactSensitiveContent(content) {
   return `${content}`
@@ -71,6 +59,70 @@ function normalizeForMatching(value = "") {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
+}
+
+function cleanMarkdownTableCell(cell = "") {
+  return `${cell}`
+    .replace(/!\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[*_`~]/g, "")
+    .trim();
+}
+
+function getSupportedHostKeywords(projectRoot) {
+  const normalizedRoot = path.resolve(projectRoot);
+
+  if (supportedHostKeywordsCache.has(normalizedRoot)) {
+    return supportedHostKeywordsCache.get(normalizedRoot);
+  }
+
+  const readmePath = path.resolve(normalizedRoot, "README.md");
+  if (!fs.existsSync(readmePath)) {
+    supportedHostKeywordsCache.set(normalizedRoot, []);
+    return [];
+  }
+
+  const readmeContent = fs.readFileSync(readmePath, "utf-8");
+  const lines = readmeContent.split(/\r?\n/);
+  const keywords = new Set();
+  let insideHostsSection = false;
+
+  for (const line of lines) {
+    if (!insideHostsSection && /\*\*Hosts suportadas\*\*/i.test(line)) {
+      insideHostsSection = true;
+      continue;
+    }
+
+    if (!insideHostsSection) {
+      continue;
+    }
+
+    if (/^##\s+/.test(line)) {
+      break;
+    }
+
+    if (!line.trim().startsWith("|")) {
+      continue;
+    }
+
+    const cells = line.split("|").map(cleanMarkdownTableCell).filter(Boolean);
+
+    for (const cell of cells) {
+      if (
+        /^-+$/.test(cell) ||
+        /^(grupo oficial|painel)$/i.test(cell) ||
+        /^https?:\/\//i.test(cell)
+      ) {
+        continue;
+      }
+
+      keywords.add(normalizeForMatching(cell));
+    }
+  }
+
+  const resolvedKeywords = [...keywords];
+  supportedHostKeywordsCache.set(normalizedRoot, resolvedKeywords);
+  return resolvedKeywords;
 }
 
 function findMatchingCommandFiles(projectRoot, text = "", maxFiles = 3) {
@@ -124,8 +176,8 @@ export function buildSupportFallbackPlan({ projectRoot, text = "" }) {
   const normalizedText = normalizeForMatching(text);
   const sections = new Set(DEFAULT_SUPPORT_SECTIONS);
   const files = new Set(extractExplicitFilePaths(text));
-  const mentionsSupportedHost = SUPPORTED_HOST_KEYWORDS.some((keyword) =>
-    normalizedText.includes(keyword),
+  const mentionsSupportedHost = getSupportedHostKeywords(projectRoot).some(
+    (keyword) => normalizedText.includes(keyword),
   );
 
   for (const commandPath of findMatchingCommandFiles(projectRoot, text)) {
@@ -285,7 +337,7 @@ export function resolveSupportFiles({
   projectRoot,
   requestedFiles = [],
   maxFiles = 6,
-  maxCharsPerFile = 12000,
+  maxCharsPerFile = DEFAULT_SUPPORT_MAX_CHARS_PER_FILE,
 }) {
   const normalizedRoot = path.resolve(projectRoot);
   const files = [];
