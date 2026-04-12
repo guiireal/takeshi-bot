@@ -132,6 +132,15 @@ export default {
     await delay(2000);
 
     await sendReply(
+      "*🧩 RICH RESPONSE*\n" +
+        `• \`${prefix}enviar-codigo\` - Enviar bloco de código em rich response\n` +
+        `• \`${prefix}enviar-tabela\` - Enviar tabela em rich response\n` +
+        `• \`${prefix}enviar-latex\` - Enviar fórmula LaTeX em rich response`,
+    );
+
+    await delay(2000);
+
+    await sendReply(
       "*🎯 COMO USAR*\n\n" +
         "1️⃣ Execute qualquer comando da lista acima\n" +
         "2️⃣ Observe o comportamento prático\n" +
