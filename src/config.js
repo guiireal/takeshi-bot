@@ -11,17 +11,17 @@ export const PREFIX = "/";
 export const BOT_EMOJI = "🤖";
 
 // Nome do bot (mude se preferir).
-export const BOT_NAME = "Takeshi Bot";
+export const BOT_NAME = "Laís";
 
 // LID do bot.
 // Para obter o LID do bot, use o comando <prefixo>lid respondendo em cima de uma mensagem do número do bot
 // Troque o <prefixo> pelo prefixo do bot (ex: /lid).
-export const BOT_LID = "12345678901234567890@lid";
+export const BOT_LID = "185440229392398";
 
 // LID do dono do bot.
 // Para obter o LID do dono do bot, use o comando <prefixo>meu-lid
 // Troque o <prefixo> pelo prefixo do bot (ex: /meu-lid).
-export const OWNER_LID = "12345678901234567890@lid";
+export const OWNER_LID = "185440229392398";
 
 // Diretório dos comandos
 export const COMMANDS_DIR = path.join(__dirname, "commands");
@@ -42,7 +42,7 @@ export const TIMEOUT_IN_MILLISECONDS_BY_EVENT = 1000;
 export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
-export const SPIDER_API_TOKEN = "seu_token_aqui";
+export const SPIDER_API_TOKEN = "zrkdcFQaYkUle6A1JDel";
 
 // Plataforma de geração de links a partir de imagens
 export const LINKER_BASE_URL = "https://linker.devgui.dev/api";
