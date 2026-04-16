@@ -11,7 +11,7 @@ export const PREFIX = "/";
 export const BOT_EMOJI = "🤖";
 
 // Nome do bot (mude se preferir).
-export const BOT_NAME = "Takeshi Bot";
+export const BOT_NAME = "Laís";
 
 // LID do bot.
 // Para obter o LID do bot, use o comando <prefixo>lid respondendo em cima de uma mensagem do número do bot
