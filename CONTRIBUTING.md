@@ -1,35 +1,9 @@
-# Contribuindo com o Takeshi Bot
+# Contribuições encerradas
 
-Obrigado por querer ajudar! Para manter o projeto organizado, siga este guia rápido.
+Embora o Takeshi seja open-source, as contribuições externas foram encerradas.
 
-## Como começar
+Com o avanço das IAs, o desafio de programar tem sido substituído pela criação de prompts. Valorizo a autoria e a identidade do projeto. Não faz sentido entrar em um ciclo de revisar códigos gerados por IAs que descaracterizam a lógica que construímos ao longo do tempo, por mais que sejam bons códigos, o fator humano e a criatividade se perdem.
+Qualquer um pode criar código com IA, não há mais valor genuíno em contribuir com código, o que torna o processo de revisão e manutenção insustentável.
 
-1. **Fork & Clone**: Crie seu fork e clone localmente.
-2. **Branch**: Use nomes claros (`feature/nome` ou `fix/nome`).
-3. **Ambiente**: Utilize **Node.js v22**.
-4. **Template**: Baseie novos comandos no arquivo `🤖-como-criar-comandos.js`.
-
-## Estrutura de Comandos
-
-Adicione seu arquivo na pasta correta em `src/commands/`:
-
-* `owner/`: Apenas o dono.
-* `admin/`: Apenas administradores.
-* `member/`: Público geral.
-
-## Padrões de Código
-
-* **Não reinvente a roda**: Use as funções em `src/utils`.
-* **Tipagem**: Sempre importe e use `CommandHandleProps` no JSDoc.
-* **Limpeza**: Se gerar arquivos temporários, certifique-se de excluí-los.
-* **Delay**: Use `randomDelay()` para evitar banimentos.
-
-## Enviando seu PR
-
-Ao abrir o Pull Request, preencha o template básico:
-
-1. **O que mudou?** (Breve descrição).
-2. **Tipo**: Bugfix, Feature ou Refactor.
-3. **Prints**: Anexe prints do comando funcionando (sucesso e erro).
-
----
+O projeto segue ativo, mas agora como um esforço individual. 
+Sinta-se à vontade para estudar o código ou fazer um fork para uso pessoal.

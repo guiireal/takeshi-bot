@@ -876,20 +876,13 @@ Você deve apagar um dos bots e tanto configurar quanto executar **apenas um**
 
 ## Contribuindo com o projeto
 
-O Takeshi Bot é um projeto **open source** e sua contribuição é muito bem-vinda!
+Embora o Takeshi seja open-source, as contribuições externas foram encerradas.
 
-### 🚀 Como contribuir
+Com o avanço das IAs, o desafio de programar tem sido substituído pela criação de prompts. Valorizo a autoria e a identidade do projeto. Não faz sentido entrar em um ciclo de revisar códigos gerados por IAs que descaracterizam a lógica que construímos ao longo do tempo, por mais que sejam bons códigos, o fator humano e a criatividade se perdem.
+Qualquer um pode criar código com IA, não há mais valor genuíno em contribuir com código, o que torna o processo de revisão e manutenção insustentável.
 
-- 🐛 **Reportar bugs** através das [Issues](https://github.com/guiireal/takeshi-bot/issues)
-- ✨ **Sugerir novas funcionalidades**
-- 🔧 **Contribuir com código** (novos comandos, correções, melhorias)
-- ⭐ **Dar uma estrela** no repositório
-
-### 📖 Antes de contribuir
-
-1. Leia nosso **[Guia de Contribuição](CONTRIBUTING.md)** completo
-2. Verifique as [Issues abertas](https://github.com/guiireal/takeshi-bot/issues)
-3. Siga o template obrigatório para Pull Requests
+O projeto segue ativo, mas agora como um esforço individual. 
+Sinta-se à vontade para estudar o código ou fazer um fork para uso pessoal.
 
 ## Licença
 
