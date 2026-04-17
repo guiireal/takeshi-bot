@@ -8,4 +8,4 @@ Qualquer um pode criar código com IA, não há mais valor genuíno em contribui
 O projeto segue ativo, mas agora como um esforço individual. 
 Sinta-se à vontade para estudar o código ou fazer um fork para uso pessoal.
 
-Usar IA não é ruim, longe disso, mas em projetos open-source, a identidade, a autoria e o estudo genuíno para trazer soluções são importantes.
+Usar IA não é ruim, longe disso, mas em projetos open-source, a identidade, a autoria e o estudo genuíno para trazer soluções são mais importantes.
