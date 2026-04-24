@@ -91,6 +91,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}to-image
 ▢ • ${prefix}to-mp3
 ▢ • ${prefix}ttp
+▢ • ${prefix}twt
 ▢ • ${prefix}yt-search
 ▢
 ╰━━─「🚀」─━━
