@@ -75,6 +75,17 @@ import { connect } from "./connection.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { bannerLog, errorLog, infoLog, warningLog } from "./utils/logger.js";
+import {
+  startDashboard,
+  updateBotStats,
+  setBotConnected,
+} from "./services/dashboard.js";
+import {
+  countCommandFiles,
+  countGroups,
+  countMutedUsers,
+  countAutoResponders,
+} from "./utils/statsHelper.js";
 
 process.on("uncaughtException", (error) => {
   if (badMacHandler.handleError(error, "uncaughtException")) {
@@ -116,6 +127,19 @@ async function startBot() {
 
     const socket = await connect();
 
+    // Iniciar Dashboard
+    startDashboard(3000);
+
+    // Atualizar estatísticas
+    updateBotStats({
+      totalCommands: countCommandFiles(),
+      totalGroups: countGroups(),
+      mutedUsers: countMutedUsers(),
+      autoResponders: countAutoResponders(),
+    });
+
+    setBotConnected(true);
+
     load(socket);
 
     setInterval(() => {
@@ -125,6 +149,14 @@ async function startBot() {
           `BadMacHandler stats: ${currentStats.errorCount}/${currentStats.maxRetries} erros`,
         );
       }
+
+      // Atualizar estatísticas a cada 5 minutos
+      updateBotStats({
+        totalCommands: countCommandFiles(),
+        totalGroups: countGroups(),
+        mutedUsers: countMutedUsers(),
+        autoResponders: countAutoResponders(),
+      });
     }, 300_000);
   } catch (error) {
     if (badMacHandler.handleError(error, "bot-startup")) {

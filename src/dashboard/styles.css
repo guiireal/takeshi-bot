@@ -1,0 +1,508 @@
+/* ==================== DARK GRUNGE CINEMATIC THEME ==================== */
+
+:root {
+  /* Primárias (background / base) */
+  --color-primary-dark: #0d0d0d;
+  --color-primary-medium: #1a1a1a;
+  --color-primary-light: #2b2b2b;
+
+  /* Secundárias (detalhes / contraste) */
+  --color-secondary-dark: #3a2f28;
+  --color-secondary-medium: #5c4a3d;
+  --color-secondary-light: #8a6f5a;
+
+  /* Destaque (highlight / texto principal) */
+  --color-accent-dark: #bfa98a;
+  --color-accent-medium: #d6c3a3;
+  --color-accent-light: #e8d8b8;
+
+  /* Acentos sutis */
+  --color-divider: #6e5a4b;
+  --color-hover: #a38c73;
+
+  /* Status */
+  --color-status-online: #6ba587;
+  --color-status-offline: #a85656;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==================== FUNDO COM TEXTURA GRUNGE ==================== */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background-color: var(--color-primary-dark);
+  color: var(--color-accent-medium);
+  line-height: 1.6;
+  position: relative;
+
+  /* Textura grunge digital */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      ellipse at 20% 50%,
+      rgba(90, 74, 61, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      rgba(58, 47, 40, 0.1) 0%,
+      transparent 50%
+    );
+
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+/* ==================== CONTAINER ==================== */
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ==================== HEADER / TITULO ==================== */
+
+.header {
+  margin-bottom: 60px;
+  position: relative;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.header h1 {
+  font-size: 4.5rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-light) 0%,
+    var(--color-accent-medium) 50%,
+    var(--color-accent-dark) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+
+  /* Efeito cinematográfico */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+  text-shadow: 0 0 30px rgba(214, 195, 163, 0.2);
+}
+
+.header p {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-divider);
+  font-weight: 500;
+  margin-top: 15px;
+}
+
+/* ==================== STATUS BADGE ==================== */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 28px;
+  background-color: rgba(107, 165, 135, 0.15);
+  border: 1px solid var(--color-status-online);
+  color: var(--color-status-online);
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0;
+  line-height: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.status-badge::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.status-badge:hover::before {
+  left: 100%;
+}
+
+.status-badge.disconnected {
+  background-color: rgba(168, 86, 86, 0.15);
+  border-color: var(--color-status-offline);
+  color: var(--color-status-offline);
+}
+
+/* ==================== GRID LAYOUT ==================== */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* ==================== CARDS - ESTADÍSTICAS ==================== */
+
+.card {
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 26, 0.8) 0%,
+    rgba(43, 43, 43, 0.5) 100%
+  );
+  border: 1px solid var(--color-divider);
+  border-radius: 2px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+
+  /* Efeito cinematográfico sutil */
+  box-shadow:
+    0 0 30px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(214, 195, 163, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.card:hover {
+  border-color: var(--color-accent-dark);
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 26, 0.95) 0%,
+    rgba(43, 43, 43, 0.7) 100%
+  );
+  box-shadow:
+    0 0 50px rgba(214, 195, 163, 0.15),
+    0 0 30px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.card:hover::before {
+  left: 100%;
+}
+
+.card-icon {
+  font-size: 2.8rem;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.card-title {
+  color: var(--color-divider);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+  font-family: "Courier New", monospace;
+}
+
+.card-value {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--color-accent-light);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.card-unit {
+  font-size: 0.8rem;
+  color: var(--color-secondary-light);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* ==================== INFO GRID ==================== */
+
+.info-grid {
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 26, 0.8) 0%,
+    rgba(43, 43, 43, 0.5) 100%
+  );
+  border: 1px solid var(--color-divider);
+  border-radius: 2px;
+  padding: 36px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 30px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.info-grid h2 {
+  color: var(--color-accent-medium);
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-divider);
+  font-family: "Courier New", monospace;
+}
+
+/* ==================== INFO ROWS ==================== */
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(110, 90, 75, 0.4);
+  transition: all 0.3s ease;
+}
+
+.info-row:hover {
+  padding-left: 12px;
+  padding-right: -12px;
+  border-bottom-color: var(--color-divider);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: var(--color-secondary-light);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: "Courier New", monospace;
+}
+
+.info-value {
+  color: var(--color-accent-light);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  font-family: "Courier New", monospace;
+}
+
+/* ==================== BUTTON ==================== */
+
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 36px;
+  background: linear-gradient(
+    135deg,
+    rgba(214, 195, 163, 0.2) 0%,
+    rgba(165, 140, 115, 0.15) 100%
+  );
+  border: 1px solid var(--color-accent-dark);
+  color: var(--color-accent-light);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Courier New", monospace;
+  position: relative;
+  overflow: hidden;
+
+  box-shadow:
+    0 0 20px rgba(214, 195, 163, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.refresh-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(214, 195, 163, 0.3), transparent);
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.6s,
+    height 0.6s;
+  border-radius: 50%;
+}
+
+.refresh-btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(214, 195, 163, 0.3) 0%,
+    rgba(165, 140, 115, 0.25) 100%
+  );
+  border-color: var(--color-accent-light);
+  box-shadow:
+    0 0 40px rgba(214, 195, 163, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.refresh-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.refresh-btn:active {
+  transform: scale(0.98);
+}
+
+/* ==================== RESPONSIVO ==================== */
+
+@media (max-width: 1024px) {
+  .header h1 {
+    font-size: 3.5rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 24px 16px;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .header {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+  }
+
+  .header h1 {
+    font-size: 2.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+  }
+
+  .card-value {
+    font-size: 2rem;
+  }
+
+  .info-grid {
+    padding: 24px;
+  }
+
+  .info-grid h2 {
+    font-size: 1.1rem;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==================== SCROLLBAR CUSTOMIZADO ==================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-primary-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-divider);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-dark);
+}

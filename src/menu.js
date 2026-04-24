@@ -77,38 +77,18 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}attp
 ▢ • ${prefix}brat
 ▢ • ${prefix}cep
-▢ • ${prefix}exemplos-de-mensagens
-▢ • ${prefix}fake-chat
-▢ • ${prefix}gerar-link
+▢ • ${prefix}enquete
 ▢ • ${prefix}info
-▢ • ${prefix}meu-lid
 ▢ • ${prefix}perfil
 ▢ • ${prefix}ping
-▢ • ${prefix}raw-message
 ▢ • ${prefix}rename
 ▢ • ${prefix}sticker
-▢ • ${prefix}suporte
 ▢ • ${prefix}to-gif
 ▢ • ${prefix}to-image
 ▢ • ${prefix}to-mp3
 ▢ • ${prefix}ttp
-▢ • ${prefix}twt
-▢ • ${prefix}yt-search
 ▢
 ╰━━─「🚀」─━━
-
-╭━━⪩ DOWNLOADS ⪨━━
-▢
-▢ • ${prefix}facebook
-▢ • ${prefix}instagram
-▢ • ${prefix}play-audio
-▢ • ${prefix}play-video
-▢ • ${prefix}pinterest
-▢ • ${prefix}tik-tok
-▢ • ${prefix}yt-mp3
-▢ • ${prefix}yt-mp4
-▢
-╰━━─「🎶」─━━
 
 ╭━━⪩ BRINCADEIRAS ⪨━━
 ▢
@@ -121,27 +101,5 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}socar
 ▢
 ╰━━─「🎡」─━━
-
-╭━━⪩ IA ⪨━━
-▢
-▢ • ${prefix}flux
-▢ • ${prefix}gemini
-▢ • ${prefix}gpt-5-mini
-▢ • ${prefix}ia-sticker
-▢
-╰━━─「🚀」─━━
-
-╭━━⪩ CANVAS ⪨━━
-▢
-▢ • ${prefix}blur
-▢ • ${prefix}bolsonaro
-▢ • ${prefix}cadeia
-▢ • ${prefix}contraste
-▢ • ${prefix}espelhar
-▢ • ${prefix}gray
-▢ • ${prefix}inverter
-▢ • ${prefix}pixel
-▢ • ${prefix}rip
-▢
-╰━━─「❇」─━━`;
+`;
 }
