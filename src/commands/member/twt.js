@@ -87,6 +87,16 @@ function toTitleCase(str) {
     .join(" ");
 }
 
+function formatNumber(num) {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + "K";
+  }
+  return num.toString();
+}
+
 export default {
   name: "twt",
   description: "Busca os trending topics (assuntos do momento) no X.com",
@@ -114,27 +124,49 @@ export default {
     await sendWaitReact();
 
     try {
-      const { data } = await axios.get(
-        `${TRENDSTOOLS_BASE_URL}/${countryCode}`,
-        { timeout: 15000 }
-      );
+      const apiUrl = `${TRENDSTOOLS_BASE_URL}/${countryCode}`;
+      
+      const { data } = await axios.get(apiUrl, { 
+        timeout: 15000,
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        }
+      });
 
-      if (!data || !Array.isArray(data) || data.length === 0) {
+      // Log para debug
+      console.log("📡 API Response para", countryCode, ":", {
+        tipo: Array.isArray(data) ? "array" : typeof data,
+        tamanho: Array.isArray(data) ? data.length : "N/A",
+        primeiroPrimeiro: Array.isArray(data) && data[0] ? Object.keys(data[0]) : "N/A"
+      });
+
+      if (!data || (Array.isArray(data) && data.length === 0)) {
         throw new WarningError(
           "Não foi possível obter os trending topics no momento. Tente novamente mais tarde."
         );
       }
 
+      // Se data não for array mas for objeto, converter em array
+      let trendsList = Array.isArray(data) ? data : [data];
+
+      if (trendsList.length === 0) {
+        throw new WarningError(
+          "Não há trending topics disponíveis para este país no momento."
+        );
+      }
+
       const countryLabel = toTitleCase(countryCode);
 
-      const lines = data
+      const lines = trendsList
         .slice(0, 10)
-        .map((item) => {
+        .map((item, index) => {
+          // Extrair dados do trending
           const name = item.name || item.trend || item.keyword || null;
 
           if (!name || typeof name !== "string") {
             return null;
           }
+
           const volume =
             item.tweet_volume ||
             item.tweetVolume ||
@@ -143,14 +175,22 @@ export default {
             null;
 
           const volumeText = volume
-            ? ` - ${Number(volume).toLocaleString("pt-BR")} menções`
+            ? ` - ${formatNumber(Number(volume))} menções`
             : "";
 
           const tag = name.startsWith("#") ? name : `#${name}`;
-          return `${tag}${volumeText}`;
+          const emoji = String.fromCodePoint(0x31 + index) + "\ufe0f\u20e3"; // 1️⃣ 2️⃣ etc
+          
+          return `${emoji} ${tag}${volumeText}`;
         })
         .filter(Boolean)
         .join("\n");
+
+      if (!lines) {
+        throw new WarningError(
+          "Não foi possível processar os trending topics."
+        );
+      }
 
       await sendSuccessReact();
 
@@ -163,7 +203,13 @@ export default {
         throw error;
       }
 
-      errorLog(JSON.stringify(error, null, 2));
+      errorLog("Erro no comando /twt:", {
+        mensagem: error.message,
+        stack: error.stack,
+        url: error.config?.url,
+        status: error.response?.status,
+      });
+
       await sendErrorReply(
         "Erro ao buscar trending topics. Tente novamente mais tarde."
       );
