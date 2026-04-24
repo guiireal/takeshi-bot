@@ -45,6 +45,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}anti-event (1/0)
 ▢ • ${prefix}anti-image (1/0)
 ▢ • ${prefix}anti-link (1/0)
+▢ • ${prefix}anti-lottie-sticker (1/0)
 ▢ • ${prefix}anti-product (1/0)
 ▢ • ${prefix}anti-sticker (1/0)
 ▢ • ${prefix}anti-video (1/0)

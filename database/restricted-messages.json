@@ -1,5 +1,6 @@
 {
     "sticker": "stickerMessage",
+    "lottieSticker": "lottieStickerMessage",
     "video": "videoMessage",
     "image": "imageMessage",
     "audio": "audioMessage",
