@@ -1,6 +1,7 @@
 import axios from "axios";
-import { PREFIX, SPIDER_API_BASE_URL, SPIDER_API_TOKEN } from "../../config.js";
+import { PREFIX, SPIDER_API_BASE_URL } from "../../config.js";
 import { DangerError } from "../../errors/index.js";
+import { getSpiderApiToken } from "../../utils/database.js";
 
 export default {
   name: "saldo",
@@ -11,8 +12,10 @@ export default {
    * @param {CommandHandleProps} props
    */
   handle: async ({ sendSuccessReply }) => {
+    const token = getSpiderApiToken();
+
     const response = await axios.get(
-      `${SPIDER_API_BASE_URL}/saldo?api_key=${SPIDER_API_TOKEN}`
+      `${SPIDER_API_BASE_URL}/saldo?api_key=${token}`,
     );
 
     if (!response.data.success) {
