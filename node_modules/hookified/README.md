@@ -1246,10 +1246,10 @@ This shows how on par `hookified` is to the native `EventEmitter` and popular `e
 
 |           name            |  summary  |  ops/sec  |  time/op  |  margin  |  samples  |
 |---------------------------|:---------:|----------:|----------:|:--------:|----------:|
-|  Hookified (v2.0.1)       |    🥇     |      12M  |     93ns  |  ±0.01%  |      11M  |
-|  EventEmitter3 (v5.0.4)   |   -2.4%   |      12M  |     91ns  |  ±0.01%  |      11M  |
-|  EventEmitter (v24.11.1)  |   -2.6%   |      12M  |     90ns  |  ±0.01%  |      11M  |
-|  Emittery (v1.2.0)        |   -91%    |       1M  |      1µs  |  ±0.01%  |     990K  |
+|  Hookified (v2.1.0)       |    🥇     |      17M  |     73ns  |  ±0.02%  |      14M  |
+|  EventEmitter3 (v5.0.4)   |   -2.2%   |      17M  |     70ns  |  ±0.02%  |      14M  |
+|  EventEmitter (v24.14.0)  |   -4.5%   |      16M  |     70ns  |  ±0.02%  |      14M  |
+|  Emittery (v2.0.0)        |   -92%    |       1M  |    792ns  |  ±0.01%  |       1M  |
 
 _Note: the `EventEmitter` version is Nodejs versioning._
 

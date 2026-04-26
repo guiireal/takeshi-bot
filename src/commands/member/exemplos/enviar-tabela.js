@@ -33,7 +33,7 @@ export default {
       makeTextSubmessage("*Tabela de comandos e helpers*"),
       makeTableSubmessage(buildTableRows(TABLE_ROWS)),
       makeTextSubmessage(
-        "Esse tipo usa `AI_RICH_RESPONSE_TABLE` com a primeira linha marcada como cabeçalho.",
+        "Esse tipo usa `AI_RICH_RESPONSE_TABLE` com a primeira linha marcada como cabeçalho."
       ),
     ]);
 
@@ -42,7 +42,7 @@ export default {
     await delay(2000);
 
     await sendReply(
-      "Use `tableMetadata.rows` para montar linhas de tabela compatíveis com o rich response.",
+      "Use `tableMetadata.rows` para montar linhas de tabela compatíveis com o rich response."
     );
   },
 };
@@ -114,12 +114,7 @@ function buildUnifiedSection(submessage) {
   return null;
 }
 
-async function sendRichResponseMessage(
-  socket,
-  remoteJid,
-  richResponse,
-  quoted,
-) {
+async function sendRichResponseMessage(socket, remoteJid, richResponse, quoted) {
   const rich = applyForwardedMetaAiContext(richResponse, remoteJid);
   const payload = proto.Message.fromObject({
     botForwardedMessage: {

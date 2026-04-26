@@ -104,6 +104,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}play-video
 ▢ • ${prefix}pinterest
 ▢ • ${prefix}tik-tok
+▢ • ${prefix}tik-tok-audio
 ▢ • ${prefix}yt-mp3
 ▢ • ${prefix}yt-mp4
 ▢
@@ -123,6 +124,7 @@ export function menuMessage(groupJid) {
 
 ╭━━⪩ IA ⪨━━
 ▢
+▢ • ${prefix}deepseek
 ▢ • ${prefix}flux
 ▢ • ${prefix}gemini
 ▢ • ${prefix}gpt-5-mini

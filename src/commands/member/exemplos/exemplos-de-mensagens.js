@@ -132,7 +132,17 @@ export default {
     await delay(2000);
 
     await sendReply(
+      "*🔘 BOTÕES E LISTAS*\n" +
+        `• \`${prefix}enviar-botoes\` - Enviar mensagens com botões simples, templates e interativos\n` +
+        `• \`${prefix}enviar-lista\` - Enviar mensagem em formato de lista\n` +
+        `• \`${prefix}exemplo-gatilho <parâmetro>\` - Receber o clique de botões e listas`,
+    );
+
+    await delay(2000);
+
+    await sendReply(
       "*🧩 RICH RESPONSE*\n" +
+        `• \`${prefix}enviar-texto-colorido\` - Enviar texto destacado/colorido em rich response\n` +
         `• \`${prefix}enviar-codigo\` - Enviar bloco de código em rich response\n` +
         `• \`${prefix}enviar-tabela\` - Enviar tabela em rich response\n` +
         `• \`${prefix}enviar-latex\` - Enviar fórmula LaTeX em rich response`,

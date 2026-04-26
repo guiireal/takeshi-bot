@@ -229,7 +229,7 @@ readBuffer(buffer: Uint8Array, options?: IReadChunkOptions): Promise<number>;
 | Parameter  | Type                                                           | Description                                                                                                                                                                                                                            |
 |------------|----------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | buffer     | [Buffer](https://nodejs.org/api/buffer.html) &#124; Uint8Array | Target buffer to write the data read to                                                                                                                                                                                                |
-| options    | [IReadChunkOptions](#ireadchunkoptions)                        | An integer specifying the number of bytes to read                                                                                                                                                                                      |
+| options    | [IReadChunkOptions](#ireadchunkoptions-interface)                        | An integer specifying the number of bytes to read                                                                                                                                                                                      |
 
 Return promise with number of bytes read.
 The number of bytes read may be less than requested if the `mayBeLess` flag is set.
@@ -245,7 +245,7 @@ peekBuffer(uint8Array: Uint8Array, options?: IReadChunkOptions): Promise<number>
 | Parameter  | Type                                    | Description                                         |
 |------------|-----------------------------------------|-----------------------------------------------------|
 | buffer     | Buffer &#124; Uint8Array                | Target buffer to write the data read (peeked) to.   |
-| options    | [IReadChunkOptions](#ireadchunkoptions) | An integer specifying the number of bytes to read.  |                                                                                                                           |
+| options    | [IReadChunkOptions](#ireadchunkoptions-interface) | An integer specifying the number of bytes to read.  |                                                                                                                           |
 
 Return value `Promise<number>` Promise with number of bytes read. The number of bytes read may be less if the `mayBeLess` flag was set.
 
