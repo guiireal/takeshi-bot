@@ -145,6 +145,7 @@ export default {
         `• \`${prefix}enviar-texto-colorido\` - Enviar texto destacado/colorido em rich response\n` +
         `• \`${prefix}enviar-codigo\` - Enviar bloco de código em rich response\n` +
         `• \`${prefix}enviar-tabela\` - Enviar tabela em rich response\n` +
+        `• \`${prefix}enviar-reels\` - Enviar reels em rich response\n` +
         `• \`${prefix}enviar-latex\` - Enviar fórmula LaTeX em rich response`,
     );
 
