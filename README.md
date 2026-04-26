@@ -2,13 +2,12 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-7.11.0-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-8.0.0-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
-[![Node.js](https://img.shields.io/badge/Node.js-22.22-green?logo=node.js)](https://nodejs.org/en)
-[![Axios](https://img.shields.io/badge/Axios-1.14-blue?logo=axios)](https://axios-http.com/ptbr/docs/intro)
+[![Node.js](https://img.shields.io/badge/Node.js-24-green?logo=node.js)](https://nodejs.org/en)
 [![Baileys](https://img.shields.io/badge/Baileys-7.0.0.9-purple?logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
@@ -66,7 +65,7 @@ Este projeto não possui qualquer vínculo oficial com o WhatsApp. Ele foi desen
 
 Não nos responsabilizamos por qualquer uso indevido deste bot. É de responsabilidade exclusiva do usuário garantir que sua utilização esteja em conformidade com os termos de uso do WhatsApp e a legislação vigente.
 
-## Instalação no Termux
+## Instalação no Termux (novo vídeo tutorial: [https://youtu.be/-yjn1Xe3ltg](https://youtu.be/-yjn1Xe3ltg))
 
 1 - Abra o Termux e execute os comandos abaixo.
 _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/wxpygdb9bcb5npb/Termux_0.118.3_Dev_Gui.apk) ou [clique aqui e baixe versão da Play Store](https://play.google.com/store/apps/details?id=com.termux) caso a versão do MediaFire anterior não funcione._
@@ -388,7 +387,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Remover advertência | Admin | ❌ |
 | Revelar | Admin | ❌ |
 | Somente admins | Admin | ❌ |
-| Ver saldo | Admin | ❌ |
+| Ver saldo da Spider X API | Admin | ❌ |
 | Borrar imagem | Membro | ❌ |
 | Brat (imagem com texto) | Membro | ✅ |
 | Busca CEP | Membro | ❌ |
@@ -397,6 +396,9 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Canvas inverter | Membro | ✅ |
 | Canvas RIP | Membro | ✅ |
 | Comandos de diversão/brincadeiras | Membro |❌ |
+| Deepseek V4 Flash | Membro | ✅ |
+| Envio de botões | Membro | ✅ |
+| Envio de listas | Membro | ✅ |
 | Espelhar imagem | Membro | ❌ |
 | Facebook download | Membro | ✅ |
 | Fake chat | Membro | ❌ |
@@ -413,14 +415,15 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Imagem preto/branco | Membro | ❌ |
 | Informações de um comando | Membro | ❌ |
 | Instagram download | Membro | ✅ |
-| Pinterest download (carrossel) | Membro | ✅ |
 | Ping | Membro | ❌ |
+| Pinterest download (carrossel) | Membro | ✅ |
 | Play áudio | Membro | ✅ |
 | Play vídeo | Membro | ✅ |
 | Renomear figurinha | Membro | ❌ |
 | Sticker | Membro | ❌ |
 | Sticker IA  | Membro | ✅ |
 | Sticker para imagem | Membro | ❌ |
+| TikTok audio download | Membro | ✅ |
 | TikTok video download | Membro | ✅ |
 | YT MP3 | Membro | ✅ |
 | YT MP4 | Membro | ✅ |

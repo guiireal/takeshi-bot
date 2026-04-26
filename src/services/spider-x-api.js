@@ -123,6 +123,23 @@ export async function gpt5Mini(text) {
   return data.response;
 }
 
+export async function deepseekV4Flash(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  const spiderApiToken = requireSpiderApiToken();
+
+  const { data } = await axios.post(
+    `${SPIDER_API_BASE_URL}/ai/deepseek-v4-flash?api_key=${spiderApiToken}`,
+    {
+      text,
+    },
+  );
+
+  return data.response;
+}
+
 export async function attp(text) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");

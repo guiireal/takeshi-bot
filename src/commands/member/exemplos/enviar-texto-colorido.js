@@ -9,32 +9,31 @@ const FORWARD_ORIGIN_META_AI = 4;
 const BOT_ENTRY_POINT_INVOKE_META_AI_1ON1 = 29;
 const BOT_ENTRY_POINT_INVOKE_META_AI_GROUP = 30;
 
-const TABLE_ROWS = [
-  ["Comando", "Helper", "Uso"],
-  ["menu", "sendReply", "Lista comandos"],
-  ["sticker", "downloadImage", "Cria figurinha"],
-  ["play-audio", "sendAudioFromBuffer", "Envia audio"],
-];
+const DEFAULT_TEXT = "EXEMPLO DE TEXTO COLORIDO";
 
 export default {
-  name: "enviar-tabela",
-  description: "Exemplo de como enviar tabela em Rich Response",
-  commands: ["enviar-tabela", "tabela"],
-  usage: `${PREFIX}enviar-tabela`,
+  name: "enviar-texto-colorido",
+  description: "Exemplo de como enviar texto colorido em Rich Response",
+  commands: ["enviar-texto-colorido", "texto-colorido", "rich-texto"],
+  usage: `${PREFIX}enviar-texto-colorido <texto>`,
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ socket, remoteJid, webMessage, sendReply, sendReact }) => {
-    await sendReact("📊");
+  handle: async ({
+    socket,
+    remoteJid,
+    webMessage,
+    fullArgs,
+    sendReply,
+    sendReact,
+  }) => {
+    await sendReact("🎨");
 
     await delay(2000);
 
+    const text = fullArgs?.trim() || DEFAULT_TEXT;
     const richResponse = buildRichResponse([
-      makeTextSubmessage("*Tabela de comandos e helpers*"),
-      makeTableSubmessage(buildTableRows(TABLE_ROWS)),
-      makeTextSubmessage(
-        "Esse tipo usa `AI_RICH_RESPONSE_TABLE` com a primeira linha marcada como cabeçalho."
-      ),
+      makeTextSubmessage(toHighlightedMarkdown(text)),
     ]);
 
     await sendRichResponseMessage(socket, remoteJid, richResponse, webMessage);
@@ -42,10 +41,14 @@ export default {
     await delay(2000);
 
     await sendReply(
-      "Use `tableMetadata.rows` para montar linhas de tabela compatíveis com o rich response."
+      "Esse exemplo usa `richResponseMessage` com `AI_RICH_RESPONSE_TEXT`. O destaque amarelo tenta seguir o Markdown `# ==( texto )==`.",
     );
   },
 };
+
+function toHighlightedMarkdown(text) {
+  return `# ==( ${String(text || DEFAULT_TEXT).trim()} )==`;
+}
 
 function makeTextSubmessage(messageText) {
   return {
@@ -54,29 +57,13 @@ function makeTextSubmessage(messageText) {
   };
 }
 
-function makeTableSubmessage(rows) {
-  return {
-    messageType: 4,
-    tableMetadata: {
-      rows,
-    },
-  };
-}
-
-function buildTableRows(rows) {
-  return rows.map((items, index) => ({
-    items: items.map((value) => String(value ?? "")),
-    isHeading: index === 0,
-  }));
-}
-
 function buildRichResponse(submessages) {
   return {
     messageType: 1,
     submessages,
     unifiedResponse: {
       data: encodeUnifiedResponseData({
-        response_id: `takeshi-table-${Date.now()}-${randomBytes(6).toString("hex")}`,
+        response_id: `takeshi-color-text-${Date.now()}-${randomBytes(6).toString("hex")}`,
         sections: submessages.map(buildUnifiedSection).filter(Boolean),
       }),
     },
@@ -96,25 +83,15 @@ function buildUnifiedSection(submessage) {
     };
   }
 
-  if (submessage.messageType === 4) {
-    return {
-      view_model: {
-        primitive: {
-          rows: submessage.tableMetadata.rows.map((row) => ({
-            is_header: !!row.isHeading,
-            cells: row.items.map((value) => String(value ?? "")),
-          })),
-          __typename: "GenATableUXPrimitive",
-        },
-        __typename: "GenAISingleLayoutViewModel",
-      },
-    };
-  }
-
   return null;
 }
 
-async function sendRichResponseMessage(socket, remoteJid, richResponse, quoted) {
+async function sendRichResponseMessage(
+  socket,
+  remoteJid,
+  richResponse,
+  quoted,
+) {
   const rich = applyForwardedMetaAiContext(richResponse, remoteJid);
   const payload = proto.Message.fromObject({
     botForwardedMessage: {
@@ -124,7 +101,7 @@ async function sendRichResponseMessage(socket, remoteJid, richResponse, quoted) 
     },
     messageContextInfo: {
       messageSecret: randomBytes(32),
-      botMetadata: buildBotMetadata(["RICH_RESPONSE_TABLE"]),
+      botMetadata: buildBotMetadata(["RICH_RESPONSE_TEXT"]),
     },
   });
   const waMessage = generateWAMessageFromContent(remoteJid, payload, {
@@ -143,7 +120,7 @@ function buildBotMetadata(extraCapabilities = []) {
       premiumModelStatus: "AVAILABLE",
     },
     botAgeCollectionMetadata: {},
-    botResponseId: `takeshi-table-${Date.now()}-${randomBytes(6).toString("hex")}`,
+    botResponseId: `takeshi-color-text-${Date.now()}-${randomBytes(6).toString("hex")}`,
     verificationMetadata: {
       proofs: [],
     },

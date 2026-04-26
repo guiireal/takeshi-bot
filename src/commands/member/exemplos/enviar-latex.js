@@ -45,7 +45,7 @@ export default {
         ],
       }),
       makeTextSubmessage(
-        "Esse tipo usa `AI_RICH_RESPONSE_LATEX`. A renderização pode depender da versão do WhatsApp do usuário.",
+        "Esse tipo usa `AI_RICH_RESPONSE_LATEX`. A renderização pode depender da versão do WhatsApp do usuário."
       ),
     ]);
 
@@ -54,7 +54,7 @@ export default {
     await delay(2000);
 
     await sendReply(
-      "Para outras fórmulas, troque `latexExpression` e a imagem renderizada usada em `url`.",
+      "Para outras fórmulas, troque `latexExpression` e a imagem renderizada usada em `url`."
     );
   },
 };
@@ -135,12 +135,7 @@ function buildUnifiedSection(submessage) {
   return null;
 }
 
-async function sendRichResponseMessage(
-  socket,
-  remoteJid,
-  richResponse,
-  quoted,
-) {
+async function sendRichResponseMessage(socket, remoteJid, richResponse, quoted) {
   const rich = applyForwardedMetaAiContext(richResponse, remoteJid);
   const payload = proto.Message.fromObject({
     botForwardedMessage: {

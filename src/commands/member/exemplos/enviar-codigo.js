@@ -44,7 +44,7 @@ export default {
       makeTextSubmessage("*Exemplo de código em Rich Response*"),
       makeCodeSubmessage("javascript", buildCodeBlocksFromString(CODE_SAMPLE)),
       makeTextSubmessage(
-        "Esse tipo usa `AI_RICH_RESPONSE_CODE` dentro de `richResponseMessage`.",
+        "Esse tipo usa `AI_RICH_RESPONSE_CODE` dentro de `richResponseMessage`."
       ),
     ]);
 
@@ -53,7 +53,7 @@ export default {
     await delay(2000);
 
     await sendReply(
-      "Use `codeMetadata.codeBlocks` quando quiser renderizar um bloco de código como resposta rica.",
+      "Use `codeMetadata.codeBlocks` quando quiser renderizar um bloco de código como resposta rica."
     );
   },
 };
@@ -173,12 +173,7 @@ function mapHighlightTypeToUnified(highlightType) {
   }
 }
 
-async function sendRichResponseMessage(
-  socket,
-  remoteJid,
-  richResponse,
-  quoted,
-) {
+async function sendRichResponseMessage(socket, remoteJid, richResponse, quoted) {
   const rich = applyForwardedMetaAiContext(richResponse, remoteJid);
   const payload = proto.Message.fromObject({
     botForwardedMessage: {

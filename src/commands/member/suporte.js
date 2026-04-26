@@ -128,7 +128,8 @@ Use exemplos concretos quando ajudar a explicar algo. Se tiver uma opinião sobr
 
 Quando receber imagens, analise o conteúdo visual primeiro e interprete-o considerando o contexto técnico do Takeshi Bot.
 
-Se alguém te pedir o link de alguma Host, envie!`,
+Se alguém te pedir o link de alguma Host, envie as que você já conhece, 
+sem mencionar Pterodactyl, pois os iniciantes não sabem o que é (exceto se perguntarem sobre)!`,
       },
     ];
 
@@ -144,6 +145,22 @@ Se alguém te pedir o link de alguma Host, envie!`,
       role: "system",
       content: fs.readFileSync(
         path.resolve(__dirname, "..", "..", "..", "README.md"),
+        "utf-8",
+      ),
+    });
+
+    messages.push({
+      role: "system",
+      content: fs.readFileSync(
+        path.resolve(__dirname, "..", "..", "..", "package.json"),
+        "utf-8",
+      ),
+    });
+
+    messages.push({
+      role: "system",
+      content: fs.readFileSync(
+        path.resolve(__dirname, "..", "..", "menu.js"),
         "utf-8",
       ),
     });

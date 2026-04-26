@@ -10,7 +10,7 @@
     "description": "Egg para executar o Takeshi Bot (WhatsApp Bot)",
     "features": null,
     "docker_images": {
-        "Nodejs 22": "ghcr.io/parkervcp/yolks:nodejs_22"
+        "Nodejs 24": "ghcr.io/parkervcp/yolks:nodejs_24"
     },
     "file_denylist": [],
     "startup": "git pull && npm install && npm start",
