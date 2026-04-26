@@ -247,3 +247,7 @@ Skill usage rule:
 - if the topic is about hosting or **Pterodactyl**, load `.skills/pterodactyl-specialist/SKILL.md`
 
 This keeps support and agent workflows selective instead of forcing every answer to carry all hosting knowledge by default.
+
+## DOESN'T RUNS
+
+Do not run `npm test`, `npm test:all` or `npm start` in this repository.
