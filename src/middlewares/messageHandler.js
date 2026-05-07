@@ -3,11 +3,12 @@
  *
  * @author Dev Gui
  */
-import { OWNER_LID } from "../config.js";
+import { BOT_LID, OWNER_LID } from "../config.js";
 import {
   readGroupRestrictions,
   readRestrictedMessageTypes,
 } from "../utils/database.js";
+import { hasGroupStatusMessage } from "../utils/groupStatusMessage.js";
 import { hasDirectMedia } from "../utils/index.js";
 import { errorLog } from "../utils/logger.js";
 import { isAdmin } from "./index.js";
@@ -20,6 +21,10 @@ export async function messageHandler(socket, webMessage) {
 
     const { remoteJid, fromMe, id: messageId } = webMessage.key;
 
+    if (!remoteJid?.endsWith("@g.us")) {
+      return;
+    }
+
     if (fromMe) {
       return;
     }
@@ -30,7 +35,7 @@ export async function messageHandler(socket, webMessage) {
       return;
     }
 
-    const isBotOrOwner = userLid === OWNER_LID;
+    const isBotOrOwner = userLid === OWNER_LID || userLid === BOT_LID;
 
     if (isBotOrOwner) {
       return;
@@ -44,8 +49,27 @@ export async function messageHandler(socket, webMessage) {
 
     const antiGroups = readGroupRestrictions();
 
+    if (
+      antiGroups[remoteJid]?.["anti-status-grupo"] &&
+      hasGroupStatusMessage(webMessage)
+    ) {
+      try {
+        await socket.groupParticipantsUpdate(remoteJid, [userLid], "remove");
+
+        await socket.sendMessage(remoteJid, {
+          delete: webMessage.key,
+        });
+      } catch (error) {
+        errorLog(
+          `Erro ao aplicar anti-status-grupo. Verifique se eu estou como admin do grupo! Detalhes: ${error.message}`,
+        );
+      }
+
+      return;
+    }
+
     const messageType = Object.keys(readRestrictedMessageTypes()).find((type) =>
-      hasDirectMedia(webMessage, type)
+      hasDirectMedia(webMessage, type),
     );
 
     if (!messageType) {
@@ -68,7 +92,7 @@ export async function messageHandler(socket, webMessage) {
     });
   } catch (error) {
     errorLog(
-      `Erro ao processar mensagem restrita. Verifique se eu estou como admin do grupo! Detalhes: ${error.message}`
+      `Erro ao processar mensagem restrita. Verifique se eu estou como admin do grupo! Detalhes: ${error.message}`,
     );
   }
 }

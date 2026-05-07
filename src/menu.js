@@ -48,6 +48,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}anti-lottie-sticker (1/0)
 ▢ • ${prefix}anti-product (1/0)
 ▢ • ${prefix}anti-sticker (1/0)
+▢ • ${prefix}anti-status-grupo (1/0)
 ▢ • ${prefix}anti-video (1/0)
 ▢ • ${prefix}auto-responder (1/0)
 ▢ • ${prefix}auto-sticker (1/0)
