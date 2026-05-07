@@ -85,13 +85,13 @@ termux-setup-storage
 Pastas mais utilizadas:
 
 - /sdcard
-- /storage/emulated/0
-- /storage/emulated/0/Download (muito comum quando você baixa o bot pelo .zip)
+- ~/storage/emulated/0
+- ~/storage/emulated/0/Download (muito comum quando você baixa o bot pelo .zip)
 
-No nosso exemplo, vamos para a `/sdcard`
+No nosso exemplo, vamos para a `~/storage`
 
 ```sh
-cd /sdcard
+cd ~/storage
 ```
 
 4 - Clone o repositório.
