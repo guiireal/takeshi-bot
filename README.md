@@ -367,7 +367,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Anti imagem | Admin | ❌ |
 | Anti link | Admin | ❌ |
 | Anti lottie sticker | Admin | ❌ |
-| Anti payment | Admin | ❌ |
+| Anti pagamento | Admin | ❌ |
 | Anti produto | Admin | ❌ |
 | Anti status grupo | Admin | ❌ |
 | Anti sticker | Admin | ❌ |
