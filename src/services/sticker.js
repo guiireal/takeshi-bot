@@ -8,7 +8,7 @@ import webp from "node-webpmux";
 import fs from "node:fs";
 import path from "node:path";
 import { BOT_EMOJI, BOT_NAME, TEMP_DIR } from "../config.js";
-import { getRandomName, getRandomNumber } from "../utils/index.js";
+import { getRandomName, getRandomNumber, getUserName } from "../utils/index.js";
 
 export async function addStickerMetadata(media, metadata) {
   const tmpFileIn = getRandomName("webp");
@@ -130,11 +130,8 @@ export async function createSticker(paramsHandler) {
     userLid,
   } = paramsHandler;
 
-  const username =
-    webMessage.pushName || webMessage.notifyName || userLid.replace(/@lid/, "");
-
   const metadata = {
-    username: username,
+    username: getUserName(webMessage, userLid),
     botName: `${BOT_EMOJI} ${BOT_NAME}`,
   };
 
@@ -150,12 +147,12 @@ export async function createSticker(paramsHandler) {
         } catch (downloadError) {
           console.error(
             `Tentativa ${attempt} de download de imagem falhou:`,
-            downloadError.message
+            downloadError.message,
           );
 
           if (attempt === 3) {
             throw new Error(
-              `Falha ao baixar imagem após 3 tentativas: ${downloadError.message}`
+              `Falha ao baixar imagem após 3 tentativas: ${downloadError.message}`,
             );
           }
 
@@ -183,12 +180,12 @@ export async function createSticker(paramsHandler) {
         } catch (downloadError) {
           console.error(
             `Tentativa ${attempt} de download de vídeo falhou:`,
-            downloadError.message
+            downloadError.message,
           );
 
           if (attempt === 3) {
             throw new Error(
-              `Falha ao baixar vídeo após 3 tentativas. Problema de conexão com WhatsApp.`
+              `Falha ao baixar vídeo após 3 tentativas. Problema de conexão com WhatsApp.`,
             );
           }
 
@@ -207,7 +204,7 @@ export async function createSticker(paramsHandler) {
           fs.unlinkSync(inputPath);
         }
         throw new Error(
-          `O vídeo enviado tem mais de ${maxDuration} segundos! Envie um vídeo menor.`
+          `O vídeo enviado tem mais de ${maxDuration} segundos! Envie um vídeo menor.`,
         );
       }
 
@@ -236,7 +233,7 @@ export async function createSticker(paramsHandler) {
 
     const stickerPath = await addStickerMetadata(
       await fs.promises.readFile(outputTempPath),
-      metadata
+      metadata,
     );
 
     for (let attempt = 1; attempt <= 3; attempt++) {
@@ -246,12 +243,12 @@ export async function createSticker(paramsHandler) {
       } catch (stickerError) {
         console.error(
           `Tentativa ${attempt} de envio de sticker falhou:`,
-          stickerError.message
+          stickerError.message,
         );
 
         if (attempt === 3) {
           throw new Error(
-            `Falha ao enviar figurinha após 3 tentativas: ${stickerError.message}`
+            `Falha ao enviar figurinha após 3 tentativas: ${stickerError.message}`,
           );
         }
 
@@ -282,13 +279,13 @@ export async function createSticker(paramsHandler) {
       error.message.includes("mmg.whatsapp.net")
     ) {
       throw new Error(
-        `Erro de conexão ao baixar mídia do WhatsApp. Tente novamente em alguns segundos.`
+        `Erro de conexão ao baixar mídia do WhatsApp. Tente novamente em alguns segundos.`,
       );
     }
 
     if (error.message.includes("FFmpeg")) {
       throw new Error(
-        `Erro ao processar mídia com FFmpeg. Verifique se o arquivo não está corrompido.`
+        `Erro ao processar mídia com FFmpeg. Verifique se o arquivo não está corrompido.`,
       );
     }
 

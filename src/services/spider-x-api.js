@@ -329,3 +329,32 @@ export async function toGif(buffer) {
 
   return data.url;
 }
+
+export async function removeBg(
+  buffer,
+  mimeType = "image/png",
+  fileName = "image.png",
+) {
+  if (!buffer) {
+    throw new Error("Você precisa informar o buffer da imagem!");
+  }
+
+  const spiderApiToken = requireSpiderApiToken();
+
+  const formData = new FormData();
+  const blob = new Blob([buffer], { type: mimeType });
+  formData.append("image", blob, fileName);
+
+  const { data } = await axios.post(
+    `${SPIDER_API_BASE_URL}/removebg?api_key=${spiderApiToken}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      responseType: "arraybuffer",
+    },
+  );
+
+  return Buffer.from(data);
+}

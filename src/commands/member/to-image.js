@@ -1,9 +1,7 @@
-import { exec as execChild } from "node:child_process";
-import path from "node:path";
-import { PREFIX, TEMP_DIR } from "../../config.js";
+import { PREFIX } from "../../config.js";
 import { InvalidParameterError } from "../../errors/index.js";
-import { getRandomNumber } from "../../utils/index.js";
-import { errorLog } from "../../utils/logger.js";
+import { Ffmpeg } from "../../services/ffmpeg.js";
+import { getRandomName, removeFileIfExists } from "../../utils/index.js";
 
 export default {
   name: "toimage",
@@ -27,21 +25,18 @@ export default {
 
     await sendWaitReact();
 
-    const inputPath = await downloadSticker(webMessage, "input");
-    const outputPath = path.resolve(
-      TEMP_DIR,
-      `${getRandomNumber(10_000, 99_999)}.png`
-    );
+    const ffmpeg = new Ffmpeg();
+    let inputPath = null;
+    let outputPath = null;
 
-    execChild(`ffmpeg -i ${inputPath} ${outputPath}`, async (error) => {
-      if (error) {
-        errorLog(JSON.stringify(error, null, 2));
-        throw new Error(error);
-      }
-
+    try {
+      inputPath = await downloadSticker(webMessage, getRandomName());
+      outputPath = await ffmpeg.convertStickerToImage(inputPath);
       await sendSuccessReact();
-
       await sendImageFromFile(outputPath);
-    });
+    } finally {
+      removeFileIfExists(inputPath);
+      removeFileIfExists(outputPath);
+    }
   },
 };

@@ -46,6 +46,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}anti-image (1/0)
 ▢ • ${prefix}anti-link (1/0)
 ▢ • ${prefix}anti-lottie-sticker (1/0)
+▢ • ${prefix}anti-payment (1/0)
 ▢ • ${prefix}anti-product (1/0)
 ▢ • ${prefix}anti-sticker (1/0)
 ▢ • ${prefix}anti-status-grupo (1/0)
@@ -58,7 +59,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}exit (1/0)
 ▢ • ${prefix}fechar
 ▢ • ${prefix}hidetag
-▢ • ${prefix}limpar
+▢ • ${prefix}limpar-chat
 ▢ • ${prefix}link-grupo
 ▢ • ${prefix}list-auto-responder
 ▢ • ${prefix}mute
@@ -87,6 +88,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}ping
 ▢ • ${prefix}raw-message
 ▢ • ${prefix}rename
+▢ • ${prefix}removebg
 ▢ • ${prefix}sticker
 ▢ • ${prefix}suporte
 ▢ • ${prefix}to-gif

@@ -4,10 +4,9 @@
  * @author MRX
  */
 import { exec } from "child_process";
-import fs from "node:fs";
 import path from "node:path";
 import { TEMP_DIR } from "../config.js";
-import { getRandomNumber } from "../utils/index.js";
+import { getRandomNumber, removeFileIfExists } from "../utils/index.js";
 import { errorLog } from "../utils/logger.js";
 
 class Ffmpeg {
@@ -30,7 +29,7 @@ class Ffmpeg {
   async _createTempFilePath(extension = "png") {
     return path.join(
       this.tempDir,
-      `${getRandomNumber(10_000, 99_999)}.${extension}`
+      `${getRandomNumber(10_000, 99_999)}.${extension}`,
     );
   }
 
@@ -69,12 +68,16 @@ class Ffmpeg {
     return outputPath;
   }
 
+  async convertStickerToImage(inputPath) {
+    const outputPath = await this._createTempFilePath();
+    const command = `ffmpeg -y -i "${inputPath}" "${outputPath}"`;
+    await this._executeCommand(command);
+    return outputPath;
+  }
+
   async cleanup(filePath) {
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
+    removeFileIfExists(filePath);
   }
 }
 
 export { Ffmpeg };
-

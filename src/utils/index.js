@@ -23,18 +23,55 @@ export function question(message) {
   return new Promise((resolve) => rl.question(message, resolve));
 }
 
+function extractInteractiveResponseId(paramsJson) {
+  if (!paramsJson) {
+    return null;
+  }
+
+  try {
+    const params = JSON.parse(paramsJson);
+
+    return (
+      params.id ||
+      params.selectedId ||
+      params.selectedRowId ||
+      params.rowId ||
+      params.buttonId ||
+      params.button_id ||
+      null
+    );
+  } catch {
+    return null;
+  }
+}
+
 export function extractDataFromMessage(webMessage) {
   const textMessage = webMessage.message?.conversation;
   const extendedTextMessage = webMessage.message?.extendedTextMessage;
   const extendedTextMessageText = extendedTextMessage?.text;
   const imageTextMessage = webMessage.message?.imageMessage?.caption;
   const videoTextMessage = webMessage.message?.videoMessage?.caption;
+  const buttonsResponseMessage =
+    webMessage.message?.buttonsResponseMessage?.selectedButtonId;
+  const templateButtonReplyMessage =
+    webMessage.message?.templateButtonReplyMessage?.selectedId;
+  const listResponseMessage =
+    webMessage.message?.listResponseMessage?.singleSelectReply?.selectedRowId;
+  const interactiveResponseMessage =
+    webMessage.message?.interactiveResponseMessage?.nativeFlowResponseMessage;
+  const interactiveResponseId = extractInteractiveResponseId(
+    interactiveResponseMessage?.paramsJson,
+  );
 
   let fullMessage =
     textMessage ||
     extendedTextMessageText ||
     imageTextMessage ||
-    videoTextMessage;
+    videoTextMessage ||
+    buttonsResponseMessage ||
+    templateButtonReplyMessage ||
+    listResponseMessage ||
+    interactiveResponseId;
 
   if (!fullMessage) {
     fullMessage = "#auto-command";
@@ -304,16 +341,32 @@ export function getRandomName(extension) {
   return `${fileName}.${extension}`;
 }
 
+export function removeFileIfExists(filePath) {
+  try {
+    if (filePath && fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      return true;
+    }
+  } catch (error) {
+    console.error("Erro ao remover arquivo:", error);
+  }
+
+  return false;
+}
+
 export function removeFileWithTimeout(filePath, timeout = 5000) {
   setTimeout(() => {
-    try {
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-    } catch (error) {
-      console.error("Erro ao remover arquivo:", error);
-    }
+    removeFileIfExists(filePath);
   }, timeout);
+}
+
+export function getUserName(webMessage, userLid, fallback = "usuario") {
+  return (
+    webMessage?.pushName ||
+    webMessage?.notifyName ||
+    userLid?.replace(/@lid/, "") ||
+    fallback
+  );
 }
 
 export async function ajustAudioByBuffer(audioBuffer, isPtt = true) {

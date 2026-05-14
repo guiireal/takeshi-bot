@@ -2,7 +2,7 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-8.1.0-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-8.2.0-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
@@ -367,6 +367,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Anti imagem | Admin | ❌ |
 | Anti link | Admin | ❌ |
 | Anti lottie sticker | Admin | ❌ |
+| Anti payment | Admin | ❌ |
 | Anti produto | Admin | ❌ |
 | Anti status grupo | Admin | ❌ |
 | Anti sticker | Admin | ❌ |
@@ -421,6 +422,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Play áudio | Membro | ✅ |
 | Play vídeo | Membro | ✅ |
 | Renomear figurinha | Membro | ❌ |
+| Remover fundo de imagem | Membro | ✅ |
 | Sticker | Membro | ❌ |
 | Sticker IA  | Membro | ✅ |
 | Sticker para imagem | Membro | ❌ |
