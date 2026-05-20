@@ -119,6 +119,38 @@ export async function processAnimatedSticker(inputPath, metadata) {
   }
 }
 
+export async function processAnimatedGifToSticker(inputPath, metadata) {
+  return new Promise((resolve, reject) => {
+    const tempOutputPath = path.resolve(TEMP_DIR, getRandomName("webp"));
+
+    const cmd = `ffmpeg -y -i "${inputPath}" -vf "scale=350:350,fps=15" -c:v libwebp -loop 0 -quality 8 -compression_level 6 -method 6 -preset picture -an -f webp "${tempOutputPath}"`;
+
+    exec(cmd, async (error, _, stderr) => {
+      try {
+        if (error) {
+          console.error("FFmpeg error:", stderr);
+          reject(new Error("Erro ao processar figurinha animada."));
+          return;
+        }
+
+        const processedBuffer = await fs.promises.readFile(tempOutputPath);
+        const finalPath = await addStickerMetadata(processedBuffer, metadata);
+
+        if (fs.existsSync(tempOutputPath)) {
+          fs.unlinkSync(tempOutputPath);
+        }
+
+        resolve(finalPath);
+      } catch (error) {
+        if (fs.existsSync(tempOutputPath)) {
+          fs.unlinkSync(tempOutputPath);
+        }
+        reject(error);
+      }
+    });
+  });
+}
+
 export async function createSticker(paramsHandler) {
   const {
     isImage,

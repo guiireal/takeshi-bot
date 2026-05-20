@@ -176,6 +176,18 @@ export async function brat(text) {
   )}&api_key=${spiderApiToken}`;
 }
 
+export async function abrat(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  const spiderApiToken = requireSpiderApiToken();
+
+  return `${SPIDER_API_BASE_URL}/stickers/abrat?text=${encodeURIComponent(
+    text,
+  )}&api_key=${spiderApiToken}`;
+}
+
 export async function pinterest(search) {
   if (!search) {
     throw new Error("Você precisa informar o parâmetro de pesquisa!");

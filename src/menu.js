@@ -78,6 +78,7 @@ export function menuMessage(groupJid) {
 ▢
 ▢ • ${prefix}attp
 ▢ • ${prefix}brat
+▢ • ${prefix}bratvid
 ▢ • ${prefix}cep
 ▢ • ${prefix}exemplos-de-mensagens
 ▢ • ${prefix}fake-chat
