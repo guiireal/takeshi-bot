@@ -169,10 +169,10 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | [Grupo oficial](https://chat.whatsapp.com/DVDE1TCtHrKFatUKrlepjZ) | [Grupo oficial](https://chat.whatsapp.com/I5d5tCyZsV4J7Cjn51IkbV) | [Grupo oficial](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) |
 | [![TED Host](./assets/images/ted-host.png)](https://loja.tedhost.com.br/) | [![Nodz Host](./assets/images/nodz.png)](loja.nodzhostinger.com.br) | [![Cebolinha Host](./assets/images/cebolinha-host.jpeg)](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) |
 
-| Raikken Host | Axion Hosting |
-|---------|-----------|
-| [Grupo oficial](https://chat.whatsapp.com/BzSDYUHbjHGF6gQmJfh2C7?mode=gi_t) | [Grupo oficial](https://chat.whatsapp.com/CvnUoAmoI5H8H5RLItIDRZ) |
-| [![Raikken](./assets/images/raikken-host.png)](https://painel.raikken.com.br) | [![Axion Hosting](./assets/images/axion-host.jpg)](https://axionhostinger.com.br/home) |
+| Raikken Host |
+|---------|
+| [Grupo oficial](https://chat.whatsapp.com/BzSDYUHbjHGF6gQmJfh2C7?mode=gi_t) |
+| [![Raikken](./assets/images/raikken-host.png)](https://painel.raikken.com.br) |
 
 ## Instalação em VPS (Debian/Ubuntu)
 
