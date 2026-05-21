@@ -35,6 +35,11 @@ async function applyAntiPaymentRestriction({ socket, remoteJid, userLid }) {
   );
 
   await sendCleanChat({ socket, remoteJid });
+
+  await runAntiPaymentStep(
+    () => socket.groupSettingUpdate(remoteJid, "not_announcement"),
+    "Erro ao abrir o grupo pelo anti-payment.",
+  );
 }
 
 export async function messageHandler(socket, webMessage) {

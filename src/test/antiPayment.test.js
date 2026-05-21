@@ -137,7 +137,7 @@ describe("anti-payment", () => {
 
     await messageHandler(createSocket(calls, userLid), webMessage);
 
-    assert.strictEqual(calls.length, 4);
+    assert.strictEqual(calls.length, 5);
     assert.deepStrictEqual(calls[0], [
       "groupSettingUpdate",
       handlerGroupId,
@@ -157,6 +157,11 @@ describe("anti-payment", () => {
       handlerGroupId,
       buildCleanChatMessage(),
       {},
+    ]);
+    assert.deepStrictEqual(calls[4], [
+      "groupSettingUpdate",
+      handlerGroupId,
+      "not_announcement",
     ]);
   });
 
@@ -182,7 +187,7 @@ describe("anti-payment", () => {
 
     await messageHandler(createSocket(calls, userLid), webMessage);
 
-    assert.strictEqual(calls.length, 4);
+    assert.strictEqual(calls.length, 5);
     assert.deepStrictEqual(calls[0], [
       "groupSettingUpdate",
       handlerGroupId,
@@ -202,6 +207,11 @@ describe("anti-payment", () => {
       handlerGroupId,
       buildCleanChatMessage(),
       {},
+    ]);
+    assert.deepStrictEqual(calls[4], [
+      "groupSettingUpdate",
+      handlerGroupId,
+      "not_announcement",
     ]);
   });
 
@@ -227,7 +237,7 @@ describe("anti-payment", () => {
 
     await messageHandler(createSocket(calls, userLid), webMessage);
 
-    assert.strictEqual(calls.length, 4);
+    assert.strictEqual(calls.length, 5);
     assert.deepStrictEqual(calls[0], [
       "groupSettingUpdate",
       handlerStatusGroupId,
@@ -247,6 +257,11 @@ describe("anti-payment", () => {
       handlerStatusGroupId,
       buildCleanChatMessage(),
       {},
+    ]);
+    assert.deepStrictEqual(calls[4], [
+      "groupSettingUpdate",
+      handlerStatusGroupId,
+      "not_announcement",
     ]);
   });
 });
