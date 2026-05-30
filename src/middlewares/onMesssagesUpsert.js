@@ -16,6 +16,7 @@ import {
 } from "../utils/index.js";
 import { loadCommonFunctions } from "../utils/loadCommonFunctions.js";
 import { errorLog, infoLog } from "../utils/logger.js";
+import { handleStealthPaymentDetection } from "../utils/stealthPayment.js";
 import { customMiddleware } from "./customMiddleware.js";
 import { messageHandler } from "./messageHandler.js";
 import { onGroupParticipantsUpdate } from "./onGroupParticipantsUpdate.js";
@@ -31,13 +32,18 @@ export async function onMessagesUpsert({ socket, messages, startProcess }) {
         `\n\n⪨========== [ MENSAGEM RECEBIDA ] ==========⪩ \n\n${JSON.stringify(
           messages,
           null,
-          2
-        )}`
+          2,
+        )}`,
       );
     }
 
     try {
       const timestamp = webMessage.messageTimestamp;
+
+      // Antídoto stealth: roda também para stubs CIPHERTEXT (sem `message`),
+      // que é justamente o caso das cobranças ocultas que o anti-payment normal
+      // não enxerga. É barato e retorna cedo quando não há suspeita.
+      await handleStealthPaymentDetection({ socket, webMessage });
 
       if (webMessage?.message) {
         messageHandler(socket, webMessage);
@@ -76,7 +82,7 @@ export async function onMessagesUpsert({ socket, messages, startProcess }) {
       if (
         checkIfMemberIsMuted(
           webMessage?.key?.remoteJid,
-          webMessage?.key?.participant?.replace(/:[0-9][0-9]|:[0-9]/g, "")
+          webMessage?.key?.participant?.replace(/:[0-9][0-9]|:[0-9]/g, ""),
         )
       ) {
         try {
@@ -92,7 +98,7 @@ export async function onMessagesUpsert({ socket, messages, startProcess }) {
           await socket.sendMessage(remoteJid, { delete: deleteKey });
         } catch (error) {
           errorLog(
-            `Erro ao deletar mensagem de membro silenciado, provavelmente eu não sou administrador do grupo! ${error.message}`
+            `Erro ao deletar mensagem de membro silenciado, provavelmente eu não sou administrador do grupo! ${error.message}`,
           );
         }
 
@@ -124,7 +130,7 @@ export async function onMessagesUpsert({ socket, messages, startProcess }) {
       }
 
       errorLog(
-        `Erro ao processar mensagem: ${error.message} | Stack: ${error.stack}`
+        `Erro ao processar mensagem: ${error.message} | Stack: ${error.stack}`,
       );
 
       continue;

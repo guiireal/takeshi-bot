@@ -4,7 +4,7 @@
  * @author Dev Gui
  */
 import { BOT_LID, OWNER_LID } from "../config.js";
-import { sendCleanChat } from "../utils/cleanChat.js";
+import { applyAntiPaymentRestriction } from "../utils/antiPaymentAction.js";
 import {
   readGroupRestrictions,
   readRestrictedMessageTypes,
@@ -14,33 +14,6 @@ import { hasDirectMedia } from "../utils/index.js";
 import { errorLog } from "../utils/logger.js";
 import { hasPaymentMessage } from "../utils/paymentMessage.js";
 import { isAdmin } from "./index.js";
-
-async function runAntiPaymentStep(step, errorMessage) {
-  try {
-    await step();
-  } catch (error) {
-    errorLog(`${errorMessage} Detalhes: ${error.message}`);
-  }
-}
-
-async function applyAntiPaymentRestriction({ socket, remoteJid, userLid }) {
-  await runAntiPaymentStep(
-    () => socket.groupSettingUpdate(remoteJid, "announcement"),
-    "Erro ao fechar o grupo pelo anti-payment.",
-  );
-
-  await runAntiPaymentStep(
-    () => socket.groupParticipantsUpdate(remoteJid, [userLid], "remove"),
-    "Erro ao banir membro pelo anti-payment.",
-  );
-
-  await sendCleanChat({ socket, remoteJid });
-
-  await runAntiPaymentStep(
-    () => socket.groupSettingUpdate(remoteJid, "not_announcement"),
-    "Erro ao abrir o grupo pelo anti-payment.",
-  );
-}
 
 export async function messageHandler(socket, webMessage) {
   try {

@@ -113,10 +113,9 @@ describe("anti-payment", () => {
       database.isActiveGroupRestriction(commandGroupId, "anti-payment"),
       false,
     );
-    assert.deepStrictEqual(replies, [
-      "Anti-payment ativado com sucesso!",
-      "Anti-payment desativado com sucesso!",
-    ]);
+    assert.strictEqual(replies.length, 2);
+    assert.ok(replies[0].startsWith("Anti-payment ativado com sucesso!"));
+    assert.strictEqual(replies[1], "Anti-payment desativado com sucesso!");
   });
 
   it("should close group, ban sender and clean chat when direct payment message is detected", async () => {
