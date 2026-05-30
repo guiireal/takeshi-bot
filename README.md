@@ -166,7 +166,7 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 
 | TED Host | Cebolinha Host |
 |----------|----------------|
-| [Grupo oficial](https://chat.whatsapp.com/DVDE1TCtHrKFatUKrlepjZ) | [Grupo oficial](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) |
+| [Grupo oficial](https://chat.whatsapp.com/I4EpMkbeaxCI4z4gQ3Pdif) | [Grupo oficial](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) |
 | [![TED Host](./assets/images/ted-host.png)](https://loja.tedhost.com.br/) | [![Cebolinha Host](./assets/images/cebolinha-host.jpeg)](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) |
 
 | Raikken Host | Axion Hosting |
