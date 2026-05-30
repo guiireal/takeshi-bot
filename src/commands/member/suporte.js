@@ -113,7 +113,7 @@ Faça sua pergunta sobre mim que eu te ajudarei!
         content: `Você é um assistente especializado em suporte técnico do Takeshi Bot.
 
 Responda apenas assuntos relacionados a: tecnologia, programação, desenvolvimento de bots, inteligência artificial, 
-machine learning, ou assuntos relacionados ao Takeshi Bot.
+machine learning ou assuntos relacionados ao Takeshi Bot.
 
 Responda apenas em português do Brasil.
 Seja direto e objetivo nas respostas, salvo se o usuário solicitar explicações mais aprofundadas.
@@ -218,9 +218,9 @@ sem mencionar Pterodactyl, pois os iniciantes não sabem o que é (exceto se per
     messages.push(userMessage);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-5-nano",
+      model: "gpt-5-mini",
       messages: messages,
-      max_completion_tokens: 4096,
+      max_completion_tokens: 4096 * 2,
     });
 
     const answer = response.choices[0].message.content.trim();
