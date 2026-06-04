@@ -1,5 +1,6 @@
 import { delay } from "baileys";
 import { PREFIX } from "../../../config.js";
+import { sendRichCodeMessage } from "../../../utils/codeMessage.js";
 
 export default {
   name: "enviar-mensagem-editada",
@@ -15,13 +16,16 @@ export default {
     sendText,
     sendEditedReply,
     sendEditedText,
+    socket,
+    remoteJid,
+    webMessage,
   }) => {
     await sendReact("✏️");
 
     await delay(3000);
 
     await sendReply(
-      "Vou demonstrar como enviar uma mensagem de texto e depois editar ela."
+      "Vou demonstrar como enviar uma mensagem de texto e depois editar ela.",
     );
 
     await delay(3000);
@@ -35,30 +39,31 @@ export default {
     await delay(3000);
 
     await sendReply(
-      "Agora vou enviar uma mensagem de texto em cima da sua e editar ela."
+      "Agora vou enviar uma mensagem de texto em cima da sua e editar ela.",
     );
 
     await delay(3000);
 
     const messageEditedResponse = await sendReply(
-      "Esta é a mensagem original."
+      "Esta é a mensagem original.",
     );
 
     await delay(3000);
 
     await sendEditedReply(
       "Esta é a mensagem editada. ✅",
-      messageEditedResponse
+      messageEditedResponse,
     );
 
     await delay(3000);
 
-    await sendReply(
-      `*Exemplo prático*
-      
-\`\`\`const messageTextResponse = await sendText("Esta é a mensagem original.");
+    await sendRichCodeMessage(socket, remoteJid, {
+      title: "*Exemplo prático*",
+      language: "javascript",
+      code: `\nconst messageTextResponse = await sendText("Esta é a mensagem original.");
 
-await sendEditedText("Esta é a mensagem editada. ✅", messageTextResponse);\`\`\``
-    );
+await sendEditedText("Esta é a mensagem editada. ✅", messageTextResponse);`,
+      quoted: webMessage,
+    });
   },
 };

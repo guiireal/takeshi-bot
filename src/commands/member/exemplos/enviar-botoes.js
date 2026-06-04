@@ -1,5 +1,6 @@
 import { delay } from "baileys";
 import { PREFIX } from "../../../config.js";
+import { sendRichCodeMessage } from "../../../utils/codeMessage.js";
 
 export default {
   name: "enviar-botoes",
@@ -9,7 +10,14 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ socket, remoteJid, sendReply, sendReact, prefix }) => {
+  handle: async ({
+    socket,
+    remoteJid,
+    webMessage,
+    sendReply,
+    sendReact,
+    prefix,
+  }) => {
     await sendReact("🔘");
 
     const triggerCommand = (parametro) =>
@@ -19,9 +27,7 @@ export default {
       try {
         await socket.sendMessage(remoteJid, content);
       } catch (error) {
-        await sendReply(
-          `⚠️ Não consegui enviar ${label}: ${error.message}`,
-        );
+        await sendReply(`⚠️ Não consegui enviar ${label}: ${error.message}`);
       }
     };
 
@@ -121,26 +127,27 @@ export default {
 
     await delay(3000);
 
-    await sendReply(
-      "📋 *Como usar mensagens com botões:*\n\n" +
-        "```javascript\n" +
-        "await socket.sendMessage(remoteJid, {\n" +
-        "  text: 'Escolha uma opção',\n" +
-        "  footer: 'Rodapé',\n" +
-        "  buttons: [\n" +
-        "    {\n" +
-        `      buttonId: '${prefix || PREFIX}exemplo-gatilho opcao1',\n` +
-        "      buttonText: { displayText: 'Opção 1' }\n" +
-        "    }\n" +
-        "  ]\n" +
-        "});\n" +
-        "```\n\n" +
-        "💡 *Dicas:*\n" +
+    await sendRichCodeMessage(socket, remoteJid, {
+      title: "📋 *Como usar mensagens com botões:*",
+      language: "javascript",
+      code: `await socket.sendMessage(remoteJid, {
+  text: 'Escolha uma opção',
+  footer: 'Rodapé',
+  buttons: [
+    {
+      buttonId: '${prefix || PREFIX}exemplo-gatilho opcao1',
+      buttonText: { displayText: 'Opção 1' }
+    }
+  ]
+});`,
+      footer:
+        "\n💡 *Dicas:*\n" +
         "• `buttons` cria botões simples usando native flow por padrão\n" +
         "• `useLegacyButtons: true` força o formato antigo `buttonsMessage`\n" +
         "• `templateButtons` permite resposta rápida, URL e chamada\n" +
         "• `interactiveButtons` usa native flow e normalmente precisa de `viewOnce: true`\n" +
         "⚠️ Importante: a baileys do Takeshi foi modificada para suportar esses formatos!",
-    );
+      quoted: webMessage,
+    });
   },
 };

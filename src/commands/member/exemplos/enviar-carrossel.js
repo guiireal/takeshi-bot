@@ -1,5 +1,6 @@
 import { delay } from "baileys";
 import { PREFIX } from "../../../config.js";
+import { sendRichCodeMessage } from "../../../utils/codeMessage.js";
 
 export default {
   name: "enviar-carrossel",
@@ -9,7 +10,7 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ socket, remoteJid, sendReply, sendReact }) => {
+  handle: async ({ socket, remoteJid, webMessage, sendReply, sendReact }) => {
     await sendReact("🎠");
 
     await delay(2000);
@@ -49,27 +50,28 @@ export default {
 
     await delay(3000);
 
-    await sendReply(
-      "📋 *Como usar mensagens carrossel:*\n\n" +
-        "```javascript\n" +
-        "await socket.sendMessage(remoteJid, {\n" +
-        "  text: 'Título principal',\n" +
-        "  footer: 'Rodapé da mensagem',\n" +
-        "  cards: [\n" +
-        "    {\n" +
-        "      title: 'Título do card',\n" +
-        "      image: { url: 'URL da imagem' },\n" +
-        "      caption: 'Descrição do card'\n" +
-        "    }\n" +
-        "  ],\n" +
-        "  viewOnce: true/false\n" +
-        "});\n" +
-        "```\n\n" +
-        "💡 *Dicas:*\n" +
+    await sendRichCodeMessage(socket, remoteJid, {
+      title: "📋 *Como usar mensagens carrossel:*",
+      language: "javascript",
+      code: `await socket.sendMessage(remoteJid, {
+  text: 'Título principal',
+  footer: 'Rodapé da mensagem',
+  cards: [
+    {
+      title: 'Título do card',
+      image: { url: 'URL da imagem' },
+      caption: 'Descrição do card'
+    }
+  ],
+  viewOnce: true
+});`,
+      footer:
+        "\n💡 *Dicas:*\n" +
         "• Você pode adicionar quantos cards quiser\n" +
-        "• viewOnce: true = obrigatório\n" +
-        "• Cada card precisa de title, image e caption\n" +
+        "• `viewOnce: true` é obrigatório\n" +
+        "• Cada card precisa de `title`, `image` e `caption`\n" +
         "⚠️ Importante: a baileys do Takeshi foi modificada para suportar mensagens em carrossel!",
-    );
+      quoted: webMessage,
+    });
   },
 };

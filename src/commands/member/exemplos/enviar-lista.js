@@ -1,5 +1,6 @@
 import { delay } from "baileys";
 import { PREFIX } from "../../../config.js";
+import { sendRichCodeMessage } from "../../../utils/codeMessage.js";
 
 export default {
   name: "enviar-lista",
@@ -9,7 +10,14 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ socket, remoteJid, sendReply, sendReact, prefix }) => {
+  handle: async ({
+    socket,
+    remoteJid,
+    webMessage,
+    sendReply,
+    sendReact,
+    prefix,
+  }) => {
     await sendReact("📋");
 
     const triggerCommand = (parametro) =>
@@ -19,9 +27,7 @@ export default {
       try {
         await socket.sendMessage(remoteJid, content);
       } catch (error) {
-        await sendReply(
-          `⚠️ Não consegui enviar ${label}: ${error.message}`,
-        );
+        await sendReply(`⚠️ Não consegui enviar ${label}: ${error.message}`);
       }
     };
 
@@ -78,36 +84,37 @@ export default {
 
     await delay(3000);
 
-    await sendReply(
-      "📋 *Como usar mensagens em lista:*\n\n" +
-        "```javascript\n" +
-        "await socket.sendMessage(remoteJid, {\n" +
-        "  text: 'Descrição da lista',\n" +
-        "  title: 'Título da lista',\n" +
-        "  footer: 'Rodapé',\n" +
-        "  buttonText: 'Abrir lista',\n" +
-        "  viewOnce: true,\n" +
-        "  sections: [\n" +
-        "    {\n" +
-        "      title: 'Seção',\n" +
-        "      rows: [\n" +
-        "        {\n" +
-        "          title: 'Opção 1',\n" +
-        "          description: 'Descrição da opção',\n" +
-        `          rowId: '${prefix || PREFIX}exemplo-gatilho imagem'\n` +
-        "        }\n" +
-        "      ]\n" +
-        "    }\n" +
-        "  ]\n" +
-        "});\n" +
-        "```\n\n" +
-        "💡 *Dicas:*\n" +
+    await sendRichCodeMessage(socket, remoteJid, {
+      title: "📋 *Como usar mensagens em lista:*",
+      language: "javascript",
+      code: `await socket.sendMessage(remoteJid, {
+  text: 'Descrição da lista',
+  title: 'Título da lista',
+  footer: 'Rodapé',
+  buttonText: 'Abrir lista',
+  viewOnce: true,
+  sections: [
+    {
+      title: 'Seção',
+      rows: [
+        {
+          title: 'Opção 1',
+          description: 'Descrição da opção',
+          rowId: '${prefix || PREFIX}exemplo-gatilho imagem'
+        }
+      ]
+    }
+  ]
+});`,
+      footer:
+        "\n💡 *Dicas:*\n" +
         "• `buttonText` é obrigatório para abrir a lista\n" +
         "• `sections` cria uma lista usando native flow por padrão\n" +
         "• `useLegacyList: true` força o formato antigo `listMessage`\n" +
         "• Cada seção pode ter várias linhas\n" +
         "• Use `rowId` para identificar a opção escolhida\n" +
         "⚠️ Importante: a baileys do Takeshi foi modificada para suportar listas!",
-    );
+      quoted: webMessage,
+    });
   },
 };
