@@ -5,6 +5,7 @@ import {
   deactivateAutoStickerGroup,
   isActiveAutoStickerGroup,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "auto-sticker",
@@ -17,16 +18,16 @@ export default {
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
 
-    const autoStickerOn = args[0] == "1";
-    const autoStickerOff = args[0] == "0";
+    const autoStickerOn = isTrue(args[0]);
+    const autoStickerOff = isFalse(args[0]);
 
     if (!autoStickerOn && !autoStickerOff) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
 
@@ -37,7 +38,7 @@ export default {
       throw new WarningError(
         `O recurso de auto-figurinha já está ${
           autoStickerOn ? "ativado" : "desativado"
-        }!`
+        }!`,
       );
     }
 

@@ -5,6 +5,7 @@ import {
   deactivateOnlyAdmins,
   isActiveOnlyAdmins,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "only-admin",
@@ -28,14 +29,14 @@ export default {
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const onlyAdminOn = args[0] == "1";
-    const onlyAdminOff = args[0] == "0";
+    const onlyAdminOn = isTrue(args[0]);
+    const onlyAdminOff = isFalse(args[0]);
     if (!onlyAdminOn && !onlyAdminOff) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     const hasActive = onlyAdminOn && isActiveOnlyAdmins(remoteJid);
@@ -44,7 +45,7 @@ export default {
       throw new WarningError(
         `O recurso de somente admins usarem meus comandos já está ${
           onlyAdminOn ? "ativado" : "desativado"
-        }!`
+        }!`,
       );
     }
     if (onlyAdminOn) {
@@ -55,7 +56,7 @@ export default {
     await sendSuccessReact();
     const context = onlyAdminOn ? "ativado" : "desativado";
     await sendReply(
-      `Recurso de somente admins usarem meus comandos ${context} com sucesso!`
+      `Recurso de somente admins usarem meus comandos ${context} com sucesso!`,
     );
   },
 };

@@ -4,6 +4,7 @@ import {
   isActiveGroupRestriction,
   updateIsActiveGroupRestriction,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "anti-product",
@@ -20,14 +21,14 @@ export default {
     }
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const antiProductOn = args[0] == "1";
-    const antiProductOff = args[0] == "0";
+    const antiProductOn = isTrue(args[0]);
+    const antiProductOff = isFalse(args[0]);
     if (!antiProductOn && !antiProductOff) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     const hasActive =
@@ -38,7 +39,7 @@ export default {
       throw new WarningError(
         `O recurso de anti-product já está ${
           antiProductOn ? "ativado" : "desativado"
-        }!`
+        }!`,
       );
     }
     updateIsActiveGroupRestriction(remoteJid, "anti-product", antiProductOn);

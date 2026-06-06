@@ -326,9 +326,12 @@ export async function createSticker(paramsHandler) {
 }
 
 export async function processAutoSticker(paramsHandler) {
-  const { isImage, isVideo, sendSuccessReact } = paramsHandler;
+  const { isImage, isVideo, sendSuccessReact, webMessage } = paramsHandler;
 
-  if (!isImage && !isVideo) {
+  const isDirectImage = !!webMessage?.message?.imageMessage;
+  const isDirectVideo = !!webMessage?.message?.videoMessage;
+
+  if (!isDirectImage && !isDirectVideo) {
     return false;
   }
 

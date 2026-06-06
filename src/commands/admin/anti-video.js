@@ -4,6 +4,7 @@ import {
   isActiveGroupRestriction,
   updateIsActiveGroupRestriction,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "anti-video",
@@ -20,14 +21,15 @@ export default {
     }
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const antiVideoOn = args[0] == "1";
+    isTrue(args[0]);
+    const antiVideoOff = isFalse(args[0]);
     const antiVideoOff = args[0] == "0";
     if (!antiVideoOn && !antiVideoOff) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     const hasActive =
@@ -38,7 +40,7 @@ export default {
       throw new WarningError(
         `O recurso de anti-video já está ${
           antiVideoOn ? "ativado" : "desativado"
-        }!`
+        }!`,
       );
     }
     updateIsActiveGroupRestriction(remoteJid, "anti-video", antiVideoOn);

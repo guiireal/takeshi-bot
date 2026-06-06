@@ -4,6 +4,7 @@ import {
   isActiveGroupRestriction,
   updateIsActiveGroupRestriction,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "anti-sticker",
@@ -20,14 +21,15 @@ export default {
     }
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const antiStickerOn = args[0] == "1";
+    isTrue(args[0]);
+    const antiStickerOff = isFalse(args[0]);
     const antiStickerOff = args[0] == "0";
     if (!antiStickerOn && !antiStickerOff) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     const hasActive =
@@ -38,7 +40,7 @@ export default {
       throw new WarningError(
         `O recurso de anti-sticker já está ${
           antiStickerOn ? "ativado" : "desativado"
-        }!`
+        }!`,
       );
     }
     updateIsActiveGroupRestriction(remoteJid, "anti-sticker", antiStickerOn);

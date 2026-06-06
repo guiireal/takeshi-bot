@@ -4,6 +4,7 @@ import {
   isActiveGroupRestriction,
   updateIsActiveGroupRestriction,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "anti-status-grupo",
@@ -27,8 +28,8 @@ export default {
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const antiStatusGrupoOn = args[0] == "1";
-    const antiStatusGrupoOff = args[0] == "0";
+    const antiStatusGrupoOn = isTrue(args[0]);
+    const antiStatusGrupoOff = isFalse(args[0]);
     if (!antiStatusGrupoOn && !antiStatusGrupoOff) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",

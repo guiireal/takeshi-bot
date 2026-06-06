@@ -150,6 +150,29 @@ export function removeAccentsAndSpecialCharacters(text) {
   return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+export function isTrue(word) {
+  if (!word) return false;
+
+  return ["1", "ativar", "ligado", "ligar", "on", "sim", "true"].includes(
+    removeAccentsAndSpecialCharacters(word.toLowerCase()),
+  );
+}
+
+export function isFalse(word) {
+  if (!word) return false;
+
+  return [
+    "0",
+    "desativar",
+    "desligado",
+    "desligar",
+    "off",
+    "nao",
+    "não",
+    "false",
+  ].includes(removeAccentsAndSpecialCharacters(word.toLowerCase()));
+}
+
 export function baileysIs(webMessage, context) {
   return !!getContent(webMessage, context);
 }

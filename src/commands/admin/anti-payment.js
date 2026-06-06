@@ -4,6 +4,7 @@ import {
   isActiveGroupRestriction,
   updateIsActiveGroupRestriction,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "anti-payment",
@@ -24,8 +25,8 @@ export default {
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const antiPaymentOn = args[0] == "1";
-    const antiPaymentOff = args[0] == "0";
+    const antiPaymentOn = isTrue(args[0]);
+    const antiPaymentOff = isFalse(args[0]);
     if (!antiPaymentOn && !antiPaymentOff) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",

@@ -5,6 +5,7 @@ import {
   deactivateExitGroup,
   isActiveExitGroup,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "exit",
@@ -18,21 +19,21 @@ export default {
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const exit = args[0] == "1";
-    const notExit = args[0] == "0";
+    const exit = isTrue(args[0]);
+    const notExit = isFalse(args[0]);
     if (!exit && !notExit) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     const hasActive = exit && isActiveExitGroup(remoteJid);
     const hasInactive = notExit && !isActiveExitGroup(remoteJid);
     if (hasActive || hasInactive) {
       throw new WarningError(
-        `O recurso de saída já está ${exit ? "ativado" : "desativado"}!`
+        `O recurso de saída já está ${exit ? "ativado" : "desativado"}!`,
       );
     }
     if (exit) {
@@ -43,7 +44,7 @@ export default {
     await sendSuccessReact();
     const context = exit ? "ativado" : "desativado";
     await sendReply(
-      `Recurso de envio de mensagem de saída ${context} com sucesso!`
+      `Recurso de envio de mensagem de saída ${context} com sucesso!`,
     );
   },
 };

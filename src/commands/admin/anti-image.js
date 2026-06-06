@@ -4,6 +4,7 @@ import {
   isActiveGroupRestriction,
   updateIsActiveGroupRestriction,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "anti-image",
@@ -20,14 +21,14 @@ export default {
     }
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const antiImageOn = args[0] == "1";
-    const antiImageOff = args[0] == "0";
+    const antiImageOn = isTrue(args[0]);
+    const antiImageOff = isFalse(args[0]);
     if (!antiImageOn && !antiImageOff) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     const hasActive =
@@ -38,7 +39,7 @@ export default {
       throw new WarningError(
         `O recurso de anti-image já está ${
           antiImageOn ? "ativado" : "desativado"
-        }!`
+        }!`,
       );
     }
     updateIsActiveGroupRestriction(remoteJid, "anti-image", antiImageOn);

@@ -4,6 +4,7 @@ import {
   isActiveGroupRestriction,
   updateIsActiveGroupRestriction,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "anti-lottie-sticker",
@@ -28,7 +29,8 @@ export default {
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const antiLottieStickerOn = args[0] == "1";
+    isTrue(args[0]);
+    const antiLottieStickerOff = isFalse(args[0]);
     const antiLottieStickerOff = args[0] == "0";
     if (!antiLottieStickerOn && !antiLottieStickerOff) {
       throw new InvalidParameterError(

@@ -5,6 +5,7 @@ import {
   deactivateAntiLinkGroup,
   isActiveAntiLinkGroup,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "anti-link",
@@ -17,14 +18,14 @@ export default {
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const antiLinkOn = args[0] == "1";
-    const antiLinkOff = args[0] == "0";
+    const antiLinkOn = isTrue(args[0]);
+    const antiLinkOff = isFalse(args[0]);
     if (!antiLinkOn && !antiLinkOff) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     const hasActive = antiLinkOn && isActiveAntiLinkGroup(remoteJid);
@@ -33,7 +34,7 @@ export default {
       throw new WarningError(
         `O recurso de anti-link já está ${
           antiLinkOn ? "ativado" : "desativado"
-        }!`
+        }!`,
       );
     }
     if (antiLinkOn) {

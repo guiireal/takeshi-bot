@@ -5,6 +5,7 @@ import {
   deactivateWelcomeGroup,
   isActiveWelcomeGroup,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "welcome",
@@ -26,14 +27,14 @@ export default {
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const welcome = args[0] == "1";
-    const notWelcome = args[0] == "0";
+    const welcome = isTrue(args[0]);
+    const notWelcome = isFalse(args[0]);
     if (!welcome && !notWelcome) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     const hasActive = welcome && isActiveWelcomeGroup(remoteJid);
@@ -42,7 +43,7 @@ export default {
       throw new WarningError(
         `O recurso de boas-vindas já está ${
           welcome ? "ativado" : "desativado"
-        }!`
+        }!`,
       );
     }
     if (welcome) {

@@ -4,6 +4,7 @@ import {
   activateAutoResponderGroup,
   deactivateAutoResponderGroup,
 } from "../../utils/database.js";
+import { isFalse, isTrue } from "../../utils/index.js";
 
 export default {
   name: "auto-responder",
@@ -16,14 +17,15 @@ export default {
   handle: async ({ args, sendReply, sendSuccessReact, remoteJid }) => {
     if (!args.length) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    const autoResponder = args[0] == "1";
+    isTrue(args[0]);
+    const notAutoResponder = isFalse(args[0]);
     const notAutoResponder = args[0] == "0";
     if (!autoResponder && !notAutoResponder) {
       throw new InvalidParameterError(
-        "Você precisa digitar 1 ou 0 (ligar ou desligar)!"
+        "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
     if (autoResponder) {
