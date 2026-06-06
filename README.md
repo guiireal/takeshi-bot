@@ -164,10 +164,10 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | [Grupo oficial](https://chat.whatsapp.com/HWeFfnUNR2mBGEw3F9GF5G) | [Grupo oficial](https://chat.whatsapp.com/Fl5FzZQC00J5CZp07AZVwQ?mode=r_c) | [Grupo oficial](https://chat.whatsapp.com/HsZDn6DJrx34z5lbNbNB2M) |
 | [![Bronxys](./assets/images/bronxys.png)](https://bronxyshost.com/) | [![NexFuture](./assets/images/nexfuture.png)](https://nexfuture.com.br/) | [![Speed Cloud](./assets/images/speed-cloud.png)](https://speedhosting.cloud/) |
 
-| TED Host | Cebolinha Host |
-|----------|----------------|
-| [Grupo oficial](https://chat.whatsapp.com/I4EpMkbeaxCI4z4gQ3Pdif) | [Grupo oficial](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) |
-| [![TED Host](./assets/images/ted-host.png)](https://loja.tedhost.com.br/) | [![Cebolinha Host](./assets/images/cebolinha-host.jpeg)]( https://dash.cebolinhahost.com) |
+| TED Host | Cebolinha Host | Vex Host |
+|----------|----------------|----------|
+| [Grupo oficial](https://chat.whatsapp.com/I4EpMkbeaxCI4z4gQ3Pdif) | [Grupo oficial](https://chat.whatsapp.com/CCf2Pw9guan12orwGg0TqC?mode=gi_t) | [Grupo oficial](https://whatsapp.com/channel/0029Vb7bjAK7j6gEdyp6g13D) |
+| [![TED Host](./assets/images/ted-host.png)](https://loja.tedhost.com.br/) | [![Cebolinha Host](./assets/images/cebolinha-host.jpeg)]( https://dash.cebolinhahost.com) | [![Vex Host](./assets/images/vexhost.jpg)](https://vexhost.com.br/) |
 
 | Raikken Host | Axion Hosting |
 |---------|-----------|
