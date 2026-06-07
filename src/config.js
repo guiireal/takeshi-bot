@@ -44,10 +44,13 @@ export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 // Obtenha seu token, criando uma conta em: https://api.spiderx.com.br.
 export const SPIDER_API_TOKEN = "seu_token_aqui";
 
-// Plataforma de geração de links a partir de imagens
+// Plataforma recomendada para o comando gerar-link.
+// Com chave propria do Linker, os links seguem a duracao do plano Linker.
+// Com token da Spider X API, os links duram 1 dia.
 export const LINKER_BASE_URL = "https://linker.devgui.dev/api";
 
 // Obtenha sua chave em: https://linker.devgui.dev.
+// Voce tambem pode usar seu token da Spider X API aqui.
 export const LINKER_API_KEY = "seu_token_aqui";
 
 // Caso queira responder apenas um grupo específico,
