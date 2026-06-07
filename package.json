@@ -1,13 +1,13 @@
 {
   "name": "takeshi-bot",
-  "version": "8.5.0",
+  "version": "8.5.1",
   "description": "Um bot de WhatsApp multifunções.",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node ./src/index.js",
     "test": "node ./src/test.js",
-    "test:all": "node --test"
+    "test:all": "node --test --test-concurrency=1"
   },
   "engines": {
     "node": ">=22.8.0"

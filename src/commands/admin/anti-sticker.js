@@ -24,9 +24,8 @@ export default {
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    isTrue(args[0]);
+    const antiStickerOn = isTrue(args[0]);
     const antiStickerOff = isFalse(args[0]);
-    const antiStickerOff = args[0] == "0";
     if (!antiStickerOn && !antiStickerOff) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",

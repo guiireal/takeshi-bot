@@ -24,9 +24,8 @@ export default {
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    isTrue(args[0]);
+    const antiVideoOn = isTrue(args[0]);
     const antiVideoOff = isFalse(args[0]);
-    const antiVideoOff = args[0] == "0";
     if (!antiVideoOn && !antiVideoOff) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",

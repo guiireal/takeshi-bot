@@ -20,9 +20,8 @@ export default {
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    isTrue(args[0]);
+    const autoResponder = isTrue(args[0]);
     const notAutoResponder = isFalse(args[0]);
-    const notAutoResponder = args[0] == "0";
     if (!autoResponder && !notAutoResponder) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
