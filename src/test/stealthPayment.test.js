@@ -100,7 +100,6 @@ describe("stealth-payment detector", () => {
     );
     assert.strictEqual(kicks.length, 1, "should remove the sender once");
     assert.deepStrictEqual(kicks[0][2], ["hide-attacker@lid"]);
-    // grupo fechado e reaberto durante a punição
     assert.ok(
       calls.some(
         (c) => c[0] === "groupSettingUpdate" && c[2] === "announcement",
@@ -111,10 +110,7 @@ describe("stealth-payment detector", () => {
         (c) => c[0] === "groupSettingUpdate" && c[2] === "not_announcement",
       ),
     );
-    // aviso final mencionando o autor removido
-    const notice = calls
-      .filter((c) => c[0] === "sendMessage")
-      .at(-1);
+    const notice = calls.filter((c) => c[0] === "sendMessage").at(-1);
     assert.ok(notice[2].text.includes("Removi"));
     assert.deepStrictEqual(notice[2].mentions, ["hide-attacker@lid"]);
   });
@@ -170,12 +166,10 @@ describe("stealth-payment detector", () => {
     assert.strictEqual(calls.length, 0);
   });
 
-  it("bans only after repeated CIPHERTEXT failures (medium confidence)", async () => {
+  it("ignores repeated plain CIPHERTEXT failures", async () => {
     const sender = "repeat-attacker@lid";
-    const socketFactory = (calls) =>
-      createSocket(calls, { senderId: sender });
+    const socketFactory = (calls) => createSocket(calls, { senderId: sender });
 
-    // 1st and 2nd plain CIPHERTEXT failures: below threshold, no action.
     const calls1 = [];
     await handleStealthPaymentDetection({
       socket: socketFactory(calls1),
@@ -190,22 +184,16 @@ describe("stealth-payment detector", () => {
     });
     assert.strictEqual(calls2.length, 0);
 
-    // 3rd failure crosses the threshold → ban + notice.
     const calls3 = [];
     await handleStealthPaymentDetection({
       socket: socketFactory(calls3),
       webMessage: ciphertextStub(onGroup, sender),
     });
-    const kicks = calls3.filter(
-      (c) => c[0] === "groupParticipantsUpdate" && c[3] === "remove",
-    );
-    assert.strictEqual(kicks.length, 1);
-    assert.deepStrictEqual(kicks[0][2], [sender]);
+    assert.strictEqual(calls3.length, 0);
   });
 
   it("ignores normal messages and non-group chats", async () => {
     const calls = [];
-    // normal decrypted message (no stub, no stealthMeta)
     await handleStealthPaymentDetection({
       socket: createSocket(calls),
       webMessage: {
@@ -213,7 +201,6 @@ describe("stealth-payment detector", () => {
         message: { conversation: "oi" },
       },
     });
-    // private chat ciphertext
     await handleStealthPaymentDetection({
       socket: createSocket(calls),
       webMessage: ciphertextStub("5511999@s.whatsapp.net", "x@lid", {

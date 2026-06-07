@@ -29,7 +29,6 @@ import { errorLog, warningLog } from "./logger.js";
 const CIPHERTEXT_STUB = proto?.WebMessageInfo?.StubType?.CIPHERTEXT ?? 2;
 
 const REPEAT_WINDOW_MS = 2 * 60 * 1000;
-const REPEAT_THRESHOLD = 3;
 const ALERT_COOLDOWN_MS = 5 * 60 * 1000;
 const TRACKER_TTL_MS = 10 * 60 * 1000;
 
@@ -62,15 +61,11 @@ function isOnCooldown(entry, now) {
   return entry.lastAlertAt && now - entry.lastAlertAt < ALERT_COOLDOWN_MS;
 }
 
-function classifyConfidence(webMessage, repeatCount) {
+function classifyConfidence(webMessage) {
   const meta = webMessage?.stealthMeta;
 
   if (meta?.decryptFail === "hide") {
     return "high";
-  }
-
-  if (repeatCount >= REPEAT_THRESHOLD) {
-    return "medium";
   }
 
   return null;
@@ -83,17 +78,12 @@ function shortJid(jid) {
   return jid.split("@")[0].split(":")[0];
 }
 
-function buildActionNotice(confidence, sender) {
+function buildActionNotice(sender) {
   const number = shortJid(sender);
-
-  const detail =
-    confidence === "high"
-      ? "tentou enviar uma cobrança *oculta e indecifrável* de forma direcionada (técnica usada para esconder pagamentos de admins e do bot)."
-      : "enviou *várias mensagens indecifráveis* seguidas (possível cobrança oculta direcionada).";
 
   return `🚨 *Anti-Payment (Stealth)*
 ━━━━━━━━━━━━━━━━━━━━━━
-Removi @${number}: ${detail}`;
+Removi @${number}: tentou enviar uma cobrança *oculta e indecifrável* de forma direcionada (técnica usada para esconder pagamentos de admins e do bot).`;
 }
 
 async function senderIsExempt({ socket, remoteJid, sender }) {
@@ -148,13 +138,13 @@ export async function handleStealthPaymentDetection({ socket, webMessage }) {
     const now = Date.now();
     sweep(now);
 
-    const trackerKey = `${remoteJid}|${sender}`;
-    const entry = registerFailure(trackerKey, now);
-
-    const confidence = classifyConfidence(webMessage, entry.count);
+    const confidence = classifyConfidence(webMessage);
     if (!confidence) {
       return;
     }
+
+    const trackerKey = `${remoteJid}|${sender}`;
+    const entry = registerFailure(trackerKey, now);
 
     if (isOnCooldown(entry, now)) {
       return;
@@ -164,8 +154,6 @@ export async function handleStealthPaymentDetection({ socket, webMessage }) {
       return;
     }
 
-    // Marca antes de agir: stubs do mesmo envio escalonado chegam quase juntos;
-    // o cooldown evita banir/avisar em duplicidade enquanto a ação roda.
     entry.lastAlertAt = now;
     tracker.set(trackerKey, entry);
 
@@ -175,12 +163,10 @@ export async function handleStealthPaymentDetection({ socket, webMessage }) {
         `enc=${webMessage.stealthMeta?.encType ?? "n/a"} | ocorrências=${entry.count}`,
     );
 
-    // Mesma punição do anti-payment: fecha, remove, limpa o chat e reabre.
     await applyAntiPaymentRestriction({ socket, remoteJid, userLid: sender });
 
-    // Aviso enviado DEPOIS da limpeza para sobreviver ao clean chat.
     await socket.sendMessage(remoteJid, {
-      text: buildActionNotice(confidence, sender),
+      text: buildActionNotice(sender),
       mentions: [sender],
     });
   } catch (error) {
