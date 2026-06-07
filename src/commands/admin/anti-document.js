@@ -24,9 +24,8 @@ export default {
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
       );
     }
-    isTrue(args[0]);
+    const antiDocumentOn = isTrue(args[0]);
     const antiDocumentOff = isFalse(args[0]);
-    const antiDocumentOff = args[0] == "0";
     if (!antiDocumentOn && !antiDocumentOff) {
       throw new InvalidParameterError(
         "Você precisa digitar 1 ou 0 (ligar ou desligar)!",
