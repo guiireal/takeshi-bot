@@ -1,7 +1,6 @@
 /**
  * Ação de punição do anti-payment, compartilhada entre o handler de mensagens
- * decifráveis (messageHandler) e o detector de cobranças ocultas
- * (stealthPayment): fecha o grupo, remove o autor, limpa o chat e reabre.
+ * decifráveis (messageHandler): fecha o grupo, remove o autor, limpa o chat e reabre.
  *
  * @author Dev Gui
  */

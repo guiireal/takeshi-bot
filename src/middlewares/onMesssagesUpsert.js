@@ -16,7 +16,6 @@ import {
 } from "../utils/index.js";
 import { loadCommonFunctions } from "../utils/loadCommonFunctions.js";
 import { errorLog, infoLog } from "../utils/logger.js";
-import { handleStealthPaymentDetection } from "../utils/stealthPayment.js";
 import { customMiddleware } from "./customMiddleware.js";
 import { messageHandler } from "./messageHandler.js";
 import { onGroupParticipantsUpdate } from "./onGroupParticipantsUpdate.js";
@@ -39,11 +38,6 @@ export async function onMessagesUpsert({ socket, messages, startProcess }) {
 
     try {
       const timestamp = webMessage.messageTimestamp;
-
-      // Antídoto stealth: roda também para stubs CIPHERTEXT (sem `message`),
-      // que é justamente o caso das cobranças ocultas que o anti-payment normal
-      // não enxerga. É barato e retorna cedo quando não há suspeita.
-      await handleStealthPaymentDetection({ socket, webMessage });
 
       if (webMessage?.message) {
         messageHandler(socket, webMessage);
