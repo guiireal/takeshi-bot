@@ -27,13 +27,10 @@ import { applyAntiPaymentRestriction } from "./antiPaymentAction.js";
 import { errorLog, warningLog } from "./logger.js";
 
 const CIPHERTEXT_STUB = proto?.WebMessageInfo?.StubType?.CIPHERTEXT ?? 2;
-const PAYMENT_CIPHERTEXT_STUB =
-  proto?.WebMessageInfo?.StubType?.PAYMENT_CIPHERTEXT ?? 47;
 
 const REPEAT_WINDOW_MS = 2 * 60 * 1000;
 const ALERT_COOLDOWN_MS = 5 * 60 * 1000;
 const TRACKER_TTL_MS = 10 * 60 * 1000;
-const SENDER_KEY_FAILURE_THRESHOLD = 3;
 
 const tracker = new Map();
 let lastSweep = Date.now();
@@ -64,47 +61,11 @@ function isOnCooldown(entry, now) {
   return entry.lastAlertAt && now - entry.lastAlertAt < ALERT_COOLDOWN_MS;
 }
 
-function isCiphertextStub(webMessage) {
-  return [CIPHERTEXT_STUB, PAYMENT_CIPHERTEXT_STUB].includes(
-    webMessage?.messageStubType,
-  );
-}
+function classifyConfidence(webMessage) {
+  const meta = webMessage?.stealthMeta;
 
-function hasHiddenDecryptFail(meta) {
-  return (
-    meta?.decryptFail === "hide" ||
-    meta?.messageDecryptFail === "hide" ||
-    meta?.encDecryptFail === "hide"
-  );
-}
-
-function hasSelectiveDeliveryMeta(meta) {
-  return meta?.messageCategory === "peer" || meta?.deviceFanout === "false";
-}
-
-function isRepeatedSenderKeyFailure(meta, entry) {
-  return (
-    meta?.failedToDecrypt === true &&
-    meta?.encType === "skmsg" &&
-    entry.count >= SENDER_KEY_FAILURE_THRESHOLD
-  );
-}
-
-function classifyConfidence(webMessage, meta, entry) {
-  if (webMessage?.messageStubType === PAYMENT_CIPHERTEXT_STUB) {
+  if (meta?.decryptFail === "hide") {
     return "high";
-  }
-
-  if (hasHiddenDecryptFail(meta)) {
-    return "high";
-  }
-
-  if (meta?.failedToDecrypt === true && hasSelectiveDeliveryMeta(meta)) {
-    return "high";
-  }
-
-  if (isRepeatedSenderKeyFailure(meta, entry)) {
-    return "medium";
   }
 
   return null;
@@ -158,14 +119,13 @@ export async function handleStealthPaymentDetection({ socket, webMessage }) {
       return;
     }
 
-    const isCiphertext = isCiphertextStub(webMessage);
-    const meta = webMessage.stealthMeta;
-    const hasStealthMeta = !!meta;
+    const isCiphertext = webMessage.messageStubType === CIPHERTEXT_STUB;
+    const hasStealthMeta = !!webMessage.stealthMeta;
     if (!isCiphertext && !hasStealthMeta) {
       return;
     }
 
-    const sender = key.participant || webMessage.participant;
+    const sender = key.participant;
     if (!sender) {
       return;
     }
@@ -178,12 +138,13 @@ export async function handleStealthPaymentDetection({ socket, webMessage }) {
     const now = Date.now();
     sweep(now);
 
-    const trackerKey = `${remoteJid}|${sender}`;
-    const entry = registerFailure(trackerKey, now);
-    const confidence = classifyConfidence(webMessage, meta, entry);
+    const confidence = classifyConfidence(webMessage);
     if (!confidence) {
       return;
     }
+
+    const trackerKey = `${remoteJid}|${sender}`;
+    const entry = registerFailure(trackerKey, now);
 
     if (isOnCooldown(entry, now)) {
       return;
@@ -198,12 +159,8 @@ export async function handleStealthPaymentDetection({ socket, webMessage }) {
 
     warningLog(
       `[stealth-payment] Suspeita (${confidence}) em ${remoteJid} | autor ${sender} | ` +
-        `stub=${webMessage?.messageStubType ?? "n/a"} | ` +
-        `decryptFail=${meta?.decryptFail ?? "n/a"} | ` +
-        `encDecryptFail=${meta?.encDecryptFail ?? "n/a"} | ` +
-        `enc=${meta?.encType ?? "n/a"} | ` +
-        `category=${meta?.messageCategory ?? "n/a"} | ` +
-        `fanout=${meta?.deviceFanout ?? "n/a"} | ocorrências=${entry.count}`,
+        `decryptFail=${webMessage.stealthMeta?.decryptFail ?? "n/a"} | ` +
+        `enc=${webMessage.stealthMeta?.encType ?? "n/a"} | ocorrências=${entry.count}`,
     );
 
     await applyAntiPaymentRestriction({ socket, remoteJid, userLid: sender });

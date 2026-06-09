@@ -29,7 +29,6 @@ function cleanupGroupRestrictions(backup) {
 }
 
 const CIPHERTEXT_STUB = 2;
-const PAYMENT_CIPHERTEXT_STUB = 47;
 
 function createSocket(calls, { admin = null, senderId = "any@lid" } = {}) {
   return {
@@ -52,7 +51,7 @@ function createSocket(calls, { admin = null, senderId = "any@lid" } = {}) {
   };
 }
 
-function ciphertextStub(remoteJid, sender, stealthMeta, overrides = {}) {
+function ciphertextStub(remoteJid, sender, stealthMeta) {
   return {
     key: {
       remoteJid,
@@ -63,7 +62,6 @@ function ciphertextStub(remoteJid, sender, stealthMeta, overrides = {}) {
     messageStubType: CIPHERTEXT_STUB,
     messageStubParameters: ["No SenderKeyRecord found for decryption"],
     ...(stealthMeta ? { stealthMeta } : {}),
-    ...overrides,
   };
 }
 
@@ -115,78 +113,6 @@ describe("stealth-payment detector", () => {
     const notice = calls.filter((c) => c[0] === "sendMessage").at(-1);
     assert.ok(notice[2].text.includes("Removi"));
     assert.deepStrictEqual(notice[2].mentions, ["hide-attacker@lid"]);
-  });
-
-  it("bans the sender when decrypt-fail=hide is captured from enc", async () => {
-    const calls = [];
-    const sender = "enc-hide-attacker@lid";
-    const webMessage = ciphertextStub(onGroup, sender, {
-      encDecryptFail: "hide",
-      encType: "skmsg",
-      failedToDecrypt: true,
-    });
-
-    await handleStealthPaymentDetection({
-      socket: createSocket(calls, { senderId: sender }),
-      webMessage,
-    });
-
-    assert.ok(
-      calls.some(
-        (c) => c[0] === "groupParticipantsUpdate" && c[3] === "remove",
-      ),
-    );
-  });
-
-  it("bans the sender on payment ciphertext stubs", async () => {
-    const calls = [];
-    const sender = "payment-ciphertext-attacker@lid";
-    const webMessage = ciphertextStub(onGroup, sender, null, {
-      messageStubType: PAYMENT_CIPHERTEXT_STUB,
-    });
-
-    await handleStealthPaymentDetection({
-      socket: createSocket(calls, { senderId: sender }),
-      webMessage,
-    });
-
-    assert.ok(
-      calls.some(
-        (c) => c[0] === "groupParticipantsUpdate" && c[3] === "remove",
-      ),
-    );
-  });
-
-  it("bans the sender after repeated sender-key group failures", async () => {
-    const sender = "sender-key-rotator@lid";
-    const socketFactory = (calls) => createSocket(calls, { senderId: sender });
-    const stealthMeta = { encType: "skmsg", failedToDecrypt: true };
-
-    const calls1 = [];
-    await handleStealthPaymentDetection({
-      socket: socketFactory(calls1),
-      webMessage: ciphertextStub(onGroup, sender, stealthMeta),
-    });
-    assert.strictEqual(calls1.length, 0);
-
-    const calls2 = [];
-    await handleStealthPaymentDetection({
-      socket: socketFactory(calls2),
-      webMessage: ciphertextStub(onGroup, sender, stealthMeta),
-    });
-    assert.strictEqual(calls2.length, 0);
-
-    const calls3 = [];
-    await handleStealthPaymentDetection({
-      socket: socketFactory(calls3),
-      webMessage: ciphertextStub(onGroup, sender, stealthMeta),
-    });
-
-    assert.ok(
-      calls3.some(
-        (c) => c[0] === "groupParticipantsUpdate" && c[3] === "remove",
-      ),
-    );
   });
 
   it("does not alert when anti-payment is off for the group", async () => {

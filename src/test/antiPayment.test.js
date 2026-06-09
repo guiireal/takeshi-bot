@@ -164,39 +164,6 @@ describe("anti-payment", () => {
     ]);
   });
 
-  it("should close group, ban sender and clean chat when send payment message is detected", async () => {
-    const calls = [];
-    const webMessage = {
-      key: {
-        remoteJid: handlerGroupId,
-        fromMe: false,
-        id: "send-payment-message-id",
-        participant: userLid,
-      },
-      message: {
-        sendPaymentMessage: {
-          noteMessage: {
-            extendedTextMessage: { text: "pagamento" },
-          },
-        },
-      },
-    };
-
-    await messageHandler(createSocket(calls, userLid), webMessage);
-
-    assert.deepStrictEqual(calls[0], [
-      "groupSettingUpdate",
-      handlerGroupId,
-      "announcement",
-    ]);
-    assert.deepStrictEqual(calls[1], [
-      "groupParticipantsUpdate",
-      handlerGroupId,
-      [userLid],
-      "remove",
-    ]);
-  });
-
   it("should close group, ban sender and clean chat when payment message is wrapped in group status message", async () => {
     const calls = [];
     const webMessage = {

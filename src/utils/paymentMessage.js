@@ -1,9 +1,5 @@
 const MAX_PAYMENT_SCAN_DEPTH = 8;
-const PAYMENT_MESSAGE_KEYS = new Set([
-  "paymentInviteMessage",
-  "requestPaymentMessage",
-  "sendPaymentMessage",
-]);
+const PAYMENT_MESSAGE_KEYS = new Set(["requestPaymentMessage"]);
 
 function canScanObject(value) {
   return (
