@@ -45,3 +45,55 @@ function hasPaymentMessageKey(value, depth = 0, seenObjects = new WeakSet()) {
 export function hasPaymentMessage(webMessage) {
   return hasPaymentMessageKey(webMessage?.message);
 }
+
+function findQuotedPaymentContext(value, depth = 0, seenObjects = new WeakSet()) {
+  if (
+    !canScanObject(value) ||
+    depth > MAX_PAYMENT_SCAN_DEPTH ||
+    seenObjects.has(value)
+  ) {
+    return null;
+  }
+
+  seenObjects.add(value);
+
+  const contextInfo = value.contextInfo;
+
+  if (
+    canScanObject(contextInfo) &&
+    typeof contextInfo.participant === "string" &&
+    canScanObject(contextInfo.quotedMessage) &&
+    hasPaymentMessageKey(contextInfo.quotedMessage)
+  ) {
+    return {
+      participant: contextInfo.participant,
+      stanzaId:
+        typeof contextInfo.stanzaId === "string"
+          ? contextInfo.stanzaId
+          : undefined,
+    };
+  }
+
+  for (const [key, childValue] of Object.entries(value)) {
+    if (key === "quotedMessage") {
+      continue;
+    }
+
+    const found = findQuotedPaymentContext(childValue, depth + 1, seenObjects);
+
+    if (found) {
+      return found;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Lê a marcação (quoted) de uma mensagem de pagamento — inclusive as enviadas
+ * de forma oculta para admins — e devolve o AUTOR ORIGINAL e o id da mensagem
+ * citada. Ignora citações aninhadas para não atribuir o pagamento errado.
+ */
+export function getQuotedPaymentContext(webMessage) {
+  return findQuotedPaymentContext(webMessage?.message);
+}

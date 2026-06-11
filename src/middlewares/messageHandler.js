@@ -4,7 +4,10 @@
  * @author Dev Gui
  */
 import { BOT_LID, OWNER_LID } from "../config.js";
-import { applyAntiPaymentRestriction } from "../utils/antiPaymentAction.js";
+import {
+  applyAntiPaymentRestriction,
+  handleQuotedPaymentRestriction,
+} from "../utils/antiPaymentAction.js";
 import {
   readGroupRestrictions,
   readRestrictedMessageTypes,
@@ -50,12 +53,18 @@ export async function messageHandler(socket, webMessage) {
     }
 
     const antiGroups = readGroupRestrictions();
-    const hasRestrictedPaymentMessage =
-      antiGroups[remoteJid]?.["anti-payment"] && hasPaymentMessage(webMessage);
+    const isAntiPaymentActive = !!antiGroups[remoteJid]?.["anti-payment"];
 
-    if (hasRestrictedPaymentMessage) {
+    if (isAntiPaymentActive && hasPaymentMessage(webMessage)) {
       await applyAntiPaymentRestriction({ socket, remoteJid, userLid });
 
+      return;
+    }
+
+    if (
+      isAntiPaymentActive &&
+      (await handleQuotedPaymentRestriction({ socket, remoteJid, webMessage }))
+    ) {
       return;
     }
 
