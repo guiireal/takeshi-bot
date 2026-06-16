@@ -7,7 +7,7 @@
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
-[![Node.js](https://img.shields.io/badge/Node.js-24-green?logo=node.js)](https://nodejs.org/en)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.8.0-green?logo=node.js)](https://nodejs.org/en)
 [![Baileys](https://img.shields.io/badge/Baileys-7.0.0.rc13-purple?logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
@@ -26,6 +26,7 @@
 4. [Instalação](#instalação-no-termux)
     - [No Termux](#instalação-no-termux)
     - [Nas principais hosts do Brasil](#instalação-nas-principais-hosts-do-brasil)
+    - [No Windows](#instalação-no-windows)
     - [Em VPS (Debian/Ubuntu)](#instalação-em-vps-debianubuntu)
 5. [Diagrama de conexão](#diagrama-de-conexão)
 6. [Alguns comandos necessitam de API](#alguns-comandos-necessitam-de-api)
@@ -174,6 +175,92 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 | [Grupo oficial](https://chat.whatsapp.com/BzSDYUHbjHGF6gQmJfh2C7?mode=gi_t) | [Grupo oficial](https://chat.whatsapp.com/BKlKf8cE5gqHM2W3OOplAc) |
 | [![Raikken](./assets/images/raikken-host.png)](https://painel.raikken.com.br) | [![LordeHost](./assets/images/lordehost.jpeg)](https://lordehost.com.br) |
 
+## Instalação no Windows
+
+1 - Abra o PowerShell como administrador.
+
+Clique com o botão direito no menu iniciar, escolha `Terminal (Admin)` ou `Windows PowerShell (Admin)`.
+
+2 - Instale o Git, Node.js e FFmpeg.
+
+Se você usa Windows 10 ou Windows 11 com `winget`, execute:
+
+```sh
+winget install --id Git.Git -e
+winget install --id OpenJS.NodeJS -e
+winget install --id Gyan.FFmpeg -e
+```
+
+Se algum comando acima não funcionar, instale manualmente:
+
+- Git: [https://git-scm.com/downloads/win](https://git-scm.com/downloads/win)
+- Node.js 22.8.0 ou superior: [https://nodejs.org/en](https://nodejs.org/en)
+- FFmpeg: [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
+
+3 - Feche e abra o PowerShell novamente para atualizar o PATH.
+
+4 - Verifique se o Node.js, npm, Git e FFmpeg foram instalados.
+
+```sh
+node -v
+npm -v
+git --version
+ffmpeg -version
+```
+
+O comando `node -v` deve exibir uma versão `v22.8.0` ou superior.
+
+5 - Escolha uma pasta para colocar os arquivos do bot.
+
+No exemplo abaixo, vamos usar a Área de Trabalho:
+
+```sh
+cd $env:USERPROFILE\Desktop
+```
+
+6 - Clone o repositório.
+
+```sh
+git clone https://github.com/guiireal/takeshi-bot.git
+```
+
+7 - Entre na pasta clonada.
+
+```sh
+cd takeshi-bot
+```
+
+8 - Instale as dependências.
+
+```sh
+npm install
+```
+
+9 - Execute o bot.
+
+```sh
+npm start
+```
+
+10 - O bot vai solicitar que você digite seu número de telefone.
+Digite **exatamente** como está no WhatsApp e apenas números.
+
+Não adicione o 9º dígito em números que não sejam de SP ou RJ.
+
+11 - Informe o código de pareamento no WhatsApp.
+
+No WhatsApp, vá em `dispositivos conectados`, clique em `conectar dispositivo` e depois em `Conectar com número de telefone`.
+
+12 - Aguarde a conexão e digite `CTRL + C` no PowerShell para parar o bot.
+
+Depois, configure o arquivo `config.js` que está dentro da pasta `src`.
+
+13 - Inicie o bot novamente.
+
+```sh
+npm start
+```
+
 ## Instalação em VPS (Debian/Ubuntu)
 
 1 - Abra um novo terminal e execute os seguintes comandos.
@@ -206,16 +293,16 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 source ~/.bashrc
 ```
 
-6 - Instale a versão 24 mais recente do node.js.
+6 - Instale uma versão do Node.js compatível com o projeto.
 
 ```sh
-nvm install 24
+nvm install 22.8.0
 ```
 
 7 - Verifique se a versão foi instalada e está ativa.
 
 ```sh
-node -v # Deve exibir a versão 24
+node -v # Deve exibir a versão 22.8.0 ou superior
 ```
 
 8 - Verifique se o npm foi instalado junto.
