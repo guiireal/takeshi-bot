@@ -194,7 +194,7 @@ winget install --id Gyan.FFmpeg -e
 Se algum comando acima não funcionar, instale manualmente:
 
 - Git: [https://git-scm.com/downloads/win](https://git-scm.com/downloads/win)
-- Node.js 22.8 ou superior: [https://nodejs.org/en](https://nodejs.org/en)
+- Node.js 24.x.x ou superior: [https://nodejs.org/en](https://nodejs.org/en)
 - FFmpeg: [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 
 3 - Feche e abra o PowerShell novamente para atualizar o PATH.
