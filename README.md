@@ -7,7 +7,7 @@
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.8.0-green?logo=node.js)](https://nodejs.org/en)
+[![Node.js](https://img.shields.io/badge/Node.js-24-green?logo=node.js)](https://nodejs.org/en)
 [![Baileys](https://img.shields.io/badge/Baileys-7.0.0.rc13-purple?logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
@@ -181,7 +181,7 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 
 Clique com o botão direito no menu iniciar, escolha `Terminal (Admin)` ou `Windows PowerShell (Admin)`.
 
-2 - Instale o Git, Node.js e FFmpeg.
+2 - Instale o Git, Node.js 24.x.x ou superior e FFmpeg.
 
 Se você usa Windows 10 ou Windows 11 com `winget`, execute:
 
@@ -194,7 +194,7 @@ winget install --id Gyan.FFmpeg -e
 Se algum comando acima não funcionar, instale manualmente:
 
 - Git: [https://git-scm.com/downloads/win](https://git-scm.com/downloads/win)
-- Node.js 22.8.0 ou superior: [https://nodejs.org/en](https://nodejs.org/en)
+- Node.js 22.8 ou superior: [https://nodejs.org/en](https://nodejs.org/en)
 - FFmpeg: [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 
 3 - Feche e abra o PowerShell novamente para atualizar o PATH.
@@ -208,7 +208,7 @@ git --version
 ffmpeg -version
 ```
 
-O comando `node -v` deve exibir uma versão `v22.8.0` ou superior.
+O comando `node -v` deve exibir uma versão `v24.x.x`.
 
 5 - Escolha uma pasta para colocar os arquivos do bot.
 
@@ -293,16 +293,16 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 source ~/.bashrc
 ```
 
-6 - Instale uma versão do Node.js compatível com o projeto.
+6 - Instale a versão 24 mais recente do node.js.
 
 ```sh
-nvm install 22.8.0
+nvm install 24
 ```
 
 7 - Verifique se a versão foi instalada e está ativa.
 
 ```sh
-node -v # Deve exibir a versão 22.8.0 ou superior
+node -v # Deve exibir a versão 24
 ```
 
 8 - Verifique se o npm foi instalado junto.
