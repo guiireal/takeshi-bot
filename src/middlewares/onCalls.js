@@ -10,7 +10,7 @@ function getCallAuthor(call) {
 }
 
 async function handleCall({ socket, call }) {
-  if (!call?.isGroup || call.status !== "offer" || !call.groupJid) {
+  if (!call?.isGroup || !call?.groupJid) {
     return;
   }
 
