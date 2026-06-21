@@ -447,9 +447,9 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Advertir | Admin | ❌ |
 | Agendar mensagem | Admin | ❌ |
 | Anti audio | Admin | ❌ |
-| Anti call | Admin | ❌ |
 | Anti documento | Admin | ❌ |
 | Anti evento | Admin | ❌ |
+| Anti ligação | Admin | ❌ |
 | Anti imagem | Admin | ❌ |
 | Anti link | Admin | ❌ |
 | Anti lottie sticker | Admin | ❌ |
