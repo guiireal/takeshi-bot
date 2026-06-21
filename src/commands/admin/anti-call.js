@@ -10,7 +10,7 @@ export default {
   name: "anti-call",
   description:
     "Ativa/desativa o recurso de anti-call no grupo, removendo quem iniciar ligação.",
-  commands: ["anti-call", "anti-ligacao", "anti-ligação"],
+  commands: ["anti-call", "anti-ligacao"],
   usage: `${PREFIX}anti-call (1/0)`,
   /**
    * @param {CommandHandleProps} props

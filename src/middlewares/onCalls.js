@@ -1,9 +1,9 @@
-import { BOT_LID, OWNER_LID } from "../config.js";
+import { BOT_EMOJI, BOT_LID, OWNER_LID } from "../config.js";
 import { isActiveGroupRestriction } from "../utils/database.js";
 import { errorLog } from "../utils/logger.js";
 import { isAdmin } from "./index.js";
 
-const ANTI_CALL_MESSAGE = "📵 Ligações são proibidas neste grupo!";
+const ANTI_CALL_MESSAGE = `${BOT_EMOJI} 📵 Ligações são proibidas neste grupo!`;
 
 function getCallAuthor(call) {
   return call.from || call.chatId || call.callerPn;

@@ -35,6 +35,7 @@ export default {
       antiDocumentOn && isActiveGroupRestriction(remoteJid, "anti-document");
     const hasInactive =
       antiDocumentOff && !isActiveGroupRestriction(remoteJid, "anti-document");
+
     if (hasActive || hasInactive) {
       throw new WarningError(
         `O recurso de anti-document já está ${
