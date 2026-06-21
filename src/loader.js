@@ -38,17 +38,17 @@ export function load(socket) {
             startProcess,
           }),
         data,
-        "messages.upsert"
+        "messages.upsert",
       );
     }, TIMEOUT_IN_MILLISECONDS_BY_EVENT);
   });
 
   socket.ev.process((events) => {
-    if (events.call?.length) {
+    if (events?.call?.length) {
       safeEventHandler(
         () => onCalls({ socket, calls: events.call }),
         events.call,
-        "call"
+        "call",
       );
     }
   });
