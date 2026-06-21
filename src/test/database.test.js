@@ -6,9 +6,13 @@
 import assert from "node:assert";
 import fs from "node:fs";
 import path from "node:path";
-import { after, before, describe, it } from "node:test";
+import { after, afterEach, before, describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 import * as database from "../utils/database.js";
+import {
+  backupGroupRestrictions,
+  restoreGroupRestrictions,
+} from "./helpers/groupRestrictions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -441,20 +445,15 @@ describe("Database Functions", () => {
     let groupRestrictionsBackup;
 
     before(() => {
-      const groupRestrictionsPath = path.resolve(
-        testDatabasePath,
-        "group-restrictions.json"
-      );
-      if (fs.existsSync(groupRestrictionsPath)) {
-        groupRestrictionsBackup = fs.readFileSync(
-          groupRestrictionsPath,
-          "utf8"
-        );
-      }
+      groupRestrictionsBackup = backupGroupRestrictions();
+    });
+
+    afterEach(() => {
+      restoreGroupRestrictions(groupRestrictionsBackup);
     });
 
     after(() => {
-      cleanupJsonFile("group-restrictions", groupRestrictionsBackup);
+      restoreGroupRestrictions(groupRestrictionsBackup);
     });
 
     it("should read group restrictions", () => {

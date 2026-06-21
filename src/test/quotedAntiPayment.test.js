@@ -1,34 +1,13 @@
 import assert from "node:assert";
-import fs from "node:fs";
-import path from "node:path";
-import { after, before, beforeEach, describe, it } from "node:test";
-import { fileURLToPath } from "node:url";
+import { beforeEach, describe, it } from "node:test";
 import { messageHandler } from "../middlewares/messageHandler.js";
+import { useGroupRestrictionsCleanup } from "./helpers/groupRestrictions.js";
 import {
   __clearEnvelopeRegistry,
   recordMessageEnvelope,
 } from "../utils/messageEnvelopeRegistry.js";
 import { getQuotedPaymentContext } from "../utils/paymentMessage.js";
 import * as database from "../utils/database.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const testDatabasePath = path.resolve(__dirname, "..", "..", "database");
-const groupRestrictionsPath = path.resolve(
-  testDatabasePath,
-  "group-restrictions.json",
-);
-
-function cleanupGroupRestrictions(backup) {
-  if (backup !== undefined) {
-    fs.writeFileSync(groupRestrictionsPath, backup);
-    return;
-  }
-
-  if (fs.existsSync(groupRestrictionsPath)) {
-    fs.unlinkSync(groupRestrictionsPath);
-  }
-}
 
 const remoteJid = "quoted-anti-payment-test@g.us";
 const quoterLid = "111111111@lid";
@@ -91,22 +70,12 @@ const removeCalls = (calls) =>
   );
 
 describe("quoted anti-payment", () => {
-  let groupRestrictionsBackup;
-
-  before(() => {
-    if (fs.existsSync(groupRestrictionsPath)) {
-      groupRestrictionsBackup = fs.readFileSync(groupRestrictionsPath, "utf8");
-    }
-
+  useGroupRestrictionsCleanup(() => {
     database.updateIsActiveGroupRestriction(remoteJid, "anti-payment", true);
   });
 
   beforeEach(() => {
     __clearEnvelopeRegistry();
-  });
-
-  after(() => {
-    cleanupGroupRestrictions(groupRestrictionsBackup);
   });
 
   it("should read the original author from a quoted payment", () => {

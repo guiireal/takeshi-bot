@@ -41,6 +41,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}add-auto-responder
 ▢ • ${prefix}agendar-mensagem
 ▢ • ${prefix}anti-audio (1/0)
+▢ • ${prefix}anti-call (1/0)
 ▢ • ${prefix}anti-document (1/0)
 ▢ • ${prefix}anti-event (1/0)
 ▢ • ${prefix}anti-image (1/0)

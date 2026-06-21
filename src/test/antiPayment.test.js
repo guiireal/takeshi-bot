@@ -1,31 +1,10 @@
 import assert from "node:assert";
-import fs from "node:fs";
-import path from "node:path";
-import { after, before, describe, it } from "node:test";
-import { fileURLToPath } from "node:url";
+import { describe, it } from "node:test";
 import antiPayment from "../commands/admin/anti-payment.js";
 import { messageHandler } from "../middlewares/messageHandler.js";
+import { useGroupRestrictionsCleanup } from "./helpers/groupRestrictions.js";
 import { buildCleanChatMessage } from "../utils/cleanChat.js";
 import * as database from "../utils/database.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const testDatabasePath = path.resolve(__dirname, "..", "..", "database");
-const groupRestrictionsPath = path.resolve(
-  testDatabasePath,
-  "group-restrictions.json",
-);
-
-function cleanupGroupRestrictions(backup) {
-  if (backup !== undefined) {
-    fs.writeFileSync(groupRestrictionsPath, backup);
-    return;
-  }
-
-  if (fs.existsSync(groupRestrictionsPath)) {
-    fs.unlinkSync(groupRestrictionsPath);
-  }
-}
 
 function createSocket(calls, userLid) {
   return {
@@ -53,13 +32,8 @@ describe("anti-payment", () => {
   const handlerGroupId = "anti-payment-handler-test@g.us";
   const handlerStatusGroupId = "anti-payment-status-handler-test@g.us";
   const userLid = "123456789@lid";
-  let groupRestrictionsBackup;
 
-  before(() => {
-    if (fs.existsSync(groupRestrictionsPath)) {
-      groupRestrictionsBackup = fs.readFileSync(groupRestrictionsPath, "utf8");
-    }
-
+  useGroupRestrictionsCleanup(() => {
     database.updateIsActiveGroupRestriction(
       commandGroupId,
       "anti-payment",
@@ -80,10 +54,6 @@ describe("anti-payment", () => {
       "anti-status-grupo",
       true,
     );
-  });
-
-  after(() => {
-    cleanupGroupRestrictions(groupRestrictionsBackup);
   });
 
   it("should activate and deactivate anti-payment", async () => {

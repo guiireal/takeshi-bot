@@ -5,6 +5,29 @@
  */
 import pkg from "../../package.json" with { type: "json" };
 
+let consoleNoiseFilterInstalled = false;
+
+export function installConsoleNoiseFilter() {
+  if (consoleNoiseFilterInstalled) {
+    return;
+  }
+
+  const originalConsoleInfo = console.info.bind(console);
+
+  console.info = (...args) => {
+    if (args[0] === "Closing session:") {
+      warningLog(
+        "O WhatsApp fechou uma sessão criptografada antiga para renovar as chaves. Isso é um aviso normal da conexão e não indica erro no bot.",
+      );
+      return;
+    }
+
+    originalConsoleInfo(...args);
+  };
+
+  consoleNoiseFilterInstalled = true;
+}
+
 export function sayLog(message) {
   console.log("\x1b[36m[TAKESHI BOT | TALK]\x1b[0m", message);
 }
