@@ -279,4 +279,48 @@ describe("Logger Functions", () => {
       assert.ok(identifiers.some((id) => id.includes("ERROR")));
     });
   });
+
+  describe("Console noise filter", () => {
+    let originalConsoleInfo;
+
+    beforeEach(() => {
+      originalConsoleInfo = console.info;
+    });
+
+    afterEach(() => {
+      console.info = originalConsoleInfo;
+    });
+
+    it("should replace libsignal closing session logs with a friendly warning", () => {
+      const consoleInfoMock = mock.fn();
+      console.info = consoleInfoMock;
+
+      logger.installConsoleNoiseFilter();
+
+      console.info("Closing session:", { registrationId: 123 });
+
+      assert.strictEqual(consoleInfoMock.mock.calls.length, 0);
+      assert.strictEqual(consoleLogMock.mock.calls.length, 1);
+
+      const args = consoleLogMock.mock.calls[0].arguments;
+      assert.strictEqual(args[0], "\x1b[33m[TAKESHI BOT | WARNING]\x1b[0m");
+      assert.ok(args[1].includes("sessão criptografada antiga"));
+      assert.ok(args[1].includes("não indica erro no bot"));
+    });
+
+    it("should keep unrelated console info logs visible", () => {
+      const consoleInfoMock = mock.fn();
+      console.info = consoleInfoMock;
+
+      logger.installConsoleNoiseFilter();
+
+      console.info("Conexão estabelecida");
+
+      assert.strictEqual(consoleInfoMock.mock.calls.length, 1);
+      assert.strictEqual(
+        consoleInfoMock.mock.calls[0].arguments[0],
+        "Conexão estabelecida"
+      );
+    });
+  });
 });

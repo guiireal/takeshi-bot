@@ -82,7 +82,7 @@ Faça sua pergunta sobre mim que eu te ajudarei!
 
     if (finalText) {
       const minLength = 5;
-      const maxLength = 4096;
+      const maxLength = 2048;
 
       if (finalText.length < minLength) {
         throw new DangerError(
@@ -218,9 +218,9 @@ sem mencionar Pterodactyl, pois os iniciantes não sabem o que é (exceto se per
     messages.push(userMessage);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-5-mini",
+      model: "gpt-5.4-mini",
       messages: messages,
-      max_completion_tokens: 4096 * 2,
+      max_completion_tokens: 2048 * 2,
     });
 
     const answer = response.choices[0].message.content.trim();

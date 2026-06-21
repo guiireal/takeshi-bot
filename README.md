@@ -2,7 +2,7 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-8.5.1-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-8.6.0-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
@@ -32,21 +32,19 @@
 6. [Alguns comandos necessitam de API](#alguns-comandos-necessitam-de-api)
 7. [Funcionalidades](#funcionalidades-gerais)
     - [Funcionalidades gerais](#funcionalidades-gerais)
-    - [Funcionalidades de envio (Exemplos)](#funcionalidades-de-envio-exemplos)
 8. [Auto responder](#auto-responder)
 9. [Menu do bot](#onde-fica-o-menu-do-bot)
 10. [Mensagens de boas vindas](#onde-modifico-a-mensagem-de-boas-vindas-e-quando-alguém-sai-do-grupo)
 11. [Diagrama de como os comandos funcionam](#diagrama-de-como-os-comandos-funcionam)
 12. [Diagrama de como funcionam os middlewares](#diagrama-de-como-funcionam-os-middlewares-interceptadores-de-recepção-e-saída)
 13. [Custom Middleware - Personalize o bot sem modificar arquivos principais](#custom-middleware---personalize-o-bot-sem-modificar-arquivos-principais)
-14. [Implementação técnica dos exemplos](#implementação-técnica-dos-exemplos)
-15. [Estrutura de pastas](#estrutura-de-pastas)
-16. [Atualizar o bot](#atualizar-o-bot)
-17. [Testes](#testes)
-18. [Erros comuns](#erros-comuns)
-19. [Inscreva-se no canal](#inscreva-se-no-canal)
-20. [Contribuindo com o projeto](#contribuindo-com-o-projeto)
-21. [Licença e Disclaimer](#licença)
+14. [Estrutura de pastas](#estrutura-de-pastas)
+15. [Atualizar o bot](#atualizar-o-bot)
+16. [Testes](#testes)
+17. [Erros comuns](#erros-comuns)
+18. [Inscreva-se no canal](#inscreva-se-no-canal)
+19. [Contribuindo com o projeto](#contribuindo-com-o-projeto)
+20. [Licença e Disclaimer](#licença)
 
 ## 🌐 Acesse o Takeshi Bot em outros idiomas
 
@@ -449,6 +447,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Advertir | Admin | ❌ |
 | Agendar mensagem | Admin | ❌ |
 | Anti audio | Admin | ❌ |
+| Anti call | Admin | ❌ |
 | Anti documento | Admin | ❌ |
 | Anti evento | Admin | ❌ |
 | Anti imagem | Admin | ❌ |
@@ -520,97 +519,6 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | YT MP4 | Membro | ✅ |
 | YT search | Membro | ✅ |
 
-## Funcionalidades de envio (Exemplos)
-
-### 🎵 Exemplos de áudio
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/enviar-audio-de-arquivo` | Enviar áudio de arquivo | Demonstra envio de arquivos de áudio do armazenamento local | Opção de mensagem de voz, resposta citada |
-| `/enviar-audio-de-url` | Enviar áudio de URL | Demonstra envio de arquivos de áudio de URLs externas | Opção de mensagem de voz, resposta citada |
-| `/enviar-audio-de-buffer` | Enviar áudio de buffer | Demonstra envio de arquivos de áudio de buffers de memória | Opção de mensagem de voz, resposta citada, buffer de arquivo ou URL |
-
-### 🖼️ Exemplos de imagem
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/enviar-imagem-de-arquivo` | Enviar imagem de arquivo | Demonstra envio de arquivos de imagem do armazenamento local | Suporte a legenda personalizada, menções, resposta citada |
-| `/enviar-imagem-de-url` | Enviar imagem de URL | Demonstra envio de arquivos de imagem de URLs externas | Envio direto de URL, suporte a menções, resposta citada |
-| `/enviar-imagem-de-buffer` | Enviar imagem de buffer | Demonstra envio de arquivos de imagem de buffers de memória | Buffer de arquivo ou URL, legenda opcional, menções, resposta citada |
-
-### 🎬 Exemplos de vídeo
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/enviar-video-de-arquivo` | Enviar vídeo de arquivo | Demonstra envio de arquivos de vídeo do armazenamento local | Suporte a legenda personalizada, menções, resposta citada |
-| `/enviar-video-de-url` | Enviar vídeo de URL | Demonstra envio de arquivos de vídeo de URLs externas | Envio direto de URL, suporte a menções, resposta citada |
-| `/enviar-video-de-buffer` | Enviar vídeo de buffer | Demonstra envio de arquivos de vídeo de buffers de memória | Buffer de arquivo ou URL, legenda opcional, menções, resposta citada |
-
-### 🎞️ Exemplos de GIF
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/enviar-gif-de-arquivo` | Enviar GIF de arquivo | Demonstra envio de arquivos GIF do armazenamento local | Suporte a legenda, menções, resposta citada |
-| `/enviar-gif-de-url` | Enviar GIF de URL | Demonstra envio de arquivos GIF de URLs externas | Suporte a legenda, menções, resposta citada |
-| `/enviar-gif-de-buffer` | Enviar GIF de buffer | Demonstra envio de arquivos GIF de buffers de memória | Buffer de arquivo ou URL, legenda, menções, resposta citada |
-
-### 🎭 Exemplos de sticker
-
-| Comando | Função | Descrição | Características |
-|---------|--------|-----------|-----------------|
-| `/enviar-sticker-de-arquivo` | Enviar sticker de arquivo | Demonstra envio de arquivos sticker do armazenamento local | Formato WebP |
-| `/enviar-sticker-de-url` | Enviar sticker de URL | Demonstra envio de arquivos sticker de URLs externas | Formato WebP |
-| `/enviar-sticker-de-buffer` | Enviar sticker de buffer | Demonstra envio de arquivos sticker de buffers de memória | Buffer de arquivo ou URL |
-
-### 📊 Exemplos de enquete/votação
-
-| Comando | Função | Descrição | Características |
-|---------|--------|-----------|-----------------|
-| `/enviar-enquete` | Enviar enquete | Demonstra como criar e enviar enquetes/votações em grupos | Suporte a escolha única ou múltipla escolha |
-
-### 📍 Exemplos de localização
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/enviar-localizacao` | Enviar localização | Demonstra como enviar localizações, com latitude e longitude | Suporte a latitude e longitude de qualquer lugar do mundo |
-
-### 📲 Exemplos de contatos
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/enviar-contato` | Enviar contato | Demonstra como enviar contatos | Os contatos podem ser chamados ou adicionados à lista dos seus contatos |
-
-### 📄 Exemplos de documento
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/enviar-documento-de-arquivo` | Enviar documento de arquivo | Demonstra envio de arquivos de documento do armazenamento local | Especificação de tipo MIME, nome de arquivo personalizado |
-| `/enviar-documento-de-url` | Enviar documento de URL | Demonstra envio de arquivos de documento de URLs externas | Especificação de tipo MIME, nome de arquivo personalizado |
-| `/enviar-documento-de-buffer` | Enviar documento de buffer | Demonstra envio de arquivos de documento de buffers de memória | Buffer de arquivo ou URL, tipo MIME, nome de arquivo personalizado |
-
-### 💬 Exemplos de mensagem
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/enviar-texto` | Enviar texto | Demonstra envio de mensagens de texto simples | Suporte a menções |
-| `/enviar-resposta` | Enviar resposta | Demonstra envio de mensagens de resposta | Respostas de sucesso/erro/aviso |
-| `/enviar-reacoes` | Enviar reações | Demonstra envio de emojis de reação | Várias reações emoji, reações de sucesso/erro/aviso |
-| `/enviar-mensagem-editada` | Enviar mensagem editada | Demonstra envio de mensagens editadas | Pode editar mensagens enviadas de forma direta ou respondendo alguém |
-
-### 📊 Exemplos de metadados
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/obter-metadados-mensagem` | Obter metadados da mensagem | Demonstra extração avançada de metadados de mensagem ou mensagem citada | Análise detalhada, suporte a resposta de mensagens, informações técnicas, menções automáticas |
-| `/obter-dados-grupo` | Obter dados do grupo | Demonstra extração de informações do grupo | Metadados do grupo, lista de participantes, informações de admin |
-| `/funcoes-grupo` | Funções do grupo | Demonstra uso de funções utilitárias do grupo | Extração de nome, dono, admins, participantes do grupo |
-
-### 🎯 Central de exemplos
-
-| Comando | Função | Descrição | Características |
-|---------|---------|-----------|-----------------|
-| `/exemplos-de-mensagens` | Central de exemplos | Central com lista de todos os exemplos disponíveis | Menu interativo, acesso direto a todos os exemplos |
-
 ## Auto responder
 
 O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/auto-responder.json`:
@@ -631,17 +539,6 @@ O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/
     }
 ]
 ```
-
-## Auto figurinha / Auto sticker
-
-O Takeshi Bot possui um recurso de auto-figurinha que converte automaticamente imagens e vídeos enviados em figurinhas:
-
-| Comando | Função | Descrição |
-|---------|---------|-----------|
-| `/auto-stick 1` | Ativar | Ativa a conversão automática no grupo |
-| `/auto-stick 0` | Desativar | Desativa a conversão automática no grupo |
-
-**Nota:** O recurso suporta imagens e vídeos de até 10 segundos.
 
 ## Onde fica o menu do bot?
 
@@ -740,125 +637,6 @@ export async function customMiddleware({ type, commonFunctions }) {
 | `action` | String | "add" ou "remove" (apenas em eventos de participantes) |
 | `data` | String | Dados do participante (apenas em eventos de participantes) |
 
-## Implementação técnica dos exemplos
-
-### 📁 Localização dos comandos de exemplo
-
-Todos os comandos de exemplo estão localizados em: `src/commands/member/exemplos/`
-
-### 🛠️ Funções disponíveis
-
-Todos os comandos de exemplo utilizam funções de `src/utils/loadCommonFunctions.js`:
-
-#### Funções de áudio
-
-- `sendAudioFromFile(filePath, asVoice, quoted)`
-- `sendAudioFromURL(url, asVoice, quoted)`
-- `sendAudioFromBuffer(buffer, asVoice, quoted)`
-
-#### Funções de imagem
-
-- `sendImageFromFile(filePath, caption, mentions, quoted)`
-- `sendImageFromURL(url, caption, mentions, quoted)`
-- `sendImageFromBuffer(buffer, caption, mentions, quoted)`
-
-#### Funções de Vídeo
-
-- `sendVideoFromFile(filePath, caption, mentions, quoted)`
-- `sendVideoFromURL(url, caption, mentions, quoted)`
-- `sendVideoFromBuffer(buffer, caption, mentions, quoted)`
-
-#### Funções de GIF
-
-- `sendGifFromFile(file, caption, mentions, quoted)`
-- `sendGifFromURL(url, caption, mentions, quoted)`
-- `sendGifFromBuffer(buffer, caption, mentions, quoted)`
-
-#### Funções de sticker
-
-- `sendStickerFromFile(filePath, quoted)`
-- `sendStickerFromURL(url, quoted)`
-- `sendStickerFromBuffer(buffer, quoted)`
-
-#### Funções de documento
-
-- `sendDocumentFromFile(filePath, mimetype, fileName, quoted)`
-- `sendDocumentFromURL(url, mimetype, fileName, quoted)`
-- `sendDocumentFromBuffer(buffer, mimetype, fileName, quoted)`
-
-#### Funções de mensagem
-
-- `sendText(text, mentions)`
-- `sendReply(text, mentions)`
-- `sendReact(emoji)`
-- `sendSuccessReply(text, mentions)`, `sendErrorReply(text, mentions)`, `sendWarningReply(text, mentions)`, `sendWaitReply(text, mentions)`
-- `sendSuccessReact()`, `sendErrorReact()`, `sendWarningReact()`, `sendWaitReact()`
-
-#### Funções utilitárias de grupo
-
-- `getGroupMetadata()` - Obter metadados completos do grupo
-- `getGroupName()` - Obter apenas o nome do grupo
-- `getGroupOwner()` - Obter informações do dono do grupo
-- `getGroupParticipants()` - Obter todos os participantes do grupo
-- `getGroupAdmins()` - Obter administradores do grupo
-
-### 🎯 Exemplos de uso com menções
-
-#### Enviar imagem com menções
-
-```javascript
-await sendImageFromFile("./assets/image.jpg", "Olá @5511999999999!", ["5511999999999@s.whatsapp.net"]);
-
-await sendImageFromURL(
-  "https://exemplo.com/imagem.png", 
-  "Olá @5511999999999 e @5511888888888!", 
-  ["5511999999999@s.whatsapp.net", "5511888888888@s.whatsapp.net"]
-);
-```
-
-#### Enviar vídeo com menções
-
-```javascript
-await sendVideoFromFile("./assets/video.mp4", "Confira este vídeo @5511999999999!", ["5511999999999@s.whatsapp.net"]);
-
-const buffer = fs.readFileSync("./video.mp4");
-await sendVideoFromBuffer(
-  buffer, 
-  "Vídeo especial para @5511999999999 e @5511888888888!", 
-  ["5511999999999@s.whatsapp.net", "5511888888888@s.whatsapp.net"]
-);
-```
-
-#### Enviar GIF com menções
-
-```javascript
-await sendGifFromFile(
-  "./assets/gif.mp4", 
-  "Tá ai @5511999999999!", 
-  ["5511999999999@s.whatsapp.net"]
-);
-```
-
-### 🎯 Suporte TypeScript
-
-Definições completas do TypeScript estão disponíveis em `src/@types/index.d.ts` com:
-
-- Assinaturas de função detalhadas
-- Descrições de parâmetros
-- Exemplos de uso
-- Especificações de tipo de retorno
-
-### 📁 Arquivos de exemplo
-
-Todos os arquivos de exemplo são armazenados em `assets/samples/`:
-
-- `sample-audio.mp3` - Arquivo de áudio para teste
-- `sample-document.pdf` - Documento PDF para teste
-- `sample-document.txt` - Documento de texto para teste
-- `sample-image.jpg` - Arquivo de imagem para teste
-- `sample-sticker.webp` - Arquivo de sticker para teste
-- `sample-video.mp4` - Arquivo de vídeo para teste
-
 ## Estrutura de pastas
 
 - 📁 .github ➔ _workflows de CI/CD e arquivo para o agente do copilot_
@@ -876,7 +654,7 @@ Todos os arquivos de exemplo são armazenados em `assets/samples/`:
   - 📁 commands ➔ _pasta onde ficam os comandos_
     - 📁 admin ➔ _pasta onde ficam os comandos administrativos_
     - 📁 member ➔ _pasta onde ficam os comandos gerais (todos poderão utilizar)_
-      - 📁 exemplos ➔ _pasta com 24 comandos de exemplo_
+      - 📁 exemplos ➔ _pasta de exemplos apenas para exploração e reaproveitamento em comandos próprios_
     - 📁 owner ➔ _pasta onde ficam os comandos de dono (grupo e bot)_
     - 📝🤖-como-criar-comandos.js ➔ _arquivo de exemplo de como criar um comando_
   - 📁 errors ➔ _classes de erros usadas nos comandos_

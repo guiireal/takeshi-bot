@@ -74,7 +74,15 @@
 import { connect } from "./connection.js";
 import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
-import { bannerLog, errorLog, infoLog, warningLog } from "./utils/logger.js";
+import {
+  bannerLog,
+  errorLog,
+  infoLog,
+  installConsoleNoiseFilter,
+  warningLog,
+} from "./utils/logger.js";
+
+installConsoleNoiseFilter();
 
 process.on("uncaughtException", (error) => {
   if (badMacHandler.handleError(error, "uncaughtException")) {
