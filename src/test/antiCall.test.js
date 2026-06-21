@@ -2,7 +2,7 @@ import assert from "node:assert";
 import { describe, it } from "node:test";
 import antiCall from "../commands/admin/anti-call.js";
 import { BOT_EMOJI } from "../config.js";
-import { onCalls } from "../middlewares/onCalls.js";
+import { onCall } from "../middlewares/onCall.js";
 import * as database from "../utils/database.js";
 import { useGroupRestrictionsCleanup } from "./helpers/groupRestrictions.js";
 
@@ -64,7 +64,7 @@ describe("anti-call", () => {
       },
     };
 
-    await onCalls({
+    await onCall({
       socket,
       calls: [
         {
@@ -102,7 +102,7 @@ describe("anti-call", () => {
       },
     };
 
-    await onCalls({
+    await onCall({
       socket,
       calls: [
         {

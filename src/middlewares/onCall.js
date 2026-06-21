@@ -36,7 +36,7 @@ async function handleCall({ socket, call }) {
   await socket.sendMessage(remoteJid, { text: ANTI_CALL_MESSAGE });
 }
 
-export async function onCalls({ socket, calls }) {
+export async function onCall({ socket, calls }) {
   if (!calls?.length) {
     return;
   }

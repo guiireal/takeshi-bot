@@ -7,7 +7,7 @@
  * @author Dev Gui
  */
 import { TIMEOUT_IN_MILLISECONDS_BY_EVENT } from "./config.js";
-import { onCalls } from "./middlewares/onCalls.js";
+import { onCall } from "./middlewares/onCall.js";
 import { onMessagesUpsert } from "./middlewares/onMesssagesUpsert.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { errorLog } from "./utils/logger.js";
@@ -46,7 +46,7 @@ export function load(socket) {
   socket.ev.process((events) => {
     if (events?.call?.length) {
       safeEventHandler(
-        () => onCalls({ socket, calls: events.call }),
+        () => onCall({ socket, calls: events.call }),
         events.call,
         "call",
       );
