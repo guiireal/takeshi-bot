@@ -1,9 +1,10 @@
 import assert from "node:assert";
 import { describe, it } from "node:test";
 import antiCall from "../commands/admin/anti-call.js";
-import { useGroupRestrictionsCleanup } from "./helpers/groupRestrictions.js";
+import { BOT_EMOJI } from "../config.js";
 import { onCalls } from "../middlewares/onCalls.js";
 import * as database from "../utils/database.js";
+import { useGroupRestrictionsCleanup } from "./helpers/groupRestrictions.js";
 
 describe("anti-call", () => {
   const commandGroupId = "anti-call-command-test@g.us";
@@ -82,7 +83,7 @@ describe("anti-call", () => {
       [
         "sendMessage",
         handlerGroupId,
-        { text: "📵 Ligações são proibidas neste grupo!" },
+        { text: `${BOT_EMOJI} 📵 Ligações são proibidas neste grupo!` },
       ],
     ]);
   });
