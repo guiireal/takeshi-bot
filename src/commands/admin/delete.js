@@ -12,7 +12,7 @@ export default {
   handle: async ({ deleteMessage, webMessage, remoteJid }) => {
     if (!webMessage?.message?.extendedTextMessage?.contextInfo) {
       throw new InvalidParameterError(
-        "Você deve mencionar uma mensagem para excluir!"
+        "Você deve mencionar uma mensagem para excluir!",
       );
     }
 
@@ -21,7 +21,7 @@ export default {
 
     if (!stanzaId || !participant) {
       throw new InvalidParameterError(
-        "Você deve mencionar uma mensagem para excluir!"
+        "Você deve mencionar uma mensagem para excluir!",
       );
     }
 
@@ -31,5 +31,7 @@ export default {
       id: stanzaId,
       participant,
     });
+
+    await deleteMessage(webMessage.key);
   },
 };
