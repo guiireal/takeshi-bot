@@ -47,7 +47,6 @@ Main runtime flow:
 High-value architectural notes:
 
 - the bot stores its WhatsApp auth state in `assets/auth/baileys/`
-- `TIMEOUT_IN_MILLISECONDS_BY_EVENT` throttles event handling to reduce spam-ban risk
 - `badMacHandler` is part of the self-healing strategy for session issues
 - `loadCommonFunctions.js` is the main injection layer for command helpers
 
@@ -206,7 +205,6 @@ Stability mechanisms:
 - `DEVELOPER_MODE` in `src/config.js` increases logging
 - runtime logs are stored in `assets/temp/wa-logs.txt`
 - `src/utils/badMacHandler.js` helps recover from repeated session failures
-- `TIMEOUT_IN_MILLISECONDS_BY_EVENT` throttles event execution
 
 Use these custom error classes:
 

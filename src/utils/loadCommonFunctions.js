@@ -8,7 +8,7 @@
  */
 import { delay } from "baileys";
 import fs from "node:fs";
-import { BOT_EMOJI, TIMEOUT_IN_MILLISECONDS_BY_EVENT } from "../config.js";
+import { BOT_EMOJI } from "../config.js";
 import {
   ajustAudioByBuffer,
   baileysIs,
@@ -51,7 +51,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         lastError = error;
         console.warn(
           `Tentativa ${attempt}/${maxRetries} falhou:`,
-          error.message
+          error.message,
         );
 
         if (attempt < maxRetries) {
@@ -61,24 +61,8 @@ export function loadCommonFunctions({ socket, webMessage }) {
     }
 
     throw new Error(
-      `Falha após ${maxRetries} tentativas. Último erro: ${lastError.message}`
+      `Falha após ${maxRetries} tentativas. Último erro: ${lastError.message}`,
     );
-  };
-
-  const sendTypingState = async (anotherJid = "") => {
-    const sendToJid = anotherJid || remoteJid;
-
-    await socket.sendPresenceUpdate("composing", sendToJid);
-
-    await delay(TIMEOUT_IN_MILLISECONDS_BY_EVENT);
-  };
-
-  const sendRecordState = async (anotherJid = "") => {
-    const sendToJid = anotherJid || remoteJid;
-
-    await socket.sendPresenceUpdate("recording", sendToJid);
-
-    await delay(TIMEOUT_IN_MILLISECONDS_BY_EVENT);
   };
 
   const downloadAudio = async (webMessage, fileName) => {
@@ -98,8 +82,6 @@ export function loadCommonFunctions({ socket, webMessage }) {
   };
 
   const sendText = async (text, mentions) => {
-    await sendTypingState();
-
     let optionalParams = {};
 
     if (mentions?.length) {
@@ -127,8 +109,6 @@ export function loadCommonFunctions({ socket, webMessage }) {
   };
 
   const sendReply = async (text, mentions) => {
-    await sendTypingState();
-
     let optionalParams = {};
 
     if (mentions?.length) {
@@ -138,7 +118,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     return await socket.sendMessage(
       remoteJid,
       { text: `${BOT_EMOJI} ${text}`, ...optionalParams },
-      { quoted: JSON.parse(JSON.stringify(webMessage)) }
+      { quoted: JSON.parse(JSON.stringify(webMessage)) },
     );
   };
 
@@ -156,7 +136,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         ...optionalParams,
         edit: messageToEdit.key,
       },
-      { quoted: JSON.parse(JSON.stringify(webMessage)) }
+      { quoted: JSON.parse(JSON.stringify(webMessage)) },
     );
   };
 
@@ -221,7 +201,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     await sendWaitReact();
     return await sendReply(
       `⏳ Aguarde! ${text || "Carregando dados..."}`,
-      mentions
+      mentions,
     );
   };
 
@@ -246,7 +226,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -260,7 +240,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       {
         sticker: { url },
       },
-      { url, ...quotedObject }
+      { url, ...quotedObject },
     );
   };
 
@@ -268,7 +248,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     file,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -290,7 +270,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         },
         {
           ...quotedObject,
-        }
+        },
       );
     });
   };
@@ -299,7 +279,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     url,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -319,7 +299,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
-        { url, ...quotedObject }
+        { url, ...quotedObject },
       );
     });
   };
@@ -328,7 +308,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     buffer,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -350,7 +330,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         },
         {
           ...quotedObject,
-        }
+        },
       );
     });
   };
@@ -359,7 +339,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     file,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -380,14 +360,14 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
   const sendAudioFromFile = async (
     filePath,
     asVoice = false,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -403,10 +383,6 @@ export function loadCommonFunctions({ socket, webMessage }) {
 
     const mimetype = asVoice ? "audio/ogg; codecs=opus" : "audio/mpeg";
 
-    if (asVoice) {
-      await sendRecordState();
-    }
-
     removeFileWithTimeout(audioPath);
     removeFileWithTimeout(oldAudioPath);
 
@@ -419,14 +395,14 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
   const sendAudioFromBuffer = async (
     buffer,
     asVoice = false,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -440,10 +416,6 @@ export function loadCommonFunctions({ socket, webMessage }) {
 
     const mimetype = asVoice ? "audio/ogg; codecs=opus" : "audio/mpeg";
 
-    if (asVoice) {
-      await sendRecordState();
-    }
-
     removeFileWithTimeout(audioPath);
     removeFileWithTimeout(oldAudioPath);
 
@@ -456,7 +428,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -482,10 +454,6 @@ export function loadCommonFunctions({ socket, webMessage }) {
 
     const mimetype = asVoice ? "audio/ogg; codecs=opus" : "audio/mpeg";
 
-    if (asVoice) {
-      await sendRecordState();
-    }
-
     removeFileWithTimeout(audioPath);
     removeFileWithTimeout(oldAudioPath);
 
@@ -498,7 +466,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -506,7 +474,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     url,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -525,7 +493,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         ...optionalParams,
       },
-      { url, ...quotedObject }
+      { url, ...quotedObject },
     );
   };
 
@@ -533,7 +501,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     file,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -554,7 +522,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -562,7 +530,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     url,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -581,7 +549,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         gifPlayback: true,
         ...optionalParams,
       },
-      { url, ...quotedObject }
+      { url, ...quotedObject },
     );
   };
 
@@ -589,7 +557,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     buffer,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -610,7 +578,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -618,7 +586,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     file,
     mimetype,
     fileName,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -632,7 +600,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -640,7 +608,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     url,
     mimetype,
     fileName,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -652,7 +620,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         mimetype: mimetype || "application/octet-stream",
         fileName: fileName || "documento.pdf",
       },
-      { url, ...quotedObject }
+      { url, ...quotedObject },
     );
   };
 
@@ -660,7 +628,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     buffer,
     mimetype,
     fileName,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -674,7 +642,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -682,7 +650,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     buffer,
     caption = "",
     mentions = null,
-    quoted = true
+    quoted = true,
   ) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
@@ -703,7 +671,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -718,7 +686,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       },
       {
         ...quotedObject,
-      }
+      },
     );
   };
 
@@ -844,7 +812,6 @@ export function loadCommonFunctions({ socket, webMessage }) {
     sendLocation,
     sendPoll,
     sendReact,
-    sendRecordState,
     sendReply,
     sendStickerFromBuffer,
     sendStickerFromFile,
@@ -852,7 +819,6 @@ export function loadCommonFunctions({ socket, webMessage }) {
     sendSuccessReact,
     sendSuccessReply,
     sendText,
-    sendTypingState,
     sendVideoFromBuffer,
     sendVideoFromFile,
     sendVideoFromURL,

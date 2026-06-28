@@ -280,30 +280,6 @@ export function canvas(type, imageURL) {
   )}&api_key=${spiderApiToken}`;
 }
 
-export async function setProxy(name) {
-  try {
-    if (!name) {
-      throw new Error("Você precisa informar o nome da nova proxy!");
-    }
-
-    const spiderApiToken = requireSpiderApiToken();
-
-    const { data } = await axios.post(
-      `${SPIDER_API_BASE_URL}/internal/set-node-js-proxy-active?api_key=${spiderApiToken}`,
-      {
-        name,
-      },
-    );
-
-    return data.success;
-  } catch (error) {
-    console.error("Erro ao definir a proxy:", error);
-    throw new Error(
-      "Não foi possível definir a proxy! Verifique se o nome está correto e tente novamente!",
-    );
-  }
-}
-
 export async function updatePlanUser(email, plan) {
   const spiderApiToken = requireSpiderApiToken();
 
