@@ -482,6 +482,20 @@ declare global {
     sendReact(emoji: string): Promise<proto.WebMessageInfo>;
 
     /**
+     * Simula uma ação de digitação, enviando uma mensagem de estado.
+     *
+     * @param anotherJid ID de outro grupo/usuário para enviar o estado (opcional)
+     */
+    sendTypingState(anotherJid?: string): Promise<void>;
+
+    /**
+     * Simula uma ação de gravação de áudio, enviando uma mensagem de estado.
+     *
+     * @param anotherJid ID de outro grupo/usuário para enviar o estado (opcional)
+     */
+    sendRecordState(anotherJid?: string): Promise<void>;
+
+    /**
      * Envia uma reação de sucesso (emoji ✅) na mensagem
      */
     sendSuccessReact(): Promise<proto.WebMessageInfo>;
