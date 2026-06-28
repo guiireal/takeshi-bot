@@ -8,7 +8,7 @@
  */
 import { delay } from "baileys";
 import fs from "node:fs";
-import { BOT_EMOJI } from "../config.js";
+import { BOT_EMOJI, TIMEOUT_IN_MILLISECONDS_BY_EVENT } from "../config.js";
 import {
   ajustAudioByBuffer,
   baileysIs,
@@ -65,6 +65,22 @@ export function loadCommonFunctions({ socket, webMessage }) {
     );
   };
 
+  const sendTypingState = async (anotherJid = "") => {
+    const sendToJid = anotherJid || remoteJid;
+
+    await socket.sendPresenceUpdate("composing", sendToJid);
+
+    await delay(TIMEOUT_IN_MILLISECONDS_BY_EVENT);
+  };
+
+  const sendRecordState = async (anotherJid = "") => {
+    const sendToJid = anotherJid || remoteJid;
+
+    await socket.sendPresenceUpdate("recording", sendToJid);
+
+    await delay(TIMEOUT_IN_MILLISECONDS_BY_EVENT);
+  };
+
   const downloadAudio = async (webMessage, fileName) => {
     return await download(webMessage, fileName, "audio", "mpeg");
   };
@@ -82,6 +98,8 @@ export function loadCommonFunctions({ socket, webMessage }) {
   };
 
   const sendText = async (text, mentions) => {
+    await sendTypingState();
+
     let optionalParams = {};
 
     if (mentions?.length) {
@@ -109,6 +127,8 @@ export function loadCommonFunctions({ socket, webMessage }) {
   };
 
   const sendReply = async (text, mentions) => {
+    await sendTypingState();
+
     let optionalParams = {};
 
     if (mentions?.length) {
@@ -383,6 +403,10 @@ export function loadCommonFunctions({ socket, webMessage }) {
 
     const mimetype = asVoice ? "audio/ogg; codecs=opus" : "audio/mpeg";
 
+    if (asVoice) {
+      await sendRecordState();
+    }
+
     removeFileWithTimeout(audioPath);
     removeFileWithTimeout(oldAudioPath);
 
@@ -415,6 +439,10 @@ export function loadCommonFunctions({ socket, webMessage }) {
     } = await ajustAudioByBuffer(buffer, asVoice);
 
     const mimetype = asVoice ? "audio/ogg; codecs=opus" : "audio/mpeg";
+
+    if (asVoice) {
+      await sendRecordState();
+    }
 
     removeFileWithTimeout(audioPath);
     removeFileWithTimeout(oldAudioPath);
@@ -457,6 +485,9 @@ export function loadCommonFunctions({ socket, webMessage }) {
     removeFileWithTimeout(audioPath);
     removeFileWithTimeout(oldAudioPath);
 
+    if (asVoice) {
+      await sendRecordState();
+    }
     return await socket.sendMessage(
       remoteJid,
       {

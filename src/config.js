@@ -35,6 +35,9 @@ export const ASSETS_DIR = path.resolve(__dirname, "..", "assets");
 // Diretório de arquivos temporários.
 export const TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
 
+// Timeout em milissegundos por evento (evita banimento).
+export const TIMEOUT_IN_MILLISECONDS_BY_EVENT = 500;
+
 // Plataforma de API's
 export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 
