@@ -237,7 +237,7 @@ declare global {
     sendAudioFromFile(
       filePath: string,
       asVoice: boolean,
-      quoted: boolean
+      quoted: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -262,7 +262,7 @@ declare global {
     sendAudioFromBuffer(
       buffer: Buffer,
       asVoice: boolean,
-      quoted: boolean
+      quoted: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -279,7 +279,7 @@ declare global {
     sendAudioFromURL(
       url: string,
       asVoice: boolean,
-      quoted: boolean
+      quoted: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -309,7 +309,7 @@ declare global {
     sendEditedReply(
       text: string,
       messageToEdit: proto.WebMessageInfo,
-      mentions?: string[]
+      mentions?: string[],
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -327,7 +327,7 @@ declare global {
     sendEditedText(
       text: string,
       messageToEdit: proto.WebMessageInfo,
-      mentions?: string[]
+      mentions?: string[],
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -346,7 +346,7 @@ declare global {
       file: string,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -365,7 +365,7 @@ declare global {
       url: string,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -392,7 +392,7 @@ declare global {
       buffer: Buffer,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -411,7 +411,7 @@ declare global {
       file: string,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -436,7 +436,7 @@ declare global {
       buffer: Buffer,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -455,7 +455,7 @@ declare global {
       url: string,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -482,23 +482,9 @@ declare global {
     sendReact(emoji: string): Promise<proto.WebMessageInfo>;
 
     /**
-     * Simula uma ação de gravação de áudio, enviando uma mensagem de estado.
-     *
-     * @param anotherJid ID de outro grupo/usuário para enviar o estado (opcional)
-     */
-    sendRecordState(anotherJid?: string): Promise<void>;
-
-    /**
      * Envia uma reação de sucesso (emoji ✅) na mensagem
      */
     sendSuccessReact(): Promise<proto.WebMessageInfo>;
-
-    /**
-     * Simula uma ação de digitação, enviando uma mensagem de estado.
-     *
-     * @param anotherJid ID de outro grupo/usuário para enviar o estado (opcional)
-     */
-    sendTypingState(anotherJid?: string): Promise<void>;
 
     /**
      * Envia uma reação de erro (emoji ⏳) na mensagem.
@@ -539,7 +525,7 @@ declare global {
      */
     sendSuccessReply(
       text: string,
-      mentions?: string[]
+      mentions?: string[],
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -554,7 +540,7 @@ declare global {
      */
     sendWarningReply(
       text: string,
-      mentions?: string[]
+      mentions?: string[],
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -569,7 +555,7 @@ declare global {
      */
     sendWaitReply(
       text: string,
-      mentions?: string[]
+      mentions?: string[],
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -584,7 +570,7 @@ declare global {
      */
     sendErrorReply(
       text: string,
-      mentions?: string[]
+      mentions?: string[],
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -599,7 +585,7 @@ declare global {
      */
     sendStickerFromFile(
       path: string,
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -614,7 +600,7 @@ declare global {
      */
     sendStickerFromURL(
       url: string,
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -637,7 +623,7 @@ declare global {
      */
     sendStickerFromBuffer(
       buffer: Buffer,
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -668,7 +654,7 @@ declare global {
       file: string,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -687,7 +673,7 @@ declare global {
       url: string,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -714,7 +700,7 @@ declare global {
       buffer: Buffer,
       caption?: string,
       mentions?: string[],
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -737,7 +723,7 @@ declare global {
       filePath: string,
       mimetype?: string,
       fileName?: string,
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -756,7 +742,7 @@ declare global {
       url: string,
       mimetype?: string,
       fileName?: string,
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -783,7 +769,7 @@ declare global {
       buffer: Buffer,
       mimetype?: string,
       fileName?: string,
-      quoted?: boolean
+      quoted?: boolean,
     ): Promise<proto.WebMessageInfo>;
 
     /**
@@ -875,7 +861,7 @@ declare global {
     sendPoll(
       title: string,
       options: { optionName: string }[],
-      singleChoice?: boolean
+      singleChoice?: boolean,
     ): Promise<proto.WebMessageInfo>;
   }
 }

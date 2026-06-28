@@ -35,9 +35,6 @@ export const ASSETS_DIR = path.resolve(__dirname, "..", "assets");
 // Diretório de arquivos temporários.
 export const TEMP_DIR = path.resolve(__dirname, "..", "assets", "temp");
 
-// Timeout em milissegundos por evento (evita banimento).
-export const TIMEOUT_IN_MILLISECONDS_BY_EVENT = 500;
-
 // Plataforma de API's
 export const SPIDER_API_BASE_URL = "https://api.spiderx.com.br/api";
 
@@ -63,13 +60,6 @@ export const ONLY_GROUP_ID = "";
 // mude o valor para ( true ) sem os parênteses
 // caso queira ver os logs de mensagens recebidas
 export const DEVELOPER_MODE = false;
-
-// Caso queira usar proxy.
-export const PROXY_PROTOCOL = "http";
-export const PROXY_HOST = "";
-export const PROXY_PORT = "";
-export const PROXY_USERNAME = "";
-export const PROXY_PASSWORD = "";
 
 // Chave da OpenAI para o comando de suporte
 export const OPENAI_API_KEY = "";
