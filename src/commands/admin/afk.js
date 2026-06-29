@@ -51,6 +51,6 @@ export default {
 
     setAfkMember(remoteJid, userLid, reason);
 
-    await sendSuccessReply(`Você está ausente.\n\nMotivo: ${reason}`);
+    await sendSuccessReply("Ausência cadastrada com sucesso!");
   },
 };

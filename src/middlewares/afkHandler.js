@@ -1,4 +1,8 @@
-import { listAfkMembers } from "../utils/database.js";
+import {
+  getPrefix,
+  listAfkMembers,
+  removeAfkMember,
+} from "../utils/database.js";
 
 const MESSAGE_WRAPPERS = [
   "documentWithCaptionMessage",
@@ -45,6 +49,17 @@ export async function handleAfkReferences({ webMessage, commonFunctions }) {
     return;
   }
 
+  const { commandName, prefix, remoteJid, userLid } = commonFunctions;
+  const afkMembers = listAfkMembers(remoteJid);
+  const isAfkCommand =
+    prefix === getPrefix(remoteJid) &&
+    ["afk", "ausente"].includes(commandName);
+
+  if (!isAfkCommand && afkMembers[userLid]) {
+    removeAfkMember(remoteJid, userLid);
+    delete afkMembers[userLid];
+  }
+
   const contextInfo = getMessageContextInfo(webMessage.message);
 
   if (!contextInfo) {
@@ -62,8 +77,6 @@ export async function handleAfkReferences({ webMessage, commonFunctions }) {
   if (!referencedMembers.size) {
     return;
   }
-
-  const afkMembers = listAfkMembers(commonFunctions.remoteJid);
 
   for (const memberId of referencedMembers) {
     const reason = afkMembers[memberId];
