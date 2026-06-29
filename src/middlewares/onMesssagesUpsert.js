@@ -20,6 +20,7 @@ import { customMiddleware } from "./customMiddleware.js";
 import { messageHandler } from "./messageHandler.js";
 import { recordMessageEnvelope } from "../utils/messageEnvelopeRegistry.js";
 import { hasPaymentMessage } from "../utils/paymentMessage.js";
+import { handleAfkReferences } from "./afkHandler.js";
 import { onGroupParticipantsUpdate } from "./onGroupParticipantsUpdate.js";
 
 export async function onMessagesUpsert({ socket, messages, startProcess }) {
@@ -118,6 +119,8 @@ export async function onMessagesUpsert({ socket, messages, startProcess }) {
         type: "message",
         commonFunctions,
       });
+
+      await handleAfkReferences({ webMessage, commonFunctions });
 
       await dynamicCommand(commonFunctions, startProcess);
     } catch (error) {

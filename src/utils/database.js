@@ -14,6 +14,7 @@ const __dirname = path.dirname(__filename);
 
 const databasePath = path.resolve(__dirname, "..", "..", "database");
 
+const AFK_GROUPS_FILE = "afk-groups";
 const ANTI_LINK_GROUPS_FILE = "anti-link-groups";
 const AUTO_RESPONDER_FILE = "auto-responder";
 const AUTO_RESPONDER_GROUPS_FILE = "auto-responder-groups";
@@ -48,6 +49,48 @@ function writeJSON(jsonFile, data, formatIfNotExists = []) {
   createIfNotExists(fullPath, formatIfNotExists);
 
   fs.writeFileSync(fullPath, JSON.stringify(data, null, 2), "utf8");
+}
+
+export function setAfkMember(groupId, memberId, reason) {
+  const afkGroups = readJSON(AFK_GROUPS_FILE, {});
+
+  if (!afkGroups[groupId]) {
+    afkGroups[groupId] = {};
+  }
+
+  afkGroups[groupId][memberId] = reason.trim();
+
+  writeJSON(AFK_GROUPS_FILE, afkGroups, {});
+}
+
+export function getAfkReason(groupId, memberId) {
+  const afkGroups = readJSON(AFK_GROUPS_FILE, {});
+
+  return afkGroups[groupId]?.[memberId] || null;
+}
+
+export function listAfkMembers(groupId) {
+  const afkGroups = readJSON(AFK_GROUPS_FILE, {});
+
+  return { ...(afkGroups[groupId] || {}) };
+}
+
+export function removeAfkMember(groupId, memberId) {
+  const afkGroups = readJSON(AFK_GROUPS_FILE, {});
+
+  if (!afkGroups[groupId]?.[memberId]) {
+    return false;
+  }
+
+  delete afkGroups[groupId][memberId];
+
+  if (!Object.keys(afkGroups[groupId]).length) {
+    delete afkGroups[groupId];
+  }
+
+  writeJSON(AFK_GROUPS_FILE, afkGroups, {});
+
+  return true;
 }
 
 export function activateExitGroup(groupId) {
