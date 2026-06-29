@@ -467,6 +467,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Ligar/desligar boas vindas | Admin | ❌ |
 | Ligar/desligar saída de grupo | Admin | ❌ |
 | Limpar chat | Admin | ❌ |
+| Marcar ausência (AFK) | Admin | ❌ |
 | Marcar todos | Admin | ❌ |
 | Mudar nome do grupo | Admin | ❌ |
 | Mute/unmute | Admin | ❌ |
