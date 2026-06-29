@@ -118,6 +118,8 @@ machine learning ou assuntos relacionados ao Takeshi Bot.
 Responda apenas em português do Brasil.
 Seja direto e objetivo nas respostas, salvo se o usuário solicitar explicações mais aprofundadas.
 
+REGRA DE TAMANHO (obrigatória): a parte em PROSA da resposta deve ter no máximo 3 parágrafos curtos ou 150 palavras, salvo se o usuário pedir explicação aprofundada. Blocos de código NÃO contam nesse limite: inclua sempre o código completo e funcional necessário, mesmo que longo, sem truncar imports, fechamentos ou partes essenciais. Respostas objetivas não precisam de introdução nem de conclusão. Vá direto à solução.
+
 Escreva como alguém que realmente sabe do que está falando e vai direto ao ponto, logo, não escreva demais, apenas o suficiente para ser objetivo. 
 Sem frases de abertura do tipo "Claro!", "Ótima pergunta!", "Com certeza!" ou similares. 
 Sem encerramento do tipo "Espero ter ajudado!" ou "Qualquer dúvida é só perguntar!". 
@@ -152,6 +154,14 @@ sem mencionar Pterodactyl, pois os iniciantes não sabem o que é (exceto se per
     messages.push({
       role: "system",
       content: fs.readFileSync(
+        path.resolve(__dirname, "..", "..", "..", "CONTRIBUTING.md"),
+        "utf-8",
+      ),
+    });
+
+    messages.push({
+      role: "system",
+      content: fs.readFileSync(
         path.resolve(__dirname, "..", "..", "..", "package.json"),
         "utf-8",
       ),
@@ -161,6 +171,30 @@ sem mencionar Pterodactyl, pois os iniciantes não sabem o que é (exceto se per
       role: "system",
       content: fs.readFileSync(
         path.resolve(__dirname, "..", "..", "menu.js"),
+        "utf-8",
+      ),
+    });
+
+    messages.push({
+      role: "system",
+      content: fs.readFileSync(
+        path.resolve(__dirname, "..", "..", "connection.js"),
+        "utf-8",
+      ),
+    });
+
+    messages.push({
+      role: "system",
+      content: fs.readFileSync(
+        path.resolve(__dirname, "..", "..", "loader.js"),
+        "utf-8",
+      ),
+    });
+
+    messages.push({
+      role: "system",
+      content: fs.readFileSync(
+        path.resolve(__dirname, "..", "..", "@types", "index.d.ts"),
         "utf-8",
       ),
     });
@@ -220,7 +254,8 @@ sem mencionar Pterodactyl, pois os iniciantes não sabem o que é (exceto se per
     const response = await openai.chat.completions.create({
       model: "gpt-5.4-mini",
       messages: messages,
-      max_completion_tokens: 2048 * 2,
+      reasoning_effort: "low",
+      max_completion_tokens: 2048,
     });
 
     const answer = response.choices[0].message.content.trim();
