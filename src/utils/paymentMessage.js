@@ -3,6 +3,9 @@ const PAYMENT_MESSAGE_KEYS = new Set([
   "paymentInviteMessage",
   "requestPaymentMessage",
   "sendPaymentMessage",
+  "cancelPaymentRequestMessage",
+  "declinePaymentRequestMessage",
+  "invoiceMessage",
 ]);
 
 function canScanObject(value) {

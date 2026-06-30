@@ -6,6 +6,7 @@ import {
   __clearEnvelopeRegistry,
   recordMessageEnvelope,
 } from "../utils/messageEnvelopeRegistry.js";
+import { __clearPaymentDefenseState } from "../utils/paymentDefenseState.js";
 import { getQuotedPaymentContext } from "../utils/paymentMessage.js";
 import * as database from "../utils/database.js";
 
@@ -76,6 +77,7 @@ describe("quoted anti-payment", () => {
 
   beforeEach(() => {
     __clearEnvelopeRegistry();
+    __clearPaymentDefenseState();
   });
 
   it("should read the original author from a quoted payment", () => {
