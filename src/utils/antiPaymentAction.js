@@ -1,44 +1,24 @@
 /**
- * Ação de punição do anti-payment, compartilhada entre o handler de mensagens
- * decifráveis (messageHandler): fecha o grupo, remove o autor, limpa o chat e reabre.
+ * Ações de punição do anti-payment, compartilhadas entre o handler de mensagens
+ * diretas (messageHandler) e o de marcações (quoted). A orquestração de fechar o
+ * grupo, remover o autor, apagar a mensagem e limpar o chat — com deduplicação e
+ * coalescência sob rajada — vive em paymentDefenseState.js.
  *
  * @author Dev Gui
  */
-import { sendCleanChat } from "./cleanChat.js";
 import { errorLog } from "./logger.js";
 import { BOT_LID, OWNER_LID } from "../config.js";
 import { getQuotedPaymentContext } from "./paymentMessage.js";
 import { verifyQuotedAuthor } from "./messageEnvelopeRegistry.js";
+import { defendAgainstPayment } from "./paymentDefenseState.js";
 
-async function runAntiPaymentStep(step, errorMessage) {
-  try {
-    await step();
-  } catch (error) {
-    errorLog(`${errorMessage} Detalhes: ${error.message}`);
-  }
-}
-
-export async function applyAntiPaymentRestriction({
+export function applyAntiPaymentRestriction({
   socket,
   remoteJid,
   userLid,
+  messageKey,
 }) {
-  await runAntiPaymentStep(
-    () => socket.groupSettingUpdate(remoteJid, "announcement"),
-    "Erro ao fechar o grupo pelo anti-payment.",
-  );
-
-  await runAntiPaymentStep(
-    () => socket.groupParticipantsUpdate(remoteJid, [userLid], "remove"),
-    "Erro ao banir membro pelo anti-payment.",
-  );
-
-  await sendCleanChat({ socket, remoteJid });
-
-  await runAntiPaymentStep(
-    () => socket.groupSettingUpdate(remoteJid, "not_announcement"),
-    "Erro ao abrir o grupo pelo anti-payment.",
-  );
+  return defendAgainstPayment({ socket, remoteJid, userLid, messageKey });
 }
 
 /**
@@ -114,22 +94,21 @@ export async function handleQuotedPaymentRestriction({
     return false;
   }
 
-  if (quotedPayment.stanzaId) {
-    await runAntiPaymentStep(
-      () =>
-        socket.sendMessage(remoteJid, {
-          delete: {
-            remoteJid,
-            fromMe: false,
-            id: quotedPayment.stanzaId,
-            participant: authorLid,
-          },
-        }),
-      "Erro ao apagar a mensagem original de pagamento.",
-    );
-  }
-
-  await applyAntiPaymentRestriction({ socket, remoteJid, userLid: authorLid });
+  // A revogação da mensagem original entra como messageKey, para rodar em
+  // paralelo com a remoção do autor dentro da defesa.
+  await applyAntiPaymentRestriction({
+    socket,
+    remoteJid,
+    userLid: authorLid,
+    messageKey: quotedPayment.stanzaId
+      ? {
+          remoteJid,
+          fromMe: false,
+          id: quotedPayment.stanzaId,
+          participant: authorLid,
+        }
+      : undefined,
+  });
 
   return true;
 }

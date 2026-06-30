@@ -59,7 +59,8 @@ function pruneGroup(groupMap) {
 export function recordMessageEnvelope(webMessage, isPayment) {
   const remoteJid = webMessage?.key?.remoteJid;
   const id = webMessage?.key?.id;
-  const participant = webMessage?.key?.participant;
+  const participantAlt = webMessage?.key?.participantAlt;
+  const participant = webMessage?.key?.participant || participantAlt;
 
   if (!remoteJid?.endsWith("@g.us") || !id || !participant) {
     return;
@@ -80,6 +81,7 @@ export function recordMessageEnvelope(webMessage, isPayment) {
 
   groupMap.set(id, {
     participant,
+    participantAlt,
     contentState,
     stealth: Boolean(webMessage?.stealthMeta),
     ts: Date.now(),
@@ -108,7 +110,7 @@ export function verifyQuotedAuthor({ groupJid, stanzaId, participant }) {
     return { corroborated: false, contradicted: false };
   }
 
-  if (entry.participant !== participant) {
+  if (entry.participant !== participant && entry.participantAlt !== participant) {
     return { corroborated: false, contradicted: true };
   }
 

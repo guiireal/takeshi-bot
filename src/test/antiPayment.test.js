@@ -1,10 +1,16 @@
 import assert from "node:assert";
-import { describe, it } from "node:test";
+import { beforeEach, describe, it } from "node:test";
 import antiPayment from "../commands/admin/anti-payment.js";
 import { messageHandler } from "../middlewares/messageHandler.js";
 import { useGroupRestrictionsCleanup } from "./helpers/groupRestrictions.js";
 import { buildCleanChatMessage } from "../utils/cleanChat.js";
+import {
+  __clearPaymentDefenseState,
+  __setGroupIncidentTtlForTests,
+} from "../utils/paymentDefenseState.js";
 import * as database from "../utils/database.js";
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function createSocket(calls, userLid) {
   return {
@@ -25,6 +31,61 @@ function createSocket(calls, userLid) {
       calls.push(["relayMessage", ...args]);
     },
   };
+}
+
+const countSetting = (calls, setting) =>
+  calls.filter(
+    (call) => call[0] === "groupSettingUpdate" && call[2] === setting,
+  ).length;
+
+const findRemove = (calls, lid) =>
+  calls.find(
+    (call) =>
+      call[0] === "groupParticipantsUpdate" &&
+      call[3] === "remove" &&
+      Array.isArray(call[2]) &&
+      call[2][0] === lid,
+  );
+
+const findDelete = (calls, id, lid) =>
+  calls.find(
+    (call) =>
+      call[0] === "sendMessage" &&
+      call[2]?.delete?.id === id &&
+      call[2]?.delete?.participant === lid,
+  );
+
+const findCleanText = (calls) =>
+  calls.find(
+    (call) =>
+      call[0] === "sendMessage" &&
+      typeof call[2]?.text === "string" &&
+      call[2].text.includes("🗑️"),
+  );
+
+const findRelay = (calls) =>
+  calls.find(
+    (call) =>
+      call[0] === "relayMessage" &&
+      JSON.stringify(call[2]) === JSON.stringify(buildCleanChatMessage()),
+  );
+
+// Asserções comuns ao incidente de pagamento: grupo fechado uma vez, autor
+// removido, mensagem revogada, chat limpo e grupo reaberto (uma vez, debounced).
+async function assertPaymentIncident({ calls, groupId, lid, messageId }) {
+  assert.strictEqual(countSetting(calls, "announcement"), 1);
+  assert.ok(findRemove(calls, lid), "deve remover o autor");
+  assert.ok(findDelete(calls, messageId, lid), "deve apagar a mensagem");
+  assert.ok(findCleanText(calls), "deve enviar a limpeza de chat");
+  assert.ok(findRelay(calls), "deve relayar a imagem de limpeza");
+
+  // A reabertura é debounced (TTL curto nos testes): espera o timer disparar.
+  await sleep(120);
+  assert.strictEqual(countSetting(calls, "not_announcement"), 1);
+  assert.ok(
+    calls.every((call) => call[1] === undefined || call[1] === groupId),
+    "todas as ações devem ser no grupo correto",
+  );
 }
 
 describe("anti-payment", () => {
@@ -54,6 +115,11 @@ describe("anti-payment", () => {
       "anti-status-grupo",
       true,
     );
+  });
+
+  beforeEach(() => {
+    __clearPaymentDefenseState();
+    __setGroupIncidentTtlForTests(20);
   });
 
   it("should activate and deactivate anti-payment", async () => {
@@ -88,7 +154,7 @@ describe("anti-payment", () => {
     assert.strictEqual(replies[1], "Anti-payment desativado com sucesso!");
   });
 
-  it("should close group, ban sender and clean chat when direct payment message is detected", async () => {
+  it("should close group, ban sender, delete message and clean chat when direct payment message is detected", async () => {
     const calls = [];
     const webMessage = {
       key: {
@@ -106,35 +172,15 @@ describe("anti-payment", () => {
 
     await messageHandler(createSocket(calls, userLid), webMessage);
 
-    assert.strictEqual(calls.length, 5);
-    assert.deepStrictEqual(calls[0], [
-      "groupSettingUpdate",
-      handlerGroupId,
-      "announcement",
-    ]);
-    assert.deepStrictEqual(calls[1], [
-      "groupParticipantsUpdate",
-      handlerGroupId,
-      [userLid],
-      "remove",
-    ]);
-    assert.strictEqual(calls[2][0], "sendMessage");
-    assert.strictEqual(calls[2][1], handlerGroupId);
-    assert.ok(calls[2][2].text.includes("🗑️"));
-    assert.deepStrictEqual(calls[3], [
-      "relayMessage",
-      handlerGroupId,
-      buildCleanChatMessage(),
-      {},
-    ]);
-    assert.deepStrictEqual(calls[4], [
-      "groupSettingUpdate",
-      handlerGroupId,
-      "not_announcement",
-    ]);
+    await assertPaymentIncident({
+      calls,
+      groupId: handlerGroupId,
+      lid: userLid,
+      messageId: "payment-message-id",
+    });
   });
 
-  it("should close group, ban sender and clean chat when send payment message is detected", async () => {
+  it("should close group, ban sender, delete message and clean chat when send payment message is detected", async () => {
     const calls = [];
     const webMessage = {
       key: {
@@ -154,20 +200,15 @@ describe("anti-payment", () => {
 
     await messageHandler(createSocket(calls, userLid), webMessage);
 
-    assert.deepStrictEqual(calls[0], [
-      "groupSettingUpdate",
-      handlerGroupId,
-      "announcement",
-    ]);
-    assert.deepStrictEqual(calls[1], [
-      "groupParticipantsUpdate",
-      handlerGroupId,
-      [userLid],
-      "remove",
-    ]);
+    await assertPaymentIncident({
+      calls,
+      groupId: handlerGroupId,
+      lid: userLid,
+      messageId: "send-payment-message-id",
+    });
   });
 
-  it("should close group, ban sender and clean chat when payment message is wrapped in group status message", async () => {
+  it("should close group, ban sender, delete message and clean chat when payment message is wrapped in group status message", async () => {
     const calls = [];
     const webMessage = {
       key: {
@@ -189,35 +230,15 @@ describe("anti-payment", () => {
 
     await messageHandler(createSocket(calls, userLid), webMessage);
 
-    assert.strictEqual(calls.length, 5);
-    assert.deepStrictEqual(calls[0], [
-      "groupSettingUpdate",
-      handlerGroupId,
-      "announcement",
-    ]);
-    assert.deepStrictEqual(calls[1], [
-      "groupParticipantsUpdate",
-      handlerGroupId,
-      [userLid],
-      "remove",
-    ]);
-    assert.strictEqual(calls[2][0], "sendMessage");
-    assert.strictEqual(calls[2][1], handlerGroupId);
-    assert.ok(calls[2][2].text.includes("🗑️"));
-    assert.deepStrictEqual(calls[3], [
-      "relayMessage",
-      handlerGroupId,
-      buildCleanChatMessage(),
-      {},
-    ]);
-    assert.deepStrictEqual(calls[4], [
-      "groupSettingUpdate",
-      handlerGroupId,
-      "not_announcement",
-    ]);
+    await assertPaymentIncident({
+      calls,
+      groupId: handlerGroupId,
+      lid: userLid,
+      messageId: "wrapped-payment-message-id",
+    });
   });
 
-  it("should close group, ban sender and clean chat when payment and group status restrictions both match", async () => {
+  it("should close group, ban sender, delete message and clean chat when payment and group status restrictions both match", async () => {
     const calls = [];
     const webMessage = {
       key: {
@@ -239,31 +260,37 @@ describe("anti-payment", () => {
 
     await messageHandler(createSocket(calls, userLid), webMessage);
 
-    assert.strictEqual(calls.length, 5);
-    assert.deepStrictEqual(calls[0], [
-      "groupSettingUpdate",
-      handlerStatusGroupId,
-      "announcement",
-    ]);
-    assert.deepStrictEqual(calls[1], [
-      "groupParticipantsUpdate",
-      handlerStatusGroupId,
-      [userLid],
-      "remove",
-    ]);
-    assert.strictEqual(calls[2][0], "sendMessage");
-    assert.strictEqual(calls[2][1], handlerStatusGroupId);
-    assert.ok(calls[2][2].text.includes("🗑️"));
-    assert.deepStrictEqual(calls[3], [
-      "relayMessage",
-      handlerStatusGroupId,
-      buildCleanChatMessage(),
-      {},
-    ]);
-    assert.deepStrictEqual(calls[4], [
-      "groupSettingUpdate",
-      handlerStatusGroupId,
-      "not_announcement",
-    ]);
+    await assertPaymentIncident({
+      calls,
+      groupId: handlerStatusGroupId,
+      lid: userLid,
+      messageId: "status-payment-message-id",
+    });
+  });
+
+  it("should resolve the author from participantAlt when participant is absent", async () => {
+    const calls = [];
+    const altLid = "987654321@lid";
+    const webMessage = {
+      key: {
+        remoteJid: handlerGroupId,
+        fromMe: false,
+        id: "alt-payment-message-id",
+        participantAlt: altLid,
+      },
+      message: {
+        requestPaymentMessage: {
+          currencyCodeIso4217: "BRL",
+        },
+      },
+    };
+
+    await messageHandler(createSocket(calls, altLid), webMessage);
+
+    assert.ok(findRemove(calls, altLid), "deve remover o autor via participantAlt");
+    assert.ok(
+      findDelete(calls, "alt-payment-message-id", altLid),
+      "deve apagar a mensagem do autor via participantAlt",
+    );
   });
 });

@@ -34,7 +34,7 @@ export async function messageHandler(socket, webMessage) {
       return;
     }
 
-    const userLid = webMessage.key?.participant;
+    const userLid = webMessage.key?.participant || webMessage.key?.participantAlt;
 
     if (!userLid) {
       return;
@@ -56,7 +56,17 @@ export async function messageHandler(socket, webMessage) {
     const isAntiPaymentActive = !!antiGroups[remoteJid]?.["anti-payment"];
 
     if (isAntiPaymentActive && hasPaymentMessage(webMessage)) {
-      await applyAntiPaymentRestriction({ socket, remoteJid, userLid });
+      await applyAntiPaymentRestriction({
+        socket,
+        remoteJid,
+        userLid,
+        messageKey: {
+          remoteJid,
+          fromMe: false,
+          id: messageId,
+          participant: userLid,
+        },
+      });
 
       return;
     }
