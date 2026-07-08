@@ -55,52 +55,36 @@ export default {
 
     await delay(3000);
 
-    await sendExample("botões de template", {
-      text: "Exemplo com botões de template",
-      footer: "Resposta rápida, URL e chamada",
-      templateButtons: [
-        {
-          index: 1,
-          quickReplyButton: {
-            displayText: "Resposta rápida",
-            id: triggerCommand("resposta-rapida"),
-          },
-        },
-        {
-          index: 2,
-          urlButton: {
-            displayText: "Abrir site",
-            url: "https://github.com/guiireal",
-          },
-        },
-        {
-          index: 3,
-          callButton: {
-            displayText: "Ligar",
-            phoneNumber: "+5511999999999",
-          },
-        },
-      ],
-    });
-
-    await delay(3000);
-
     await sendExample("botões interativos", {
       text: "Exemplo com botões interativos",
-      footer: "Botões native flow",
+      footer: "Resposta rápida, link, chamada e cópia",
       interactiveButtons: [
         {
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
-            display_text: "Interativo 1",
-            id: triggerCommand("interativo1"),
+            display_text: "Resposta rápida",
+            id: triggerCommand("resposta-rapida"),
           }),
         },
         {
-          name: "quick_reply",
+          name: "cta_url",
           buttonParamsJson: JSON.stringify({
-            display_text: "Interativo 2",
-            id: triggerCommand("interativo2"),
+            display_text: "Abrir site",
+            url: "https://github.com/guiireal",
+          }),
+        },
+        {
+          name: "cta_call",
+          buttonParamsJson: JSON.stringify({
+            display_text: "Ligar",
+            phone_number: "+5511999999999",
+          }),
+        },
+        {
+          name: "cta_copy",
+          buttonParamsJson: JSON.stringify({
+            display_text: "Copiar código",
+            copy_code: "TAKESHI2026",
           }),
         },
       ],
@@ -133,19 +117,23 @@ export default {
       code: `await socket.sendMessage(remoteJid, {
   text: 'Escolha uma opção',
   footer: 'Rodapé',
-  buttons: [
+  interactiveButtons: [
     {
-      buttonId: '${prefix || PREFIX}exemplo-gatilho opcao1',
-      buttonText: { displayText: 'Opção 1' }
+      name: 'cta_url',
+      buttonParamsJson: JSON.stringify({
+        display_text: 'Abrir site',
+        url: 'https://github.com/guiireal'
+      })
     }
-  ]
+  ],
+  viewOnce: true
 });`,
       footer:
         "\n💡 *Dicas:*\n" +
         "• `buttons` cria botões simples usando native flow por padrão\n" +
         "• `useLegacyButtons: true` força o formato antigo `buttonsMessage`\n" +
-        "• `templateButtons` permite resposta rápida, URL e chamada\n" +
-        "• `interactiveButtons` usa native flow e normalmente precisa de `viewOnce: true`\n" +
+        "• `interactiveButtons` aceita `quick_reply`, `cta_url`, `cta_call`, `cta_copy`, `single_select`, entre outros\n" +
+        "• `templateButtons` não é mais renderizado pelo WhatsApp em números comuns, use `interactiveButtons`\n" +
         "⚠️ Importante: a baileys do Takeshi foi modificada para suportar esses formatos!",
       quoted: webMessage,
     });
