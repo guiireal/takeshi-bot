@@ -13,7 +13,10 @@ import * as database from "../utils/database.js";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function createSocket(calls, userLid) {
+  let messageSeq = 0;
+
   return {
+    user: { id: "bot-user@s.whatsapp.net" },
     groupMetadata: async () => ({
       owner: "owner@lid",
       participants: [{ id: userLid, admin: null }],
@@ -26,6 +29,15 @@ function createSocket(calls, userLid) {
     },
     sendMessage: async (...args) => {
       calls.push(["sendMessage", ...args]);
+      messageSeq += 1;
+
+      return {
+        key: {
+          id: `BOT_MSG_${messageSeq}`,
+          fromMe: true,
+          remoteJid: args[0],
+        },
+      };
     },
     relayMessage: async (...args) => {
       calls.push(["relayMessage", ...args]);
