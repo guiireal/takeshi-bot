@@ -1,6 +1,7 @@
 import path from "node:path";
 import { ASSETS_DIR, PREFIX } from "../../config.js";
 import { menuMessage } from "../../menu.js";
+import { getRandomNumber } from "../../utils/index.js";
 
 export default {
   name: "menu",
@@ -10,12 +11,20 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ remoteJid, sendImageFromFile, sendSuccessReact }) => {
+  handle: async ({
+    remoteJid,
+    sendSuccessReact,
+    sendImageFromFile,
+    sendGifFromFile,
+  }) => {
     await sendSuccessReact();
 
-    await sendImageFromFile(
-      path.join(ASSETS_DIR, "images", "takeshi-bot.png"),
-      `\n\n${menuMessage(remoteJid)}`
-    );
+    const useGif = getRandomNumber(0, 1);
+    const send = useGif ? sendGifFromFile : sendImageFromFile;
+    const file = useGif
+      ? path.join(ASSETS_DIR, "videos", "takeshi-bot.mp4")
+      : path.join(ASSETS_DIR, "images", "takeshi-bot.png");
+
+    await send(file, `\n\n${menuMessage(remoteJid)}`);
   },
 };
