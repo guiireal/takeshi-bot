@@ -50,7 +50,7 @@ export const SPIDER_API_TOKEN = "seu_token_aqui";
 export const LINKER_BASE_URL = "https://linker.devgui.dev/api";
 
 // Obtenha sua chave em: https://linker.devgui.dev.
-// Voce tambem pode usar seu token da Spider X API aqui.
+// Se não configurar esta chave, o bot usa automaticamente o token da Spider X API.
 export const LINKER_API_KEY = "seu_token_aqui";
 
 // Caso queira responder apenas um grupo específico,

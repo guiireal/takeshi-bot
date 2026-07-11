@@ -1,2 +1,4 @@
-assets/auth/baileys
 .vscode
+assets/auth/baileys
+assets/temp/
+assets/temp/wa-logs.txt
