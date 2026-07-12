@@ -56,7 +56,7 @@ Stack content
       const response = `\`\`\`json
 {
   "sections": ["PROJECT_OVERVIEW", "STACK"],
-  "files": ["src/config.js", ".skills/pterodactyl-specialist/SKILL.md"]
+  "files": ["src/config.js", ".agents/skills/pterodactyl-specialist/SKILL.md"]
 }
 \`\`\``;
 
@@ -65,7 +65,7 @@ Stack content
       assert.deepStrictEqual(plan.sections, ["PROJECT_OVERVIEW", "STACK"]);
       assert.deepStrictEqual(plan.files, [
         "src/config.js",
-        ".skills/pterodactyl-specialist/SKILL.md",
+        ".agents/skills/pterodactyl-specialist/SKILL.md",
       ]);
     });
   });
@@ -76,7 +76,7 @@ Stack content
         projectRoot,
         requestedFiles: [
           "src/config.js",
-          ".skills/pterodactyl-specialist/SKILL.md",
+          ".agents/skills/pterodactyl-specialist/SKILL.md",
         ],
       });
 
@@ -87,7 +87,7 @@ Stack content
       assert.doesNotMatch(files[0].content, /asOjDIpVROlnghw4jKDt/);
       assert.strictEqual(
         files[1].path,
-        ".skills/pterodactyl-specialist/SKILL.md",
+        ".agents/skills/pterodactyl-specialist/SKILL.md",
       );
     });
 
@@ -133,7 +133,7 @@ Stack content
 
       assert.ok(plan.sections.includes("HOSTING_AND_PTERODACTYL"));
       assert.ok(plan.files.includes("README.md"));
-      assert.ok(plan.files.includes(".skills/pterodactyl-specialist/SKILL.md"));
+      assert.ok(plan.files.includes(".agents/skills/pterodactyl-specialist/SKILL.md"));
     });
 
     it("should include README for installation questions", () => {
