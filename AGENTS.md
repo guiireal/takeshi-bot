@@ -195,7 +195,7 @@ Installation tutorials stay in `README.md`.
 
 If the topic is about hosting, VPS setup, startup configuration, schedules, SFTP, Pterodactyl panel usage, or backup flow, agents should also load:
 
-- `.skills/pterodactyl-specialist/SKILL.md`
+- `.agents/skills/pterodactyl-specialist/SKILL.md`
 
 That skill is the specialized source for Pterodactyl guidance.
 
@@ -236,7 +236,7 @@ This repository uses a local skills pattern to help AI agents load specialized c
 
 Current local skill directory:
 
-- `.skills/pterodactyl-specialist/`
+- `.agents/skills/*`
 
 Current local skill:
 
@@ -244,7 +244,7 @@ Current local skill:
 
 Skill usage rule:
 
-- if the topic is about hosting or **Pterodactyl**, load `.skills/pterodactyl-specialist/SKILL.md`
+- if the topic is about hosting or **Pterodactyl**, load `.agents/skills/pterodactyl-specialist/SKILL.md`
 
 This keeps support and agent workflows selective instead of forcing every answer to carry all hosting knowledge by default.
 
