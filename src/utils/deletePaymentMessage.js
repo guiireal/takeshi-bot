@@ -6,6 +6,7 @@
  * @author Dev Gui
  */
 import { delay } from "baileys";
+import { BOT_EMOJI } from "../config.js";
 import { errorLog } from "./logger.js";
 
 /**
@@ -49,7 +50,7 @@ export async function deletePaymentMessage({
     await socket.sendMessage(
       remoteJid,
       {
-        text: "Mensagem de pagamento removida",
+        text: `${BOT_EMOJI} Mensagem de pagamento removida`,
         edit: {
           remoteJid,
           fromMe: true,
