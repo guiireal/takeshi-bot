@@ -191,7 +191,7 @@ export function buildSupportFallbackPlan({ projectRoot, text = "" }) {
     )
   ) {
     sections.add("HOSTING_AND_PTERODACTYL");
-    files.add(".skills/pterodactyl-specialist/SKILL.md");
+    files.add(".agents/skills/pterodactyl-specialist/SKILL.md");
   }
 
   if (
