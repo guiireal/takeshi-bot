@@ -22,6 +22,13 @@ export function installConsoleNoiseFilter() {
       return;
     }
 
+    if (args[0] === "Removing old closed session:") {
+      warningLog(
+        "O WhatsApp removeu uma sessão criptografada antiga já fechada. Isso é limpeza normal do histórico de chaves e não indica erro no bot.",
+      );
+      return;
+    }
+
     originalConsoleInfo(...args);
   };
 
