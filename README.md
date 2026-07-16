@@ -516,6 +516,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Sticker para imagem | Membro | ❌ |
 | TikTok audio download | Membro | ✅ |
 | TikTok video download | Membro | ✅ |
+| Transcrever áudio | Membro | ✅ |
 | YT MP3 | Membro | ✅ |
 | YT MP4 | Membro | ✅ |
 | YT search | Membro | ✅ |
