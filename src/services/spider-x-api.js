@@ -140,6 +140,34 @@ export async function deepseekV4Flash(text) {
   return data.response;
 }
 
+export async function transcribe(audioBuffer, mimeType, fileName) {
+  if (!audioBuffer) {
+    throw new Error("Você precisa informar o buffer do áudio!");
+  }
+
+  const spiderApiToken = requireSpiderApiToken();
+  const formData = new FormData();
+  const blob = new Blob([audioBuffer], { type: mimeType || "audio/ogg" });
+
+  formData.append("audio", blob, fileName || "audio.ogg");
+
+  const { data } = await axios.post(
+    `${SPIDER_API_BASE_URL}/ai/whisper-v3-turbo?api_key=${spiderApiToken}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
+
+  if (!data?.success || !data.transcription) {
+    throw new Error(data?.message || "Não foi possível transcrever o áudio.");
+  }
+
+  return data.transcription;
+}
+
 export async function attp(text) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");

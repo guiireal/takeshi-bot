@@ -134,6 +134,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}gemini
 ▢ • ${prefix}gpt-5-mini
 ▢ • ${prefix}ia-sticker
+▢ • ${prefix}transcrever
 ▢
 ╰━━─「🚀」─━━
 

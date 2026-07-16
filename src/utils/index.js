@@ -192,6 +192,24 @@ export function getContent(webMessage, context) {
   );
 }
 
+export function getExtensionFromMimeType(mimeType, fallback = "bin") {
+  const normalizedMimeType = mimeType?.split(";")[0].trim().toLowerCase();
+
+  const extensionsByMimeType = {
+    "audio/aac": "aac",
+    "audio/flac": "flac",
+    "audio/m4a": "m4a",
+    "audio/mp4": "m4a",
+    "audio/mpeg": "mp3",
+    "audio/ogg": "ogg",
+    "audio/wav": "wav",
+    "audio/x-m4a": "m4a",
+    "audio/x-wav": "wav",
+  };
+
+  return extensionsByMimeType[normalizedMimeType] || fallback;
+}
+
 export async function download(webMessage, fileName, context, extension) {
   const content = getContent(webMessage, context);
 
