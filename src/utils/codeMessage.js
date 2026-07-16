@@ -109,41 +109,6 @@ export function buildRichResponse(submessages, prefix = "takeshi-code") {
   };
 }
 
-export function buildRichMarkdownResponse(message, prefix = "takeshi-code") {
-  const text = String(message || "");
-  const codeFenceRegex = /```([^\r\n`]*)\r?\n([\s\S]*?)```/g;
-  const submessages = [];
-  let lastIndex = 0;
-  let hasCode = false;
-
-  for (const match of text.matchAll(codeFenceRegex)) {
-    const matchIndex = match.index ?? 0;
-    const prose = text.slice(lastIndex, matchIndex).trim();
-    const code = match[2].replace(/\r?\n$/, "");
-    const language = match[1].trim().split(/\s+/)[0] || "text";
-
-    if (prose) {
-      submessages.push(makeTextSubmessage(prose));
-    }
-
-    submessages.push(makeCodeSubmessage(language, code));
-    hasCode = true;
-    lastIndex = matchIndex + match[0].length;
-  }
-
-  if (!hasCode) {
-    return null;
-  }
-
-  const trailingProse = text.slice(lastIndex).trim();
-
-  if (trailingProse) {
-    submessages.push(makeTextSubmessage(trailingProse));
-  }
-
-  return buildRichResponse(submessages, prefix);
-}
-
 export async function sendRichResponseMessage(
   socket,
   remoteJid,
