@@ -1,3 +1,4 @@
+import { delay } from "baileys";
 import { PREFIX } from "../../../config.js";
 import { InvalidParameterError } from "../../../errors/index.js";
 import { pinterest } from "../../../services/spider-x-api.js";
@@ -5,7 +6,7 @@ import { errorLog } from "../../../utils/logger.js";
 
 export default {
   name: "pinterest",
-  description: "Busco imagens no Pinterest e envio em formato carrossel.",
+  description: "Busco imagens no Pinterest e envio separadamente.",
   commands: ["pinterest", "pin"],
   usage: `${PREFIX}pinterest gatos fofos`,
   /**
@@ -16,8 +17,7 @@ export default {
     sendWaitReact,
     sendSuccessReact,
     sendErrorReply,
-    socket,
-    remoteJid,
+    sendImageFromURL,
   }) => {
     if (!fullArgs.length) {
       throw new InvalidParameterError(
@@ -35,32 +35,29 @@ export default {
         return;
       }
 
-      const cards = data
+      const images = data
         .filter((item) => typeof item?.url === "string" && item.url.length)
-        .slice(0, 5)
-        .map((item, index) => ({
-          title: `📌 Resultado ${index + 1}`,
-          image: {
-            url: item.url,
-          },
-          caption: `Busca: ${fullArgs}`,
-        }));
+        .slice(0, 3);
 
-      if (!cards.length) {
+      if (!images.length) {
         await sendErrorReply(
-          "Não foi possível montar o carrossel com as imagens retornadas.",
+          "Não foi possível enviar as imagens retornadas.",
         );
         return;
       }
 
       await sendSuccessReact();
 
-      await socket.sendMessage(remoteJid, {
-        text: `📌 Resultados do Pinterest para: ${fullArgs}`,
-        footer: "Deslize para ver as imagens →",
-        cards,
-        viewOnce: true,
-      });
+      for (const [index, image] of images.entries()) {
+        await sendImageFromURL(
+          image.url,
+          `📌 Resultado ${index + 1} para: ${fullArgs}`,
+        );
+
+        if (index < images.length - 1) {
+          await delay(500);
+        }
+      }
     } catch (error) {
       errorLog(JSON.stringify(error, null, 2));
       await sendErrorReply(JSON.stringify(error.message));
