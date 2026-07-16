@@ -4,10 +4,6 @@ import { fileURLToPath } from "node:url";
 import OpenAI from "openai";
 import { BOT_EMOJI, OPENAI_API_KEY, PREFIX } from "../../config.js";
 import { DangerError, WarningError } from "../../errors/index.js";
-import {
-  buildRichMarkdownResponse,
-  sendRichResponseMessage,
-} from "../../utils/codeMessage.js";
 import { getRandomName } from "../../utils/index.js";
 
 export default {
@@ -25,8 +21,6 @@ Você também pode escrever o texto e responder a mensagem com o comando ${PREFI
   handle: async ({
     fullArgs,
     args,
-    socket,
-    remoteJid,
     sendReply,
     sendWaitReply,
     sendReact,
@@ -275,13 +269,7 @@ Não respondo assuntos fora do meu escopo de tecnologia!`,
     }
 
     await sendReact(BOT_EMOJI);
-    const richResponse = buildRichMarkdownResponse(answer);
-
-    if (richResponse) {
-      await sendRichResponseMessage(socket, remoteJid, richResponse, webMessage);
-    } else {
-      await sendReply(answer);
-    }
+    await sendReply(answer);
 
     if (imagePath && fs.existsSync(imagePath)) {
       fs.unlinkSync(imagePath);
