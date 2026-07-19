@@ -103,30 +103,30 @@ export default {
 
     await delay(3000);
 
-    await sendReply(
-      "📋 *Como usar mensagens com botões:*\n\n" +
-        "```javascript\n" +
-        "await socket.sendMessage(remoteJid, {\n" +
-        "  text: 'Escolha uma opção',\n" +
-        "  footer: 'Rodapé',\n" +
-        "  interactiveButtons: [\n" +
-        "    {\n" +
-        "      name: 'cta_url',\n" +
-        "      buttonParamsJson: JSON.stringify({\n" +
-        "        display_text: 'Abrir site',\n" +
-        "        url: 'https://github.com/guiireal'\n" +
-        "      })\n" +
-        "    }\n" +
-        "  ],\n" +
-        "  viewOnce: true\n" +
-        "});\n" +
-        "```\n\n" +
-        "💡 *Dicas:*\n" +
-        "• `buttons` cria botões simples usando native flow por padrão\n" +
-        "• `useLegacyButtons: true` força o formato antigo `buttonsMessage`\n" +
-        "• `interactiveButtons` aceita `quick_reply`, `cta_url`, `cta_call`, `cta_copy`, `single_select`, entre outros\n" +
-        "• `templateButtons` não é mais renderizado pelo WhatsApp em números comuns, use `interactiveButtons`\n" +
-        "⚠️ Importante: a baileys do Takeshi foi modificada para suportar esses formatos!",
-    );
+    await sendReply(`📋 *Como usar mensagens com botões:*
+
+\`\`\`
+await socket.sendMessage(remoteJid, {
+  text: 'Escolha uma opção',
+  footer: 'Rodapé',
+  interactiveButtons: [
+    {
+      name: 'cta_url',
+      buttonParamsJson: JSON.stringify({
+        display_text: 'Abrir site',
+        url: 'https://github.com/guiireal'
+      })
+    }
+  ],
+  viewOnce: true
+});
+\`\`\`
+
+💡 *Dicas:*
+• \`buttons\` cria botões simples usando native flow por padrão
+• \`useLegacyButtons: true\` força o formato antigo \`buttonsMessage\`
+• \`interactiveButtons\` aceita \`quick_reply\`, \`cta_url\`, \`cta_call\`, \`cta_copy\`, \`single_select\`, entre outros
+• \`templateButtons\` não é mais renderizado pelo WhatsApp em números comuns, use \`interactiveButtons\`
+⚠️ Importante: a baileys do Takeshi foi modificada para suportar esses formatos!`);
   },
 };

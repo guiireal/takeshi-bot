@@ -25,13 +25,13 @@ export default {
 
     await delay(2000);
 
-    await sendReply(
-      "*Exemplo de código formatado:*\n\n" +
-        "```javascript\n" +
-        CODE_SAMPLE +
-        "\n```\n\n" +
-        "No WhatsApp, use três crases (```) para abrir e fechar blocos de código.",
-    );
+    await sendReply(`*Exemplo de código formatado:*
+
+\`\`\`
+${CODE_SAMPLE}
+\`\`\`
+
+No WhatsApp, use três crases (\`\`\`) para abrir e fechar blocos de código.`);
 
     await delay(2000);
 
