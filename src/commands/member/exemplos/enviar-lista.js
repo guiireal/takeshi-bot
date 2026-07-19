@@ -23,21 +23,15 @@ export default {
     const triggerCommand = (parametro) =>
       `${prefix || PREFIX}exemplo-gatilho ${parametro}`;
 
-    const sendExample = async (label, content) => {
-      try {
-        await socket.sendMessage(remoteJid, content);
-      } catch (error) {
-        await sendReply(`⚠️ Não consegui enviar ${label}: ${error.message}`);
-      }
-    };
-
     await delay(2000);
 
-    await sendReply("Vou enviar um exemplo de mensagem em lista");
+    await sendReply(`Vou enviar um exemplo de mensagem em lista
+      
+⚠️ Atenção: não funciona no WhatsApp Business!`);
 
     await delay(3000);
 
-    await sendExample("lista", {
+    await socket.sendMessage(remoteJid, {
       text: "Escolha uma categoria para ver exemplos",
       title: "Menu de exemplos",
       footer: "Lista de opções",

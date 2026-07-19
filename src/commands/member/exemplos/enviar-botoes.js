@@ -23,21 +23,15 @@ export default {
     const triggerCommand = (parametro) =>
       `${prefix || PREFIX}exemplo-gatilho ${parametro}`;
 
-    const sendExample = async (label, content) => {
-      try {
-        await socket.sendMessage(remoteJid, content);
-      } catch (error) {
-        await sendReply(`⚠️ Não consegui enviar ${label}: ${error.message}`);
-      }
-    };
-
     await delay(2000);
 
-    await sendReply("Vou enviar exemplos de mensagens com botões");
+    await sendReply(`Vou enviar exemplos de mensagens com botões
+      
+⚠️ Atenção: não funciona no WhatsApp Business!`);
 
     await delay(3000);
 
-    await sendExample("botões simples", {
+    await socket.sendMessage(remoteJid, {
       text: "Exemplo com botões simples",
       footer: "Botões simples",
       buttons: [
@@ -55,7 +49,7 @@ export default {
 
     await delay(3000);
 
-    await sendExample("botões interativos", {
+    await socket.sendMessage(remoteJid, {
       text: "Exemplo com botões interativos",
       footer: "Resposta rápida, link, chamada e cópia",
       interactiveButtons: [
@@ -93,7 +87,7 @@ export default {
 
     await delay(3000);
 
-    await sendExample("botões legados", {
+    await socket.sendMessage(remoteJid, {
       text: "Exemplo com botões legados",
       footer: "Compatibilidade com buttonsMessage antigo",
       buttons: [

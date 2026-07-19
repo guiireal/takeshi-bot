@@ -15,7 +15,9 @@ export default {
 
     await delay(2000);
 
-    await sendReply("Vou enviar um exemplo de mensagem em carrossel (cards)");
+    await sendReply(`Vou enviar um exemplo de mensagem em carrossel (cards)
+  
+⚠️ Atenção: não funciona no WhatsApp Business!`);
 
     await delay(3000);
 
