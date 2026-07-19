@@ -7,13 +7,13 @@ import { DangerError, WarningError } from "../../errors/index.js";
 import { getRandomName } from "../../utils/index.js";
 
 /**
- * WhatsApp ignores fenced language tags (```javascript), so move the
- * technology name outside the block and keep bare triple backticks.
+ * WhatsApp ignores fenced language tags (```javascript) and the label
+ * confuses end users, so strip it and keep bare triple backticks.
  */
 function normalizeWhatsAppCodeBlocks(text) {
   return String(text || "").replace(
     /```([A-Za-z0-9_+#.-]+)[ \t]*\r?\n/g,
-    (_match, language) => `${language}\n\`\`\`\n`,
+    "```\n",
   );
 }
 
@@ -131,12 +131,11 @@ Seja direto e objetivo nas respostas, salvo se o usuário solicitar explicaçõe
 
 REGRA DE TAMANHO (obrigatória): a parte em PROSA da resposta deve ter no máximo 3 parágrafos curtos ou 150 palavras, salvo se o usuário pedir explicação aprofundada. Blocos de código NÃO contam nesse limite: inclua sempre o código completo e funcional necessário, mesmo que longo, sem truncar imports, fechamentos ou partes essenciais. Respostas objetivas não precisam de introdução nem de conclusão. Vá direto à solução.
 
-REGRA DE CÓDIGO NO WHATSAPP (obrigatória): o WhatsApp NÃO renderiza a linguagem colada no fence.
+REGRA DE CÓDIGO NO WHATSAPP (obrigatória): o WhatsApp NÃO renderiza a linguagem colada no fence e isso confunde o usuário.
 Nunca use \`\`\`javascript, \`\`\`bash, \`\`\`json, \`\`\`js, \`\`\`sh ou qualquer \`\`\`linguagem.
-Formato correto: coloque o nome da tecnologia FORA do bloco e abra/feche só com três crases.
+Não escreva o nome da tecnologia antes do bloco. Abra e feche só com três crases.
 
 Exemplo correto:
-javascript
 \`\`\`
 const x = 1;
 \`\`\`
