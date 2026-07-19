@@ -1,12 +1,11 @@
 import { delay } from "baileys";
 import { PREFIX } from "../../../config.js";
-import { sendRichCodeMessage } from "../../../utils/codeMessage.js";
 
 export default {
   name: "enviar-mensagem-editada",
   description: "Exemplo de como enviar uma mensagem editada",
   commands: ["enviar-mensagem-editada"],
-  usage: `${PREFIX}enviar-mensagem-editada"],`,
+  usage: `${PREFIX}enviar-mensagem-editada`,
   /**
    * @param {CommandHandleProps} props
    */
@@ -16,9 +15,6 @@ export default {
     sendText,
     sendEditedReply,
     sendEditedText,
-    socket,
-    remoteJid,
-    webMessage,
   }) => {
     await sendReact("✏️");
 
@@ -57,13 +53,14 @@ export default {
 
     await delay(3000);
 
-    await sendRichCodeMessage(socket, remoteJid, {
-      title: "*Exemplo prático*",
-      language: "javascript",
-      code: `\nconst messageTextResponse = await sendText("Esta é a mensagem original.");
+    await sendReply(
+      `*Exemplo prático*
+      
+\`\`\`
+const messageTextResponse = await sendText("Esta é a mensagem original.");
 
-await sendEditedText("Esta é a mensagem editada. ✅", messageTextResponse);`,
-      quoted: webMessage,
-    });
+await sendEditedText("Esta é a mensagem editada. ✅", messageTextResponse);
+\`\`\``,
+    );
   },
 };
