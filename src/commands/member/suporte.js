@@ -6,14 +6,18 @@ import { BOT_EMOJI, OPENAI_API_KEY, PREFIX } from "../../config.js";
 import { DangerError, WarningError } from "../../errors/index.js";
 import { getRandomName } from "../../utils/index.js";
 
+// Identifiers commonly stuck after ``` by models (```javascript, ```bash, etc).
+const CODE_FENCE_LANGUAGES =
+  "javascript|js|jsx|typescript|ts|tsx|bash|sh|shell|zsh|json|jsonc|yaml|yml|toml|xml|html|css|scss|go|golang|python|py|ruby|rb|php|java|kotlin|kt|rust|rs|c|cpp|csharp|cs|swift|dart|sql|graphql|md|markdown|diff|dockerfile|docker|powershell|ps1|cmd|bat|ini|env|text|txt|plaintext|vue|svelte|lua|r|perl|scala|nginx|makefile|proto|protobuf|nodejs|node";
+
 /**
- * WhatsApp ignores fenced language tags (```javascript) and the label
- * confuses end users, so strip it and keep bare triple backticks.
+ * Only transforms fences like ```javascript / ```bash / ```ts into bare ```.
+ * Does not touch language names written in normal prose.
  */
 function normalizeWhatsAppCodeBlocks(text) {
   return String(text || "").replace(
-    /```([A-Za-z0-9_+#.-]+)[ \t]*\r?\n/g,
-    "```\n",
+    new RegExp(`\`\`\`(?:${CODE_FENCE_LANGUAGES})(?=[\\s\\r\\n]|$)`, "gi"),
+    "```",
   );
 }
 
@@ -131,9 +135,10 @@ Seja direto e objetivo nas respostas, salvo se o usuário solicitar explicaçõe
 
 REGRA DE TAMANHO (obrigatória): a parte em PROSA da resposta deve ter no máximo 3 parágrafos curtos ou 150 palavras, salvo se o usuário pedir explicação aprofundada. Blocos de código NÃO contam nesse limite: inclua sempre o código completo e funcional necessário, mesmo que longo, sem truncar imports, fechamentos ou partes essenciais. Respostas objetivas não precisam de introdução nem de conclusão. Vá direto à solução.
 
-REGRA DE CÓDIGO NO WHATSAPP (obrigatória): o WhatsApp NÃO renderiza a linguagem colada no fence e isso confunde o usuário.
-Nunca use \`\`\`javascript, \`\`\`bash, \`\`\`json, \`\`\`js, \`\`\`sh ou qualquer \`\`\`linguagem.
-Não escreva o nome da tecnologia antes do bloco. Abra e feche só com três crases.
+REGRA DE CÓDIGO NO WHATSAPP (obrigatória): nunca cole a linguagem no fence.
+Errado: \`\`\`javascript  |  \`\`\`bash  |  \`\`\`js  |  \`\`\`ts  |  \`\`\`go
+Certo: apenas \`\`\` sozinho na abertura e no fechamento.
+Você pode citar a linguagem no texto normal se precisar, mas NUNCA logo após as três crases.
 
 Exemplo correto:
 \`\`\`
