@@ -1,6 +1,5 @@
 import { delay } from "baileys";
 import { PREFIX } from "../../../config.js";
-import { sendRichCodeMessage } from "../../../utils/codeMessage.js";
 
 export default {
   name: "enviar-botoes",
@@ -13,7 +12,6 @@ export default {
   handle: async ({
     socket,
     remoteJid,
-    webMessage,
     sendReply,
     sendReact,
     prefix,
@@ -105,31 +103,30 @@ export default {
 
     await delay(3000);
 
-    await sendRichCodeMessage(socket, remoteJid, {
-      title: "📋 *Como usar mensagens com botões:*",
-      language: "javascript",
-      code: `await socket.sendMessage(remoteJid, {
-  text: 'Escolha uma opção',
-  footer: 'Rodapé',
-  interactiveButtons: [
-    {
-      name: 'cta_url',
-      buttonParamsJson: JSON.stringify({
-        display_text: 'Abrir site',
-        url: 'https://github.com/guiireal'
-      })
-    }
-  ],
-  viewOnce: true
-});`,
-      footer:
-        "\n💡 *Dicas:*\n" +
+    await sendReply(
+      "📋 *Como usar mensagens com botões:*\n\n" +
+        "```javascript\n" +
+        "await socket.sendMessage(remoteJid, {\n" +
+        "  text: 'Escolha uma opção',\n" +
+        "  footer: 'Rodapé',\n" +
+        "  interactiveButtons: [\n" +
+        "    {\n" +
+        "      name: 'cta_url',\n" +
+        "      buttonParamsJson: JSON.stringify({\n" +
+        "        display_text: 'Abrir site',\n" +
+        "        url: 'https://github.com/guiireal'\n" +
+        "      })\n" +
+        "    }\n" +
+        "  ],\n" +
+        "  viewOnce: true\n" +
+        "});\n" +
+        "```\n\n" +
+        "💡 *Dicas:*\n" +
         "• `buttons` cria botões simples usando native flow por padrão\n" +
         "• `useLegacyButtons: true` força o formato antigo `buttonsMessage`\n" +
         "• `interactiveButtons` aceita `quick_reply`, `cta_url`, `cta_call`, `cta_copy`, `single_select`, entre outros\n" +
         "• `templateButtons` não é mais renderizado pelo WhatsApp em números comuns, use `interactiveButtons`\n" +
         "⚠️ Importante: a baileys do Takeshi foi modificada para suportar esses formatos!",
-      quoted: webMessage,
-    });
+    );
   },
 };
