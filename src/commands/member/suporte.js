@@ -6,6 +6,17 @@ import { BOT_EMOJI, OPENAI_API_KEY, PREFIX } from "../../config.js";
 import { DangerError, WarningError } from "../../errors/index.js";
 import { getRandomName } from "../../utils/index.js";
 
+/**
+ * WhatsApp ignores fenced language tags (```javascript), so move the
+ * technology name outside the block and keep bare triple backticks.
+ */
+function normalizeWhatsAppCodeBlocks(text) {
+  return String(text || "").replace(
+    /```([A-Za-z0-9_+#.-]+)[ \t]*\r?\n/g,
+    (_match, language) => `${language}\n\`\`\`\n`,
+  );
+}
+
 export default {
   name: "suporte",
   description: "Suporte inteligente do Takeshi usando IA treinada",
@@ -119,6 +130,21 @@ Responda apenas em português do Brasil.
 Seja direto e objetivo nas respostas, salvo se o usuário solicitar explicações mais aprofundadas.
 
 REGRA DE TAMANHO (obrigatória): a parte em PROSA da resposta deve ter no máximo 3 parágrafos curtos ou 150 palavras, salvo se o usuário pedir explicação aprofundada. Blocos de código NÃO contam nesse limite: inclua sempre o código completo e funcional necessário, mesmo que longo, sem truncar imports, fechamentos ou partes essenciais. Respostas objetivas não precisam de introdução nem de conclusão. Vá direto à solução.
+
+REGRA DE CÓDIGO NO WHATSAPP (obrigatória): o WhatsApp NÃO renderiza a linguagem colada no fence.
+Nunca use \`\`\`javascript, \`\`\`bash, \`\`\`json, \`\`\`js, \`\`\`sh ou qualquer \`\`\`linguagem.
+Formato correto: coloque o nome da tecnologia FORA do bloco e abra/feche só com três crases.
+
+Exemplo correto:
+javascript
+\`\`\`
+const x = 1;
+\`\`\`
+
+Exemplo errado (não use):
+\`\`\`javascript
+const x = 1;
+\`\`\`
 
 Escreva como alguém que realmente sabe do que está falando e vai direto ao ponto, logo, não escreva demais, apenas o suficiente para ser objetivo. 
 Sem frases de abertura do tipo "Claro!", "Ótima pergunta!", "Com certeza!" ou similares. 
@@ -258,7 +284,9 @@ sem mencionar Pterodactyl, pois os iniciantes não sabem o que é (exceto se per
       max_completion_tokens: 2048,
     });
 
-    const answer = response.choices[0].message.content.trim();
+    const answer = normalizeWhatsAppCodeBlocks(
+      response.choices[0].message.content.trim(),
+    );
 
     if (!answer) {
       throw new DangerError(
