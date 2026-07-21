@@ -4,9 +4,7 @@
  *
  * @author Dev Gui
  */
-import fs from "node:fs";
 import { exitMessage, welcomeMessage } from "../messages.js";
-import { getProfileImageData } from "../services/baileys.js";
 import {
   isActiveExitGroup,
   isActiveGroup,
@@ -33,11 +31,6 @@ export async function onGroupParticipantsUpdate({
     const userLid = extractUserLid(data);
 
     if (isActiveWelcomeGroup(remoteJid) && action === "add") {
-      const { buffer, profileImage } = await getProfileImageData(
-        socket,
-        userLid
-      );
-
       const hasMemberMention = welcomeMessage.includes("@member");
 
       const mentions = [];
@@ -47,40 +40,16 @@ export async function onGroupParticipantsUpdate({
         const userNumber = onlyNumbers(userLid);
         finalWelcomeMessage = welcomeMessage.replace(
           "@member",
-          `@${userNumber}`
+          `@${userNumber}`,
         );
         mentions.push(userLid);
       }
 
-      if (buffer) {
-        try {
-          await socket.sendMessage(remoteJid, {
-            image: buffer,
-            caption: finalWelcomeMessage,
-            mentions,
-          });
-        } catch (error) {
-          await socket.sendMessage(remoteJid, {
-            text: finalWelcomeMessage,
-            mentions,
-          });
-        }
-      } else {
-        await socket.sendMessage(remoteJid, {
-          text: finalWelcomeMessage,
-          mentions,
-        });
-      }
-
-      if (!profileImage.includes("default-user")) {
-        fs.unlinkSync(profileImage);
-      }
+      await socket.sendMessage(remoteJid, {
+        text: finalWelcomeMessage,
+        mentions,
+      });
     } else if (isActiveExitGroup(remoteJid) && action === "remove") {
-      const { buffer, profileImage } = await getProfileImageData(
-        socket,
-        userLid
-      );
-
       const hasMemberMention = exitMessage.includes("@member");
 
       const mentions = [];
@@ -92,29 +61,10 @@ export async function onGroupParticipantsUpdate({
         mentions.push(userLid);
       }
 
-      if (buffer) {
-        try {
-          await socket.sendMessage(remoteJid, {
-            image: buffer,
-            caption: finalExitMessage,
-            mentions,
-          });
-        } catch (error) {
-          await socket.sendMessage(remoteJid, {
-            text: finalExitMessage,
-            mentions,
-          });
-        }
-      } else {
-        await socket.sendMessage(remoteJid, {
-          text: finalExitMessage,
-          mentions,
-        });
-      }
-
-      if (!profileImage.includes("default-user")) {
-        fs.unlinkSync(profileImage);
-      }
+      await socket.sendMessage(remoteJid, {
+        text: finalExitMessage,
+        mentions,
+      });
     }
   } catch (error) {
     errorLog(`Erro em onGroupParticipantsUpdate: ${error.message}`);
