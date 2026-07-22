@@ -21,6 +21,35 @@ function normalizeWhatsAppCodeBlocks(text) {
   );
 }
 
+/**
+ * Removes unsolicited calls to continue the conversation from prose while
+ * preserving code blocks. The system prompt should prevent these, but this is
+ * a final guard because the command must answer the current request only.
+ */
+function removeUnsolicitedFollowUps(text) {
+  const continuationPattern =
+    /(?:^|\s)(?:se\s+quiser|se\s+preferir|caso\s+queira)[,:]?\s*(?:eu\s+)?(?:posso|te\s+(?:passo|envio|mostro|explico|ajudo)|lhe\s+(?:passo|envio|mostro|explico)|preparo|forneço)\b|^\s*(?:posso\s+(?:também\s+)?(?:te|lhe)\s+(?:passar|enviar|mostrar|explicar)|quer\s+que\s+eu\s+(?:te\s+)?(?:passe|envie|mostre|explique))/i;
+
+  let insideCodeBlock = false;
+
+  return String(text || "")
+    .split(/\r?\n/)
+    .map((line) => {
+      if (line.trimStart().startsWith("```")) {
+        insideCodeBlock = !insideCodeBlock;
+        return line;
+      }
+
+      if (insideCodeBlock) return line;
+
+      const match = line.match(continuationPattern);
+      return match ? line.slice(0, match.index).trimEnd() : line;
+    })
+    .filter((line, index, lines) => line || lines[index - 1] || lines[index + 1])
+    .join("\n")
+    .trim();
+}
+
 export default {
   name: "suporte",
   description: "Suporte inteligente do Takeshi usando IA treinada",
@@ -147,6 +176,8 @@ Se alguém te pedir o link de alguma Host, envie as que você já conhece,
 sem mencionar Pterodactyl, pois os iniciantes não sabem o que é (exceto se perguntarem sobre)!
 
 REGRA DE TAMANHO (obrigatória): a parte em PROSA da resposta deve ter no máximo 3 parágrafos curtos ou 150 palavras, salvo se o usuário pedir explicação aprofundada. Blocos de código NÃO contam nesse limite: inclua sempre o código completo e funcional necessário, mesmo que longo, sem truncar imports, fechamentos ou partes essenciais. Respostas objetivas não precisam de introdução nem de conclusão. Vá direto à solução.
+
+REGRA DE ENCERRAMENTO (obrigatória): entregue somente o que foi solicitado e encerre a resposta ao concluir. Nunca ofereça continuação, ajuda adicional, scripts, métodos, funções, exemplos ou próximos passos que o usuário não pediu. São proibidas frases como "Se quiser, posso...", "Posso te passar...", "Quer que eu...", "Caso queira..." e equivalentes, mesmo como última frase.
 
 REGRA DE CÓDIGO NO WHATSAPP (obrigatória): nunca cole a linguagem no fence.
 Errado: \`\`\`javascript  |  \`\`\`bash  |  \`\`\`js  |  \`\`\`ts  |  \`\`\`go
@@ -288,8 +319,8 @@ const x = 1;
       max_completion_tokens: 2048,
     });
 
-    const answer = normalizeWhatsAppCodeBlocks(
-      response.choices[0].message.content.trim(),
+    const answer = removeUnsolicitedFollowUps(
+      normalizeWhatsAppCodeBlocks(response.choices[0].message.content.trim()),
     );
 
     if (!answer) {
