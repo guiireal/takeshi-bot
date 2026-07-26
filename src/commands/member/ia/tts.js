@@ -26,7 +26,7 @@ export default {
 
     if (!text) {
       throw new InvalidParameterError(
-        `Você precisa informar o texto!\n\nExemplo: ${PREFIX}tts Olá, tudo bem? | joao\nVozes: joao, ana, pedro`,
+        `Você precisa informar o texto!\n\nExemplo: ${PREFIX}tts Olá, tudo bem? / joao\nVozes: joao, ana, pedro`,
       );
     }
 
