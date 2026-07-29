@@ -1,0 +1,42 @@
+{
+  "target": "lib/Types/Message.d.ts",
+  "ops": [
+    {
+      "type": "insertAfter",
+      "anchor": "    viewOnce?: boolean;\n};",
+      "addition": "export interface Carousel {\n    image?: WAMediaUpload;\n    video?: WAMediaUpload;\n    product?: WASendableProduct;\n    title?: string;\n    caption?: string;\n    footer?: string;\n    buttons?: proto.Message.InteractiveMessage.NativeFlowMessage.NativeFlowButton[];\n}\ntype Buttonable = {\n    /** add buttons to the message */\n    buttons?: proto.Message.ButtonsMessage.IButton[];\n    /** force old buttonsMessage format instead of native flow quick replies */\n    useLegacyButtons?: boolean;\n};\ntype Templatable = {\n    /** add buttons to the message (conflicts with normal buttons) */\n    templateButtons?: proto.IHydratedTemplateButton[];\n    footer?: string;\n};\ntype Interactiveable = {\n    /** add buttons to the message (conflicts with normal buttons) */\n    interactiveButtons?: proto.Message.InteractiveMessage.NativeFlowMessage.NativeFlowButton[];\n    title?: string;\n    subtitle?: string;\n    media?: boolean;\n};\ntype Shopable = {\n    shop?: proto.Message.InteractiveMessage.ShopMessage.Surface;\n    id?: string;\n    title?: string;\n    subtitle?: string;\n    media?: boolean;\n};\ntype Collectionable = {\n    collection?: {\n        bizJid?: string;\n        id?: string;\n        version?: number;\n    };\n    title?: string;\n    subtitle?: string;\n    media?: boolean;\n};\ntype Cardsable = {\n    cards?: Carousel[];\n    title?: string;\n    subtitle?: string;\n};",
+      "sentinel": "export interface Carousel {"
+    },
+    {
+      "type": "insertAfter",
+      "anchor": "    height?: number;\n};",
+      "addition": "type Listable = {\n    /** Sections of the List */\n    sections?: proto.Message.ListMessage.ISection[];\n    /** Title of a List Message only */\n    title?: string;\n    /** Text of the button on the list (required) */\n    buttonText?: string;\n    /** force old listMessage format instead of native flow single select */\n    useLegacyList?: boolean;\n};",
+      "sentinel": "type Listable = {"
+    },
+    {
+      "type": "replace",
+      "search": "} & Mentionable & Contextable & WithDimensions) | ({",
+      "replacement": "} & Mentionable & Contextable & Buttonable & Templatable & Interactiveable & Shopable & Collectionable & Cardsable & WithDimensions) | ({"
+    },
+    {
+      "type": "replace",
+      "search": "} & Mentionable & Contextable & WithDimensions) | {",
+      "replacement": "} & Mentionable & Contextable & Buttonable & Templatable & Interactiveable & Shopable & Collectionable & Cardsable & WithDimensions) | {"
+    },
+    {
+      "type": "replace",
+      "search": "} & Contextable)) & {",
+      "replacement": "} & Contextable & Buttonable & Templatable & Interactiveable & Shopable & Collectionable & Cardsable)) & {"
+    },
+    {
+      "type": "replace",
+      "search": "} & Mentionable & Contextable & Editable) | AnyMediaMessageContent | {",
+      "replacement": "} & Mentionable & Contextable & Buttonable & Templatable & Interactiveable & Shopable & Collectionable & Cardsable & Listable & Editable) | AnyMediaMessageContent | {"
+    },
+    {
+      "type": "replace",
+      "search": "} & Mentionable & Contextable & Editable) | ({",
+      "replacement": "} & Mentionable & Contextable & Buttonable & Templatable & Editable) | ({"
+    }
+  ]
+}

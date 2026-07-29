@@ -49,6 +49,23 @@ describe("message envelope registry", () => {
     );
   });
 
+  it("does not corroborate a message the bot could not decrypt", () => {
+    // Envelope recebido, conteúdo nunca lido: não é pagamento confirmado, então
+    // não corrobora. Também não é forja, então não contradiz.
+    recordMessageEnvelope(
+      {
+        key: { remoteJid: groupJid, id: stanzaId, participant: authorLid },
+        message: null,
+      },
+      false,
+    );
+
+    assert.deepStrictEqual(
+      verifyQuotedAuthor({ groupJid, stanzaId, participant: authorLid }),
+      { corroborated: false, contradicted: false },
+    );
+  });
+
   it("flags a forged quote when the author matches neither form", () => {
     recordMessageEnvelope(
       {

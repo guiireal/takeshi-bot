@@ -49,7 +49,11 @@ export function hasPaymentMessage(webMessage) {
   return hasPaymentMessageKey(webMessage?.message);
 }
 
-function findQuotedPaymentContext(value, depth = 0, seenObjects = new WeakSet()) {
+function findQuotedPaymentContext(
+  value,
+  depth = 0,
+  seenObjects = new WeakSet(),
+) {
   if (
     !canScanObject(value) ||
     depth > MAX_PAYMENT_SCAN_DEPTH ||
@@ -92,11 +96,6 @@ function findQuotedPaymentContext(value, depth = 0, seenObjects = new WeakSet())
   return null;
 }
 
-/**
- * Lê a marcação (quoted) de uma mensagem de pagamento — inclusive as enviadas
- * de forma oculta para admins — e devolve o AUTOR ORIGINAL e o id da mensagem
- * citada. Ignora citações aninhadas para não atribuir o pagamento errado.
- */
 export function getQuotedPaymentContext(webMessage) {
   return findQuotedPaymentContext(webMessage?.message);
 }

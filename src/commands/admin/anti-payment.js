@@ -9,8 +9,7 @@ import { isFalse, isTrue } from "../../utils/index.js";
 export default {
   name: "anti-payment",
   description:
-    "Ativa/desativa o recurso de anti-payment no grupo, fechando o grupo, removendo o autor e limpando o chat. " +
-    "Inclui detecção de cobranças *ocultas* (stealth): mensagens de pagamento indecifráveis/direcionadas que admins e o bot não conseguem ver também removem o autor automaticamente.",
+    "Ativa/desativa o recurso de anti-payment no grupo, fechando o grupo, removendo o autor e limpando o chat.",
   commands: ["anti-payment", "anti-pagamento"],
   usage: `${PREFIX}anti-payment (1/0)`,
   /**
@@ -45,9 +44,6 @@ export default {
     }
     updateIsActiveGroupRestriction(remoteJid, "anti-payment", antiPaymentOn);
     const status = antiPaymentOn ? "ativado" : "desativado";
-    const stealthNote = antiPaymentOn
-      ? "\n\n🛡️ Proteção *stealth* ligada: cobranças ocultas (indecifráveis/direcionadas) também são detectadas e removem o autor automaticamente."
-      : "";
-    await sendSuccessReply(`Anti-payment ${status} com sucesso!${stealthNote}`);
+    await sendSuccessReply(`Anti-payment ${status} com sucesso!`);
   },
 };

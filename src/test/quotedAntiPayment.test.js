@@ -38,9 +38,23 @@ function buildQuotedPaymentWebMessage() {
   };
 }
 
-// Simula o bot tendo recebido a mensagem ORIGINAL de pagamento (indecifrável,
-// como no truque stealth). É o que corrobora a marcação.
+// Simula o bot tendo recebido e LIDO a mensagem ORIGINAL de pagamento. Só uma
+// mensagem reconhecida como pagamento corrobora a marcação.
 function recordOriginalPayment(participant = authorLid, id = originalStanzaId) {
+  recordMessageEnvelope(
+    {
+      key: { remoteJid, id, participant },
+      message: { requestPaymentMessage: { currencyCodeIso4217: "BRL" } },
+    },
+    true,
+  );
+}
+
+// Simula uma mensagem que o bot NÃO conseguiu decifrar. Não corrobora nada.
+function recordUnreadableOriginal(
+  participant = authorLid,
+  id = originalStanzaId,
+) {
   recordMessageEnvelope(
     { key: { remoteJid, id, participant }, message: null },
     false,
@@ -105,7 +119,7 @@ describe("quoted anti-payment", () => {
     assert.strictEqual(getQuotedPaymentContext(webMessage), null);
   });
 
-  it("should ban the original author and delete the hidden payment message", async () => {
+  it("should ban the original author and delete the quoted payment message", async () => {
     const calls = [];
     recordOriginalPayment();
     const socket = createSocket(calls, [
@@ -159,6 +173,21 @@ describe("quoted anti-payment", () => {
   it("should NOT ban when the quote is not corroborated (bot never saw the original)", async () => {
     const calls = [];
     // Propositalmente NÃO registramos o envelope original.
+    const socket = createSocket(calls, [
+      { id: quoterLid, admin: null },
+      { id: authorLid, admin: null },
+    ]);
+
+    await messageHandler(socket, buildQuotedPaymentWebMessage());
+
+    assert.strictEqual(removeCalls(calls).length, 0);
+  });
+
+  it("should NOT ban when the original message was never decrypted", async () => {
+    const calls = [];
+    // O bot recebeu o envelope, mas nunca leu o conteúdo. Sem leitura confirmada
+    // não há como distinguir cobrança oculta de falha de sessão: não pune.
+    recordUnreadableOriginal();
     const socket = createSocket(calls, [
       { id: quoterLid, admin: null },
       { id: authorLid, admin: null },

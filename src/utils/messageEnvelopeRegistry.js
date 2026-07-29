@@ -5,7 +5,11 @@
  * inocentes por marcação forjada: o contextInfo.participant/quotedMessage é
  * fornecido pelo cliente e pode ser fabricado. Antes de punir o autor citado,
  * exigimos que o bot tenha realmente recebido aquela mensagem original, do mesmo
- * autor, e que ela não tenha sido lida como "não-pagamento".
+ * autor, e a tenha lido como pagamento.
+ *
+ * Mensagens que o bot não conseguiu decifrar NÃO corroboram marcação: sem leitura
+ * do conteúdo não há como distinguir um pagamento oculto de uma mensagem comum
+ * perdida por falha de sessão, e o custo de errar é banir um inocente.
  *
  * Tudo é volátil de propósito: marcações relevantes acontecem em minutos. Se o
  * bot reiniciar e perder o histórico, o modo de falha é ficar mais conservador
@@ -83,7 +87,6 @@ export function recordMessageEnvelope(webMessage, isPayment) {
     participant,
     participantAlt,
     contentState,
-    stealth: Boolean(webMessage?.stealthMeta),
     ts: Date.now(),
   });
 
@@ -93,11 +96,15 @@ export function recordMessageEnvelope(webMessage, isPayment) {
 /**
  * Decide se uma marcação de pagamento é confiável o bastante para punir o autor.
  *
+ * Só corroboramos o que o bot LEU: a mensagem original precisa ter sido recebida,
+ * do MESMO autor, e ter sido reconhecida como pagamento.
+ *
  * - corroborated: o bot recebeu a mensagem original, do MESMO autor, e ela era
- *   pagamento OU foi indecifrável (consistente com o truque stealth). Pode punir.
+ *   pagamento. Pode punir.
  * - contradicted: o bot recebeu a mensagem, mas de OUTRO autor, ou ela era um
  *   conteúdo legível que NÃO era pagamento. É forja. Nunca punir.
- * - nenhum dos dois: o bot não viu a mensagem original. Sem corroboração, não pune.
+ * - nenhum dos dois: o bot não viu a mensagem original, ou não conseguiu decifrar
+ *   o conteúdo. Sem leitura confirmada, não pune.
  */
 export function verifyQuotedAuthor({ groupJid, stanzaId, participant }) {
   if (!stanzaId) {
@@ -118,7 +125,10 @@ export function verifyQuotedAuthor({ groupJid, stanzaId, participant }) {
     return { corroborated: false, contradicted: true };
   }
 
-  return { corroborated: true, contradicted: false };
+  return {
+    corroborated: entry.contentState === "payment",
+    contradicted: false,
+  };
 }
 
 /**

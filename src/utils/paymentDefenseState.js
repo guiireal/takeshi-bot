@@ -103,7 +103,6 @@ function scheduleGroupReopen(socket, remoteJid) {
   }
 
   if (!incident.groupClosed) {
-    // O fechamento falhou: nada a reabrir. Libera o incidente para nova tentativa.
     groupIncidents.delete(remoteJid);
     return;
   }
@@ -143,8 +142,6 @@ async function runDefense({ socket, remoteJid, userLid, messageKey }) {
           `Erro ao banir membro pelo anti-payment. Detalhes: ${error.message}`,
         );
       }),
-    // Best-effort: payments quase nunca saem com delete admin puro.
-    // Roda em paralelo com ban/fechamento; se o hack falhar, cai no delete normal.
     messageKey
       ? runStep(
           () =>
@@ -179,7 +176,12 @@ async function runDefense({ socket, remoteJid, userLid, messageKey }) {
  *
  * @returns {Promise<boolean>} true se o autor foi (ou já estava sendo) removido.
  */
-export function defendAgainstPayment({ socket, remoteJid, userLid, messageKey }) {
+export function defendAgainstPayment({
+  socket,
+  remoteJid,
+  userLid,
+  messageKey,
+}) {
   if (!remoteJid || !userLid) {
     return Promise.resolve(false);
   }
@@ -212,9 +214,6 @@ export function defendAgainstPayment({ socket, remoteJid, userLid, messageKey })
   });
 }
 
-/**
- * Apenas para testes: zera o estado e restaura o TTL padrão.
- */
 export function __clearPaymentDefenseState() {
   for (const incident of groupIncidents.values()) {
     if (incident.reopenTimer) {
@@ -229,9 +228,6 @@ export function __clearPaymentDefenseState() {
   groupIncidentTtlMs = DEFAULT_GROUP_INCIDENT_TTL_MS;
 }
 
-/**
- * Apenas para testes: encurta a janela de reabertura debounced.
- */
 export function __setGroupIncidentTtlForTests(ms) {
   groupIncidentTtlMs = ms;
 }

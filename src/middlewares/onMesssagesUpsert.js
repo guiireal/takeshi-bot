@@ -43,8 +43,7 @@ export async function onMessagesUpsert({ socket, messages, startProcess }) {
       const timestamp = webMessage.messageTimestamp;
 
       // Registra o envelope (id -> autor/estado) de TODA mensagem de grupo,
-      // inclusive as indecifráveis, para corroborar marcações de pagamento e
-      // impedir forja (banir inocente).
+      // para corroborar marcações de pagamento e impedir forja (banir inocente).
       recordMessageEnvelope(webMessage, hasPaymentMessage(webMessage));
 
       if (webMessage?.message) {

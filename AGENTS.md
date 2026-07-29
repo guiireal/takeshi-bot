@@ -149,6 +149,34 @@ Mandatory rule:
 
 This keeps persistence behavior consistent and avoids duplicated parsing logic.
 
+## ANTI_PAYMENT
+
+Two entry points punish a payment message:
+
+- direct: the bot reads a payment message live in the group (`messageHandler`)
+- quoted: a member replies to a payment message, and the ORIGINAL author is
+  removed, never the one who quoted (`handleQuotedPaymentRestriction`)
+
+The quoted path is forgeable — `contextInfo.participant` and `quotedMessage` come
+from the client — so it is gated by `src/utils/messageEnvelopeRegistry.js`, an
+in-memory record of every group message envelope the bot received.
+
+Deliberate rule: **only a message the bot actually read as a payment corroborates
+a quote.** A message whose content was never decrypted does NOT corroborate.
+
+| Recorded state | Quote outcome |
+| --- | --- |
+| `payment` (bot read a payment) | corroborated → punishes |
+| `other` (readable, not payment) | contradicted → never punishes |
+| `unreadable` (never decrypted) | not corroborated → never punishes |
+| not recorded at all | not corroborated → never punishes |
+
+An undecryptable message is indistinguishable from an ordinary message lost to a
+Signal session failure, so it is never treated as evidence: acting on it removes
+innocent members. The failure mode is always conservative — when in doubt, do not
+punish. Do not punish based on undecryptable messages without a new signal that
+actually proves payment content.
+
 ## SERVICES
 
 ### Spider X API
@@ -185,6 +213,55 @@ Project-level scripts:
 - `npm start`
 - `npm test`
 - `npm run test:all`
+- `npm run patch:baileys`
+
+## BAILEYS_PATCHES
+
+`node_modules/baileys` and `node_modules/libsignal` are intentionally committed to git
+(see the negated entries in `.gitignore`), because the project ships local changes to
+the baileys build output.
+
+Patched files, all marked with `// Alterado por: Dev Gui` on the first line:
+
+| File | Purpose |
+| --- | --- |
+| `lib/Socket/messages-send.js` | Adds the `biz` / `native_flow` binary nodes and normalizes `listMessage.listType`, without which WhatsApp silently drops buttons and lists. |
+| `lib/Utils/messages.js` | Builds `interactiveMessage` from `buttons`, `interactiveButtons`, `cards` and `sections`, plus the legacy `buttonsMessage` / `listMessage` fallbacks. |
+| `lib/Types/Message.d.ts` | Type declarations for the options above. Types only, no runtime effect. |
+
+The source of truth is `patches/baileys/*.ops.json`. Each file lists edits anchored to
+**snippets of code**, never to line numbers, so upstream inserting code above a target
+does not break them:
+
+| Operation | Meaning |
+| --- | --- |
+| `insertAfter` | insert `addition` right after the unique `anchor` snippet |
+| `replace` | swap the unique `search` snippet for `replacement` |
+| `remove` | drop the unique `search` snippet |
+| `prepend` | put `addition` at the top of the file |
+
+Every operation carries a `sentinel` — a snippet of its own output. If the sentinel is
+already in the file, the operation is skipped, which makes the script idempotent. A
+sentinel must never match text that already exists in the pristine file, or the edit
+silently no-ops forever.
+
+`scripts/patch-baileys.mjs` runs on `postinstall`, so every `npm install` / `npm ci`
+reapplies the edits. It is pure JavaScript and does **not** shell out to the `patch`
+binary, which is absent on Termux and slim Docker images. Anchors are required to be
+unique: an ambiguous or missing anchor fails that one file loudly instead of corrupting
+it.
+
+A failed patch does not fail `npm install`. `node_modules/baileys` is committed, so the
+bot still boots from the committed code; breaking every install — including end users on
+Termux — would cost more than the warning.
+
+Rules:
+
+- never edit `node_modules/baileys` directly without also updating the matching ops file
+- when bumping baileys, run `npm install` and read the postinstall output; a failed
+  operation means upstream changed the anchored snippet
+- to fix, open the target file, find the new form of the snippet, and update the
+  `anchor` / `search` field — then rerun `npm run patch:baileys`
 
 ## HOSTING_AND_PTERODACTYL
 

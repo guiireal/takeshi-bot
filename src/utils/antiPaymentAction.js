@@ -1,16 +1,16 @@
 /**
  * Ações de punição do anti-payment, compartilhadas entre o handler de mensagens
  * diretas (messageHandler) e o de marcações (quoted). A orquestração de fechar o
- * grupo, remover o autor, apagar a mensagem e limpar o chat — com deduplicação e
- * coalescência sob rajada — vive em paymentDefenseState.js.
+ * grupo, remover o autor, apagar a mensagem e limpar o chat, com deduplicação e
+ * coalescência sob rajada, vive em paymentDefenseState.js.
  *
  * @author Dev Gui
  */
-import { errorLog } from "./logger.js";
 import { BOT_LID, OWNER_LID } from "../config.js";
-import { getQuotedPaymentContext } from "./paymentMessage.js";
+import { errorLog } from "./logger.js";
 import { verifyQuotedAuthor } from "./messageEnvelopeRegistry.js";
 import { defendAgainstPayment } from "./paymentDefenseState.js";
+import { getQuotedPaymentContext } from "./paymentMessage.js";
 
 export function applyAntiPaymentRestriction({
   socket,
@@ -21,17 +21,6 @@ export function applyAntiPaymentRestriction({
   return defendAgainstPayment({ socket, remoteJid, userLid, messageKey });
 }
 
-/**
- * Anti-payment por marcação (quoted): quando um membro responde/cita uma
- * mensagem de pagamento (inclusive as ocultas para admins), identificamos o
- * AUTOR ORIGINAL da mensagem citada e o removemos — nunca quem citou.
- *
- * Travas anti-forja (o Takeshi não tem level/staff): só age contra autor que
- * NÃO é o bot/dono, que está PRESENTE no grupo e que NÃO é admin. Uma marcação
- * forjada apontando para admin/dono ou para quem já saiu do grupo é ignorada.
- *
- * @returns {Promise<boolean>} true se o autor original foi removido.
- */
 export async function handleQuotedPaymentRestriction({
   socket,
   remoteJid,
@@ -49,10 +38,6 @@ export async function handleQuotedPaymentRestriction({
     return false;
   }
 
-  // Anti-forja: a marcação só é confiável se o bot tiver realmente recebido a
-  // mensagem original (mesmo autor) e ela for pagamento ou indecifrável. Se for
-  // forjada (autor diferente / conteúdo legível não-pagamento) ou se o bot nunca
-  // viu o original, NÃO punimos.
   const { corroborated, contradicted } = verifyQuotedAuthor({
     groupJid: remoteJid,
     stanzaId: quotedPayment.stanzaId,
@@ -94,8 +79,6 @@ export async function handleQuotedPaymentRestriction({
     return false;
   }
 
-  // A revogação da mensagem original entra como messageKey, para rodar em
-  // paralelo com a remoção do autor dentro da defesa.
   await applyAntiPaymentRestriction({
     socket,
     remoteJid,
