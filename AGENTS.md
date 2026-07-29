@@ -327,4 +327,4 @@ This keeps support and agent workflows selective instead of forcing every answer
 
 ## DOESN'T RUNS
 
-Do not run `npm test`, `npm test:all` or `npm start` in this repository.
+Do not run `npm test` or `npm start` in this repository.
