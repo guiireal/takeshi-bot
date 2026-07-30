@@ -89,6 +89,10 @@ export async function facebook(url) {
   return download("facebook", url);
 }
 
+export async function xTwitter(url) {
+  return download("x-twitter", url);
+}
+
 export async function gemini(text) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");

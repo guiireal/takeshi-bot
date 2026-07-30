@@ -110,6 +110,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}pinterest
 ▢ • ${prefix}tik-tok
 ▢ • ${prefix}tik-tok-audio
+▢ • ${prefix}xtwitter
 ▢ • ${prefix}yt-mp3
 ▢ • ${prefix}yt-mp4
 ▢
