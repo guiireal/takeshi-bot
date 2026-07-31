@@ -229,39 +229,24 @@ Patched files, all marked with `// Alterado por: Dev Gui` on the first line:
 | `lib/Utils/messages.js` | Builds `interactiveMessage` from `buttons`, `interactiveButtons`, `cards` and `sections`, plus the legacy `buttonsMessage` / `listMessage` fallbacks. |
 | `lib/Types/Message.d.ts` | Type declarations for the options above. Types only, no runtime effect. |
 
-The source of truth is `patches/baileys/*.ops.json`. Each file lists edits anchored to
-**snippets of code**, never to line numbers, so upstream inserting code above a target
-does not break them:
+The single source of truth is `scripts/patch-baileys.mjs`. It contains the Baileys
+compatibility edits directly, following the same self-contained pattern used by
+Spider Bot X. The script applies transformations anchored to code snippets instead of
+line numbers and uses sentinels to keep repeated runs idempotent.
 
-| Operation | Meaning |
-| --- | --- |
-| `insertAfter` | insert `addition` right after the unique `anchor` snippet |
-| `replace` | swap the unique `search` snippet for `replacement` |
-| `remove` | drop the unique `search` snippet |
-| `prepend` | put `addition` at the top of the file |
-
-Every operation carries a `sentinel` — a snippet of its own output. If the sentinel is
-already in the file, the operation is skipped, which makes the script idempotent. A
-sentinel must never match text that already exists in the pristine file, or the edit
-silently no-ops forever.
-
-`scripts/patch-baileys.mjs` runs on `postinstall`, so every `npm install` / `npm ci`
-reapplies the edits. It is pure JavaScript and does **not** shell out to the `patch`
-binary, which is absent on Termux and slim Docker images. Anchors are required to be
-unique: an ambiguous or missing anchor fails that one file loudly instead of corrupting
-it.
-
-A failed patch does not fail `npm install`. `node_modules/baileys` is committed, so the
-bot still boots from the committed code; breaking every install — including end users on
-Termux — would cost more than the warning.
+The script runs on `postinstall`, so every `npm install` / `npm ci` reapplies the
+edits. It is pure JavaScript and does not depend on the `patch` binary, which is absent
+on Termux and slim Docker images. A missing anchor or required snippet throws an error
+and stops the postinstall instead of leaving a partially compatible Baileys unnoticed.
 
 Rules:
 
-- never edit `node_modules/baileys` directly without also updating the matching ops file
-- when bumping baileys, run `npm install` and read the postinstall output; a failed
-  operation means upstream changed the anchored snippet
-- to fix, open the target file, find the new form of the snippet, and update the
-  `anchor` / `search` field — then rerun `npm run patch:baileys`
+- never edit `node_modules/baileys` directly without also updating
+  `scripts/patch-baileys.mjs`
+- when bumping Baileys, run `npm install` and read the postinstall output; a failure
+  means upstream changed one of the anchored snippets
+- to fix an upstream change, update the anchor or replacement in the single script and
+  rerun `npm run patch:baileys`
 
 ## HOSTING_AND_PTERODACTYL
 

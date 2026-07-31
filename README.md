@@ -653,9 +653,7 @@ export async function customMiddleware({ type, commonFunctions }) {
 - 📁 database ➔ _arquivos de dados_
 - 📁 diagrams ➔ _diagramas de fluxos de dados e execução do Bot_
 - 📁 node_modules ➔ _módulos do Node.js_
-- 📁 patches ➔ _ajustes aplicados em bibliotecas externas_
-  - 📁 baileys ➔ _ajustes na biblioteca do WhatsApp (botões e listas)_
-- 📁 scripts ➔ _scripts de apoio do projeto_
+- 📁 scripts ➔ _scripts de apoio, incluindo o patch de botões e listas do Baileys_
 - 📁 src ➔ _código fonte do bot (geralmente você mexerá mais aqui)_
   - 📁 @types ➔ _pasta onde fica as definições de tipos_
   - 📁 commands ➔ _pasta onde ficam os comandos_
