@@ -313,7 +313,7 @@ const x = 1;
     messages.push(userMessage);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-5.4-mini",
+      model: "gpt-5.6-luna",
       messages: messages,
       reasoning_effort: "low",
       max_completion_tokens: 2048,
