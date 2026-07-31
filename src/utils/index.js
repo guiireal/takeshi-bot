@@ -536,3 +536,37 @@ export function hasDirectMedia(webMessage, context) {
 export const GROUP_PARTICIPANT_ADD = 27;
 export const GROUP_PARTICIPANT_LEAVE = 32;
 export const isAddOrLeave = [GROUP_PARTICIPANT_ADD, GROUP_PARTICIPANT_LEAVE];
+
+export const CODE_FENCE_LANGUAGES =
+  "javascript|js|jsx|typescript|ts|tsx|bash|sh|shell|zsh|json|jsonc|yaml|yml|toml|xml|html|css|scss|go|golang|python|py|ruby|rb|php|java|kotlin|kt|rust|rs|c|cpp|csharp|cs|swift|dart|sql|graphql|md|markdown|diff|dockerfile|docker|powershell|ps1|cmd|bat|ini|env|text|txt|plaintext|vue|svelte|lua|r|perl|scala|nginx|makefile|proto|protobuf|nodejs|node";
+
+export function normalizeWhatsAppCodeBlocks(text) {
+  return String(text || "").replace(
+    new RegExp(`\`\`\`(?:${CODE_FENCE_LANGUAGES})(?=[\\s\\r\\n]|$)`, "gi"),
+    "```",
+  );
+}
+
+export function removeUnsolicitedFollowUps(text) {
+  const continuationPattern =
+    /(?:^|\s)(?:se\s+quiser|se\s+preferir|caso\s+queira)[,:]?\s*(?:eu\s+)?(?:posso|te\s+(?:passo|envio|mostro|explico|ajudo)|lhe\s+(?:passo|envio|mostro|explico)|preparo|forneço)\b|^\s*(?:posso\s+(?:também\s+)?(?:te|lhe)\s+(?:passar|enviar|mostrar|explicar)|quer\s+que\s+eu\s+(?:te\s+)?(?:passe|envie|mostre|explique))/i;
+
+  let insideCodeBlock = false;
+
+  return String(text || "")
+    .split(/\r?\n/)
+    .map((line) => {
+      if (line.trimStart().startsWith("```")) {
+        insideCodeBlock = !insideCodeBlock;
+        return line;
+      }
+
+      if (insideCodeBlock) return line;
+
+      const match = line.match(continuationPattern);
+      return match ? line.slice(0, match.index).trimEnd() : line;
+    })
+    .filter((line, index, lines) => line || lines[index - 1] || lines[index + 1])
+    .join("\n")
+    .trim();
+}

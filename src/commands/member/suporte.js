@@ -4,51 +4,11 @@ import { fileURLToPath } from "node:url";
 import OpenAI from "openai";
 import { BOT_EMOJI, OPENAI_API_KEY, PREFIX } from "../../config.js";
 import { DangerError, WarningError } from "../../errors/index.js";
-import { getRandomName } from "../../utils/index.js";
-
-// Identifiers commonly stuck after ``` by models (```javascript, ```bash, etc).
-const CODE_FENCE_LANGUAGES =
-  "javascript|js|jsx|typescript|ts|tsx|bash|sh|shell|zsh|json|jsonc|yaml|yml|toml|xml|html|css|scss|go|golang|python|py|ruby|rb|php|java|kotlin|kt|rust|rs|c|cpp|csharp|cs|swift|dart|sql|graphql|md|markdown|diff|dockerfile|docker|powershell|ps1|cmd|bat|ini|env|text|txt|plaintext|vue|svelte|lua|r|perl|scala|nginx|makefile|proto|protobuf|nodejs|node";
-
-/**
- * Only transforms fences like ```javascript / ```bash / ```ts into bare ```.
- * Does not touch language names written in normal prose.
- */
-function normalizeWhatsAppCodeBlocks(text) {
-  return String(text || "").replace(
-    new RegExp(`\`\`\`(?:${CODE_FENCE_LANGUAGES})(?=[\\s\\r\\n]|$)`, "gi"),
-    "```",
-  );
-}
-
-/**
- * Removes unsolicited calls to continue the conversation from prose while
- * preserving code blocks. The system prompt should prevent these, but this is
- * a final guard because the command must answer the current request only.
- */
-function removeUnsolicitedFollowUps(text) {
-  const continuationPattern =
-    /(?:^|\s)(?:se\s+quiser|se\s+preferir|caso\s+queira)[,:]?\s*(?:eu\s+)?(?:posso|te\s+(?:passo|envio|mostro|explico|ajudo)|lhe\s+(?:passo|envio|mostro|explico)|preparo|forneço)\b|^\s*(?:posso\s+(?:também\s+)?(?:te|lhe)\s+(?:passar|enviar|mostrar|explicar)|quer\s+que\s+eu\s+(?:te\s+)?(?:passe|envie|mostre|explique))/i;
-
-  let insideCodeBlock = false;
-
-  return String(text || "")
-    .split(/\r?\n/)
-    .map((line) => {
-      if (line.trimStart().startsWith("```")) {
-        insideCodeBlock = !insideCodeBlock;
-        return line;
-      }
-
-      if (insideCodeBlock) return line;
-
-      const match = line.match(continuationPattern);
-      return match ? line.slice(0, match.index).trimEnd() : line;
-    })
-    .filter((line, index, lines) => line || lines[index - 1] || lines[index + 1])
-    .join("\n")
-    .trim();
-}
+import {
+  getRandomName,
+  normalizeWhatsAppCodeBlocks,
+  removeUnsolicitedFollowUps,
+} from "../../utils/index.js";
 
 export default {
   name: "suporte",
