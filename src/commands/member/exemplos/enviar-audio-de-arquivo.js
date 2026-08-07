@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import path from "node:path";
 import { ASSETS_DIR, PREFIX } from "../../../config.js";
 export default {

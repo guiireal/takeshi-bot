@@ -1,6 +1,6 @@
 import { ASSETS_DIR, PREFIX } from "../../config.js";
 import { InvalidParameterError } from "../../errors/index.js";
-import { getProfileImageData } from "../../services/baileys.js";
+import { getProfileImageData } from "../../services/profile.js";
 import { isGroup, onlyNumbers } from "../../utils/index.js";
 import { errorLog } from "../../utils/logger.js";
 

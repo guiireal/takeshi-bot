@@ -199,6 +199,11 @@ describe("isLink Middleware", () => {
       expected: true,
       description: "URL com caractere especial",
     },
+    {
+      input: "https://youtu.be/aaa?s=xxx",
+      expected: true,
+      description: "URL com subdomínio e query params",
+    },
   ];
 
   testCases.forEach(({ input, expected, description }) => {
@@ -207,7 +212,7 @@ describe("isLink Middleware", () => {
       strictEqual(
         result,
         expected,
-        `Para entrada "${input}", esperado ${expected} mas recebeu ${result}`
+        `Para entrada "${input}", esperado ${expected} mas recebeu ${result}`,
       );
     });
   });

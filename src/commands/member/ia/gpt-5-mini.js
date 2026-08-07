@@ -15,7 +15,7 @@ export default {
 
     if (!text) {
       throw new InvalidParameterError(
-        "Você precisa me dizer o que eu devo responder!"
+        "Você precisa me dizer o que eu devo responder!",
       );
     }
 

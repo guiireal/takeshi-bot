@@ -14,9 +14,9 @@ if [ ! -d "assets" ]; then
     exit 1
 fi
 
-if [ ! -d "assets/auth/baileys" ]; then
+if [ ! -d "assets/auth/zapo" ]; then
     echo "⚠️  A pasta de autenticação não existe ou já foi removida"
-    echo "   Caminho: ./assets/auth/baileys"
+    echo "   Caminho: ./assets/auth/zapo"
     exit 0
 fi
 
@@ -33,7 +33,7 @@ case $confirm in
         echo ""
         echo "🔄 Removendo arquivos de autenticação..."
         
-        rm -rf ./assets/auth/baileys
+        rm -rf ./assets/auth/zapo
         
         if [ $? -eq 0 ]; then
             echo "✅ Arquivos de autenticação removidos com sucesso!"

@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 export default {
@@ -71,9 +71,9 @@ export default {
 
     const metadata = await getGroupMetadata();
     if (metadata) {
-      const creationDate = new Date(
-        metadata.creation * 1000
-      ).toLocaleDateString("pt-BR");
+      const creationDate = metadata.creation
+        ? new Date(metadata.creation * 1000).toLocaleDateString("pt-BR")
+        : "N/A";
       const announce = metadata.announce ? "Sim" : "Não";
       const restrict = metadata.restrict ? "Sim" : "Não";
 

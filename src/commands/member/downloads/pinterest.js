@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 import { InvalidParameterError } from "../../../errors/index.js";
 import { pinterest } from "../../../services/spider-x-api.js";

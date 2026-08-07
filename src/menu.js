@@ -26,50 +26,49 @@ export function menuMessage(groupJid) {
 ╭━━⪩ DONO ⪨━━
 ▢
 ▢ • ${prefix}exec
-▢ • ${prefix}get-group-id
+▢ • ${prefix}getgroupid
 ▢ • ${prefix}off
 ▢ • ${prefix}on
-▢ • ${prefix}set-menu-image
-▢ • ${prefix}set-prefix
-▢ • ${prefix}set-spider-api-token
+▢ • ${prefix}setmenuimage
+▢ • ${prefix}setprefix
+▢ • ${prefix}setspiderapitoken
 ▢
 ╰━━─「🌌」─━━
 
 ╭━━⪩ ADMINS ⪨━━
 ▢
 ▢ • ${prefix}abrir
-▢ • ${prefix}add-auto-responder
-▢ • ${prefix}agendar-mensagem
-▢ • ${prefix}anti-audio (1/0)
-▢ • ${prefix}anti-call (1/0)
-▢ • ${prefix}anti-document (1/0)
-▢ • ${prefix}anti-event (1/0)
-▢ • ${prefix}anti-image (1/0)
-▢ • ${prefix}anti-link (1/0)
-▢ • ${prefix}anti-lottie-sticker (1/0)
-▢ • ${prefix}anti-payment (1/0)
-▢ • ${prefix}anti-product (1/0)
-▢ • ${prefix}anti-sticker (1/0)
-▢ • ${prefix}anti-status-grupo (1/0)
-▢ • ${prefix}anti-video (1/0)
-▢ • ${prefix}auto-responder (1/0)
-▢ • ${prefix}auto-sticker (1/0)
+▢ • ${prefix}addautoresponder
+▢ • ${prefix}agendarmensagem
+▢ • ${prefix}antiaudio (1/0)
+▢ • ${prefix}anticall (1/0)
+▢ • ${prefix}antidocument (1/0)
+▢ • ${prefix}antievent (1/0)
+▢ • ${prefix}antiimage (1/0)
+▢ • ${prefix}antilink (1/0)
+▢ • ${prefix}antilottie-sticker (1/0)
+▢ • ${prefix}antipayment (1/0)
+▢ • ${prefix}antiproduct (1/0)
+▢ • ${prefix}antisticker (1/0)
+▢ • ${prefix}antistatus-grupo (1/0)
+▢ • ${prefix}antivideo (1/0)
+▢ • ${prefix}autoresponder (1/0)
+▢ • ${prefix}autosticker (1/0)
 ▢ • ${prefix}ban
 ▢ • ${prefix}delete
-▢ • ${prefix}delete-auto-responder
+▢ • ${prefix}deleteautoresponder
 ▢ • ${prefix}exit (1/0)
 ▢ • ${prefix}fechar
 ▢ • ${prefix}hidetag
-▢ • ${prefix}limpar-chat
-▢ • ${prefix}link-grupo
-▢ • ${prefix}list-auto-responder
+▢ • ${prefix}limparchat
+▢ • ${prefix}linkgrupo
+▢ • ${prefix}listautoresponder
 ▢ • ${prefix}mute
-▢ • ${prefix}only-admin (1/0)
+▢ • ${prefix}onlyadmin (1/0)
 ▢ • ${prefix}promover
 ▢ • ${prefix}rebaixar
 ▢ • ${prefix}revelar
 ▢ • ${prefix}saldo
-▢ • ${prefix}set-proxy
 ▢ • ${prefix}unmute
 ▢ • ${prefix}welcome (1/0)
 ▢
@@ -81,11 +80,11 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}brat
 ▢ • ${prefix}bratvid
 ▢ • ${prefix}cep
-▢ • ${prefix}exemplos-de-mensagens
-▢ • ${prefix}fake-chat
-▢ • ${prefix}gerar-link
+▢ • ${prefix}exemplosdemensagens
+▢ • ${prefix}fakechat
+▢ • ${prefix}gerarlink
 ▢ • ${prefix}info
-▢ • ${prefix}meu-lid
+▢ • ${prefix}meulid
 ▢ • ${prefix}perfil
 ▢ • ${prefix}ping
 ▢ • ${prefix}raw-message
@@ -93,9 +92,9 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}removebg
 ▢ • ${prefix}sticker
 ▢ • ${prefix}suporte
-▢ • ${prefix}to-gif
-▢ • ${prefix}to-image
-▢ • ${prefix}to-mp3
+▢ • ${prefix}togif
+▢ • ${prefix}toimage
+▢ • ${prefix}tomp3
 ▢ • ${prefix}ttp
 ▢ • ${prefix}yt-search
 ▢
@@ -105,14 +104,14 @@ export function menuMessage(groupJid) {
 ▢
 ▢ • ${prefix}facebook
 ▢ • ${prefix}instagram
-▢ • ${prefix}play-audio
-▢ • ${prefix}play-video
+▢ • ${prefix}playaudio
+▢ • ${prefix}playvideo
 ▢ • ${prefix}pinterest
-▢ • ${prefix}tik-tok
-▢ • ${prefix}tik-tok-audio
+▢ • ${prefix}tiktok
+▢ • ${prefix}tiktokaudio
 ▢ • ${prefix}xtwitter
-▢ • ${prefix}yt-mp3
-▢ • ${prefix}yt-mp4
+▢ • ${prefix}ytmp3
+▢ • ${prefix}ytmp4
 ▢
 ╰━━─「🎶」─━━
 
@@ -133,8 +132,8 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}deepseek
 ▢ • ${prefix}flux
 ▢ • ${prefix}gemini
-▢ • ${prefix}gpt-5-mini
-▢ • ${prefix}ia-sticker
+▢ • ${prefix}gpt5mini
+▢ • ${prefix}iasticker
 ▢ • ${prefix}transcrever
 ▢ • ${prefix}tts
 ▢

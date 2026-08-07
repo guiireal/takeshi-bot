@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 export default {
@@ -126,7 +126,6 @@ await socket.sendMessage(remoteJid, {
 • \`buttons\` cria botões simples usando native flow por padrão
 • \`useLegacyButtons: true\` força o formato antigo \`buttonsMessage\`
 • \`interactiveButtons\` aceita \`quick_reply\`, \`cta_url\`, \`cta_call\`, \`cta_copy\`, \`single_select\`, entre outros
-• \`templateButtons\` não é mais renderizado pelo WhatsApp em números comuns, use \`interactiveButtons\`
-⚠️ Importante: a baileys do Takeshi foi modificada para suportar esses formatos!`);
+• \`templateButtons\` não é mais renderizado pelo WhatsApp em números comuns, use \`interactiveButtons\``);
   },
 };

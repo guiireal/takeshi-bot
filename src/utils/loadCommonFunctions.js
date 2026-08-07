@@ -6,12 +6,12 @@
  *
  * @author Dev Gui
  */
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import fs from "node:fs";
 import { BOT_EMOJI, TIMEOUT_IN_MILLISECONDS_BY_EVENT } from "../config.js";
 import {
   ajustAudioByBuffer,
-  baileysIs,
+  hasMessageContent,
   download,
   extractDataFromMessage,
   onlyNumbers,
@@ -36,10 +36,10 @@ export function loadCommonFunctions({ socket, webMessage }) {
     return null;
   }
 
-  const isAudio = baileysIs(webMessage, "audio");
-  const isImage = baileysIs(webMessage, "image");
-  const isVideo = baileysIs(webMessage, "video");
-  const isSticker = baileysIs(webMessage, "sticker");
+  const isAudio = hasMessageContent(webMessage, "audio");
+  const isImage = hasMessageContent(webMessage, "image");
+  const isVideo = hasMessageContent(webMessage, "video");
+  const isSticker = hasMessageContent(webMessage, "sticker");
 
   const withRetry = async (fn, maxRetries = 3, delayMs = 1000) => {
     let lastError;

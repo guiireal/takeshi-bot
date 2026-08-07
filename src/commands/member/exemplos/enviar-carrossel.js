@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 export default {
@@ -71,7 +71,6 @@ await socket.sendMessage(remoteJid, {
 💡 *Dicas:*
 • Você pode adicionar quantos cards quiser
 • \`viewOnce: true\` é obrigatório
-• Cada card precisa de \`title\`, \`image\` e \`caption\`
-⚠️ Importante: a baileys do Takeshi foi modificada para suportar mensagens em carrossel!`);
+• Cada card precisa de \`title\`, \`image\` e \`caption\``);
   },
 };

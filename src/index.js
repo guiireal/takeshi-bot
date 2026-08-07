@@ -72,7 +72,6 @@
  * Não modifique nada abaixo, a não ser que saiba o que está fazendo!
  */
 import { connect } from "./connection.js";
-import { load } from "./loader.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import {
   bannerLog,
@@ -122,9 +121,7 @@ async function startBot() {
       );
     }
 
-    const socket = await connect();
-
-    load(socket);
+    await connect();
 
     setInterval(() => {
       const currentStats = badMacHandler.getStats();

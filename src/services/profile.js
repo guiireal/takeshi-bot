@@ -1,6 +1,6 @@
 /**
  * Funções reaproveitáveis
- * da biblioteca Baileys (comunicação com o WhatsApp).
+ * de perfil/foto do WhatsApp.
  *
  * @author Dev Gui
  */

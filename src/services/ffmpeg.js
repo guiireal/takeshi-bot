@@ -29,7 +29,7 @@ class Ffmpeg {
   async _createTempFilePath(extension = "png") {
     return path.join(
       this.tempDir,
-      `${getRandomNumber(10_000, 99_999)}.${extension}`,
+      `${getRandomNumber(10_000, 99_999)}.${extension}`
     );
   }
 

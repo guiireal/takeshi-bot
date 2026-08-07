@@ -8,7 +8,17 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ socket }) => {
-    console.log(socket.user);
+  handle: async ({ socket, remoteJid, webMessage }) => {
+    await socket.sendMessage(
+      remoteJid,
+      {
+        video: { url: "https://linker.devgui.dev/l/AH5eJgwY.mp4" },
+        gifPlayback: true,
+        caption: "Teste",
+      },
+      {
+        quoted: webMessage,
+      },
+    );
   },
 };

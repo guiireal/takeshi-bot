@@ -15,7 +15,8 @@ For installation walkthroughs and end-user tutorials, see `README.md`.
 
 ## PROJECT_OVERVIEW
 
-**Takeshi Bot** is a modular WhatsApp bot framework built on the Baileys ecosystem.
+**Takeshi Bot** is a modular WhatsApp bot framework built on `zapo-js`, an independent
+implementation of the WhatsApp Web multi-device protocol.
 
 Core principles:
 
@@ -38,17 +39,35 @@ The project philosophy is simple: code for humans first.
 Main runtime flow:
 
 1. `index.js` or `src/index.js` boots the bot.
-2. `src/connection.js` opens the WhatsApp connection, loads auth state, handles pairing, and reconnects when needed.
-3. `src/loader.js` registers listeners and wraps event execution with safe error handling.
-4. `src/middlewares/onMesssagesUpsert.js` receives messages, filters stale events, handles muted users and participant events, and injects common functions.
+2. `src/connection.js` builds the zapo `WaClient` (with a SQLite-backed store),
+   opens the connection, handles pairing, and registers listeners via `src/loader.js`
+   before connecting.
+3. `src/loader.js` subscribes to `client.on("message" | "call" | "group")` and wraps
+   event execution with safe error handling. It also builds the compatibility
+   `socket` object (`src/services/wa.js`) passed down to everything below.
+4. `src/middlewares/onMessage.js` receives one inbound message event at a time,
+   filters stale events, handles muted users, and injects common functions.
+   Participant add/remove is a *separate* `group` event, handled directly in
+   `src/loader.js` — it does not go through `onMessage.js`.
 5. `src/utils/dynamicCommand.js` validates prefix, permission, group state, and dispatches the selected command.
 6. `src/services/*` and `src/utils/*` provide integrations, media processing, database access, and helpers.
 
 High-value architectural notes:
 
-- the bot stores its WhatsApp auth state in `assets/auth/baileys/`
+- the bot stores its WhatsApp auth state in a SQLite file under `assets/auth/zapo/`
+  (see `src/connection.js`), tracked in git the same way `assets/auth/baileys/` used
+  to be — treat it as sensitive, it is enough to impersonate the linked device
+- `src/services/wa.js` is a compatibility adapter: it exposes the same
+  `sendMessage` / `groupMetadata` / `groupParticipantsUpdate` / etc. shape the
+  codebase has always used, translating each call to the matching zapo
+  coordinator (`client.message`, `client.group`, `client.presence`, ...).
+  Prefer extending this adapter over reaching for `client` (`socket.client`)
+  directly in commands, so the whole codebase keeps one send-shape.
+- `src/services/interactiveMessages.js` builds native buttons/lists/carousels
+  (`interactiveMessage`/`nativeFlowMessage`) from the legacy `buttons` /
+  `interactiveButtons` / `sections` / `cards` DSL — no Baileys patch needed.
 - TIMEOUT_IN_MILLISECONDS_BY_EVENT throttles event handling to reduce spam-ban risk
-- `badMacHandler` is part of the self-healing strategy for session issues
+- `badMacHandler` is a defensive net for Signal/session-decrypt errors
 - `loadCommonFunctions.js` is the main injection layer for command helpers
 
 ## CORE_FILES
@@ -58,9 +77,11 @@ High-value architectural notes:
 | `index.js` | Root entrypoint for hosts that expect a root `index.js`. |
 | `src/index.js` | Main source entrypoint. |
 | `src/config.js` | Core runtime configuration, tokens, directories, flags, and platform settings. |
-| `src/connection.js` | WhatsApp socket setup, pairing, session persistence, reconnection logic. |
-| `src/loader.js` | Event registration and safe wrapper logic. |
-| `src/middlewares/onMesssagesUpsert.js` | Main inbound message processing pipeline. |
+| `src/connection.js` | zapo `WaClient` + SQLite store setup, pairing, reconnection logic. |
+| `src/loader.js` | Event registration, safe wrapper logic, and socket-adapter wiring. |
+| `src/services/wa.js` | Compatibility adapter translating the legacy socket API to zapo coordinators. |
+| `src/services/interactiveMessages.js` | Buttons/lists/carousel DSL → native `interactiveMessage` builder. |
+| `src/middlewares/onMessage.js` | Main inbound message processing pipeline (one event at a time). |
 | `src/middlewares/customMiddleware.js` | Official extension point for custom global logic. |
 | `src/utils/dynamicCommand.js` | Prefix validation, permission enforcement, and command dispatch. |
 | `src/utils/loadCommonFunctions.js` | Injected helper functions used by command handlers. |
@@ -69,6 +90,7 @@ High-value architectural notes:
 | `src/services/spider-x-api.js` | Spider X integration for downloads, AI, Pinterest, Brat, and related endpoints. |
 | `src/services/sticker.js` | Sticker processing and EXIF handling. |
 | `src/services/ffmpeg.js` | Media conversion and audio/video processing. |
+| `src/services/profile.js` | Profile picture download/fallback helper. |
 
 ## COMMAND_GUIDE
 
@@ -213,40 +235,32 @@ Project-level scripts:
 - `npm start`
 - `npm test`
 - `npm run test:all`
-- `npm run patch:baileys`
 
-## BAILEYS_PATCHES
+## ZAPO_INTEGRATION
 
-`node_modules/baileys` and `node_modules/libsignal` are intentionally committed to git
-(see the negated entries in `.gitignore`), because the project ships local changes to
-the baileys build output.
+The bot runs on `zapo-js`, an independent implementation of the WhatsApp Web
+multi-device protocol. There is **no patched dependency** and nothing is committed
+under `node_modules/` — `npm install` alone is enough to get a working tree.
 
-Patched files, all marked with `// Alterado por: Dev Gui` on the first line:
+Two pieces bridge zapo's native API to the shape this codebase has always used:
 
-| File | Purpose |
+| File | Role |
 | --- | --- |
-| `lib/Socket/messages-send.js` | Adds the `biz` / `native_flow` binary nodes and normalizes `listMessage.listType`, without which WhatsApp silently drops buttons and lists. |
-| `lib/Utils/messages.js` | Builds `interactiveMessage` from `buttons`, `interactiveButtons`, `cards` and `sections`, plus the legacy `buttonsMessage` / `listMessage` fallbacks. |
-| `lib/Types/Message.d.ts` | Type declarations for the options above. Types only, no runtime effect. |
-
-The single source of truth is `scripts/patch-baileys.mjs`. It contains the Baileys
-compatibility edits directly, following the same self-contained pattern used by
-Spider Bot X. The script applies transformations anchored to code snippets instead of
-line numbers and uses sentinels to keep repeated runs idempotent.
-
-The script runs on `postinstall`, so every `npm install` / `npm ci` reapplies the
-edits. It is pure JavaScript and does not depend on the `patch` binary, which is absent
-on Termux and slim Docker images. A missing anchor or required snippet throws an error
-and stops the postinstall instead of leaving a partially compatible Baileys unnoticed.
+| `src/services/wa.js` | Compatibility adapter. Exposes `sendMessage`, `groupMetadata`, `groupParticipantsUpdate`, `groupSettingUpdate`, `groupUpdateSubject`, `groupInviteCode`, `updateBlockStatus`, `sendPresenceUpdate`, `profilePictureUrl` — translating each into the matching zapo coordinator call (`client.message`, `client.group`, `client.privacy`, `client.presence`, `client.profile`). `groupMetadata()` also back-fills the legacy `{ id, admin }` shape onto the metadata itself and each participant (zapo's native shape is `{ jid, ..., participants: [{ jid, isAdmin, isSuperAdmin }] }`) so permission checks and example commands across the codebase keep working unchanged. |
+| `src/services/interactiveMessages.js` | Builds native `interactiveMessage` (native_flow) / `buttonsMessage` / `listMessage` payloads from the legacy `buttons` / `interactiveButtons` / `sections` / `cards` DSL — this is what used to require the Baileys binary patch. Carousel cards upload their images through `client.message.upload` before building the card. |
 
 Rules:
 
-- never edit `node_modules/baileys` directly without also updating
-  `scripts/patch-baileys.mjs`
-- when bumping Baileys, run `npm install` and read the postinstall output; a failure
-  means upstream changed one of the anchored snippets
-- to fix an upstream change, update the anchor or replacement in the single script and
-  rerun `npm run patch:baileys`
+- prefer extending `src/services/wa.js` / `src/services/interactiveMessages.js` over
+  reaching for the raw zapo `client` (`socket.client`) inside a command — this keeps
+  one consistent send-shape across the whole codebase
+- `client.message.send` resolves to a `WaMessagePublishResult` (`{ id, ack }`), not a
+  Baileys-style `{ key: { id } }` — the adapter synthesizes `.key` on every return
+  value for backward compatibility (see `attachBaileysStyleKey` in `wa.js`); don't
+  strip it when touching the adapter
+- entry/exit of group members is **not** a message event anymore — it's the
+  `group` event (`client.on("group", ...)`, handled in `src/loader.js`), not a
+  `messageStubType` on a message like it was under Baileys
 
 ## HOSTING_AND_PTERODACTYL
 

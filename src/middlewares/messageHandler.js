@@ -106,7 +106,7 @@ export async function messageHandler(socket, webMessage) {
     }
 
     const messageType = Object.keys(readRestrictedMessageTypes()).find((type) =>
-      hasDirectMedia(webMessage, type),
+      hasDirectMedia(webMessage, type)
     );
 
     if (!messageType) {
@@ -129,7 +129,7 @@ export async function messageHandler(socket, webMessage) {
     });
   } catch (error) {
     errorLog(
-      `Erro ao processar mensagem restrita. Verifique se eu estou como admin do grupo! Detalhes: ${error.message}`,
+      `Erro ao processar mensagem restrita. Verifique se eu estou como admin do grupo! Detalhes: ${error.message}`
     );
   }
 }

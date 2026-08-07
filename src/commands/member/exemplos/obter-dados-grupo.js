@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 export default {
@@ -46,9 +46,13 @@ export default {
 • Membros: ${groupMetadata.participants.filter((p) => !p.admin).length}
 
 ⚙️ *Configurações:*
-• Criado em: ${new Date(groupMetadata.creation * 1000).toLocaleDateString(
-        "pt-BR"
-      )}
+• Criado em: ${
+        groupMetadata.creation
+          ? new Date(groupMetadata.creation * 1000).toLocaleDateString(
+              "pt-BR",
+            )
+          : "N/A"
+      }
 • Dono: ${groupMetadata.owner || "N/A"}
 • Apenas admins podem enviar: ${groupMetadata.announce ? "Sim" : "Não"}
 • Aprovação para entrar: ${groupMetadata.restrict ? "Sim" : "Não"}`;

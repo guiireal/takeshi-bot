@@ -42,7 +42,7 @@ function getMessageContextInfo(message) {
 /**
  * Responde quando uma mensagem menciona ou cita um membro ausente.
  *
- * @param {{ webMessage: import("baileys").WAMessage, commonFunctions: CommandHandleProps }} params
+ * @param {{ webMessage: import("zapo-js").WaIncomingMessageEvent, commonFunctions: CommandHandleProps }} params
  */
 export async function handleAfkReferences({ webMessage, commonFunctions }) {
   if (!commonFunctions.isGroup) {

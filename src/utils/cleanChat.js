@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { BOT_EMOJI } from "../config.js";
 import { clearChat } from "../messages.js";
 

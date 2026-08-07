@@ -2,19 +2,24 @@
  * Este script é responsável
  * por carregar os eventos
  * que serão escutados pelo
- * socket do WhatsApp.
+ * cliente do WhatsApp.
  *
  * @author Dev Gui
  */
+import { customMiddleware } from "./middlewares/customMiddleware.js";
 import { onCall } from "./middlewares/onCall.js";
-import { onMessagesUpsert } from "./middlewares/onMesssagesUpsert.js";
+import { onGroupParticipantsUpdate } from "./middlewares/onGroupParticipantsUpdate.js";
+import { onMessage } from "./middlewares/onMessage.js";
+import { createSocketAdapter } from "./services/wa.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { errorLog } from "./utils/logger.js";
 
-export function load(socket) {
-  const safeEventHandler = async (callback, data, eventName) => {
+export function load(client) {
+  const socket = createSocketAdapter(client);
+
+  const safeEventHandler = async (callback, eventName) => {
     try {
-      await callback(data);
+      await callback();
     } catch (error) {
       if (badMacHandler.handleError(error, eventName)) {
         return;
@@ -26,27 +31,50 @@ export function load(socket) {
     }
   };
 
-  socket.ev.on("messages.upsert", async (data) => {
+  client.on("message", async (event) => {
     const startProcess = Date.now();
+
     safeEventHandler(
-      () =>
-        onMessagesUpsert({
-          socket,
-          messages: data.messages,
-          startProcess,
-        }),
-      data,
-      "messages.upsert",
+      () => onMessage({ socket, event, startProcess }),
+      "message",
     );
   });
 
-  socket.ev.process((events) => {
-    if (events?.call?.length) {
-      safeEventHandler(
-        () => onCall({ socket, calls: events.call }),
-        events.call,
-        "call",
-      );
+  client.on("call", async (event) => {
+    const call = {
+      id: event.callId,
+      from: event.callerPnJid ?? event.callCreatorJid,
+      status: event.type,
+      isGroup: !!event.groupJid,
+      groupJid: event.groupJid,
+    };
+
+    safeEventHandler(() => onCall({ socket, calls: [call] }), "call");
+  });
+
+  client.on("group", async (event) => {
+    if (event.action !== "add" && event.action !== "remove") {
+      return;
+    }
+
+    for (const participant of event.participants || []) {
+      safeEventHandler(async () => {
+        await customMiddleware({
+          socket,
+          webMessage: null,
+          type: "participant",
+          action: event.action,
+          data: participant.jid,
+          commonFunctions: null,
+        });
+
+        await onGroupParticipantsUpdate({
+          data: participant.jid,
+          remoteJid: event.groupJid,
+          socket,
+          action: event.action,
+        });
+      }, "group");
     }
   });
 

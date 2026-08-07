@@ -86,7 +86,10 @@ export function hasGroupStatusFlag(
       return true;
     }
 
-    if (key === "statusAttributions" && hasGroupStatusAttribution(childValue)) {
+    if (
+      key === "statusAttributions" &&
+      hasGroupStatusAttribution(childValue)
+    ) {
       return true;
     }
 
@@ -135,7 +138,7 @@ export function getCurrentMessageContentVariants(
 }
 
 export function hasGroupStatusMessage(webMessage) {
-  return getCurrentMessageContentVariants(webMessage?.message).some((message) =>
-    hasGroupStatusFlag(message),
+  return getCurrentMessageContentVariants(webMessage?.message).some(
+    (message) => hasGroupStatusFlag(message),
   );
 }

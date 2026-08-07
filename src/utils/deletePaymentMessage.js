@@ -14,13 +14,13 @@
  *
  * @author Dev Gui
  */
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { BOT_EMOJI } from "../config.js";
 import { errorLog } from "./logger.js";
 
 /**
  * @param {{
- *   socket: import("baileys").WASocket,
+ *   socket: ReturnType<typeof import("../services/wa.js").createSocketAdapter>,
  *   remoteJid: string,
  *   messageKey: {
  *     remoteJid?: string,
@@ -125,7 +125,7 @@ export async function deletePaymentMessage({
  * garantindo pelo menos a tentativa de apagar para todos.
  *
  * @param {{
- *   socket: import("baileys").WASocket,
+ *   socket: ReturnType<typeof import("../services/wa.js").createSocketAdapter>,
  *   remoteJid: string,
  *   messageKey: {
  *     remoteJid?: string,

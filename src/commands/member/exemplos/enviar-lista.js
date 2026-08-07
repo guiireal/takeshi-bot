@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 export default {
@@ -105,7 +105,6 @@ await socket.sendMessage(remoteJid, {
 • \`sections\` cria uma lista usando native flow por padrão
 • \`useLegacyList: true\` força o formato antigo \`listMessage\`
 • Cada seção pode ter várias linhas
-• Use \`rowId\` para identificar a opção escolhida
-⚠️ Importante: a baileys do Takeshi foi modificada para suportar listas!`);
+• Use \`rowId\` para identificar a opção escolhida`);
   },
 };

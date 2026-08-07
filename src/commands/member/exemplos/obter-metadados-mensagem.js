@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 import { onlyNumbers } from "../../../utils/index.js";
 
@@ -59,9 +59,9 @@ export default {
             replyLid,
           id: webMessage.message.extendedTextMessage.contextInfo.stanzaId,
         },
-        messageTimestamp:
+        timestampSeconds:
           webMessage.message.extendedTextMessage.contextInfo.quotedMessage
-            .messageTimestamp || webMessage.messageTimestamp,
+            .timestampSeconds || webMessage.timestampSeconds,
         pushName:
           webMessage.message.extendedTextMessage.contextInfo.pushName ||
           "Usuário",
@@ -120,7 +120,7 @@ export default {
 • Chat: \`${remoteJid}\`
 • ID da mensagem: \`${targetMessage.key?.id || "N/A"}\`
 • Timestamp: ${new Date(
-      (targetMessage.messageTimestamp || 0) * 1000
+      (targetMessage.timestampSeconds || 0) * 1000
     ).toLocaleString("pt-BR")}
 
 📱 *Contexto:*
@@ -205,7 +205,7 @@ ${mediaInfo}
 • Tipo da mensagem citada: ${getMessageType(targetMessage)}
 • Tem mídia: ${getMediaType(targetMessage) ? "Sim" : "Não"}
 • Data da mensagem citada: ${new Date(
-        (targetMessage.messageTimestamp || 0) * 1000
+        (targetMessage.timestampSeconds || 0) * 1000
       ).toLocaleString("pt-BR")}`;
 
       await sendText(replyInfo, [replyLid]);

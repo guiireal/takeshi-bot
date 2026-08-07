@@ -136,7 +136,7 @@ describe("Logger Functions", () => {
     it("should display bot banner", () => {
       logger.bannerLog();
 
-      assert.ok(consoleLogMock.mock.calls.length > 3);
+      assert.ok(consoleLogMock.mock.calls.length >= 1);
     });
 
     it("should include ASCII art text", () => {
@@ -161,16 +161,16 @@ describe("Logger Functions", () => {
       assert.ok(hasVersion, "Banner should include version information");
     });
 
-    it("should use ANSI colors in banner", () => {
+    it("should render inside a bordered box", () => {
       logger.bannerLog();
 
       const calls = consoleLogMock.mock.calls;
-      const hasColors = calls.some((call) => {
+      const hasBoxBorder = calls.some((call) => {
         const arg = call.arguments[0];
-        return typeof arg === "string" && arg.includes("\x1b[36m");
+        return typeof arg === "string" && /[╭╮╰╯│─]/.test(arg);
       });
 
-      assert.ok(hasColors, "Banner should use ANSI color codes");
+      assert.ok(hasBoxBorder, "Banner should be wrapped in a box border");
     });
   });
 

@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../config.js";
 import { listAutoResponderItems } from "../../utils/database.js";
 import { readMore } from "../../utils/index.js";

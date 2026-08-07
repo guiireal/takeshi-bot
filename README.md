@@ -2,13 +2,13 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-8.11.0-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-9.0.0--beta-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
-[![Node.js](https://img.shields.io/badge/Node.js-24-green?logo=node.js)](https://nodejs.org/en)
-[![Baileys](https://img.shields.io/badge/Baileys-7.0.0.rc14-purple?logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)
+[![Node.js](https://img.shields.io/badge/Node.js-22-green?logo=node.js)](https://nodejs.org/en)
+[![Zapo](https://img.shields.io/badge/Zapo-1.7.0-green?logo=whatsapp)](https://zapo.to/)
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
 
@@ -179,7 +179,7 @@ As principais hosts já oferecem o Takeshi como **bot padrão**, não sendo nece
 
 Clique com o botão direito no menu iniciar, escolha `Terminal (Admin)` ou `Windows PowerShell (Admin)`.
 
-2 - Instale o Git, Node.js 24.x.x ou superior e FFmpeg.
+2 - Instale o Git, Node.js 22.x.x ou superior e FFmpeg.
 
 Se você usa Windows 10 ou Windows 11 com `winget`, execute:
 
@@ -192,7 +192,7 @@ winget install --id Gyan.FFmpeg -e
 Se algum comando acima não funcionar, instale manualmente:
 
 - Git: [https://git-scm.com/downloads/win](https://git-scm.com/downloads/win)
-- Node.js 24.x.x ou superior: [https://nodejs.org/en](https://nodejs.org/en)
+- Node.js 22.x.x ou superior: [https://nodejs.org/en](https://nodejs.org/en)
 - FFmpeg: [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 
 3 - Feche e abra o PowerShell novamente para atualizar o PATH.
@@ -291,16 +291,16 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 source ~/.bashrc
 ```
 
-6 - Instale a versão 24 mais recente do node.js.
+6 - Instale a versão 22 mais recente do node.js.
 
 ```sh
-nvm install 24
+nvm install 22
 ```
 
 7 - Verifique se a versão foi instalada e está ativa.
 
 ```sh
-node -v # Deve exibir a versão 24
+node -v # Deve exibir a versão 22
 ```
 
 8 - Verifique se o npm foi instalado junto.
@@ -634,7 +634,7 @@ export async function customMiddleware({ type, commonFunctions }) {
 
 | Parâmetro | Tipo | Descrição |
 |-----------|------|----------|
-| `socket` | Object | Socket do Baileys para enviar mensagens |
+| `socket` | Object | Socket de compatibilidade (services/wa.js) para enviar mensagens |
 | `webMessage` | Object | Mensagem completa do WhatsApp |
 | `type` | String | "message" ou "participant" |
 | `commonFunctions` | Object/null | Todas as funções do bot (null para eventos de participantes) |
@@ -653,7 +653,7 @@ export async function customMiddleware({ type, commonFunctions }) {
 - 📁 database ➔ _arquivos de dados_
 - 📁 diagrams ➔ _diagramas de fluxos de dados e execução do Bot_
 - 📁 node_modules ➔ _módulos do Node.js_
-- 📁 scripts ➔ _scripts de apoio, incluindo o patch de botões e listas do Baileys_
+- 📁 scripts ➔ _scripts de apoio_
 - 📁 src ➔ _código fonte do bot (geralmente você mexerá mais aqui)_
   - 📁 @types ➔ _pasta onde fica as definições de tipos_
   - 📁 commands ➔ _pasta onde ficam os comandos_
@@ -668,7 +668,7 @@ export async function customMiddleware({ type, commonFunctions }) {
   - 📁 test ➔ _testes_
   - 📁 utils ➔ _utilitários_
   - 📝 config.js ➔ _arquivo de configurações do bot_
-  - 📝 connection.js ➔ _script de conexão do bot com a biblioteca Baileys_
+  - 📝 connection.js ➔ _script de conexão do bot com a zapo-js_
   - 📝 index.js ➔ _script ponto de entrada do bot_
   - 📝 loader.js ➔ _script de carga de funções_
   - 📝 menu.js ➔ _menu do bot_
@@ -723,7 +723,7 @@ Isso pode disparar erro de `rate-overlimit` durante a sincronização.
 
 ![erro comum 3](./assets/images/erro-comum-3.png)
 
-Para corrigir, reinicie a autenticação do Baileys:
+Para corrigir, reinicie a autenticação do WhatsApp:
 
 ```sh
 bash reset-qr-auth.sh

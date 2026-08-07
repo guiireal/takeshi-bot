@@ -1,4 +1,4 @@
-.vscode
-assets/auth/baileys
+node_modules/
+
 assets/temp/
 assets/temp/wa-logs.txt

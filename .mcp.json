@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "zapo-docs": {
+      "type": "http",
+      "url": "https://zapo.to/mcp"
+    }
+  }
+}

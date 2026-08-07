@@ -62,7 +62,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
       await socket.groupParticipantsUpdate(remoteJid, [userLid], "remove");
 
       await sendReply(
-        "Anti-link ativado! Você foi removido por enviar um link!"
+        "Anti-link ativado! Você foi removido por enviar um link!",
       );
 
       await socket.sendMessage(remoteJid, {
@@ -109,7 +109,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
         await sendReact(BOT_EMOJI);
         const groupPrefix = getPrefix(remoteJid);
         await sendReply(
-          `O padrão é: ${groupPrefix}\nUse ${groupPrefix}menu para ver os comandos disponíveis!`
+          `O padrão é: ${groupPrefix}\nUse ${groupPrefix}menu para ver os comandos disponíveis!`,
         );
       }
 
@@ -118,7 +118,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
 
     if (!(await checkPermission({ type, ...paramsHandler }))) {
       await sendErrorReply(
-        "Você não tem permissão para executar este comando!"
+        "Você não tem permissão para executar este comando!",
       );
       return;
     }
@@ -128,7 +128,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
       !(await isAdmin({ remoteJid, userLid, socket }))
     ) {
       await sendWarningReply(
-        "Somente administradores podem executar comandos!"
+        "Somente administradores podem executar comandos!",
       );
       return;
     }
@@ -141,14 +141,14 @@ export async function dynamicCommand(paramsHandler, startProcess) {
     ) {
       if (command.name !== "on") {
         await sendWarningReply(
-          "Este grupo está desativado! Peça para o dono do grupo ativar o bot!"
+          "Este grupo está desativado! Peça para o dono do grupo ativar o bot!",
         );
         return;
       }
 
       if (!(await checkPermission({ type, ...paramsHandler }))) {
         await sendErrorReply(
-          "Você não tem permissão para executar este comando!"
+          "Você não tem permissão para executar este comando!",
         );
         return;
       }
@@ -166,7 +166,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
   if (fullMessage === groupPrefix) {
     await sendReact(BOT_EMOJI);
     await sendReply(
-      `Este é meu prefixo! Use ${groupPrefix}menu para ver os comandos disponíveis!`
+      `Este é meu prefixo! Use ${groupPrefix}menu para ver os comandos disponíveis!`,
     );
 
     return;
@@ -174,7 +174,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
 
   if (!hasTypeAndCommand({ type, command })) {
     await sendWarningReply(
-      `Comando não encontrado! Use ${groupPrefix}menu para ver os comandos disponíveis!`
+      `Comando não encontrado! Use ${groupPrefix}menu para ver os comandos disponíveis!`,
     );
 
     return;
@@ -189,17 +189,17 @@ export async function dynamicCommand(paramsHandler, startProcess) {
   } catch (error) {
     if (badMacHandler.handleError(error, `command:${command?.name}`)) {
       await sendWarningReply(
-        "Erro temporário de sincronização. Tente novamente em alguns segundos."
+        "Erro temporário de sincronização. Tente novamente em alguns segundos.",
       );
       return;
     }
 
     if (badMacHandler.isSessionError(error)) {
       errorLog(
-        `Erro de sessão durante execução de comando ${command?.name}: ${error.message}`
+        `Erro de sessão durante execução de comando ${command?.name}: ${error.message}`,
       );
       await sendWarningReply(
-        "Erro de comunicação. Tente executar o comando novamente."
+        "Erro de comunicação. Tente executar o comando novamente.",
       );
       return;
     }
@@ -221,14 +221,14 @@ export async function dynamicCommand(paramsHandler, startProcess) {
           isSpiderAPIError ? "a Spider X API" : url
         } no comando ${command.name}!
       
-📄 *Detalhes*: ${messageText}`
+📄 *Detalhes*: ${messageText}`,
       );
     } else {
       errorLog("Erro ao executar comando", error);
       await sendErrorReply(
         `Ocorreu um erro ao executar o comando ${command.name}!
       
-📄 *Detalhes*: ${error.message}`
+📄 *Detalhes*: ${error.message}`,
       );
     }
   }

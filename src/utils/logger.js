@@ -3,7 +3,20 @@
  *
  * @author Dev Gui
  */
+import boxen from "boxen";
+import chalk from "chalk";
+import gradient from "gradient-string";
 import pkg from "../../package.json" with { type: "json" };
+
+const bannerGradient = gradient(["#60A5FA", "#3B82F6", "#818CF8"]);
+
+/**
+ * Largura do terminal atual. Em ambientes sem TTY (ex.: saída redirecionada
+ * para arquivo) `columns` é `undefined`; assume-se 80 nesse caso.
+ */
+export function getTerminalWidth() {
+  return process.stdout.columns || 80;
+}
 
 let consoleNoiseFilterInstalled = false;
 
@@ -59,9 +72,34 @@ export function warningLog(message) {
   console.log("\x1b[33m[TAKESHI BOT | WARNING]\x1b[0m", message);
 }
 
+const BANNER_ART = [
+  "░▀█▀░█▀█░█░█░█▀▀░█▀▀░█░█░▀█▀░░█▀▄░█▀█░▀█▀",
+  "░░█░░█▀█░█▀▄░█▀▀░▀▀█░█▀█░░█░░░█▀▄░█░█░░█░",
+  "░░▀░░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░░▀▀░░▀▀▀░░▀░",
+];
+
+const BANNER_BOX_WIDTH = 61;
+
 export function bannerLog() {
-  console.log(`\x1b[36m░▀█▀░█▀█░█░█░█▀▀░█▀▀░█░█░▀█▀░░█▀▄░█▀█░▀█▀\x1b[0m`);
-  console.log(`░░█░░█▀█░█▀▄░█▀▀░▀▀█░█▀█░░█░░░█▀▄░█░█░░█░`);
-  console.log(`\x1b[36m░░▀░░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░░▀▀░░▀▀▀░░▀░\x1b[0m`);
-  console.log(`\x1b[36m🤖 Versão: \x1b[0m${pkg.version}\n`);
+  const subtitle = chalk.gray("🤖 Bot de WhatsApp multifunções");
+  const version = chalk.gray("Versão ") + chalk.white.bold(pkg.version);
+
+  if (getTerminalWidth() < BANNER_BOX_WIDTH) {
+    console.log(bannerGradient("🤖 TAKESHI BOT"));
+    console.log(`${subtitle}\n${version}\n`);
+    return;
+  }
+
+  const art = BANNER_ART.map((line) => bannerGradient(line)).join("\n");
+  const content = `${art}\n\n${subtitle}  ${chalk.gray("•")}  ${version}`;
+
+  console.log(
+    boxen(content, {
+      padding: 1,
+      margin: { top: 1, bottom: 1 },
+      borderStyle: "round",
+      borderColor: "blue",
+      textAlignment: "center",
+    }),
+  );
 }

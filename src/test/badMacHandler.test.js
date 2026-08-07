@@ -210,10 +210,4 @@ describe("BadMacHandler", () => {
     });
   });
 
-  describe("clearProblematicSessionFiles", () => {
-    it("should return false if baileys folder does not exist", () => {
-      const result = handler.clearProblematicSessionFiles();
-      assert.ok(typeof result === "boolean");
-    });
-  });
 });

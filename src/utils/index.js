@@ -4,14 +4,14 @@
  * @author Dev Gui
  */
 import axios from "axios";
-import { delay, downloadContentFromMessage } from "baileys";
-import { writeFile } from "fs/promises";
 import { exec } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
+import { pipeline } from "node:stream/promises";
 import { pathToFileURL } from "node:url";
-import { ASSETS_DIR, COMMANDS_DIR, PREFIX, TEMP_DIR } from "../config.js";
+import { delay, downloadMediaMessage } from "zapo-js";
+import { COMMANDS_DIR, PREFIX, TEMP_DIR } from "../config.js";
 import { errorLog } from "./logger.js";
 
 export function question(message) {
@@ -173,7 +173,7 @@ export function isFalse(word) {
   ].includes(removeAccentsAndSpecialCharacters(word.toLowerCase()));
 }
 
-export function baileysIs(webMessage, context) {
+export function hasMessageContent(webMessage, context) {
   return !!getContent(webMessage, context);
 }
 
@@ -217,17 +217,12 @@ export async function download(webMessage, fileName, context, extension) {
     return null;
   }
 
-  const stream = await downloadContentFromMessage(content, context);
-
-  let buffer = Buffer.from([]);
-
-  for await (const chunk of stream) {
-    buffer = Buffer.concat([buffer, chunk]);
-  }
+  const rawMessage = { [`${context}Message`]: content };
+  const stream = await downloadMediaMessage(rawMessage);
 
   const filePath = path.resolve(TEMP_DIR, `${fileName}.${extension}`);
 
-  await writeFile(filePath, buffer);
+  await pipeline(stream, fs.createWriteStream(filePath));
 
   return filePath;
 }
@@ -492,17 +487,6 @@ export function isAtLeastMinutesInPast(timestamp, minimumMinutes = 5) {
   return diffInMinutes >= minimumMinutes;
 }
 
-export function getLastTimestampCreds() {
-  const credsJson = JSON.parse(
-    fs.readFileSync(
-      path.resolve(ASSETS_DIR, "auth", "baileys", "creds.json"),
-      "utf-8",
-    ),
-  );
-
-  return credsJson.lastAccountSyncTimestamp;
-}
-
 export function extractUserLid(data) {
   if (typeof data === "string") {
     try {
@@ -532,10 +516,6 @@ export function hasDirectMedia(webMessage, context) {
     webMessage?.message?.viewOnceMessageV2?.message?.[`${context}Message`]
   );
 }
-
-export const GROUP_PARTICIPANT_ADD = 27;
-export const GROUP_PARTICIPANT_LEAVE = 32;
-export const isAddOrLeave = [GROUP_PARTICIPANT_ADD, GROUP_PARTICIPANT_LEAVE];
 
 export const CODE_FENCE_LANGUAGES =
   "javascript|js|jsx|typescript|ts|tsx|bash|sh|shell|zsh|json|jsonc|yaml|yml|toml|xml|html|css|scss|go|golang|python|py|ruby|rb|php|java|kotlin|kt|rust|rs|c|cpp|csharp|cs|swift|dart|sql|graphql|md|markdown|diff|dockerfile|docker|powershell|ps1|cmd|bat|ini|env|text|txt|plaintext|vue|svelte|lua|r|perl|scala|nginx|makefile|proto|protobuf|nodejs|node";

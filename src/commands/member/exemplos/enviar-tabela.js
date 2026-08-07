@@ -1,5 +1,5 @@
-import { delay, generateWAMessageFromContent, proto } from "baileys";
 import { randomBytes } from "node:crypto";
+import { delay, proto } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 const META_AI_BOT_JID = "867051314767696@bot";
@@ -115,7 +115,7 @@ function buildUnifiedSection(submessage) {
 }
 
 async function sendRichResponseMessage(socket, remoteJid, richResponse, quoted) {
-  const rich = applyForwardedMetaAiContext(richResponse, remoteJid);
+  const rich = applyForwardedMetaAiContext(richResponse, remoteJid, quoted);
   const payload = proto.Message.fromObject({
     botForwardedMessage: {
       message: {
@@ -127,13 +127,8 @@ async function sendRichResponseMessage(socket, remoteJid, richResponse, quoted) 
       botMetadata: buildBotMetadata(["RICH_RESPONSE_TABLE"]),
     },
   });
-  const waMessage = generateWAMessageFromContent(remoteJid, payload, {
-    quoted: JSON.parse(JSON.stringify(quoted)),
-  });
 
-  return socket.relayMessage(remoteJid, waMessage.message, {
-    messageId: waMessage.key.id,
-  });
+  return socket.relayMessage(remoteJid, payload);
 }
 
 function buildBotMetadata(extraCapabilities = []) {
@@ -160,10 +155,19 @@ function buildBotMetadata(extraCapabilities = []) {
   };
 }
 
-function applyForwardedMetaAiContext(richResponse, remoteJid) {
+function applyForwardedMetaAiContext(richResponse, remoteJid, quoted) {
+  const quoteContext = quoted
+    ? {
+        stanzaId: quoted.key?.id,
+        participant: quoted.key?.participant || quoted.key?.remoteJid,
+        quotedMessage: quoted.message,
+      }
+    : {};
+
   return {
     ...richResponse,
     contextInfo: {
+      ...quoteContext,
       isForwarded: true,
       forwardingScore: 1,
       forwardOrigin: FORWARD_ORIGIN_META_AI,

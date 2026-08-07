@@ -253,7 +253,7 @@ describe("Utility Functions", () => {
     });
   });
 
-  describe("baileysIs", () => {
+  describe("hasMessageContent", () => {
     it("should detect image message", () => {
       const webMessage = {
         message: {
@@ -261,7 +261,7 @@ describe("Utility Functions", () => {
         },
       };
 
-      assert.strictEqual(utils.baileysIs(webMessage, "image"), true);
+      assert.strictEqual(utils.hasMessageContent(webMessage, "image"), true);
     });
 
     it("should detect video message", () => {
@@ -271,7 +271,7 @@ describe("Utility Functions", () => {
         },
       };
 
-      assert.strictEqual(utils.baileysIs(webMessage, "video"), true);
+      assert.strictEqual(utils.hasMessageContent(webMessage, "video"), true);
     });
 
     it("should return false for nonexistent type", () => {
@@ -281,7 +281,7 @@ describe("Utility Functions", () => {
         },
       };
 
-      assert.strictEqual(utils.baileysIs(webMessage, "image"), false);
+      assert.strictEqual(utils.hasMessageContent(webMessage, "image"), false);
     });
   });
 
@@ -392,20 +392,6 @@ describe("Utility Functions", () => {
     it("should use 5 minutes as default", () => {
       const sixMinutesAgo = Math.floor(Date.now() / 1000) - 360;
       assert.strictEqual(utils.isAtLeastMinutesInPast(sixMinutesAgo), true);
-    });
-  });
-
-  describe("GROUP_PARTICIPANT constants", () => {
-    it("should have constant GROUP_PARTICIPANT_ADD", () => {
-      assert.strictEqual(utils.GROUP_PARTICIPANT_ADD, 27);
-    });
-
-    it("should have constant GROUP_PARTICIPANT_LEAVE", () => {
-      assert.strictEqual(utils.GROUP_PARTICIPANT_LEAVE, 32);
-    });
-
-    it("should have isAddOrLeave array with correct values", () => {
-      assert.deepStrictEqual(utils.isAddOrLeave, [27, 32]);
     });
   });
 

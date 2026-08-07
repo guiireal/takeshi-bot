@@ -1,6 +1,26 @@
-import { GroupMetadata, proto, WAMessage, WASocket } from "baileys";
+import type {
+  WaGroupMetadata,
+  WaIncomingMessageEvent,
+  WaMessagePublishResult,
+} from "zapo-js";
+import type { createSocketAdapter } from "../services/wa.js";
 
 declare global {
+  /**
+   * Retorno dos helpers de envio (sendReply, sendText, etc.): o
+   * WaMessagePublishResult da zapo-js, com um `.key` no estilo Baileys
+   * sintetizado pelo adaptador (services/wa.js) para compatibilidade.
+   */
+  type SentMessageResult = WaMessagePublishResult & {
+    key: { remoteJid: string; fromMe: boolean; id: string };
+  };
+
+  /**
+   * Socket de compatibilidade retornado por services/wa.js, usado por
+   * todo o bot no lugar do socket cru da zapo-js.
+   */
+  type WaSocketAdapter = ReturnType<typeof createSocketAdapter>;
+
   /**
    * Parâmetros do customMiddleware disponíveis para personalização do bot.
    * Use este middleware para adicionar lógica customizada sem modificar arquivos principais.
@@ -19,14 +39,14 @@ declare global {
    */
   interface CustomMiddlewareProps {
     /**
-     * Socket do Baileys para operações avançadas.
+     * Socket de compatibilidade (services/wa.js) para operações avançadas.
      */
-    socket: WASocket;
+    socket: WaSocketAdapter;
 
     /**
      * Mensagem completa do WhatsApp.
      */
-    webMessage: WAMessage;
+    webMessage: WaIncomingMessageEvent;
 
     /**
      * Tipo do evento sendo processado.
@@ -150,9 +170,9 @@ declare global {
     replyText: string;
 
     /**
-     * Socket do baileys para operações avançadas.
+     * Socket de compatibilidade (services/wa.js) para operações avançadas.
      */
-    socket: WASocket;
+    socket: WaSocketAdapter;
 
     /**
      * Timestamp em que o comando foi iniciado.
@@ -176,7 +196,7 @@ declare global {
     /**
      * Informações detalhadas da mensagem do WhatsApp.
      */
-    webMessage: WAMessage;
+    webMessage: WaIncomingMessageEvent;
 
     /**
      * Exclui uma mensagem de um participante do WhatsApp.
@@ -238,7 +258,7 @@ declare global {
       filePath: string,
       asVoice: boolean,
       quoted: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um áudio a partir de um arquivo.
@@ -263,7 +283,7 @@ declare global {
       buffer: Buffer,
       asVoice: boolean,
       quoted: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um áudio a partir de uma URL.
@@ -280,7 +300,7 @@ declare global {
       url: string,
       asVoice: boolean,
       quoted: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um contato para o grupo ou usuário.
@@ -308,9 +328,9 @@ declare global {
      */
     sendEditedReply(
       text: string,
-      messageToEdit: proto.WebMessageInfo,
+      messageToEdit: SentMessageResult,
       mentions?: string[],
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma mensagem de texto, opcionalmente mencionando usuários.
@@ -326,9 +346,9 @@ declare global {
      */
     sendEditedText(
       text: string,
-      messageToEdit: proto.WebMessageInfo,
+      messageToEdit: SentMessageResult,
       mentions?: string[],
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um gif a partir de um arquivo local.
@@ -347,7 +367,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um gif a partir de uma URL.
@@ -366,7 +386,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um gif a partir de um buffer.
@@ -393,7 +413,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma imagem a partir de um arquivo local.
@@ -412,7 +432,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma imagem a partir de um buffer.
@@ -437,7 +457,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma imagem a partir de uma URL.
@@ -456,7 +476,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma localização geográfica.
@@ -479,7 +499,7 @@ declare global {
      * ```
      * @param emoji Emoji para reagir
      */
-    sendReact(emoji: string): Promise<proto.WebMessageInfo>;
+    sendReact(emoji: string): Promise<SentMessageResult>;
 
     /**
      * Simula uma ação de digitação, enviando uma mensagem de estado.
@@ -498,22 +518,22 @@ declare global {
     /**
      * Envia uma reação de sucesso (emoji ✅) na mensagem
      */
-    sendSuccessReact(): Promise<proto.WebMessageInfo>;
+    sendSuccessReact(): Promise<SentMessageResult>;
 
     /**
      * Envia uma reação de erro (emoji ⏳) na mensagem.
      */
-    sendWaitReact(): Promise<proto.WebMessageInfo>;
+    sendWaitReact(): Promise<SentMessageResult>;
 
     /**
      * Envia uma reação de erro (emoji ⚠️) na mensagem.
      */
-    sendWarningReact(): Promise<proto.WebMessageInfo>;
+    sendWarningReact(): Promise<SentMessageResult>;
 
     /**
      * Envia uma reação de erro (emoji ❌) na mensagem.
      */
-    sendErrorReact(): Promise<proto.WebMessageInfo>;
+    sendErrorReact(): Promise<SentMessageResult>;
 
     /**
      * Envia uma mensagem como resposta.
@@ -525,7 +545,7 @@ declare global {
      * @param text Texto da mensagem
      * @param mentions Array opcional de IDs de usuários para mencionar
      */
-    sendReply(text: string, mentions?: string[]): Promise<proto.WebMessageInfo>;
+    sendReply(text: string, mentions?: string[]): Promise<SentMessageResult>;
 
     /**
      * Envia uma mensagem de sucesso como resposta.
@@ -540,7 +560,7 @@ declare global {
     sendSuccessReply(
       text: string,
       mentions?: string[],
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma mensagem de atenção como resposta.
@@ -555,7 +575,7 @@ declare global {
     sendWarningReply(
       text: string,
       mentions?: string[],
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma mensagem de aguarde como resposta.
@@ -570,7 +590,7 @@ declare global {
     sendWaitReply(
       text: string,
       mentions?: string[],
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma mensagem de erro como resposta.
@@ -585,7 +605,7 @@ declare global {
     sendErrorReply(
       text: string,
       mentions?: string[],
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um sticker a partir de um arquivo local.
@@ -600,7 +620,7 @@ declare global {
     sendStickerFromFile(
       path: string,
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um sticker a partir de uma URL.
@@ -615,7 +635,7 @@ declare global {
     sendStickerFromURL(
       url: string,
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um sticker a partir de um buffer.
@@ -638,7 +658,7 @@ declare global {
     sendStickerFromBuffer(
       buffer: Buffer,
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia uma mensagem de texto, opcionalmente mencionando usuários.
@@ -650,7 +670,7 @@ declare global {
      * @param text Texto da mensagem
      * @param mentions Array opcional de IDs de usuários para mencionar
      */
-    sendText(text: string, mentions?: string[]): Promise<proto.WebMessageInfo>;
+    sendText(text: string, mentions?: string[]): Promise<SentMessageResult>;
 
     /**
      * Envia um vídeo a partir de um arquivo local.
@@ -669,7 +689,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um vídeo a partir de uma URL.
@@ -688,7 +708,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um vídeo a partir de um buffer.
@@ -715,7 +735,7 @@ declare global {
       caption?: string,
       mentions?: string[],
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um documento a partir de um arquivo local.
@@ -738,7 +758,7 @@ declare global {
       mimetype?: string,
       fileName?: string,
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um documento a partir de uma URL.
@@ -757,7 +777,7 @@ declare global {
       mimetype?: string,
       fileName?: string,
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Envia um documento a partir de um buffer.
@@ -784,7 +804,7 @@ declare global {
       mimetype?: string,
       fileName?: string,
       quoted?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
 
     /**
      * Obtém metadados completos do grupo.
@@ -798,7 +818,7 @@ declare global {
      * @param jid ID do grupo (opcional, usa o grupo atual se não fornecido)
      * @returns Promise com metadados do grupo ou null se não for um grupo
      */
-    getGroupMetadata(jid?: string): Promise<GroupMetadata | null>;
+    getGroupMetadata(jid?: string): Promise<WaGroupMetadata | null>;
 
     /**
      * Obtém o nome do grupo.
@@ -876,7 +896,7 @@ declare global {
       title: string,
       options: { optionName: string }[],
       singleChoice?: boolean,
-    ): Promise<proto.WebMessageInfo>;
+    ): Promise<SentMessageResult>;
   }
 }
 

@@ -1,4 +1,4 @@
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 const CODE_SAMPLE = `async function responderComTempo({ sendReply }) {

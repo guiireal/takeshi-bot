@@ -14,27 +14,28 @@
  *
  * @author Dev Gui
  */
-import makeWASocket, {
-  DisconnectReason,
-  fetchLatestBaileysVersion,
-  isJidBroadcast,
-  isJidNewsletter,
-  isJidStatusBroadcast,
-  useMultiFileAuthState,
-} from "baileys";
-import NodeCache from "node-cache";
+import { createMediaProcessor } from "@zapo-js/media-utils";
+import { createSqliteStore } from "@zapo-js/store-sqlite";
+import boxen from "boxen";
+import chalk from "chalk";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pino from "pino";
+import {
+  createStore,
+  isBroadcastJid,
+  isNewsletterJid,
+  isStatusBroadcastJid,
+  WaClient,
+} from "zapo-js";
 import { PREFIX, TEMP_DIR } from "./config.js";
 import { load } from "./loader.js";
-import { badMacHandler } from "./utils/badMacHandler.js";
 import { onlyNumbers, question } from "./utils/index.js";
 import {
   bannerLog,
   errorLog,
-  infoLog,
+  getTerminalWidth,
   successLog,
   warningLog,
 } from "./utils/logger.js";
@@ -53,7 +54,18 @@ const logger = pino(
 
 logger.level = "error";
 
-const msgRetryCounterCache = new NodeCache();
+const MAX_RECONNECT_ATTEMPTS = 10;
+
+const FATAL_DISCONNECT_REASONS = new Set([
+  "stream_error_replaced",
+  "stream_error_device_removed",
+  "stream_error_force_logout",
+  "failure_not_authorized",
+  "failure_banned",
+  "failure_locked",
+  "failure_bad_user_agent",
+  "primary_identity_key_change",
+]);
 
 function formatPairingCode(code) {
   if (!code) return code;
@@ -66,44 +78,96 @@ function clearScreenWithBanner() {
   bannerLog();
 }
 
-export async function connect() {
-  const baileysFolder = path.resolve(
-    __dirname,
-    "..",
-    "assets",
-    "auth",
-    "baileys",
-  );
+function pairingBoxWidth() {
+  return Math.max(28, Math.min(getTerminalWidth() - 4, 64));
+}
 
-  const { state, saveCreds } = await useMultiFileAuthState(baileysFolder);
+function createWaStore() {
+  const authFolder = path.resolve(__dirname, "..", "assets", "auth", "zapo");
 
-  const { version } = await fetchLatestBaileysVersion();
+  if (!fs.existsSync(authFolder)) {
+    fs.mkdirSync(authFolder, { recursive: true });
+  }
 
-  const socket = makeWASocket({
-    version,
-    logger,
-    defaultQueryTimeoutMs: undefined,
-    retryRequestDelayMs: 5000,
-    auth: state,
-    shouldIgnoreJid: (jid) =>
-      isJidBroadcast(jid) || isJidStatusBroadcast(jid) || isJidNewsletter(jid),
-    connectTimeoutMs: 20_000,
-    keepAliveIntervalMs: 30_000,
-    maxMsgRetryCount: 5,
-    markOnlineOnConnect: true,
-    syncFullHistory: false,
-    emitOwnEvents: false,
-    msgRetryCounterCache,
-    shouldSyncHistoryMessage: () => false,
+  const sqlite = createSqliteStore({
+    path: path.join(authFolder, "state.sqlite"),
+    driver: "auto",
   });
 
-  if (!socket.authState.creds.registered) {
+  return createStore({
+    backends: { sqlite },
+    providers: {
+      auth: "sqlite",
+      signal: "sqlite",
+      preKey: "sqlite",
+      session: "sqlite",
+      identity: "sqlite",
+      senderKey: "sqlite",
+      appState: "sqlite",
+      privacyToken: "sqlite",
+      messages: "none",
+      threads: "none",
+      contacts: "none",
+    },
+  });
+}
+
+export async function connect() {
+  const store = createWaStore();
+
+  const client = new WaClient(
+    {
+      store,
+      sessionId: "default",
+      recoverFromClientTooOld: true,
+      markOnlineOnConnect: true,
+      media: {
+        processor: createMediaProcessor(),
+        generateThumbnail: true,
+        generateWaveform: true,
+        normalizeVoiceNote: true,
+      },
+    },
+    logger,
+  );
+
+  client.ignoreKey((m) => {
+    if (m.fromMe && m.kind === "message") {
+      return true;
+    }
+
+    const jid = m.remoteJid ?? "";
+    return (
+      isBroadcastJid(jid) || isStatusBroadcastJid(jid) || isNewsletterJid(jid)
+    );
+  });
+
+  let pairingHandled = false;
+
+  const ensurePairingCode = async () => {
+    if (pairingHandled) {
+      return;
+    }
+
+    pairingHandled = true;
+
     clearScreenWithBanner();
     console.log(
-      'Informe o número do bot (SP/RJ exigem 9º dígito). \nExemplo: "+5511912345678", demais estados: "+554112345678":',
+      boxen(
+        `${chalk.white.bold("Informe o número do bot")}\n${chalk.gray("(SP/RJ exigem 9º dígito)")}\n\n${chalk.gray("Exemplo:")} ${chalk.blue("+5511912345678")}\n${chalk.gray("Demais estados:")} ${chalk.blue("+554112345678")}`,
+        {
+          padding: 1,
+          margin: { bottom: 1 },
+          borderStyle: "round",
+          borderColor: "blue",
+          title: "📱 Pareamento",
+          titleAlignment: "center",
+          width: pairingBoxWidth(),
+        },
+      ),
     );
 
-    const phoneNumber = await question("Número: ");
+    const phoneNumber = await question(chalk.blue.bold("Número: "));
 
     if (!phoneNumber) {
       errorLog(
@@ -113,102 +177,94 @@ export async function connect() {
       process.exit(1);
     }
 
-    const code = await socket.requestPairingCode(onlyNumbers(phoneNumber));
+    try {
+      const code = await client.auth.requestPairingCode(
+        onlyNumbers(phoneNumber),
+      );
 
-    console.log(`Código de pareamento: ${formatPairingCode(code)}`);
-  }
+      console.log(
+        boxen(
+          `${chalk.gray("Digite este código em")}\n${chalk.white("WhatsApp → Aparelhos conectados → Conectar com número de telefone")}\n\n${chalk.white.bold(formatPairingCode(code))}`,
+          {
+            padding: 1,
+            margin: { top: 1, bottom: 1 },
+            borderStyle: "round",
+            borderColor: "greenBright",
+            title: "🔑 Código de pareamento",
+            titleAlignment: "center",
+            textAlignment: "center",
+            width: pairingBoxWidth(),
+          },
+        ),
+      );
+    } catch (error) {
+      errorLog(`Falha ao solicitar código de pareamento: ${error.message}`);
+      pairingHandled = false;
+    }
+  };
 
-  socket.ev.on("connection.update", async (update) => {
-    const { connection, lastDisconnect } = update;
+  client.on("auth_pairing_required", ensurePairingCode);
+  client.on("auth_qr", ensurePairingCode);
 
-    if (connection === "close") {
-      const error = lastDisconnect?.error;
-      const statusCode = error?.output?.statusCode;
+  client.on("auth_paired", () => {
+    successLog("✅ Dispositivo pareado com sucesso!");
+  });
 
-      if (
-        error?.message?.includes("Bad MAC") ||
-        error?.toString()?.includes("Bad MAC")
-      ) {
-        errorLog("Bad MAC error na desconexão detectado");
+  let reconnectAttempts = 0;
 
-        if (badMacHandler.handleError(error, "connection.update")) {
-          if (badMacHandler.hasReachedLimit()) {
-            warningLog(
-              "Limite de erros Bad MAC atingido. Limpando arquivos de sessão problemáticos...",
-            );
-            badMacHandler.clearProblematicSessionFiles();
-            badMacHandler.resetErrorCount();
+  client.on("connection", async (event) => {
+    if (event.status === "open") {
+      reconnectAttempts = 0;
 
-            const newSocket = await connect();
-            load(newSocket);
-            return;
-          }
-        }
-      }
-
-      if (statusCode === DisconnectReason.loggedOut) {
-        errorLog("Bot desconectado!");
-      } else {
-        switch (statusCode) {
-          case DisconnectReason.badSession:
-            warningLog("Sessão inválida!");
-
-            const sessionError = new Error("Bad session detected");
-            if (badMacHandler.handleError(sessionError, "badSession")) {
-              if (badMacHandler.hasReachedLimit()) {
-                warningLog(
-                  "Limite de erros de sessão atingido. Limpando arquivos de sessão...",
-                );
-                badMacHandler.clearProblematicSessionFiles();
-                badMacHandler.resetErrorCount();
-              }
-            }
-            break;
-          case DisconnectReason.connectionClosed:
-            warningLog("Conexão fechada!");
-            break;
-          case DisconnectReason.connectionLost:
-            warningLog("Conexão perdida!");
-            break;
-          case DisconnectReason.connectionReplaced:
-            warningLog("Conexão substituída!");
-            break;
-          case DisconnectReason.multideviceMismatch:
-            warningLog("Dispositivo incompatível!");
-            break;
-          case DisconnectReason.forbidden:
-            warningLog("Conexão proibida!");
-            break;
-          case DisconnectReason.restartRequired:
-            infoLog('Me reinicie por favor! Digite "npm start".');
-            break;
-          case DisconnectReason.unavailableService:
-            warningLog("Serviço indisponível!");
-            break;
-        }
-
-        const newSocket = await connect();
-        load(newSocket);
-      }
-    } else if (connection === "open") {
       clearScreenWithBanner();
       successLog("✅ Bot iniciado com sucesso!");
       successLog("Fui conectado com sucesso!");
-      infoLog("Versão do WhatsApp Web: " + version.join("."));
       successLog(
-        `✅ Estou pronto para uso! 
-Verifique o prefixo, digitando a palavra "prefixo" no WhatsApp. 
+        `✅ Estou pronto para uso!
+Verifique o prefixo, digitando a palavra "prefixo" no WhatsApp.
 O prefixo padrão definido no config.js é ${PREFIX}`,
       );
-      badMacHandler.resetErrorCount();
-    } else if (connection === "connecting") {
-      infoLog("Conectando...");
-    } else {
-      infoLog("Atualizando conexão...");
+      return;
+    }
+
+    if (event.isLogout) {
+      errorLog("Bot desconectado (logout)!");
+      return;
+    }
+
+    if (FATAL_DISCONNECT_REASONS.has(event.reason)) {
+      errorLog(
+        `Desconexão fatal (${event.reason}). Não vou tentar reconectar automaticamente.`,
+      );
+      return;
+    }
+
+    if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+      errorLog(
+        `Limite de ${MAX_RECONNECT_ATTEMPTS} tentativas de reconexão atingido. Encerrando.`,
+      );
+      return;
+    }
+
+    const delayMs = Math.min(30_000, 1_000 * 2 ** reconnectAttempts);
+    reconnectAttempts += 1;
+
+    warningLog(
+      `Conexão fechada (${event.reason}). Tentando reconectar em ${delayMs}ms (tentativa ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})...`,
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+
+    try {
+      await client.connect();
+    } catch (error) {
+      errorLog(`Falha ao reconectar: ${error.message}`);
     }
   });
 
-  socket.ev.on("creds.update", saveCreds);
+  load(client);
 
-  return socket;
+  await client.connect();
+
+  return client;
 }

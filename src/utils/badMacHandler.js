@@ -1,14 +1,12 @@
 /**
- * Utilitário para lidar com erros "Bad MAC"
- * que são comuns em bots WhatsApp usando Baileys.
+ * Utilitário para lidar com erros "Bad MAC" / de sessão Signal,
+ * comuns em bots WhatsApp que mantêm sessão por longos períodos.
  *
  * Este módulo fornece funções para detectar, contar
  * e lidar graciosamente com esses erros.
  *
  * @author Dev Gui
  */
-import fs from "node:fs";
-import path from "node:path";
 import { errorLog, warningLog } from "./logger.js";
 
 class BadMacHandler {
@@ -36,49 +34,6 @@ class BadMacHandler {
       errorMessage.includes("decrypt") ||
       this.isBadMacError(error)
     );
-  }
-
-  clearProblematicSessionFiles() {
-    try {
-      const baileysFolder = path.resolve(
-        process.cwd(),
-        "assets",
-        "auth",
-        "baileys"
-      );
-
-      if (!fs.existsSync(baileysFolder)) {
-        return false;
-      }
-
-      const files = fs.readdirSync(baileysFolder);
-      let removedCount = 0;
-
-      for (const file of files) {
-        const filePath = path.join(baileysFolder, file);
-        if (fs.statSync(filePath).isFile()) {
-          if (
-            file.includes("app-state-sync-key") ||
-            file === "creds.json" ||
-            file.includes("app-state-sync-version")
-          ) {
-            continue;
-          }
-        }
-      }
-
-      if (removedCount > 0) {
-        warningLog(
-          `${removedCount} arquivos de sessão problemáticos removidos. Credenciais principais preservadas.`
-        );
-        return true;
-      }
-
-      return false;
-    } catch (error) {
-      errorLog(`Erro ao limpar arquivos de sessão: ${error.message}`);
-      return false;
-    }
   }
 
   incrementErrorCount() {

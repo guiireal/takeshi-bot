@@ -5,11 +5,11 @@
  */
 import { messageHandler } from "./messageHandler.js";
 import { onGroupParticipantsUpdate } from "./onGroupParticipantsUpdate.js";
-import { onMessagesUpsert } from "./onMesssagesUpsert.js";
+import { onMessage } from "./onMessage.js";
 
-export { messageHandler, onGroupParticipantsUpdate, onMessagesUpsert };
+export { messageHandler, onGroupParticipantsUpdate, onMessage };
 
-import { delay } from "baileys";
+import { delay } from "zapo-js";
 import { OWNER_LID } from "../config.js";
 import { getPrefix } from "../utils/database.js";
 

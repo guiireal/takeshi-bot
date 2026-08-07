@@ -7,7 +7,10 @@
  *
  * @author Dev Gui
  */
-export const welcomeMessage = "Seja bem vindo ao nosso grupo, @member!";
+export const welcomeMessage = `Seja bem vindo(a) à Dev Community </>, @member!
+
+Leia as regras na descrição para melhor convivência no grupo!`;
+
 export const exitMessage =
   "Poxa, @member saiu do grupo... Sentiremos sua falta!";
 

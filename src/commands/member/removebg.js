@@ -81,6 +81,8 @@ export default {
 
       await sendSuccessReact();
       await sendStickerFromFile(finalStickerPath);
+    } catch (error) {
+      console.error("Erro ao processar o comando removebg:", error);
     } finally {
       removeFileIfExists(inputPath);
       removeFileIfExists(convertedImagePath);

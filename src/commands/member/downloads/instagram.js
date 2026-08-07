@@ -7,7 +7,7 @@ export default {
   name: "instagram",
   description: "Faço o download de vídeos/reels do Instagram",
   commands: ["instagram", "ig", "inst", "insta"],
-  usage: `${PREFIX}instagram https://www.instagram.com/reel/Cx789012345/`,
+  usage: `${PREFIX}instagram https://www.instagram.com/reel/DTNwF0dDj1z`,
   /**
    * @param {CommandHandleProps} props
    */
@@ -20,7 +20,7 @@ export default {
   }) => {
     if (!fullArgs.length) {
       throw new InvalidParameterError(
-        "Você precisa enviar uma URL do Instagram!"
+        "Você precisa enviar uma URL do Instagram!",
       );
     }
 

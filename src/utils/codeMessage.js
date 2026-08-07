@@ -1,5 +1,5 @@
-import { generateWAMessageFromContent, proto } from "baileys";
 import { randomBytes } from "node:crypto";
+import { proto } from "zapo-js";
 
 const META_AI_BOT_JID = "867051314767696@bot";
 const META_AI_BOT_NAME = "Meta AI";
@@ -115,7 +115,7 @@ export async function sendRichResponseMessage(
   richResponse,
   quoted,
 ) {
-  const rich = applyForwardedMetaAiContext(richResponse, remoteJid);
+  const rich = applyForwardedMetaAiContext(richResponse, remoteJid, quoted);
   const payload = proto.Message.fromObject({
     botForwardedMessage: {
       message: {
@@ -127,13 +127,8 @@ export async function sendRichResponseMessage(
       botMetadata: buildBotMetadata(["RICH_RESPONSE_CODE"]),
     },
   });
-  const waMessage = generateWAMessageFromContent(remoteJid, payload, {
-    quoted: quoted ? JSON.parse(JSON.stringify(quoted)) : undefined,
-  });
 
-  return socket.relayMessage(remoteJid, waMessage.message, {
-    messageId: waMessage.key.id,
-  });
+  return socket.relayMessage(remoteJid, payload);
 }
 
 function getHighlightType(token) {
@@ -217,10 +212,19 @@ function buildBotMetadata(extraCapabilities = []) {
   };
 }
 
-function applyForwardedMetaAiContext(richResponse, remoteJid) {
+function applyForwardedMetaAiContext(richResponse, remoteJid, quoted) {
+  const quoteContext = quoted
+    ? {
+        stanzaId: quoted.key?.id,
+        participant: quoted.key?.participant || quoted.key?.remoteJid,
+        quotedMessage: quoted.message,
+      }
+    : {};
+
   return {
     ...richResponse,
     contextInfo: {
+      ...quoteContext,
       isForwarded: true,
       forwardingScore: 1,
       forwardOrigin: FORWARD_ORIGIN_META_AI,
