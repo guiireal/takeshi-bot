@@ -14,8 +14,8 @@
  *
  * @author Dev Gui
  */
+import { createMediaProcessor } from "@zapo-js/media-utils";
 import { createSqliteStore } from "@zapo-js/store-sqlite";
-import { createSql } from "./services/sql-connect.js";
 import boxen from "boxen";
 import chalk from "chalk";
 import fs from "node:fs";
@@ -82,20 +82,20 @@ function pairingBoxWidth() {
   return Math.max(28, Math.min(getTerminalWidth() - 4, 64));
 }
 
-async function createWaStore() {
+function createWaStore() {
   const authFolder = path.resolve(__dirname, "..", "assets", "auth", "zapo");
 
   if (!fs.existsSync(authFolder)) {
     fs.mkdirSync(authFolder, { recursive: true });
   }
 
-  const dbPath = path.join(authFolder, "state.sqlite");
-  const sqlite = await createSql(dbPath);
+  const sqlite = createSqliteStore({
+    path: path.join(authFolder, "state.sqlite"),
+    driver: "auto",
+  });
 
   return createStore({
-    backends: {
-      sqlite: createSqliteStore({ connection: sqlite }),
-    },
+    backends: { sqlite },
     providers: {
       auth: "sqlite",
       signal: "sqlite",
@@ -113,9 +113,23 @@ async function createWaStore() {
 }
 
 export async function connect() {
-  const store = await createWaStore();
+  const store = createWaStore();
 
-  const client = new WaClient({ store, sessionId: "default" }, logger);
+  const client = new WaClient(
+    {
+      store,
+      sessionId: "default",
+      recoverFromClientTooOld: true,
+      markOnlineOnConnect: true,
+      media: {
+        processor: createMediaProcessor(),
+        generateThumbnail: true,
+        generateWaveform: true,
+        normalizeVoiceNote: true,
+      },
+    },
+    logger,
+  );
 
   client.ignoreKey((m) => {
     if (m.fromMe && m.kind === "message") {
