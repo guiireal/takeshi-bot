@@ -9,7 +9,7 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ socket, remoteJid, sendReply, sendReact }) => {
+  handle: async ({ sendCarousel, sendReply, sendReact }) => {
     await sendReact("🎠");
 
     await delay(2000);
@@ -20,7 +20,7 @@ export default {
 
     await delay(3000);
 
-    await socket.sendMessage(remoteJid, {
+    await sendCarousel({
       text: "🎨 Galeria de Exemplos",
       footer: "Deslize para ver todos os cards →",
       cards: [
@@ -54,7 +54,7 @@ export default {
     await sendReply(`📋 *Como usar mensagens carrossel:*
 
 \`\`\`
-await socket.sendMessage(remoteJid, {
+await sendCarousel({
   text: 'Título principal',
   footer: 'Rodapé da mensagem',
   cards: [
@@ -70,7 +70,8 @@ await socket.sendMessage(remoteJid, {
 
 💡 *Dicas:*
 • Você pode adicionar quantos cards quiser
-• \`viewOnce: true\` é obrigatório
-• Cada card precisa de \`title\`, \`image\` e \`caption\``);
+• \`viewOnce: true\` é o caminho usual no carrossel
+• Cada card precisa de \`title\`, \`image\` e \`caption\`
+• Prefira \`sendCarousel\` em vez de \`socket.sendMessage\` direto`);
   },
 };

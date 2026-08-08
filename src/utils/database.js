@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PREFIX, SPIDER_API_TOKEN } from "../config.js";
+import { LINKER_API_KEY, PREFIX, SPIDER_API_TOKEN } from "../config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -537,3 +537,72 @@ export function getSpiderApiToken() {
 
   return config.spider_api_token || SPIDER_API_TOKEN;
 }
+
+export function setLinkerApiKey(apiKey) {
+  const filename = CONFIG_FILE;
+  const config = readJSON(filename, {});
+
+  config.linker_api_key = apiKey;
+
+  writeJSON(filename, config, {});
+}
+
+export function getLinkerApiKey() {
+  const filename = CONFIG_FILE;
+  const config = readJSON(filename, {});
+
+  return config.linker_api_key || LINKER_API_KEY;
+}
+
+export function isSetupCompleted() {
+  const filename = CONFIG_FILE;
+  const config = readJSON(filename, {});
+
+  return config.setup_completed === true;
+}
+
+export function markSetupCompleted() {
+  const filename = CONFIG_FILE;
+  const config = readJSON(filename, {});
+
+  config.setup_completed = true;
+
+  writeJSON(filename, config, {});
+}
+
+export const DEFAULT_WELCOME_MESSAGE = "Seja bem vindo(a) ao grupo, @member!\n\nLeia as regras na descrição para melhor convivência no grupo!";
+
+export const DEFAULT_EXIT_MESSAGE = "Poxa, @member saiu do grupo... Sentiremos sua falta!";
+
+export function setWelcomeMessage(message) {
+  const filename = CONFIG_FILE;
+  const config = readJSON(filename, {});
+
+  config.welcome_message = message;
+
+  writeJSON(filename, config, {});
+}
+
+export function getWelcomeMessage() {
+  const filename = CONFIG_FILE;
+  const config = readJSON(filename, {});
+
+  return config.welcome_message || DEFAULT_WELCOME_MESSAGE;
+}
+
+export function setExitMessage(message) {
+  const filename = CONFIG_FILE;
+  const config = readJSON(filename, {});
+
+  config.exit_message = message;
+
+  writeJSON(filename, config, {});
+}
+
+export function getExitMessage() {
+  const filename = CONFIG_FILE;
+  const config = readJSON(filename, {});
+
+  return config.exit_message || DEFAULT_EXIT_MESSAGE;
+}
+

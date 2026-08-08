@@ -1,1 +1,4 @@
-{}
+{
+  "welcome_message": "Seja bem vindo(a) ao grupo, @member!\n\nLeia as regras na descrição para melhor convivência no grupo!",
+  "exit_message": "Poxa, @member saiu do grupo... Sentiremos sua falta!"
+}

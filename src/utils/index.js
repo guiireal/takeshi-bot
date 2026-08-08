@@ -20,7 +20,12 @@ export function question(message) {
     output: process.stdout,
   });
 
-  return new Promise((resolve) => rl.question(message, resolve));
+  return new Promise((resolve) => {
+    rl.question(message, (answer) => {
+      rl.close();
+      resolve(answer);
+    });
+  });
 }
 
 function extractInteractiveResponseId(paramsJson) {

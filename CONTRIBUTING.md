@@ -1,11 +1,54 @@
-# Contribuições encerradas
+# Contribuindo com o Takeshi Bot
 
-Embora o Takeshi seja open-source, as contribuições externas foram encerradas.
+Contribuições são bem-vindas: **Issue** (bug, ideia, dúvida) ou **Pull Request**.
 
-Com o avanço das IAs, o desafio de programar tem sido substituído pela criação de prompts. Valorizo a autoria e a identidade do projeto. Não faz sentido entrar em um ciclo de revisar códigos gerados por IA que descaracterizam a lógica que construímos ao longo do tempo, por mais que sejam bons códigos, o fator humano e a criatividade se perdem.
-Qualquer um pode criar código com IA, não há mais valor genuíno em contribuir com código, o que torna o processo de revisão e manutenção insustentável.
+Antes de abrir, dê uma olhada se já não existe algo parecido aberto.
 
-O projeto segue ativo, mas agora como um esforço individual. 
-Sinta-se à vontade para estudar o código ou fazer um fork para uso pessoal.
+## Como abrir Issue ou PR
 
-Usar IA não é ruim, longe disso, mas em projetos open-source, a identidade, a autoria e o esforço genuíno para trazer soluções são mais importantes.
+Use o modelo abaixo no título e na descrição:
+
+### Título
+
+```text
+Título: <descreva sua solicitação>
+```
+
+Exemplos:
+- `Título: set-menu-gif falha ao converter GIF grande`
+- `Título: adicionar comando de enquete por grupo`
+
+### Tipo
+
+Marque um:
+
+- [ ] Bug
+- [ ] Feature
+- [ ] Melhoria
+- [ ] Documentação
+- [ ] Outro
+
+### Descrição completa
+
+Explique com clareza:
+
+- o que acontece / o que você quer
+- como reproduzir (se for bug)
+- o que esperava que acontecesse
+- prints, logs ou trechos de código, se ajudar
+
+### Testes
+
+- [ ] Testei localmente antes de abrir
+- [ ] Não testei
+
+## Pull Request
+
+1. Faça um fork do repositório
+2. Crie uma branch a partir da `main`
+3. Faça as alterações
+4. Abra o PR com o modelo acima
+
+Mantenha o PR focado: uma ideia por PR facilita a revisão.
+
+Obrigado por contribuir.

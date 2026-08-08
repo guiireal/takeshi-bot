@@ -9,13 +9,7 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({
-    socket,
-    remoteJid,
-    sendReply,
-    sendReact,
-    prefix,
-  }) => {
+  handle: async ({ sendList, sendReply, sendReact, prefix }) => {
     await sendReact("📋");
 
     const triggerCommand = (parametro) =>
@@ -29,7 +23,7 @@ export default {
 
     await delay(3000);
 
-    await socket.sendMessage(remoteJid, {
+    await sendList({
       text: "Escolha uma categoria para ver exemplos",
       title: "Menu de exemplos",
       footer: "Lista de opções",
@@ -79,7 +73,7 @@ export default {
     await sendReply(`📋 *Como usar mensagens em lista:*
 
 \`\`\`
-await socket.sendMessage(remoteJid, {
+await sendList({
   text: 'Descrição da lista',
   title: 'Título da lista',
   footer: 'Rodapé',
@@ -105,6 +99,7 @@ await socket.sendMessage(remoteJid, {
 • \`sections\` cria uma lista usando native flow por padrão
 • \`useLegacyList: true\` força o formato antigo \`listMessage\`
 • Cada seção pode ter várias linhas
-• Use \`rowId\` para identificar a opção escolhida`);
+• Use \`rowId\` para identificar a opção escolhida
+• Prefira \`sendList\` em vez de \`socket.sendMessage\` direto`);
   },
 };

@@ -264,18 +264,26 @@ npm install
 npm start
 ```
 
-10 - O bot vai solicitar que você digite seu número de telefone.
-Digite **exatamente** como está no WhatsApp e apenas números.
+10 - Na **primeira instalação**, o bot abre um assistente no terminal:
 
+1. **Tipo de base**
+   - `1` Base limpa (só pastas `owner` / `admin` / `member` + comando `ping`)
+   - `2` Base completa (com todos os comandos)
+2. Se escolher a base completa:
+   - Configurar **Spider X API** (`1` Sim / `2` Não) — token em [https://api.spiderx.com.br](https://api.spiderx.com.br)
+   - Configurar **Linker** (`1` Sim / `2` Não) — chave em [https://linker.devgui.dev](https://linker.devgui.dev)
+3. Depois disso, informe o **número do bot** para pareamento.
+
+Digite o número **exatamente** como está no WhatsApp (com DDI).  
 Não adicione o 9º dígito em números que não sejam de SP ou RJ.
 
-11 - Informe o código de pareamento no WhatsApp.
+Tokens e chaves ficam em `database/config.json` (também dá para mudar depois com `=set-spider-api-token` e `=set-linker-token`).
+
+11 - Informe o **código de pareamento** (aparece em amarelo no terminal) no WhatsApp.
 
 No WhatsApp, vá em `dispositivos conectados`, clique em `conectar dispositivo` e depois em `Conectar com número de telefone`.
 
-12 - Aguarde a conexão e digite `CTRL + C` no PowerShell para parar o bot.
-
-Depois, configure o arquivo `config.js` que está dentro da pasta `src`.
+12 - Aguarde a conexão. Se precisar, digite `CTRL + C` no terminal para parar o bot e ajuste `src/config.js` (nome, prefixo, LIDs, etc.).
 
 13 - Inicie o bot novamente.
 
@@ -363,9 +371,13 @@ npm install
 npm start
 ```
 
-14 - O bot vai solicitar que você digite seu número de telefone.
-Digite **exatamente** como está no WhatsApp e apenas números.
+14 - Na **primeira instalação**, complete o assistente no terminal:
 
+1. Base limpa (`1`) ou base completa (`2`)
+2. Se base completa: configurar Spider X e Linker (opcional)
+3. Número do bot para pareamento
+
+Digite o número **exatamente** como está no WhatsApp (com DDI).  
 Não adicione o 9º dígito em números que não sejam de SP ou RJ.
 
 ![tutorial-vps-1](./assets/images/tutorial-vps-1.png)
@@ -376,7 +388,7 @@ Não adicione o 9º dígito em números que não sejam de SP ou RJ.
 pm2 start npm --name "takeshi-bot" -- start
 ```
 
-16 - O bot exibirá um **código de pareamento** que deve ser colocado em `dispositivos conectados` no seu WhatsApp.
+16 - O bot exibirá um **código de pareamento** (em amarelo) que deve ser colocado em `dispositivos conectados` no seu WhatsApp.
 
 ![tutorial-vps-2](./assets/images/tutorial-vps-2.png)
 
@@ -443,25 +455,74 @@ Lembre-se de trocar os números acima pelos seus números, obviamente e tbm ver 
 
 ## Diagrama de conexão
 
-[![diagram](https://mermaid.ink/img/pako:eNqdVc1u1DAQfpWpJSSQtqX7k_2JoChse-hh26qtWlTtxZtMs4bEXhxnVVpV4gDcOLQUDgipQnBAiBs3OO6b8AR9BMbJZvu3BYQPVmx_M558M9_4gPkqQOayBJ-mKH1cFDzUPO5KoMFTo2Qa91Dn6wHXRvhiwKWBRRwCT-Ds9OjLr-evz06Pf8KW8kdfryMfKpMjP7-DTf4Ek76we9eB216OO_4G231uEm8w6MoctqIMghqitveWtj2XYO-fQ1vFCtTEq68k-oaDVBMHDwoPt27B_cmAtfXlztLyugdbSzsX9nOoJiegw97tSnW-BJWanRznTn54UzSv3sKaFjEKzWGI-6BVwGVgo-sV_2rH-ReZzi4sEBEuyEEMiSEmzk9pn04J40KXLYpQ2BtBjn7EqBUEmVd7NNWf45TLrWJMuzv3bgNfwwDBH30PREhu0eYDeYzSqHP0tjdbeF5Ho7TkE4vbuOdCuVKtzTr1RvPO1PjPTk-OoKMSoyd2F2ymhXeJXxe8Hlmep9Sm18cojbi-19N3F7ZGHwFj4sKzwUd9lVBdZIUQqKTLMkw7ElTfOWx8qKHAjzETloufi7OYA3Vz9iyDvz68hPbYggpwV-iYbC4EeYnIMY82hr3RJ5VJTIt9HvCZq-RlwA0eDYk2TWmSvuAi-TNfmY2N6OHqJrRXV5bam97i6kz2f16oiEeMEIZ8opWcQhtFzEmIWeoREowHGvMLUAY3aWj05tFyx9uwIlra-IOMxgrKtPQXGZ28gBVqAgM9-r4nYvoiLWHyv_rJueZaY3iJREgsrck0QYyrA65QMlUNWeqLUpv5x8ysra-ubI5TYlvjY1u-iaFZyUhIzA4QeJhynbcQCiDhIU0XEgJTByuxUIuAuUanWGLUK2Jul-zAWnSZ6WOMXWYbR4C7PI2M7SCHZEYNeEepuLDUKg37zN3lUUKrdBBwUzwNk11NgaBuq1Qa5pZbzUrmhbkHbI_WzfpcrdGq1eabTtNpVSrVEnvG3Mb8XKPpVKpVakx1p1FvHpbYfnZvea5RL9drjfK8UynXW80Sw0CQNjr5-5Q9U4e_ARz-Fnw?type=png)](https://mermaid.live/edit#pako:eNqdVc1u1DAQfpWpJSSQtqX7k_2JoChse-hh26qtWlTtxZtMs4bEXhxnVVpV4gDcOLQUDgipQnBAiBs3OO6b8AR9BMbJZvu3BYQPVmx_M558M9_4gPkqQOayBJ-mKH1cFDzUPO5KoMFTo2Qa91Dn6wHXRvhiwKWBRRwCT-Ds9OjLr-evz06Pf8KW8kdfryMfKpMjP7-DTf4Ek76we9eB216OO_4G231uEm8w6MoctqIMghqitveWtj2XYO-fQ1vFCtTEq68k-oaDVBMHDwoPt27B_cmAtfXlztLyugdbSzsX9nOoJiegw97tSnW-BJWanRznTn54UzSv3sKaFjEKzWGI-6BVwGVgo-sV_2rH-ReZzi4sEBEuyEEMiSEmzk9pn04J40KXLYpQ2BtBjn7EqBUEmVd7NNWf45TLrWJMuzv3bgNfwwDBH30PREhu0eYDeYzSqHP0tjdbeF5Ho7TkE4vbuOdCuVKtzTr1RvPO1PjPTk-OoKMSoyd2F2ymhXeJXxe8Hlmep9Sm18cojbi-19N3F7ZGHwFj4sKzwUd9lVBdZIUQqKTLMkw7ElTfOWx8qKHAjzETloufi7OYA3Vz9iyDvz68hPbYggpwV-iYbC4EeYnIMY82hr3RJ5VJTIt9HvCZq-RlwA0eDYk2TWmSvuAi-TNfmY2N6OHqJrRXV5bam97i6kz2f16oiEeMEIZ8opWcQhtFzEmIWeoREowHGvMLUAY3aWj05tFyx9uwIlra-IOMxgrKtPQXGZ28gBVqAgM9-r4nYvoiLWHyv_rJueZaY3iJREgsrck0QYyrA65QMlUNWeqLUpv5x8ysra-ubI5TYlvjY1u-iaFZyUhIzA4QeJhynbcQCiDhIU0XEgJTByuxUIuAuUanWGLUK2Jul-zAWnSZ6WOMXWYbR4C7PI2M7SCHZEYNeEepuLDUKg37zN3lUUKrdBBwUzwNk11NgaBuq1Qa5pZbzUrmhbkHbI_WzfpcrdGq1eabTtNpVSrVEnvG3Mb8XKPpVKpVakx1p1FvHpbYfnZvea5RL9drjfK8UynXW80Sw0CQNjr5-5Q9U4e_ARz-Fnw)
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Dev as 👨‍💻 Você
+    participant Bot as 🤖 Takeshi Bot
+    participant WA as 💬 WhatsApp
+
+    Note over Dev,WA: 🚀 COMO O BOT CONECTA NO WHATSAPP
+
+    %% ========== PRIMEIRA VEZ ==========
+    rect rgb(230, 240, 255)
+        Note over Dev,WA: 🆕 Primeira vez rodando o bot
+        
+        Dev->>Bot: npm start
+        Bot->>Dev: "Digite o número do bot: "
+        Dev->>Bot: 5511999999999
+        
+        Bot->>WA: Pede código de pareamento
+        WA-->>Bot: Retorna código (ex: 1234-5678)
+        Bot->>Dev: 🔑 Mostra código: 1234-5678
+        
+        Note over Dev: Abra o WhatsApp no celular<br/>Vá em "Aparelhos Conectados"<br/>Clique em "Conectar Aparelho"<br/>Digite o código mostrado
+        
+        Dev->>WA: ✅ Código confirmado no celular
+        WA->>Bot: Conexão autorizada!
+        Bot->>Bot: Salva credenciais
+        
+        Note over Bot: ✅ BOT CONECTADO!<br/>Agora ele vai conectar<br/>automaticamente sempre
+    end
+
+    %% ========== PRÓXIMAS VEZES ==========
+    rect rgb(240, 255, 240)
+        Note over Dev,WA: 🔄 Nas próximas vezes
+        
+        Dev->>Bot: npm start
+        Bot->>Bot: Carrega credenciais salvas
+        Bot->>WA: Conecta automaticamente
+        WA-->>Bot: ✅ Conectado!
+        
+        Note over Bot: ✅ PRONTO!<br/>Bot já está online<br/>e aguardando mensagens
+    end
+
+    %% ========== RESUMO ==========
+    rect rgb(255, 255, 230)
+        Note over Dev,WA: 📝 RESUMO SIMPLES
+        Note over Dev,WA: 1️⃣ Primeira vez: npm start → Digite número → Código → Confirma no celular<br/>2️⃣ Próximas vezes: npm start → Conecta sozinho<br/>3️⃣ As credenciais ficam salvas em: assets/auth/baileys/
+    end
+```
 
 ## Alguns comandos necessitam de API
 
-Edite o arquivo `config.js` que está dentro da pasta `src` e cole sua api key da plataforma Spider X API, conforme o código abaixo.
-Para obter seu token, acesse: [https://api.spiderx.com.br](https://api.spiderx.com.br) e crie sua conta gratuitamente!
+Na **primeira instalação** (base completa), o assistente já pergunta se você quer configurar Spider X e Linker.
+
+Você também pode configurar depois:
+
+- Pelo WhatsApp (dono): `=set-spider-api-token` e `=set-linker-token`
+- Em `database/config.json` (`spider_api_token` e `linker_api_key`)
+- Como fallback, em `src/config.js`:
 
 ```js
 export const SPIDER_API_TOKEN = "seu_token_aqui";
-```
-
-Para comandos de **canvas** e **gerar-link**, é necessário configurar a API do **Linker**:
-
-```js
-export const LINKER_BASE_URL = "https://linker.devgui.dev/api";
 export const LINKER_API_KEY = "seu_token_aqui";
 ```
 
-Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
+Spider X API: [https://api.spiderx.com.br](https://api.spiderx.com.br)  
+Linker (canvas / gerar-link): [https://linker.devgui.dev](https://linker.devgui.dev)
+
+Prioridade de leitura: valor em `database/config.json` → fallback de `src/config.js`.
 
 ## Funcionalidades gerais
 
@@ -494,6 +555,8 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Fechar grupo | Admin | ❌ |
 | Gestão de mensagens do auto-responder | Admin | ❌ |
 | Ligar/desligar auto responder | Admin | ❌ |
+| Definir mensagem de boas vindas (`legendabv`) | Admin | ❌ |
+| Definir mensagem de saída (`legendasaiu`) | Admin | ❌ |
 | Ligar/desligar boas vindas | Admin | ❌ |
 | Ligar/desligar saída de grupo | Admin | ❌ |
 | Limpar chat | Admin | ❌ |
@@ -580,15 +643,139 @@ O menu do bot fica dentro da pasta `src` no arquivo chamado `menu.js`
 
 ## Onde modifico a mensagem de boas vindas e quando alguém sai do grupo?
 
-As mensagens ficam dentro da pasta `src` no arquivo chamado `messages.js`
+Pelo WhatsApp, com comandos de **admin** no grupo (não edite mais arquivo de código para isso):
+
+1. Ative o recurso no grupo:
+   - `=welcome 1` liga as boas-vindas
+   - `=exit 1` liga a mensagem de saída
+2. Defina o texto:
+   - `=legendabv Seja bem vindo(a), @member!`
+   - `=legendasaiu Poxa, @member saiu do grupo...`
+
+Use `@member` na mensagem para mencionar quem entrou ou saiu.
+
+Sem argumentos (`=legendabv` ou `=legendasaiu`), o bot mostra a mensagem atual.
+
+As mensagens ficam salvas em `database/config.json` (`welcome_message` e `exit_message`). O padrão de fábrica já vem preenchido com texto genérico.
 
 ## Diagrama de como os comandos funcionam
 
-[![diagram](https://mermaid.ink/img/pako:eNqNVltrG0cU_isnCwGJqJJ2tZKtpTE4GwUMteVYlinFL6Pd0Xpb7Y48F9eJMeRCX_pSSqEPJRDSBAp9K6HQ9_0n_gPtT-iZ2YscW7KiBzGz831nznduuxdWwEJqeZagp4qmAX0ck4iT5DgF_BElWaqSCeX5fk64jIN4TlIJY0E5EAH_vf35A25U9o7H7DbsEZM56sOvcEi-o-Ik1s9uA_0kzIG_vIJtfqriMwYhA58lJA3RcM7YY5ICO8Or9f0NJHlI-e0FPB1v7z0ewtHQz36EXVxvw3gX_KFeDkv2_fvwsPrBeDTOXh7sDGGwd7Szfe0kB3MaSODRpOZ02g1wXP3X7dbzwyW-oCoP7H__-enq9fsqIEDTs5hAUKoouZrxxdaW4bQSmqplZs2pDiC6QicUCCBSkIgW6aFpuFzZo-Eh7B8M_cFodJeuQpIRV1_pgFNI0o7gw3gaBwQozDkLFCfAbotbrJBTqjwqqQKNQ8TVHIMjZPYOiMRcfwZnzuk0Pi9ZAeOcSga1Vn0pd_-mf3BsmUBbyxy9GXQltMjE-3LCW1tYky9B8KCFlrQp0WLfp5S3VhySMInTVYcJ1e3UWhOsqzc_wCANWCo5Ux4UJO1-81uxNlRnLMj-BEkTmFOexEJk79lniN6vwDAhgpKQQEqwR4UkeRyuXvwOuXJ4CCL7iP2ZmiadMFkBcvUIMAuhj02yK0AhBhGnisxw6nBQ6wq66GMYfD3wx4d31bQp564u7M7Kms7HRqeo68E5DZTUhUIWY2dtTRsT_glJTFN-mpZl1xr8sLqi4JSdLVWo6xvzzRahFhiOAzqfPYOamSIc0WLOMB31TzA7CY6EChPrXbJAEB4JqOG_wjslE9fULUAUEhIL6LYfwFSl2R_Z31Tk_hBxb5kwlFMG4avsY6QLb2HXqPNWRsFugk-weSNSOAsFxbjjNGFX34v5kPRcGqOlYWEQnSb2hp6qBftBDlztpqnuKlJPOEuexDNay-mNnF1fU4EHg9H-cHS49jVh6u-O0tOD3wP32kw1SU1DerPCciROkL8KuXmQVr1_8qFxZFq_el-UBXOvUmc1rIjHoeVJrmgDJyLHzOPWutCQY0ue0IQeWx4uQzolaib1wLxEGr6lv2EsKZk4mKITy5uSmcCdmodElh8P1VOOF1LuM5VKy3PaTs9YsbwL6xz3bq_Z6fW7tuM6G92O7XQb1jPLs-1e0-72-z27t9F3Hdu-bFjPzb120-1vbvZdt9tpu5sbbbRGw1gyvpt_wpgvmcv_AYwQ1RY?type=png)](https://mermaid.live/edit#pako:eNqNVltrG0cU_isnCwGJqJJ2tZKtpTE4GwUMteVYlinFL6Pd0Xpb7Y48F9eJMeRCX_pSSqEPJRDSBAp9K6HQ9_0n_gPtT-iZ2YscW7KiBzGz831nznduuxdWwEJqeZagp4qmAX0ck4iT5DgF_BElWaqSCeX5fk64jIN4TlIJY0E5EAH_vf35A25U9o7H7DbsEZM56sOvcEi-o-Ik1s9uA_0kzIG_vIJtfqriMwYhA58lJA3RcM7YY5ICO8Or9f0NJHlI-e0FPB1v7z0ewtHQz36EXVxvw3gX_KFeDkv2_fvwsPrBeDTOXh7sDGGwd7Szfe0kB3MaSODRpOZ02g1wXP3X7dbzwyW-oCoP7H__-enq9fsqIEDTs5hAUKoouZrxxdaW4bQSmqplZs2pDiC6QicUCCBSkIgW6aFpuFzZo-Eh7B8M_cFodJeuQpIRV1_pgFNI0o7gw3gaBwQozDkLFCfAbotbrJBTqjwqqQKNQ8TVHIMjZPYOiMRcfwZnzuk0Pi9ZAeOcSga1Vn0pd_-mf3BsmUBbyxy9GXQltMjE-3LCW1tYky9B8KCFlrQp0WLfp5S3VhySMInTVYcJ1e3UWhOsqzc_wCANWCo5Ux4UJO1-81uxNlRnLMj-BEkTmFOexEJk79lniN6vwDAhgpKQQEqwR4UkeRyuXvwOuXJ4CCL7iP2ZmiadMFkBcvUIMAuhj02yK0AhBhGnisxw6nBQ6wq66GMYfD3wx4d31bQp564u7M7Kms7HRqeo68E5DZTUhUIWY2dtTRsT_glJTFN-mpZl1xr8sLqi4JSdLVWo6xvzzRahFhiOAzqfPYOamSIc0WLOMB31TzA7CY6EChPrXbJAEB4JqOG_wjslE9fULUAUEhIL6LYfwFSl2R_Z31Tk_hBxb5kwlFMG4avsY6QLb2HXqPNWRsFugk-weSNSOAsFxbjjNGFX34v5kPRcGqOlYWEQnSb2hp6qBftBDlztpqnuKlJPOEuexDNay-mNnF1fU4EHg9H-cHS49jVh6u-O0tOD3wP32kw1SU1DerPCciROkL8KuXmQVr1_8qFxZFq_el-UBXOvUmc1rIjHoeVJrmgDJyLHzOPWutCQY0ue0IQeWx4uQzolaib1wLxEGr6lv2EsKZk4mKITy5uSmcCdmodElh8P1VOOF1LuM5VKy3PaTs9YsbwL6xz3bq_Z6fW7tuM6G92O7XQb1jPLs-1e0-72-z27t9F3Hdu-bFjPzb120-1vbvZdt9tpu5sbbbRGw1gyvpt_wpgvmcv_AYwQ1RY)
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User as 👤 Usuário
+    participant Bot as 🤖 Takeshi Bot
+    participant Cmd as 📂 Arquivo do Comando
+
+    Note over User,Cmd: 🚀 QUANDO VOCÊ MANDA UM COMANDO
+
+    %% ========== USUÁRIO ENVIA ==========
+    rect rgb(230, 240, 255)
+        Note over User,Bot: 1️⃣ Usuário envia comando
+        User->>Bot: /menu
+        Note over Bot: Bot recebe a mensagem
+    end
+
+    %% ========== BOT PROCESSA ==========
+    rect rgb(240, 255, 240)
+        Note over Bot: 2️⃣ Bot verifica e procura o comando
+        
+        Bot->>Bot: Verifica se o grupo está ativo
+        Bot->>Bot: Verifica se o prefixo está correto (/)
+        Bot->>Bot: Procura o comando "menu"
+        
+        Note over Bot: Busca em:<br/>📁 src/commands/owner/<br/>📁 src/commands/admin/<br/>📁 src/commands/member/
+        
+        Bot->>Bot: ✅ Encontrou: member/menu.js
+        Bot->>Bot: Verifica se você tem permissão
+        
+        Note over Bot: Permissão baseada na pasta:<br/>• owner/ = só dono do bot<br/>• admin/ = admins do grupo<br/>• member/ = qualquer um
+    end
+
+    %% ========== COMANDO EXECUTA ==========
+    rect rgb(255, 250, 230)
+        Note over Bot,Cmd: 3️⃣ Executa o arquivo do comando
+        
+        Bot->>Cmd: Chama menu.js
+        
+        Note over Cmd: O arquivo menu.js recebe tudo pronto:<br/>• sendReply (enviar resposta)<br/>• sendImage (enviar imagem)<br/>• args (argumentos do comando)<br/>• e mais 50+ funções prontas!
+        
+        Cmd->>Cmd: Lógica do comando menu:
+        Note over Cmd: 1. Carrega imagem do menu<br/>2. Monta o texto com comandos<br/>3. Envia imagem + texto
+        
+        Cmd->>Bot: sendImageFromFile(imagem, texto)
+    end
+
+    %% ========== RESPOSTA ==========
+    rect rgb(230, 255, 230)
+        Note over Bot,User: 4️⃣ Bot responde
+        Bot->>User: 📱 Envia o menu
+        Note over User: ✅ Você recebe a resposta!
+    end
+
+    %% ========== RESUMO ==========
+    rect rgb(255, 255, 230)
+        Note over User,Cmd: 📝 RESUMO SIMPLES
+        Note over User,Cmd: 1️⃣ Você envia: /menu<br/>2️⃣ Bot procura o arquivo menu.js nas pastas de comando<br/>3️⃣ Bot verifica se você pode usar (permissão)<br/>4️⃣ Arquivo menu.js executa e usa funções prontas<br/>5️⃣ Você recebe a resposta<br/><br/>💡 DICA: Cada comando é um arquivo separado!<br/>Não existe "switch/case" gigante
+```
 
 ## Diagrama de como funcionam os middlewares (interceptadores) de recepção e saída
 
-[![diagram](https://mermaid.ink/img/pako:eNqtld9qE0EUxl_lOFBoIW2TzV8WrU2tFKVJa9uAltycZE_TwexMnJ2NtaXghQqiIPXCC1FELIgXeq3XeZO-gD6Cs7NJtmmTBsG9CDsz5zvn7De_yRyxpvSIuSygRyGJJq1ybCn06wLMg6GWIvQbpOJxB5XmTd5BoaHs-VwABvDn08mPeHQ5aEXqOOT0HezgQwr2eTR3ObAWkOonO4Wq7EqokN9Qst5PWpWaQHZNkK2UiuJdE_3-KdyrlaurG1BeX6v1XlbgdnVnqwwbNdgu3wEzv7ZV29wYpJmZgRvD54IkWYhjFTU1qFZj1smmU-Dkop98fi5enNzT2YfnUG63wt43H0hohSAktFTYkYkyebPK-aUlY4prBsYOKRCW78reFwl4SWjCBsGrpE2DCGbbAM_Vk-G4OueEKxKD-S4XnrGbAt37DKh5Fz28eb2hFpdmm9JH4UkXFh9T2wzMN4q5cTmxrUeS9dMkARcKb1ILwScRYIt88AgaiXhUlDhrhdthI9Bch9y1HR4J09QxnL14C9aneNI6Fc9Wo6a9S-Yl7QzoOXkFdbZCvm1CwqjrcP_B7rU6m9RZstsWV9_iGkFDDRp-ZSKmdkAjbnkUjDXswrefPfv1--cbqEad7eEhiBEBCS8e2JerGI9Ow2TC-3BbzKcT_vH1kPAA-RinJ_C9Rb5JBssVVBzHyKbQbWpNY7tyjq4Ae989nII4HXB9Fd9jEv4z5manO-TxKRs9GXJr179Dbq0fUh57Hlk4FEWAT-a7L48AX7PRfbSF1HyPN7H31SB5ge8xbv1fzCdu_Dr3O6YYejI6WecsmzVtUdtigF2zL6E2mVNAujk3PDnAUqyluMdcrUJKMZ-Uj9GQHUUxdab3yac6c82rR3sYtnXk27GRmctrV0p_oDT_vq195u6hcSPFwo6HenCjDmeVqUjqlgyFZq6TLuVsFuYesQPmZorFhYKTzWSK6Wwpn8s4ZvUJc-cLhYVizsmWSvlC2kk72exxih3awpmFfM4pFLJ5s54pFfMpZljTUlXie91e78d_AUVrgqU?type=png)](https://mermaid.live/edit#pako:eNqtld9qE0EUxl_lOFBoIW2TzV8WrU2tFKVJa9uAltycZE_TwexMnJ2NtaXghQqiIPXCC1FELIgXeq3XeZO-gD6Cs7NJtmmTBsG9CDsz5zvn7De_yRyxpvSIuSygRyGJJq1ybCn06wLMg6GWIvQbpOJxB5XmTd5BoaHs-VwABvDn08mPeHQ5aEXqOOT0HezgQwr2eTR3ObAWkOonO4Wq7EqokN9Qst5PWpWaQHZNkK2UiuJdE_3-KdyrlaurG1BeX6v1XlbgdnVnqwwbNdgu3wEzv7ZV29wYpJmZgRvD54IkWYhjFTU1qFZj1smmU-Dkop98fi5enNzT2YfnUG63wt43H0hohSAktFTYkYkyebPK-aUlY4prBsYOKRCW78reFwl4SWjCBsGrpE2DCGbbAM_Vk-G4OueEKxKD-S4XnrGbAt37DKh5Fz28eb2hFpdmm9JH4UkXFh9T2wzMN4q5cTmxrUeS9dMkARcKb1ILwScRYIt88AgaiXhUlDhrhdthI9Bch9y1HR4J09QxnL14C9aneNI6Fc9Wo6a9S-Yl7QzoOXkFdbZCvm1CwqjrcP_B7rU6m9RZstsWV9_iGkFDDRp-ZSKmdkAjbnkUjDXswrefPfv1--cbqEad7eEhiBEBCS8e2JerGI9Ow2TC-3BbzKcT_vH1kPAA-RinJ_C9Rb5JBssVVBzHyKbQbWpNY7tyjq4Ae989nII4HXB9Fd9jEv4z5manO-TxKRs9GXJr179Dbq0fUh57Hlk4FEWAT-a7L48AX7PRfbSF1HyPN7H31SB5ge8xbv1fzCdu_Dr3O6YYejI6WecsmzVtUdtigF2zL6E2mVNAujk3PDnAUqyluMdcrUJKMZ-Uj9GQHUUxdab3yac6c82rR3sYtnXk27GRmctrV0p_oDT_vq195u6hcSPFwo6HenCjDmeVqUjqlgyFZq6TLuVsFuYesQPmZorFhYKTzWSK6Wwpn8s4ZvUJc-cLhYVizsmWSvlC2kk72exxih3awpmFfM4pFLJ5s54pFfMpZljTUlXie91e78d_AUVrgqU)
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Admin as 👮 Admin
+    participant Bot as 🤖 Takeshi Bot
+    participant User as 👤 Novo Membro
+
+    Note over Admin,User: 🚀 QUANDO ALGUÉM ENTRA OU SAI DO GRUPO
+
+    %% ========== ALGUÉM ENTRA ==========
+    rect rgb(230, 240, 255)
+        Note over Admin,User: ✅ Alguém entra no grupo
+        
+        Admin->>Bot: Adiciona @João ao grupo
+        Bot->>Bot: Detecta que alguém entrou
+        
+        Bot->>Bot: Boas-vindas está ativada?<br/>(comando: /welcome on)
+        
+        alt Boas-vindas ativada
+            Bot->>Bot: Pega mensagem de boas-vindas
+            Note over Bot: Substitui:<br/>{nome} → João<br/>{grupo} → Nome do grupo
+            Bot->>User: 👋 "Bem-vindo João ao grupo XYZ!"
+            Note over User: ✅ Novo membro recebe mensagem
+        else Boas-vindas desativada
+            Note over Bot: ℹ️ Não faz nada
+        end
+    end
+
+    %% ========== ALGUÉM SAI ==========
+    rect rgb(240, 255, 240)
+        Note over Admin,User: ❌ Alguém sai do grupo
+        
+        Admin->>Bot: Remove @Maria do grupo
+        Bot->>Bot: Detecta que alguém saiu
+        
+        Bot->>Bot: Mensagem de saída está ativada?<br/>(comando: /exit on)
+        
+        alt Mensagem de saída ativada
+            Bot->>Bot: Pega mensagem de despedida
+            Note over Bot: Substitui:<br/>{nome} → Maria<br/>{grupo} → Nome do grupo
+            Bot->>Admin: 👋 "Maria saiu do grupo XYZ"
+            Note over Admin: ✅ Grupo recebe notificação
+        else Mensagem de saída desativada
+            Note over Bot: ℹ️ Não faz nada
+        end
+        
+        Bot->>Bot: Limpa dados de Maria<br/>(se ela estava mutada, etc)
+    end
+
+    %% ========== RESUMO ==========
+    rect rgb(255, 255, 230)
+        Note over Admin,User: 📝 RESUMO SIMPLES
+        Note over Admin,User: 1️⃣ Alguém entra ou sai do grupo<br/>2️⃣ Bot detecta automaticamente<br/>3️⃣ Se configurado, envia mensagem personalizada<br/>4️⃣ Limpa dados de quem saiu<br/><br/>💡 ATIVAR: /welcome on ou /exit on<br/>💡 DESATIVAR: /welcome off ou /exit off
+    end
+```
 
 ## Custom Middleware - Personalize o bot sem modificar arquivos principais
 
@@ -702,7 +889,7 @@ export async function customMiddleware({ type, commonFunctions }) {
   - 📝 index.js ➔ _script ponto de entrada do bot_
   - 📝 loader.js ➔ _script de carga de funções_
   - 📝 menu.js ➔ _menu do bot_
-  - 📝 messages.js ➔ _arquivos de mensagens de boas vindas e saída_
+  - 📝 messages.js ➔ _mensagens utilitárias (ex.: limpar chat); boas-vindas/saída ficam em database/config.json via legendabv e legendasaiu_
   - 📝 test.js ➔ _script de testes_
 - 📝 .gitignore ➔ _arquivo para não subir certas pastas no GitHub_
 - 📝 ⚡-cases-estao-aqui.js ➔ _easter egg_
@@ -784,15 +971,9 @@ Você deve apagar um dos bots e tanto configurar quanto executar **apenas um**
 
 ## Contribuindo com o projeto
 
-Embora o Takeshi seja open-source, as contribuições externas foram encerradas.
+Contribuições estão abertas de novo: Issues e Pull Requests são bem-vindos.
 
-Com o avanço das IAs, o desafio de programar tem sido substituído pela criação de prompts. Valorizo a autoria e a identidade do projeto. Não faz sentido entrar em um ciclo de revisar códigos gerados por IA que descaracterizam a lógica que construímos ao longo do tempo, por mais que sejam bons códigos, o fator humano e a criatividade se perdem.
-Qualquer um pode criar código com IA, não há mais valor genuíno em contribuir com código, o que torna o processo de revisão e manutenção insustentável.
-
-O projeto segue ativo, mas agora como um esforço individual. 
-Sinta-se à vontade para estudar o código ou fazer um fork para uso pessoal.
-
-Usar IA não é ruim, longe disso, mas em projetos open-source, a identidade, a autoria e o esforço genuíno para trazer soluções são mais importantes.
+O modelo é simples (título, tipo, descrição e se testou). Detalhes em [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Licença
 

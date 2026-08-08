@@ -157,7 +157,7 @@ Important files:
 
 | File | Role |
 | --- | --- |
-| `config.json` | runtime values such as tokens and mutable settings |
+| `config.json` | runtime values: `spider_api_token`, `linker_api_key`, welcome/exit messages, `setup_completed`, and other mutable settings |
 | `prefix-groups.json` | custom prefixes per group |
 | `auto-responder.json` | trigger/answer entries |
 | `muted.json` | muted users by group |
@@ -304,7 +304,8 @@ Agents working in this repository should follow these rules:
 - never modify `assets/auth/` manually
 - when supporting users, stay read-only unless explicitly asked to change code
 - when support needs extra context, load only the relevant sections or files
-- never expose the values of `OPENAI_API_KEY`, `LINKER_API_KEY`, or `SPIDER_API_TOKEN`
+- never expose the values of `OPENAI_API_KEY`, `LINKER_API_KEY`, `SPIDER_API_TOKEN`, or tokens stored in `database/config.json`
+- first-install wizard lives in `src/utils/setup.js` (base limpa/completa, Spider, Linker) and runs once from `src/index.js` before pairing
 
 ## SKILLS
 

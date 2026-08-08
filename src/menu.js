@@ -29,6 +29,8 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}getgroupid
 ▢ • ${prefix}off
 ▢ • ${prefix}on
+▢ • ${prefix}setlinkertoken
+▢ • ${prefix}setmenugif
 ▢ • ${prefix}setmenuimage
 ▢ • ${prefix}setprefix
 ▢ • ${prefix}setspiderapitoken
@@ -60,6 +62,8 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}exit (1/0)
 ▢ • ${prefix}fechar
 ▢ • ${prefix}hidetag
+▢ • ${prefix}legendabv
+▢ • ${prefix}legendasaiu
 ▢ • ${prefix}limparchat
 ▢ • ${prefix}linkgrupo
 ▢ • ${prefix}listautoresponder

@@ -121,6 +121,8 @@ async function startBot() {
       );
     }
 
+    await runFirstInstallSetup();
+
     await connect();
 
     setInterval(() => {

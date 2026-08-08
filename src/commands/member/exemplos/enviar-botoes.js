@@ -9,13 +9,7 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({
-    socket,
-    remoteJid,
-    sendReply,
-    sendReact,
-    prefix,
-  }) => {
+  handle: async ({ sendButtons, sendReply, sendReact, prefix }) => {
     await sendReact("🔘");
 
     const triggerCommand = (parametro) =>
@@ -29,7 +23,7 @@ export default {
 
     await delay(3000);
 
-    await socket.sendMessage(remoteJid, {
+    await sendButtons({
       text: "Exemplo com botões simples",
       footer: "Botões simples",
       buttons: [
@@ -47,37 +41,37 @@ export default {
 
     await delay(3000);
 
-    await socket.sendMessage(remoteJid, {
+    await sendButtons({
       text: "Exemplo com botões interativos",
       footer: "Resposta rápida, link, chamada e cópia",
       interactiveButtons: [
         {
           name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
+          buttonParamsJson: {
             display_text: "Resposta rápida",
             id: triggerCommand("resposta-rapida"),
-          }),
+          },
         },
         {
           name: "cta_url",
-          buttonParamsJson: JSON.stringify({
+          buttonParamsJson: {
             display_text: "Abrir site",
             url: "https://github.com/guiireal",
-          }),
+          },
         },
         {
           name: "cta_call",
-          buttonParamsJson: JSON.stringify({
+          buttonParamsJson: {
             display_text: "Ligar",
             phone_number: "+5511999999999",
-          }),
+          },
         },
         {
           name: "cta_copy",
-          buttonParamsJson: JSON.stringify({
+          buttonParamsJson: {
             display_text: "Copiar código",
             copy_code: "TAKESHI2026",
-          }),
+          },
         },
       ],
       viewOnce: true,
@@ -85,7 +79,7 @@ export default {
 
     await delay(3000);
 
-    await socket.sendMessage(remoteJid, {
+    await sendButtons({
       text: "Exemplo com botões legados",
       footer: "Compatibilidade com buttonsMessage antigo",
       buttons: [
@@ -106,16 +100,16 @@ export default {
     await sendReply(`📋 *Como usar mensagens com botões:*
 
 \`\`\`
-await socket.sendMessage(remoteJid, {
+await sendButtons({
   text: 'Escolha uma opção',
   footer: 'Rodapé',
   interactiveButtons: [
     {
       name: 'cta_url',
-      buttonParamsJson: JSON.stringify({
+      buttonParamsJson: {
         display_text: 'Abrir site',
         url: 'https://github.com/guiireal'
-      })
+      }
     }
   ],
   viewOnce: true
@@ -126,6 +120,8 @@ await socket.sendMessage(remoteJid, {
 • \`buttons\` cria botões simples usando native flow por padrão
 • \`useLegacyButtons: true\` força o formato antigo \`buttonsMessage\`
 • \`interactiveButtons\` aceita \`quick_reply\`, \`cta_url\`, \`cta_call\`, \`cta_copy\`, \`single_select\`, entre outros
-• \`templateButtons\` não é mais renderizado pelo WhatsApp em números comuns, use \`interactiveButtons\``);
+• \`buttonParamsJson\` pode ser objeto ou string JSON (o builder serializa)
+• \`templateButtons\` não é mais renderizado pelo WhatsApp em números comuns, use \`interactiveButtons\`
+• Prefira \`sendButtons\` em vez de \`socket.sendMessage\` direto`);
   },
 };

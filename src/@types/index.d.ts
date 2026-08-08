@@ -80,6 +80,79 @@ declare global {
     data?: string;
   }
 
+  interface InteractiveListRow {
+    title: string;
+    description?: string;
+    rowId?: string;
+    id?: string;
+  }
+
+  interface InteractiveListSection {
+    title?: string;
+    highlight_label?: string;
+    rows: InteractiveListRow[];
+  }
+
+  interface InteractiveSimpleButton {
+    buttonId?: string;
+    id?: string;
+    buttonText?: { displayText: string };
+    displayText?: string;
+    text?: string;
+  }
+
+  interface InteractiveNativeButton {
+    name: string;
+    buttonParamsJson?: string | Record<string, unknown>;
+  }
+
+  interface InteractiveCarouselCard {
+    title?: string;
+    caption?: string;
+    footer?: string;
+    image?: { url: string; mimetype?: string } | Buffer;
+    video?: { url: string; mimetype?: string } | Buffer;
+    buttons?: (InteractiveSimpleButton | InteractiveNativeButton)[];
+  }
+
+  interface SendListOptions {
+    text: string;
+    sections: InteractiveListSection[];
+    buttonText?: string;
+    title?: string;
+    subtitle?: string;
+    footer?: string;
+    mentions?: string[];
+    viewOnce?: boolean;
+    useLegacyList?: boolean;
+    quoted?: boolean;
+  }
+
+  interface SendButtonsOptions {
+    text: string;
+    buttons?: InteractiveSimpleButton[];
+    interactiveButtons?: InteractiveNativeButton[];
+    title?: string;
+    subtitle?: string;
+    footer?: string;
+    caption?: string;
+    mentions?: string[];
+    viewOnce?: boolean;
+    useLegacyButtons?: boolean;
+    quoted?: boolean;
+  }
+
+  interface SendCarouselOptions {
+    cards: InteractiveCarouselCard[];
+    text?: string;
+    title?: string;
+    subtitle?: string;
+    footer?: string;
+    mentions?: string[];
+    viewOnce?: boolean;
+    quoted?: boolean;
+  }
+
   /**
    * Propriedades e funções disponíveis no objeto passado para a função handle
    * de cada comando. Você pode acessá-las com desestruturação:
@@ -897,6 +970,12 @@ declare global {
       options: { optionName: string }[],
       singleChoice?: boolean,
     ): Promise<SentMessageResult>;
+
+    sendList(options: SendListOptions): Promise<SentMessageResult>;
+
+    sendButtons(options: SendButtonsOptions): Promise<SentMessageResult>;
+
+    sendCarousel(options: SendCarouselOptions): Promise<SentMessageResult>;
   }
 }
 

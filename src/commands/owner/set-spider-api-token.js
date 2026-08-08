@@ -14,24 +14,21 @@ export default {
     "spider-api-token",
   ],
   usage: `${PREFIX}set-spider-api-token token aqui`,
-  /**
-   * @param {CommandHandleProps} props
-   */
   handle: async ({ args, sendSuccessReply }) => {
     if (!args.length) {
-      throw new InvalidParameterError("Você deve fornecer um token!");
+      throw new InvalidParameterError(
+        "Você deve fornecer um token!\n\nObtenha em: https://api.spiderx.com.br",
+      );
     }
 
     if (args[0].length < 8 || args[0].length > 25) {
       throw new InvalidParameterError(
-        "O token deve ter entre 8 e 25 caracteres!"
+        "O token deve ter entre 8 e 25 caracteres!",
       );
     }
 
-    const newToken = args[0];
+    setSpiderApiToken(args[0]);
 
-    setSpiderApiToken(newToken);
-
-    await sendSuccessReply(`Token da Spider API alterado com sucesso!`);
+    await sendSuccessReply("Token da Spider API alterado com sucesso!");
   },
 };

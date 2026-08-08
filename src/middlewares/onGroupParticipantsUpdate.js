@@ -4,14 +4,29 @@
  *
  * @author Dev Gui
  */
-import { exitMessage, welcomeMessage } from "../messages.js";
 import {
+  getExitMessage,
+  getWelcomeMessage,
   isActiveExitGroup,
   isActiveGroup,
   isActiveWelcomeGroup,
 } from "../utils/database.js";
 import { extractUserLid, onlyNumbers } from "../utils/index.js";
 import { errorLog } from "../utils/logger.js";
+
+function applyMemberPlaceholder(template, userLid) {
+  const hasMemberMention = template.includes("@member");
+  const mentions = [];
+  let text = template;
+
+  if (hasMemberMention) {
+    const userNumber = onlyNumbers(userLid);
+    text = template.replaceAll("@member", `@${userNumber}`);
+    mentions.push(userLid);
+  }
+
+  return { text, mentions };
+}
 
 export async function onGroupParticipantsUpdate({
   data,
@@ -31,38 +46,23 @@ export async function onGroupParticipantsUpdate({
     const userLid = extractUserLid(data);
 
     if (isActiveWelcomeGroup(remoteJid) && action === "add") {
-      const hasMemberMention = welcomeMessage.includes("@member");
-
-      const mentions = [];
-      let finalWelcomeMessage = welcomeMessage;
-
-      if (hasMemberMention) {
-        const userNumber = onlyNumbers(userLid);
-        finalWelcomeMessage = welcomeMessage.replace(
-          "@member",
-          `@${userNumber}`,
-        );
-        mentions.push(userLid);
-      }
+      const { text, mentions } = applyMemberPlaceholder(
+        getWelcomeMessage(),
+        userLid,
+      );
 
       await socket.sendMessage(remoteJid, {
-        text: finalWelcomeMessage,
+        text,
         mentions,
       });
     } else if (isActiveExitGroup(remoteJid) && action === "remove") {
-      const hasMemberMention = exitMessage.includes("@member");
-
-      const mentions = [];
-      let finalExitMessage = exitMessage;
-
-      if (hasMemberMention) {
-        const userNumber = onlyNumbers(userLid);
-        finalExitMessage = exitMessage.replace("@member", `@${userNumber}`);
-        mentions.push(userLid);
-      }
+      const { text, mentions } = applyMemberPlaceholder(
+        getExitMessage(),
+        userLid,
+      );
 
       await socket.sendMessage(remoteJid, {
-        text: finalExitMessage,
+        text,
         mentions,
       });
     }

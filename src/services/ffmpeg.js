@@ -75,6 +75,13 @@ class Ffmpeg {
     return outputPath;
   }
 
+  async convertGifToMp4(inputPath) {
+    const outputPath = await this._createTempFilePath("mp4");
+    const command = `ffmpeg -y -i "${inputPath}" -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:v libx264 -an "${outputPath}"`;
+    await this._executeCommand(command);
+    return outputPath;
+  }
+
   async cleanup(filePath) {
     removeFileIfExists(filePath);
   }

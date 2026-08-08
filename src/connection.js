@@ -184,7 +184,7 @@ export async function connect() {
 
       console.log(
         boxen(
-          `${chalk.gray("Digite este código em")}\n${chalk.white("WhatsApp → Aparelhos conectados → Conectar com número de telefone")}\n\n${chalk.white.bold(formatPairingCode(code))}`,
+          `${chalk.gray("Digite este código em")}\n${chalk.white("WhatsApp → Aparelhos conectados → Conectar com número de telefone")}\n\n${chalk.yellow.bold(formatPairingCode(code))}`,
           {
             padding: 1,
             margin: { top: 1, bottom: 1 },

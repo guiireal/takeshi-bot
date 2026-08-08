@@ -799,6 +799,27 @@ export function loadCommonFunctions({ socket, webMessage }) {
     });
   };
 
+  const sendInteractivePayload = async (options = {}) => {
+    const { quoted = false, ...content } = options;
+    const quotedObject = quoted
+      ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
+      : {};
+
+    return await socket.sendMessage(remoteJid, content, quotedObject);
+  };
+
+  const sendList = async (options = {}) => {
+    return await sendInteractivePayload(options);
+  };
+
+  const sendButtons = async (options = {}) => {
+    return await sendInteractivePayload(options);
+  };
+
+  const sendCarousel = async (options = {}) => {
+    return await sendInteractivePayload(options);
+  };
+
   const isGroup = !!remoteJid?.endsWith("@g.us");
   const isGroupWithLid = !!userLid?.endsWith("@lid");
 
@@ -893,6 +914,8 @@ export function loadCommonFunctions({ socket, webMessage }) {
     sendAudioFromBuffer,
     sendAudioFromFile,
     sendAudioFromURL,
+    sendButtons,
+    sendCarousel,
     sendContact,
     sendDocumentFromBuffer,
     sendDocumentFromFile,
@@ -907,6 +930,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     sendImageFromBuffer,
     sendImageFromFile,
     sendImageFromURL,
+    sendList,
     sendLocation,
     sendPoll,
     sendReact,
