@@ -1,8 +1,5 @@
-/**
- * Funções comuns de uso geral
- * do bot. Não há
- * necessidade de modificar
- * este arquivo.
+/*
+ * Funções comuns de uso geral do bot.
  *
  * @author Dev Gui
  */
@@ -285,6 +282,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         remoteJid,
         {
           image: fs.readFileSync(file),
+          mimetype: "image/png",
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
@@ -316,6 +314,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         remoteJid,
         {
           image: { url },
+          mimetype: "image/png",
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
@@ -345,6 +344,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
         remoteJid,
         {
           image: buffer,
+          mimetype: "image/png",
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
@@ -375,6 +375,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       remoteJid,
       {
         video: fs.readFileSync(file),
+        mimetype: "video/mp4",
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         ...optionalParams,
       },
@@ -521,6 +522,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       remoteJid,
       {
         video: { url },
+        mimetype: "video/mp4",
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         ...optionalParams,
       },
@@ -547,6 +549,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       remoteJid,
       {
         video: fs.readFileSync(file),
+        mimetype: "video/mp4",
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         gifPlayback: true,
         ...optionalParams,
@@ -576,6 +579,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       remoteJid,
       {
         video: { url },
+        mimetype: "video/mp4",
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         gifPlayback: true,
         ...optionalParams,
@@ -603,6 +607,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       remoteJid,
       {
         video: buffer,
+        mimetype: "video/mp4",
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         gifPlayback: true,
         ...optionalParams,
@@ -697,6 +702,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
       remoteJid,
       {
         video: buffer,
+        mimetype: "video/mp4",
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         ...optionalParams,
       },
