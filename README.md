@@ -12,6 +12,16 @@
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
 
+## 🧪 Testando a versão 9.0.0-beta (migração para Zapo)
+
+Estamos migrando a base do Baileys para o [Zapo](https://zapo.to/). Se quiser testar a versão beta antes do lançamento oficial, clone a branch `9-beta`:
+
+```sh
+git clone -b 9-beta https://github.com/guiireal/takeshi-bot.git
+```
+
+Use por sua conta e risco, pode conter instabilidades.
+
 ## Desenvolvida do zero, no vídeo
 
 [CRIANDO UM BOT DE WHATSAPP DO ZERO (GUIA DEFINITIVO) - BASE COMPLETA + 6 COMANDOS - JAVASCRIPT](https://youtu.be/6zr2NYIYIyc)
@@ -111,17 +121,31 @@ cd takeshi-bot
 chmod -R 755 ./*
 ```
 
-7 - Execute o bot.
+7 - Instale as dependências do projeto.
+
+Se você escolheu uma pasta de armazenamento compartilhado (como `/sdcard`, `~/storage/emulated/0` ou a pasta `Download`), use a flag `--no-bin-links`, pois esse tipo de armazenamento não suporta links simbólicos e o `npm install` normal vai falhar:
+
+```sh
+npm install --no-bin-links
+```
+
+Se você usou uma pasta interna do Termux (fora da `~/storage`), pode instalar normalmente:
+
+```sh
+npm install
+```
+
+8 - Execute o bot.
 
 ```sh
 npm start
 ```
 
-8 - Insira o número de telefone e pressione `enter`.
+9 - Insira o número de telefone e pressione `enter`.
 
-9 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
+10 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
 
-10 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+11 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
 
 Depois, Configure o arquivo `config.js` que está dentro da pasta `src`.
 
@@ -146,7 +170,7 @@ export const BOT_LID = "12345678901234567890@lid";
 export const OWNER_LID = "12345678901234567890@lid";
 ```
 
-11 - Inicie o bot novamente.
+12 - Inicie o bot novamente.
 
 ```sh
 npm start
@@ -327,52 +351,58 @@ git clone https://github.com/guiireal/takeshi-bot.git
 cd takeshi-bot
 ```
 
-12 - Digite o seguinte comando.
+12 - Instale as dependências do projeto.
+
+```sh
+npm install
+```
+
+13 - Digite o seguinte comando.
 
 ```sh
 npm start
 ```
 
-13 - O bot vai solicitar que você digite seu número de telefone.
+14 - O bot vai solicitar que você digite seu número de telefone.
 Digite **exatamente** como está no WhatsApp e apenas números.
 
 Não adicione o 9º dígito em números que não sejam de SP ou RJ.
 
 ![tutorial-vps-1](./assets/images/tutorial-vps-1.png)
 
-14 - Conecte o bot no PM2
+15 - Conecte o bot no PM2
 
 ```sh
 pm2 start npm --name "takeshi-bot" -- start
 ```
 
-15 - O bot exibirá um **código de pareamento** que deve ser colocado em `dispositivos conectados` no seu WhatsApp.
+16 - O bot exibirá um **código de pareamento** que deve ser colocado em `dispositivos conectados` no seu WhatsApp.
 
 ![tutorial-vps-2](./assets/images/tutorial-vps-2.png)
 
-16 - Vá em `dispositivos conectados` no seu WhatsApp.
+17 - Vá em `dispositivos conectados` no seu WhatsApp.
 
 ![tutorial-vps-3](./assets/images/tutorial-vps-3.png)
 
-17 - Clique em `conectar dispositivo`
+18 - Clique em `conectar dispositivo`
 
 ![tutorial-vps-4](./assets/images/tutorial-vps-4.png)
 
-18 - No canto inferior, clique em `Conectar com número de telefone`
+19 - No canto inferior, clique em `Conectar com número de telefone`
 
 ![tutorial-vps-5](./assets/images/tutorial-vps-5.png)
 
-19 - Coloque o **código de pareamento** que você recebeu no terminal, que foi feito no passo `15`.
+20 - Coloque o **código de pareamento** que você recebeu no terminal, que foi feito no passo `16`.
 
 ![tutorial-vps-6](./assets/images/tutorial-vps-6.png)
 
-20 - Após isso, no terminal que ficou parado, ele deve exibir que **foi conectado com sucesso**
+21 - Após isso, no terminal que ficou parado, ele deve exibir que **foi conectado com sucesso**
 
 ![tutorial-vps-7](./assets/images/tutorial-vps-7.png)
 
-21 - Digite `CTRL + C` para parar o bot.
+22 - Digite `CTRL + C` para parar o bot.
 
-22 - Agora inicie ele pelo `PM2`, executando o seguinte código abaixo.
+23 - Agora inicie ele pelo `PM2`, executando o seguinte código abaixo.
 
 ```sh
 pm2 start npm --name "takeshi-bot" -- start
@@ -380,7 +410,7 @@ pm2 start npm --name "takeshi-bot" -- start
 
 ![tutorial-vps-8](./assets/images/tutorial-vps-8.png)
 
-23 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+24 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
 
 Depois, Configure o arquivo `config.js` que está dentro da pasta `src`.
 
@@ -407,7 +437,7 @@ export const OWNER_LID = "12345678901234567890@lid";
 
 Lembre-se de trocar os números acima pelos seus números, obviamente e tbm ver se o seu prefixo é a barra /.
 
-24 - Por fim, teste o bot!
+25 - Por fim, teste o bot!
 
 ![tutorial-vps-9](./assets/images/tutorial-vps-9.png)
 
