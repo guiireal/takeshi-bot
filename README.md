@@ -12,6 +12,16 @@
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
 
+## 🧪 Testando a versão 9.0.0-beta (migração para Zapo)
+
+Estamos migrando a base do Baileys para o [Zapo](https://zapo.to/). Se quiser testar a versão beta antes do lançamento oficial, clone a branch `9-beta`:
+
+```sh
+git clone -b 9-beta https://github.com/guiireal/takeshi-bot.git
+```
+
+Use por sua conta e risco, pode conter instabilidades.
+
 ## Desenvolvida do zero, no vídeo
 
 [CRIANDO UM BOT DE WHATSAPP DO ZERO (GUIA DEFINITIVO) - BASE COMPLETA + 6 COMANDOS - JAVASCRIPT](https://youtu.be/6zr2NYIYIyc)
