@@ -230,7 +230,7 @@ git --version
 ffmpeg -version
 ```
 
-O comando `node -v` deve exibir uma versão `v24.x.x`.
+O comando `node -v` deve exibir uma versão `v22.x.x` ou `v24.x.x`.
 
 5 - Escolha uma pasta para colocar os arquivos do bot.
 
