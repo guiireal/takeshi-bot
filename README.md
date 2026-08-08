@@ -44,7 +44,7 @@
 17. [Erros comuns](#erros-comuns)
 18. [Inscreva-se no canal](#inscreva-se-no-canal)
 19. [Contribuindo com o projeto](#contribuindo-com-o-projeto)
-20. [Licença e Disclaimer](#licença)
+20. [Licença](#licença)
 
 ## 🌐 Acesse o Takeshi Bot em outros idiomas
 
@@ -782,7 +782,3 @@ O que você não pode fazer:
 - Não pode transformar este código em algo proprietário (fechado) e impedir outras pessoas de acessá-lo ou usá-lo.
 
 Esta licença garante que todos tenham acesso ao código-fonte e podem colaborar livremente, promovendo o compartilhamento e o aprimoramento do projeto.
-
-## ⚠ Disclaimer
-
-Neste projeto, precisei hospedar a node_modules, para auxiliar quem está rodando o bot pelo celular, pois muitos deles podem não rodar o `npm install` pelo termux corretamente.
