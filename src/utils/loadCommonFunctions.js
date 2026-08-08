@@ -17,6 +17,10 @@ import {
   onlyNumbers,
   removeFileWithTimeout,
 } from "./index.js";
+import {
+  optimizeImageBuffer,
+  needsOptimization,
+} from "../services/imageOptimizer.js";
 
 export function loadCommonFunctions({ socket, webMessage }) {
   const {
@@ -255,13 +259,25 @@ export function loadCommonFunctions({ socket, webMessage }) {
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
       : {};
 
-    return await socket.sendMessage(
-      remoteJid,
-      {
-        sticker: { url },
-      },
-      { url, ...quotedObject },
-    );
+    return await withRetry(async () => {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch sticker from URL: ${response.statusText}`);
+      }
+
+      const stickerBuffer = Buffer.from(await response.arrayBuffer());
+
+      return await socket.sendMessage(
+        remoteJid,
+        {
+          sticker: stickerBuffer,
+        },
+        {
+          ...quotedObject,
+        },
+      );
+    });
   };
 
   const sendImageFromFile = async (
@@ -312,14 +328,28 @@ export function loadCommonFunctions({ socket, webMessage }) {
     }
 
     return await withRetry(async () => {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image from URL: ${response.statusText}`);
+      }
+
+      let imageBuffer = Buffer.from(await response.arrayBuffer());
+
+      if (await needsOptimization(imageBuffer)) {
+        imageBuffer = await optimizeImageBuffer(imageBuffer);
+      }
+
       return await socket.sendMessage(
         remoteJid,
         {
-          image: { url },
+          image: imageBuffer,
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
-        { url, ...quotedObject },
+        {
+          ...quotedObject,
+        },
       );
     });
   };
@@ -517,15 +547,27 @@ export function loadCommonFunctions({ socket, webMessage }) {
       optionalParams = { mentions };
     }
 
-    return await socket.sendMessage(
-      remoteJid,
-      {
-        video: { url },
-        caption: caption ? `${BOT_EMOJI} ${caption}` : "",
-        ...optionalParams,
-      },
-      { url, ...quotedObject },
-    );
+    return await withRetry(async () => {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch video from URL: ${response.statusText}`);
+      }
+
+      const videoBuffer = Buffer.from(await response.arrayBuffer());
+
+      return await socket.sendMessage(
+        remoteJid,
+        {
+          video: videoBuffer,
+          caption: caption ? `${BOT_EMOJI} ${caption}` : "",
+          ...optionalParams,
+        },
+        {
+          ...quotedObject,
+        },
+      );
+    });
   };
 
   const sendGifFromFile = async (
@@ -572,16 +614,28 @@ export function loadCommonFunctions({ socket, webMessage }) {
       optionalParams = { mentions };
     }
 
-    return await socket.sendMessage(
-      remoteJid,
-      {
-        video: { url },
-        caption: caption ? `${BOT_EMOJI} ${caption}` : "",
-        gifPlayback: true,
-        ...optionalParams,
-      },
-      { url, ...quotedObject },
-    );
+    return await withRetry(async () => {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch gif from URL: ${response.statusText}`);
+      }
+
+      const gifBuffer = Buffer.from(await response.arrayBuffer());
+
+      return await socket.sendMessage(
+        remoteJid,
+        {
+          video: gifBuffer,
+          caption: caption ? `${BOT_EMOJI} ${caption}` : "",
+          gifPlayback: true,
+          ...optionalParams,
+        },
+        {
+          ...quotedObject,
+        },
+      );
+    });
   };
 
   const sendGifFromBuffer = async (
@@ -644,15 +698,28 @@ export function loadCommonFunctions({ socket, webMessage }) {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
       : {};
-    return await socket.sendMessage(
-      remoteJid,
-      {
-        document: { url },
-        mimetype: mimetype || "application/octet-stream",
-        fileName: fileName || "documento.pdf",
-      },
-      { url, ...quotedObject },
-    );
+
+    return await withRetry(async () => {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch document from URL: ${response.statusText}`);
+      }
+
+      const documentBuffer = Buffer.from(await response.arrayBuffer());
+
+      return await socket.sendMessage(
+        remoteJid,
+        {
+          document: documentBuffer,
+          mimetype: mimetype || "application/octet-stream",
+          fileName: fileName || "documento.pdf",
+        },
+        {
+          ...quotedObject,
+        },
+      );
+    });
   };
 
   const sendDocumentFromBuffer = async (

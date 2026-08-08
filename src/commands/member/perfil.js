@@ -3,6 +3,10 @@ import { InvalidParameterError } from "../../errors/index.js";
 import { getProfileImageData } from "../../services/profile.js";
 import { isGroup, onlyNumbers } from "../../utils/index.js";
 import { errorLog } from "../../utils/logger.js";
+import {
+  optimizeImageBuffer,
+  needsOptimization,
+} from "../../services/imageOptimizer.js";
 
 export default {
   name: "perfil",
@@ -76,8 +80,15 @@ export default {
 
       await sendSuccessReact();
 
+      const response = await fetch(profilePicUrl);
+      let imageBuffer = Buffer.from(await response.arrayBuffer());
+
+      if (await needsOptimization(imageBuffer)) {
+        imageBuffer = await optimizeImageBuffer(imageBuffer);
+      }
+
       await socket.sendMessage(remoteJid, {
-        image: { url: profilePicUrl },
+        image: imageBuffer,
         caption: mensagem,
         mentions: mentions,
       });
