@@ -1,3 +1,33 @@
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0d1117",
+    "mainBkg": "#161b22",
+    "primaryColor": "#1f6feb",
+    "primaryTextColor": "#ffffff",
+    "primaryBorderColor": "#8b949e",
+    "secondaryColor": "#238636",
+    "tertiaryColor": "#9e6a03",
+    "lineColor": "#8b949e",
+    "textColor": "#ffffff",
+    "actorBkg": "#21262d",
+    "actorBorder": "#8b949e",
+    "actorTextColor": "#ffffff",
+    "actorLineColor": "#8b949e",
+    "signalColor": "#e6edf3",
+    "signalTextColor": "#ffffff",
+    "labelBoxBkgColor": "#21262d",
+    "labelBoxBorderColor": "#8b949e",
+    "labelTextColor": "#ffffff",
+    "loopTextColor": "#ffffff",
+    "noteBkgColor": "#21262d",
+    "noteTextColor": "#ffffff",
+    "noteBorderColor": "#8b949e",
+    "activationBkgColor": "#1f6feb",
+    "activationBorderColor": "#58a6ff",
+    "sequenceNumberColor": "#ffffff"
+  }
+}}%%
 sequenceDiagram
     autonumber
     participant Dev as 👨‍💻 Você
@@ -7,40 +37,40 @@ sequenceDiagram
     Note over Dev,WA: 🚀 COMO O BOT CONECTA NO WHATSAPP
 
     %% ========== PRIMEIRA VEZ ==========
-    rect rgb(230, 240, 255)
+    rect rgba(56, 139, 253, 0.12)
         Note over Dev,WA: 🆕 Primeira vez rodando o bot
-        
+
         Dev->>Bot: npm start
-        Bot->>Dev: "Digite o número do bot: "
+        Bot->>Dev: Digite o número do bot
         Dev->>Bot: 5511999999999
-        
+
         Bot->>WA: Pede código de pareamento
         WA-->>Bot: Retorna código (ex: 1234-5678)
         Bot->>Dev: 🔑 Mostra código: 1234-5678
-        
-        Note over Dev: Abra o WhatsApp no celular<br/>Vá em "Aparelhos Conectados"<br/>Clique em "Conectar Aparelho"<br/>Digite o código mostrado
-        
+
+        Note over Dev: Abra o WhatsApp no celular<br/>Vá em Aparelhos Conectados<br/>Clique em Conectar Aparelho<br/>Digite o código mostrado
+
         Dev->>WA: ✅ Código confirmado no celular
-        WA->>Bot: Conexão autorizada!
+        WA->>Bot: Conexão autorizada
         Bot->>Bot: Salva credenciais
-        
-        Note over Bot: ✅ BOT CONECTADO!<br/>Agora ele vai conectar<br/>automaticamente sempre
+
+        Note over Bot: ✅ BOT CONECTADO<br/>Agora ele vai conectar<br/>automaticamente sempre
     end
 
     %% ========== PRÓXIMAS VEZES ==========
-    rect rgb(240, 255, 240)
+    rect rgba(63, 185, 80, 0.12)
         Note over Dev,WA: 🔄 Nas próximas vezes
-        
+
         Dev->>Bot: npm start
         Bot->>Bot: Carrega credenciais salvas
         Bot->>WA: Conecta automaticamente
-        WA-->>Bot: ✅ Conectado!
-        
-        Note over Bot: ✅ PRONTO!<br/>Bot já está online<br/>e aguardando mensagens
+        WA-->>Bot: ✅ Conectado
+
+        Note over Bot: ✅ PRONTO<br/>Bot já está online<br/>e aguardando mensagens
     end
 
     %% ========== RESUMO ==========
-    rect rgb(255, 255, 230)
+    rect rgba(210, 153, 34, 0.12)
         Note over Dev,WA: 📝 RESUMO SIMPLES
-        Note over Dev,WA: 1️⃣ Primeira vez: npm start → Digite número → Código → Confirma no celular<br/>2️⃣ Próximas vezes: npm start → Conecta sozinho<br/>3️⃣ As credenciais ficam salvas em: assets/auth/baileys/
+        Note over Dev,WA: 1️⃣ Primeira vez: npm start → número → código → confirma no celular<br/>2️⃣ Próximas vezes: npm start → conecta sozinho<br/>3️⃣ Credenciais salvas em: assets/auth/zapo/
     end

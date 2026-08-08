@@ -1,3 +1,33 @@
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0d1117",
+    "mainBkg": "#161b22",
+    "primaryColor": "#1f6feb",
+    "primaryTextColor": "#ffffff",
+    "primaryBorderColor": "#8b949e",
+    "secondaryColor": "#238636",
+    "tertiaryColor": "#9e6a03",
+    "lineColor": "#8b949e",
+    "textColor": "#ffffff",
+    "actorBkg": "#21262d",
+    "actorBorder": "#8b949e",
+    "actorTextColor": "#ffffff",
+    "actorLineColor": "#8b949e",
+    "signalColor": "#e6edf3",
+    "signalTextColor": "#ffffff",
+    "labelBoxBkgColor": "#21262d",
+    "labelBoxBorderColor": "#8b949e",
+    "labelTextColor": "#ffffff",
+    "loopTextColor": "#ffffff",
+    "noteBkgColor": "#21262d",
+    "noteTextColor": "#ffffff",
+    "noteBorderColor": "#8b949e",
+    "activationBkgColor": "#1f6feb",
+    "activationBorderColor": "#58a6ff",
+    "sequenceNumberColor": "#ffffff"
+  }
+}}%%
 sequenceDiagram
     autonumber
     participant User as 👤 Usuário
@@ -7,50 +37,51 @@ sequenceDiagram
     Note over User,Cmd: 🚀 QUANDO VOCÊ MANDA UM COMANDO
 
     %% ========== USUÁRIO ENVIA ==========
-    rect rgb(230, 240, 255)
+    rect rgba(56, 139, 253, 0.12)
         Note over User,Bot: 1️⃣ Usuário envia comando
         User->>Bot: /menu
         Note over Bot: Bot recebe a mensagem
     end
 
     %% ========== BOT PROCESSA ==========
-    rect rgb(240, 255, 240)
+    rect rgba(63, 185, 80, 0.12)
         Note over Bot: 2️⃣ Bot verifica e procura o comando
-        
+
         Bot->>Bot: Verifica se o grupo está ativo
-        Bot->>Bot: Verifica se o prefixo está correto (/)
-        Bot->>Bot: Procura o comando "menu"
-        
+        Bot->>Bot: Verifica se o prefixo está correto
+        Bot->>Bot: Procura o comando menu
+
         Note over Bot: Busca em:<br/>📁 src/commands/owner/<br/>📁 src/commands/admin/<br/>📁 src/commands/member/
-        
+
         Bot->>Bot: ✅ Encontrou: member/menu.js
         Bot->>Bot: Verifica se você tem permissão
-        
-        Note over Bot: Permissão baseada na pasta:<br/>• owner/ = só dono do bot<br/>• admin/ = admins do grupo<br/>• member/ = qualquer um
+
+        Note over Bot: Permissão baseada na pasta:<br/>owner = só dono do bot<br/>admin = admins do grupo<br/>member = qualquer um
     end
 
     %% ========== COMANDO EXECUTA ==========
-    rect rgb(255, 250, 230)
+    rect rgba(163, 113, 247, 0.12)
         Note over Bot,Cmd: 3️⃣ Executa o arquivo do comando
-        
+
         Bot->>Cmd: Chama menu.js
-        
-        Note over Cmd: O arquivo menu.js recebe tudo pronto:<br/>• sendReply (enviar resposta)<br/>• sendImage (enviar imagem)<br/>• args (argumentos do comando)<br/>• e mais 50+ funções prontas!
-        
-        Cmd->>Cmd: Lógica do comando menu:
-        Note over Cmd: 1. Carrega imagem do menu<br/>2. Monta o texto com comandos<br/>3. Envia imagem + texto
-        
+
+        Note over Cmd: O arquivo menu.js recebe tudo pronto:<br/>sendReply, sendImage, args<br/>e mais 50+ funções prontas
+
+        Cmd->>Cmd: Lógica do comando menu
+        Note over Cmd: Carrega imagem do menu<br/>Monta o texto com comandos<br/>Envia imagem + texto
+
         Cmd->>Bot: sendImageFromFile(imagem, texto)
     end
 
     %% ========== RESPOSTA ==========
-    rect rgb(230, 255, 230)
+    rect rgba(63, 185, 80, 0.12)
         Note over Bot,User: 4️⃣ Bot responde
         Bot->>User: 📱 Envia o menu
-        Note over User: ✅ Você recebe a resposta!
+        Note over User: ✅ Você recebe a resposta
     end
 
     %% ========== RESUMO ==========
-    rect rgb(255, 255, 230)
+    rect rgba(210, 153, 34, 0.12)
         Note over User,Cmd: 📝 RESUMO SIMPLES
-        Note over User,Cmd: 1️⃣ Você envia: /menu<br/>2️⃣ Bot procura o arquivo menu.js nas pastas de comando<br/>3️⃣ Bot verifica se você pode usar (permissão)<br/>4️⃣ Arquivo menu.js executa e usa funções prontas<br/>5️⃣ Você recebe a resposta<br/><br/>💡 DICA: Cada comando é um arquivo separado!<br/>Não existe "switch/case" gigante
+        Note over User,Cmd: 1️⃣ Você envia: /menu<br/>2️⃣ Bot procura menu.js nas pastas de comando<br/>3️⃣ Bot verifica permissão<br/>4️⃣ Arquivo menu.js executa com funções prontas<br/>5️⃣ Você recebe a resposta<br/><br/>💡 DICA: cada comando é um arquivo separado<br/>Não existe switch/case gigante
+    end

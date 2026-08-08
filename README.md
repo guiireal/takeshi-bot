@@ -456,6 +456,36 @@ Lembre-se de trocar os números acima pelos seus números, obviamente e tbm ver 
 ## Diagrama de conexão
 
 ```mermaid
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0d1117",
+    "mainBkg": "#161b22",
+    "primaryColor": "#1f6feb",
+    "primaryTextColor": "#ffffff",
+    "primaryBorderColor": "#8b949e",
+    "secondaryColor": "#238636",
+    "tertiaryColor": "#9e6a03",
+    "lineColor": "#8b949e",
+    "textColor": "#ffffff",
+    "actorBkg": "#21262d",
+    "actorBorder": "#8b949e",
+    "actorTextColor": "#ffffff",
+    "actorLineColor": "#8b949e",
+    "signalColor": "#e6edf3",
+    "signalTextColor": "#ffffff",
+    "labelBoxBkgColor": "#21262d",
+    "labelBoxBorderColor": "#8b949e",
+    "labelTextColor": "#ffffff",
+    "loopTextColor": "#ffffff",
+    "noteBkgColor": "#21262d",
+    "noteTextColor": "#ffffff",
+    "noteBorderColor": "#8b949e",
+    "activationBkgColor": "#1f6feb",
+    "activationBorderColor": "#58a6ff",
+    "sequenceNumberColor": "#ffffff"
+  }
+}}%%
 sequenceDiagram
     autonumber
     participant Dev as 👨‍💻 Você
@@ -465,42 +495,42 @@ sequenceDiagram
     Note over Dev,WA: 🚀 COMO O BOT CONECTA NO WHATSAPP
 
     %% ========== PRIMEIRA VEZ ==========
-    rect rgb(230, 240, 255)
+    rect rgba(56, 139, 253, 0.12)
         Note over Dev,WA: 🆕 Primeira vez rodando o bot
-        
+
         Dev->>Bot: npm start
-        Bot->>Dev: "Digite o número do bot: "
+        Bot->>Dev: Digite o número do bot
         Dev->>Bot: 5511999999999
-        
+
         Bot->>WA: Pede código de pareamento
         WA-->>Bot: Retorna código (ex: 1234-5678)
         Bot->>Dev: 🔑 Mostra código: 1234-5678
-        
-        Note over Dev: Abra o WhatsApp no celular<br/>Vá em "Aparelhos Conectados"<br/>Clique em "Conectar Aparelho"<br/>Digite o código mostrado
-        
+
+        Note over Dev: Abra o WhatsApp no celular<br/>Vá em Aparelhos Conectados<br/>Clique em Conectar Aparelho<br/>Digite o código mostrado
+
         Dev->>WA: ✅ Código confirmado no celular
-        WA->>Bot: Conexão autorizada!
+        WA->>Bot: Conexão autorizada
         Bot->>Bot: Salva credenciais
-        
-        Note over Bot: ✅ BOT CONECTADO!<br/>Agora ele vai conectar<br/>automaticamente sempre
+
+        Note over Bot: ✅ BOT CONECTADO<br/>Agora ele vai conectar<br/>automaticamente sempre
     end
 
     %% ========== PRÓXIMAS VEZES ==========
-    rect rgb(240, 255, 240)
+    rect rgba(63, 185, 80, 0.12)
         Note over Dev,WA: 🔄 Nas próximas vezes
-        
+
         Dev->>Bot: npm start
         Bot->>Bot: Carrega credenciais salvas
         Bot->>WA: Conecta automaticamente
-        WA-->>Bot: ✅ Conectado!
-        
-        Note over Bot: ✅ PRONTO!<br/>Bot já está online<br/>e aguardando mensagens
+        WA-->>Bot: ✅ Conectado
+
+        Note over Bot: ✅ PRONTO<br/>Bot já está online<br/>e aguardando mensagens
     end
 
     %% ========== RESUMO ==========
-    rect rgb(255, 255, 230)
+    rect rgba(210, 153, 34, 0.12)
         Note over Dev,WA: 📝 RESUMO SIMPLES
-        Note over Dev,WA: 1️⃣ Primeira vez: npm start → Digite número → Código → Confirma no celular<br/>2️⃣ Próximas vezes: npm start → Conecta sozinho<br/>3️⃣ As credenciais ficam salvas em: assets/auth/baileys/
+        Note over Dev,WA: 1️⃣ Primeira vez: npm start → número → código → confirma no celular<br/>2️⃣ Próximas vezes: npm start → conecta sozinho<br/>3️⃣ Credenciais salvas em: assets/auth/zapo/
     end
 ```
 
@@ -661,6 +691,36 @@ As mensagens ficam salvas em `database/config.json` (`welcome_message` e `exit_m
 ## Diagrama de como os comandos funcionam
 
 ```mermaid
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0d1117",
+    "mainBkg": "#161b22",
+    "primaryColor": "#1f6feb",
+    "primaryTextColor": "#ffffff",
+    "primaryBorderColor": "#8b949e",
+    "secondaryColor": "#238636",
+    "tertiaryColor": "#9e6a03",
+    "lineColor": "#8b949e",
+    "textColor": "#ffffff",
+    "actorBkg": "#21262d",
+    "actorBorder": "#8b949e",
+    "actorTextColor": "#ffffff",
+    "actorLineColor": "#8b949e",
+    "signalColor": "#e6edf3",
+    "signalTextColor": "#ffffff",
+    "labelBoxBkgColor": "#21262d",
+    "labelBoxBorderColor": "#8b949e",
+    "labelTextColor": "#ffffff",
+    "loopTextColor": "#ffffff",
+    "noteBkgColor": "#21262d",
+    "noteTextColor": "#ffffff",
+    "noteBorderColor": "#8b949e",
+    "activationBkgColor": "#1f6feb",
+    "activationBorderColor": "#58a6ff",
+    "sequenceNumberColor": "#ffffff"
+  }
+}}%%
 sequenceDiagram
     autonumber
     participant User as 👤 Usuário
@@ -670,58 +730,89 @@ sequenceDiagram
     Note over User,Cmd: 🚀 QUANDO VOCÊ MANDA UM COMANDO
 
     %% ========== USUÁRIO ENVIA ==========
-    rect rgb(230, 240, 255)
+    rect rgba(56, 139, 253, 0.12)
         Note over User,Bot: 1️⃣ Usuário envia comando
         User->>Bot: /menu
         Note over Bot: Bot recebe a mensagem
     end
 
     %% ========== BOT PROCESSA ==========
-    rect rgb(240, 255, 240)
+    rect rgba(63, 185, 80, 0.12)
         Note over Bot: 2️⃣ Bot verifica e procura o comando
-        
+
         Bot->>Bot: Verifica se o grupo está ativo
-        Bot->>Bot: Verifica se o prefixo está correto (/)
-        Bot->>Bot: Procura o comando "menu"
-        
+        Bot->>Bot: Verifica se o prefixo está correto
+        Bot->>Bot: Procura o comando menu
+
         Note over Bot: Busca em:<br/>📁 src/commands/owner/<br/>📁 src/commands/admin/<br/>📁 src/commands/member/
-        
+
         Bot->>Bot: ✅ Encontrou: member/menu.js
         Bot->>Bot: Verifica se você tem permissão
-        
-        Note over Bot: Permissão baseada na pasta:<br/>• owner/ = só dono do bot<br/>• admin/ = admins do grupo<br/>• member/ = qualquer um
+
+        Note over Bot: Permissão baseada na pasta:<br/>owner = só dono do bot<br/>admin = admins do grupo<br/>member = qualquer um
     end
 
     %% ========== COMANDO EXECUTA ==========
-    rect rgb(255, 250, 230)
+    rect rgba(163, 113, 247, 0.12)
         Note over Bot,Cmd: 3️⃣ Executa o arquivo do comando
-        
+
         Bot->>Cmd: Chama menu.js
-        
-        Note over Cmd: O arquivo menu.js recebe tudo pronto:<br/>• sendReply (enviar resposta)<br/>• sendImage (enviar imagem)<br/>• args (argumentos do comando)<br/>• e mais 50+ funções prontas!
-        
-        Cmd->>Cmd: Lógica do comando menu:
-        Note over Cmd: 1. Carrega imagem do menu<br/>2. Monta o texto com comandos<br/>3. Envia imagem + texto
-        
+
+        Note over Cmd: O arquivo menu.js recebe tudo pronto:<br/>sendReply, sendImage, args<br/>e mais 50+ funções prontas
+
+        Cmd->>Cmd: Lógica do comando menu
+        Note over Cmd: Carrega imagem do menu<br/>Monta o texto com comandos<br/>Envia imagem + texto
+
         Cmd->>Bot: sendImageFromFile(imagem, texto)
     end
 
     %% ========== RESPOSTA ==========
-    rect rgb(230, 255, 230)
+    rect rgba(63, 185, 80, 0.12)
         Note over Bot,User: 4️⃣ Bot responde
         Bot->>User: 📱 Envia o menu
-        Note over User: ✅ Você recebe a resposta!
+        Note over User: ✅ Você recebe a resposta
     end
 
     %% ========== RESUMO ==========
-    rect rgb(255, 255, 230)
+    rect rgba(210, 153, 34, 0.12)
         Note over User,Cmd: 📝 RESUMO SIMPLES
-        Note over User,Cmd: 1️⃣ Você envia: /menu<br/>2️⃣ Bot procura o arquivo menu.js nas pastas de comando<br/>3️⃣ Bot verifica se você pode usar (permissão)<br/>4️⃣ Arquivo menu.js executa e usa funções prontas<br/>5️⃣ Você recebe a resposta<br/><br/>💡 DICA: Cada comando é um arquivo separado!<br/>Não existe "switch/case" gigante
+        Note over User,Cmd: 1️⃣ Você envia: /menu<br/>2️⃣ Bot procura menu.js nas pastas de comando<br/>3️⃣ Bot verifica permissão<br/>4️⃣ Arquivo menu.js executa com funções prontas<br/>5️⃣ Você recebe a resposta<br/><br/>💡 DICA: cada comando é um arquivo separado<br/>Não existe switch/case gigante
+    end
 ```
 
 ## Diagrama de como funcionam os middlewares (interceptadores) de recepção e saída
 
 ```mermaid
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0d1117",
+    "mainBkg": "#161b22",
+    "primaryColor": "#1f6feb",
+    "primaryTextColor": "#ffffff",
+    "primaryBorderColor": "#8b949e",
+    "secondaryColor": "#238636",
+    "tertiaryColor": "#9e6a03",
+    "lineColor": "#8b949e",
+    "textColor": "#ffffff",
+    "actorBkg": "#21262d",
+    "actorBorder": "#8b949e",
+    "actorTextColor": "#ffffff",
+    "actorLineColor": "#8b949e",
+    "signalColor": "#e6edf3",
+    "signalTextColor": "#ffffff",
+    "labelBoxBkgColor": "#21262d",
+    "labelBoxBorderColor": "#8b949e",
+    "labelTextColor": "#ffffff",
+    "loopTextColor": "#ffffff",
+    "noteBkgColor": "#21262d",
+    "noteTextColor": "#ffffff",
+    "noteBorderColor": "#8b949e",
+    "activationBkgColor": "#1f6feb",
+    "activationBorderColor": "#58a6ff",
+    "sequenceNumberColor": "#ffffff"
+  }
+}}%%
 sequenceDiagram
     autonumber
     participant Admin as 👮 Admin
@@ -731,18 +822,18 @@ sequenceDiagram
     Note over Admin,User: 🚀 QUANDO ALGUÉM ENTRA OU SAI DO GRUPO
 
     %% ========== ALGUÉM ENTRA ==========
-    rect rgb(230, 240, 255)
+    rect rgba(56, 139, 253, 0.12)
         Note over Admin,User: ✅ Alguém entra no grupo
-        
-        Admin->>Bot: Adiciona @João ao grupo
+
+        Admin->>Bot: Adiciona João ao grupo
         Bot->>Bot: Detecta que alguém entrou
-        
-        Bot->>Bot: Boas-vindas está ativada?<br/>(comando: /welcome on)
-        
+
+        Bot->>Bot: Boas-vindas ativada? (comando /welcome on)
+
         alt Boas-vindas ativada
             Bot->>Bot: Pega mensagem de boas-vindas
-            Note over Bot: Substitui:<br/>{nome} → João<br/>{grupo} → Nome do grupo
-            Bot->>User: 👋 "Bem-vindo João ao grupo XYZ!"
+            Note over Bot: Substitui placeholders:<br/>nome → João<br/>grupo → Nome do grupo
+            Bot->>User: 👋 Bem-vindo João ao grupo XYZ
             Note over User: ✅ Novo membro recebe mensagem
         else Boas-vindas desativada
             Note over Bot: ℹ️ Não faz nada
@@ -750,28 +841,28 @@ sequenceDiagram
     end
 
     %% ========== ALGUÉM SAI ==========
-    rect rgb(240, 255, 240)
+    rect rgba(63, 185, 80, 0.12)
         Note over Admin,User: ❌ Alguém sai do grupo
-        
-        Admin->>Bot: Remove @Maria do grupo
+
+        Admin->>Bot: Remove Maria do grupo
         Bot->>Bot: Detecta que alguém saiu
-        
-        Bot->>Bot: Mensagem de saída está ativada?<br/>(comando: /exit on)
-        
+
+        Bot->>Bot: Mensagem de saída ativada? (comando /exit on)
+
         alt Mensagem de saída ativada
             Bot->>Bot: Pega mensagem de despedida
-            Note over Bot: Substitui:<br/>{nome} → Maria<br/>{grupo} → Nome do grupo
-            Bot->>Admin: 👋 "Maria saiu do grupo XYZ"
+            Note over Bot: Substitui placeholders:<br/>nome → Maria<br/>grupo → Nome do grupo
+            Bot->>Admin: 👋 Maria saiu do grupo XYZ
             Note over Admin: ✅ Grupo recebe notificação
         else Mensagem de saída desativada
             Note over Bot: ℹ️ Não faz nada
         end
-        
-        Bot->>Bot: Limpa dados de Maria<br/>(se ela estava mutada, etc)
+
+        Bot->>Bot: Limpa dados de Maria<br/>(mute e afins, se existirem)
     end
 
     %% ========== RESUMO ==========
-    rect rgb(255, 255, 230)
+    rect rgba(210, 153, 34, 0.12)
         Note over Admin,User: 📝 RESUMO SIMPLES
         Note over Admin,User: 1️⃣ Alguém entra ou sai do grupo<br/>2️⃣ Bot detecta automaticamente<br/>3️⃣ Se configurado, envia mensagem personalizada<br/>4️⃣ Limpa dados de quem saiu<br/><br/>💡 ATIVAR: /welcome on ou /exit on<br/>💡 DESATIVAR: /welcome off ou /exit off
     end

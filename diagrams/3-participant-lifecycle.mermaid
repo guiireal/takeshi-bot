@@ -1,3 +1,33 @@
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0d1117",
+    "mainBkg": "#161b22",
+    "primaryColor": "#1f6feb",
+    "primaryTextColor": "#ffffff",
+    "primaryBorderColor": "#8b949e",
+    "secondaryColor": "#238636",
+    "tertiaryColor": "#9e6a03",
+    "lineColor": "#8b949e",
+    "textColor": "#ffffff",
+    "actorBkg": "#21262d",
+    "actorBorder": "#8b949e",
+    "actorTextColor": "#ffffff",
+    "actorLineColor": "#8b949e",
+    "signalColor": "#e6edf3",
+    "signalTextColor": "#ffffff",
+    "labelBoxBkgColor": "#21262d",
+    "labelBoxBorderColor": "#8b949e",
+    "labelTextColor": "#ffffff",
+    "loopTextColor": "#ffffff",
+    "noteBkgColor": "#21262d",
+    "noteTextColor": "#ffffff",
+    "noteBorderColor": "#8b949e",
+    "activationBkgColor": "#1f6feb",
+    "activationBorderColor": "#58a6ff",
+    "sequenceNumberColor": "#ffffff"
+  }
+}}%%
 sequenceDiagram
     autonumber
     participant Admin as 👮 Admin
@@ -7,18 +37,18 @@ sequenceDiagram
     Note over Admin,User: 🚀 QUANDO ALGUÉM ENTRA OU SAI DO GRUPO
 
     %% ========== ALGUÉM ENTRA ==========
-    rect rgb(230, 240, 255)
+    rect rgba(56, 139, 253, 0.12)
         Note over Admin,User: ✅ Alguém entra no grupo
-        
-        Admin->>Bot: Adiciona @João ao grupo
+
+        Admin->>Bot: Adiciona João ao grupo
         Bot->>Bot: Detecta que alguém entrou
-        
-        Bot->>Bot: Boas-vindas está ativada?<br/>(comando: /welcome on)
-        
+
+        Bot->>Bot: Boas-vindas ativada? (comando /welcome on)
+
         alt Boas-vindas ativada
             Bot->>Bot: Pega mensagem de boas-vindas
-            Note over Bot: Substitui:<br/>{nome} → João<br/>{grupo} → Nome do grupo
-            Bot->>User: 👋 "Bem-vindo João ao grupo XYZ!"
+            Note over Bot: Substitui placeholders:<br/>nome → João<br/>grupo → Nome do grupo
+            Bot->>User: 👋 Bem-vindo João ao grupo XYZ
             Note over User: ✅ Novo membro recebe mensagem
         else Boas-vindas desativada
             Note over Bot: ℹ️ Não faz nada
@@ -26,28 +56,28 @@ sequenceDiagram
     end
 
     %% ========== ALGUÉM SAI ==========
-    rect rgb(240, 255, 240)
+    rect rgba(63, 185, 80, 0.12)
         Note over Admin,User: ❌ Alguém sai do grupo
-        
-        Admin->>Bot: Remove @Maria do grupo
+
+        Admin->>Bot: Remove Maria do grupo
         Bot->>Bot: Detecta que alguém saiu
-        
-        Bot->>Bot: Mensagem de saída está ativada?<br/>(comando: /exit on)
-        
+
+        Bot->>Bot: Mensagem de saída ativada? (comando /exit on)
+
         alt Mensagem de saída ativada
             Bot->>Bot: Pega mensagem de despedida
-            Note over Bot: Substitui:<br/>{nome} → Maria<br/>{grupo} → Nome do grupo
-            Bot->>Admin: 👋 "Maria saiu do grupo XYZ"
+            Note over Bot: Substitui placeholders:<br/>nome → Maria<br/>grupo → Nome do grupo
+            Bot->>Admin: 👋 Maria saiu do grupo XYZ
             Note over Admin: ✅ Grupo recebe notificação
         else Mensagem de saída desativada
             Note over Bot: ℹ️ Não faz nada
         end
-        
-        Bot->>Bot: Limpa dados de Maria<br/>(se ela estava mutada, etc)
+
+        Bot->>Bot: Limpa dados de Maria<br/>(mute e afins, se existirem)
     end
 
     %% ========== RESUMO ==========
-    rect rgb(255, 255, 230)
+    rect rgba(210, 153, 34, 0.12)
         Note over Admin,User: 📝 RESUMO SIMPLES
         Note over Admin,User: 1️⃣ Alguém entra ou sai do grupo<br/>2️⃣ Bot detecta automaticamente<br/>3️⃣ Se configurado, envia mensagem personalizada<br/>4️⃣ Limpa dados de quem saiu<br/><br/>💡 ATIVAR: /welcome on ou /exit on<br/>💡 DESATIVAR: /welcome off ou /exit off
     end
