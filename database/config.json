@@ -1,4 +1,7 @@
 {
+  "spider_api_token": "",
+  "linker_api_key": "",
   "welcome_message": "Seja bem vindo(a) ao grupo, @member!\n\nLeia as regras na descrição para melhor convivência no grupo!",
-  "exit_message": "Poxa, @member saiu do grupo... Sentiremos sua falta!"
+  "exit_message": "Poxa, @member saiu do grupo... Sentiremos sua falta!",
+  "setup_completed": false
 }
