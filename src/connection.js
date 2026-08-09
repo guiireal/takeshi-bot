@@ -15,7 +15,7 @@
  * @author Dev Gui
  */
 import { createSqliteStore } from "@zapo-js/store-sqlite";
-import Database from "@irithell-js/better-sqlite3-termux";
+import { createSql } from "./services/sql-connect.js";
 import boxen from "boxen";
 import chalk from "chalk";
 import fs from "node:fs";
@@ -82,82 +82,20 @@ function pairingBoxWidth() {
   return Math.max(28, Math.min(getTerminalWidth() - 4, 64));
 }
 
+/* mudei aqui, só pra saber.*/
 async function createWaStore() {
   const authFolder = path.resolve(__dirname, "..", "assets", "auth", "zapo");
+
   if (!fs.existsSync(authFolder)) {
     fs.mkdirSync(authFolder, { recursive: true });
   }
 
   const dbPath = path.join(authFolder, "state.sqlite");
-  const db = new Database(dbPath);
-  let closed = false;
-
-  const ensureOpen = () => {
-    if (closed) throw new Error("sqlite connection is closed");
-  };
-
-  const connection = {
-    driver: "better-sqlite3",
-
-    exec(sql) {
-      ensureOpen();
-      db.exec(sql);
-    },
-
-    run(sql, params) {
-      ensureOpen();
-      const stmt = db.prepare(sql);
-      try {
-        return stmt.run(...(params || []));
-      } finally {
-        stmt.free();
-      }
-    },
-
-    get(sql, params) {
-      ensureOpen();
-      const stmt = db.prepare(sql);
-      try {
-        return stmt.get(...(params || []));
-      } finally {
-        stmt.free();
-      }
-    },
-
-    all(sql, params) {
-      ensureOpen();
-      const stmt = db.prepare(sql);
-      try {
-        return stmt.all(...(params || []));
-      } finally {
-        stmt.free();
-      }
-    },
-
-    runInTransaction(callback) {
-      ensureOpen();
-      const transaction = db.transaction(() => {
-        const result = callback(connection);
-        if (result && typeof result.then === "function") {
-          throw new Error("sqlite transaction callback must be synchronous");
-        }
-        return result;
-      });
-      return transaction();
-    },
-
-    flush() {},
-
-    close() {
-      if (closed) return;
-      closed = true;
-      db.close();
-    },
-  };
+  const sqlite = await createSql(dbPath);
 
   return createStore({
     backends: {
-      sqlite: createSqliteStore({ connection }),
+      sqlite: createSqliteStore({ connection: sqlite }),
     },
     providers: {
       auth: "sqlite",
@@ -178,7 +116,15 @@ async function createWaStore() {
 export async function connect() {
   const store = await createWaStore();
 
-  const client = new WaClient({ store, sessionId: "default" }, logger);
+  const client = new WaClient(
+    {
+      store,
+      sessionId: "default",
+      recoverFromClientTooOld: true,
+      markOnlineOnConnect: true,      
+    },
+    logger,
+  );
 
   client.ignoreKey((m) => {
     if (m.fromMe && m.kind === "message") {
@@ -233,7 +179,7 @@ export async function connect() {
 
       console.log(
         boxen(
-          `${chalk.gray("Digite este código em")}\n${chalk.white("WhatsApp → Aparelhos conectados → Conectar com número de telefone")}\n\n${chalk.white.bold(formatPairingCode(code))}`,
+          `${chalk.gray("Digite este código em")}\n${chalk.white("WhatsApp → Aparelhos conectados → Conectar com número de telefone")}\n\n${chalk.yellow.bold(formatPairingCode(code))}`,
           {
             padding: 1,
             margin: { top: 1, bottom: 1 },
@@ -277,9 +223,9 @@ O prefixo padrão definido no config.js é ${PREFIX}`,
     }
 
     if (event.isLogout) {
-      errorLog("Bot desconectado (logout)!");
-      return;
-    }
+  errorLog(`Bot desconectado (logout). Motivo: ${event.reason ?? "desconhecido"}`);
+  return;
+}
 
     if (FATAL_DISCONNECT_REASONS.has(event.reason)) {
       errorLog(
