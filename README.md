@@ -559,6 +559,8 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Função | Contexto | Requer a Spider X API? |
 | ------------ | --- | --- |
 | Alterar imagem do bot | Dono | ❌ |
+| Alterar token Linker | Dono | ❌ |
+| Alterar token Spider X | Dono | ❌ |
 | Desligar o bot no grupo | Dono | ❌ |
 | Executar comandos de infra | Dono | ❌ |
 | Ligar o bot no grupo | Dono | ❌ |
