@@ -84,80 +84,17 @@ function pairingBoxWidth() {
 
 async function createWaStore() {
   const authFolder = path.resolve(__dirname, "..", "assets", "auth", "zapo");
+
   if (!fs.existsSync(authFolder)) {
     fs.mkdirSync(authFolder, { recursive: true });
   }
 
   const dbPath = path.join(authFolder, "state.sqlite");
-  const db = new Database(dbPath);
-  let closed = false;
-
-  const ensureOpen = () => {
-    if (closed) throw new Error("sqlite connection is closed");
-  };
-
-  const connection = {
-    driver: "better-sqlite3",
-
-    exec(sql) {
-      ensureOpen();
-      db.exec(sql);
-    },
-
-    run(sql, params) {
-      ensureOpen();
-      const stmt = db.prepare(sql);
-      try {
-        return stmt.run(...(params || []));
-      } finally {
-        stmt.free();
-      }
-    },
-
-    get(sql, params) {
-      ensureOpen();
-      const stmt = db.prepare(sql);
-      try {
-        return stmt.get(...(params || []));
-      } finally {
-        stmt.free();
-      }
-    },
-
-    all(sql, params) {
-      ensureOpen();
-      const stmt = db.prepare(sql);
-      try {
-        return stmt.all(...(params || []));
-      } finally {
-        stmt.free();
-      }
-    },
-
-    runInTransaction(callback) {
-      ensureOpen();
-      const transaction = db.transaction(() => {
-        const result = callback(connection);
-        if (result && typeof result.then === "function") {
-          throw new Error("sqlite transaction callback must be synchronous");
-        }
-        return result;
-      });
-      return transaction();
-    },
-
-    flush() {},
-
-    close() {
-      if (closed) return;
-      closed = true;
-      db.close();
-    },
-  };
+  const sqlite = await createSql(dbPath);
 
   return createStore({
     backends: {
-      sqlite: createSqliteStore({ connection }),
+      sqlite: createSqliteStore({ connection: sqlite }),
     },
     providers: {
       auth: "sqlite",
