@@ -585,8 +585,8 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Fechar grupo | Admin | ❌ |
 | Gestão de mensagens do auto-responder | Admin | ❌ |
 | Ligar/desligar auto responder | Admin | ❌ |
-| Definir mensagem de boas vindas (`legendabv`) | Admin | ❌ |
-| Definir mensagem de saída (`legendasaiu`) | Admin | ❌ |
+| Definir mensagem de boas vindas | Admin | ❌ |
+| Definir mensagem de saída | Admin | ❌ |
 | Ligar/desligar boas vindas | Admin | ❌ |
 | Ligar/desligar saída de grupo | Admin | ❌ |
 | Limpar chat | Admin | ❌ |
