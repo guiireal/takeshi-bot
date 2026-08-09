@@ -2,7 +2,6 @@
 
 # Script para reset da autenticação do Takeshi Bot
 # Autor: Dev Gui
-# Versão: 0.9.0-BETA
 
 echo "🤖 Takeshi Bot - Reset da Autenticação"
 echo "====================================="

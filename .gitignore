@@ -3,6 +3,5 @@ node_modules/
 assets/temp/
 assets/temp/wa-logs.txt
 
-# WhatsApp auth state (session can impersonate the linked device)
 assets/auth/**
 !assets/auth/.gitkeep
