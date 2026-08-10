@@ -80,8 +80,10 @@ Não nos responsabilizamos por qualquer uso indevido deste bot. É de responsabi
 _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/wxpygdb9bcb5npb/Termux_0.118.3_Dev_Gui.apk) ou [clique aqui e baixe versão da Play Store](https://play.google.com/store/apps/details?id=com.termux) caso a versão do MediaFire anterior não funcione._
 
 ```sh
-pkg upgrade -y && pkg update -y && pkg install git -y && pkg install nodejs-lts -y && pkg install ffmpeg -y
+pkg upgrade -y && pkg update -y && pkg install git nodejs-lts ffmpeg python make clang binutils -y
 ```
+
+> O bot usa `better-sqlite3` (módulo nativo) no store de autenticação do zapo. No Termux **não existe prebuild** para Android, então o `npm install` **compila** o pacote no aparelho. Por isso instalamos `python`, `make`, `clang` e `binutils` além do Node e do FFmpeg.
 
 2 - Habilite o acesso da pasta storage, no termux.
 
@@ -121,31 +123,56 @@ cd takeshi-bot
 chmod -R 755 ./*
 ```
 
-7 - Instale as dependências do projeto.
+7 - Configure o `node-gyp` para o Termux (faça **antes** do `npm install`, em **toda** sessão nova do Termux, a menos que use a opção permanente abaixo).
+
+No Android o `node-gyp` exige a variável `android_ndk_path`. No Termux ela não vem definida e o build de pacotes nativos (como o `better-sqlite3`) falha. Defina um valor vazio:
+
+```sh
+export GYP_DEFINES="android_ndk_path=''"
+```
+
+**Opcional (permanente):** para não precisar exportar a cada abertura do Termux:
+
+```sh
+mkdir -p ~/.gyp
+cat > ~/.gyp/include.gypi << 'EOF'
+{
+  "variables": {
+    "android_ndk_path": ""
+  }
+}
+EOF
+```
+
+8 - Instale as dependências do projeto.
+
+A primeira instalação do `better-sqlite3` no Termux **compila no celular** e pode levar vários minutos. Não interrompa o processo.
 
 Se você escolheu uma pasta de armazenamento compartilhado (como `/sdcard`, `~/storage/emulated/0` ou a pasta `Download`), use a flag `--no-bin-links`, pois esse tipo de armazenamento não suporta links simbólicos e o `npm install` normal vai falhar:
 
 ```sh
+export GYP_DEFINES="android_ndk_path=''"
 npm install --no-bin-links
 ```
 
 Se você usou uma pasta interna do Termux (fora da `~/storage`), pode instalar normalmente:
 
 ```sh
+export GYP_DEFINES="android_ndk_path=''"
 npm install
 ```
 
-8 - Execute o bot.
+9 - Execute o bot.
 
 ```sh
 npm start
 ```
 
-9 - Insira o número de telefone e pressione `enter`.
+10 - Insira o número de telefone e pressione `enter`.
 
-10 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
+11 - Informe o código que aparece no termux, no seu WhatsApp, [assista aqui, caso não encontre essa opção](https://youtu.be/6zr2NYIYIyc?t=5395).
 
-11 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
+12 - Aguarde 10 segundos, depois digite `CTRL + C` para parar o bot.
 
 Depois, Configure o arquivo `config.js` que está dentro da pasta `src`.
 
@@ -170,7 +197,7 @@ export const BOT_LID = "12345678901234567890@lid";
 export const OWNER_LID = "12345678901234567890@lid";
 ```
 
-12 - Inicie o bot novamente.
+13 - Inicie o bot novamente.
 
 ```sh
 npm start
@@ -1014,6 +1041,39 @@ O erro abaixo acontece quando é feito o download do arquivo ZIP direto no celul
 Para resolver, siga o [tutorial de instalação via git clone](#instalação-no-termux).
 
 ![erro comum 1](./assets/images/erro-comum-1.jpg)
+
+### 🧱 `npm install` falha no Termux com `better-sqlite3` / `node-gyp` / `make`
+
+Sintomas comuns:
+
+- `gyp ERR! build error` / ``make` failed with exit code: 2`
+- erros citando `android_ndk_path` ou `node-gyp`
+- falha ao instalar `better-sqlite3` (usado no store SQLite do zapo)
+
+Isso **não é bug do Takeshi**. No Termux o Android é detectado pelo `node-gyp`, que exige `android_ndk_path`, e o `better-sqlite3` **não tem prebuild** para Android, então precisa compilar no aparelho.
+
+1. Instale a toolchain de build:
+
+```sh
+pkg install python make clang binutils -y
+```
+
+2. Defina o workaround do `node-gyp` (na mesma sessão em que for rodar o `npm install`):
+
+```sh
+export GYP_DEFINES="android_ndk_path=''"
+```
+
+3. Limpe e reinstale:
+
+```sh
+rm -rf node_modules
+npm install
+# ou, em storage compartilhado:
+# npm install --no-bin-links
+```
+
+A compilação pode demorar vários minutos. Referências: [better-sqlite3#857](https://github.com/WiseLibs/better-sqlite3/issues/857) e [termux-packages#20717](https://github.com/termux/termux-packages/issues/20717).
 
 ### 🔄 Remoção dos arquivos de sessão e conectar novamente
 
