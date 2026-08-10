@@ -13,6 +13,7 @@ export default {
       remoteJid,
       {
         video: { url: "https://linker.devgui.dev/l/AH5eJgwY.mp4" },
+        mimetype: "video/mp4",
         gifPlayback: true,
         caption: "Teste",
       },

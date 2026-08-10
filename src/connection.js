@@ -14,7 +14,6 @@
  *
  * @author Dev Gui
  */
-import { createMediaProcessor } from "@zapo-js/media-utils";
 import { createSqliteStore } from "@zapo-js/store-sqlite";
 import boxen from "boxen";
 import chalk from "chalk";
@@ -115,18 +114,14 @@ function createWaStore() {
 export async function connect() {
   const store = createWaStore();
 
+  // Sem @zapo-js/media-utils / sharp: mídia ainda envia, mas sem
+  // thumbnail/waveform/probe. mimetype fica explícito nos helpers.
   const client = new WaClient(
     {
       store,
       sessionId: "default",
       recoverFromClientTooOld: true,
       markOnlineOnConnect: true,
-      media: {
-        processor: createMediaProcessor(),
-        generateThumbnail: true,
-        generateWaveform: true,
-        normalizeVoiceNote: true,
-      },
     },
     logger,
   );

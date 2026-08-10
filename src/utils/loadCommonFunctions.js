@@ -18,8 +18,8 @@ import {
   removeFileWithTimeout,
 } from "./index.js";
 import {
-  optimizeImageBuffer,
-  needsOptimization,
+  detectImageMimetype,
+  detectMimetype,
 } from "../services/imageOptimizer.js";
 
 export function loadCommonFunctions({ socket, webMessage }) {
@@ -297,10 +297,14 @@ export function loadCommonFunctions({ socket, webMessage }) {
     }
 
     return await withRetry(async () => {
+      const imageBuffer = fs.readFileSync(file);
+      const mimetype = await detectImageMimetype(imageBuffer, "image/jpeg");
+
       return await socket.sendMessage(
         remoteJid,
         {
-          image: fs.readFileSync(file),
+          image: imageBuffer,
+          mimetype,
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
@@ -334,16 +338,14 @@ export function loadCommonFunctions({ socket, webMessage }) {
         throw new Error(`Failed to fetch image from URL: ${response.statusText}`);
       }
 
-      let imageBuffer = Buffer.from(await response.arrayBuffer());
-
-      if (await needsOptimization(imageBuffer)) {
-        imageBuffer = await optimizeImageBuffer(imageBuffer);
-      }
+      const imageBuffer = Buffer.from(await response.arrayBuffer());
+      const mimetype = await detectImageMimetype(imageBuffer, "image/jpeg");
 
       return await socket.sendMessage(
         remoteJid,
         {
           image: imageBuffer,
+          mimetype,
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
@@ -371,10 +373,13 @@ export function loadCommonFunctions({ socket, webMessage }) {
     }
 
     return await withRetry(async () => {
+      const mimetype = await detectImageMimetype(buffer, "image/jpeg");
+
       return await socket.sendMessage(
         remoteJid,
         {
           image: buffer,
+          mimetype,
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
@@ -401,10 +406,14 @@ export function loadCommonFunctions({ socket, webMessage }) {
       optionalParams = { mentions };
     }
 
+    const videoBuffer = fs.readFileSync(file);
+    const mimetype = await detectMimetype(videoBuffer, "video/mp4");
+
     return await socket.sendMessage(
       remoteJid,
       {
-        video: fs.readFileSync(file),
+        video: videoBuffer,
+        mimetype,
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         ...optionalParams,
       },
@@ -555,11 +564,13 @@ export function loadCommonFunctions({ socket, webMessage }) {
       }
 
       const videoBuffer = Buffer.from(await response.arrayBuffer());
+      const mimetype = await detectMimetype(videoBuffer, "video/mp4");
 
       return await socket.sendMessage(
         remoteJid,
         {
           video: videoBuffer,
+          mimetype,
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           ...optionalParams,
         },
@@ -585,10 +596,14 @@ export function loadCommonFunctions({ socket, webMessage }) {
       optionalParams = { mentions };
     }
 
+    const videoBuffer = fs.readFileSync(file);
+    const mimetype = await detectMimetype(videoBuffer, "video/mp4");
+
     return await socket.sendMessage(
       remoteJid,
       {
-        video: fs.readFileSync(file),
+        video: videoBuffer,
+        mimetype,
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         gifPlayback: true,
         ...optionalParams,
@@ -622,11 +637,13 @@ export function loadCommonFunctions({ socket, webMessage }) {
       }
 
       const gifBuffer = Buffer.from(await response.arrayBuffer());
+      const mimetype = await detectMimetype(gifBuffer, "video/mp4");
 
       return await socket.sendMessage(
         remoteJid,
         {
           video: gifBuffer,
+          mimetype,
           caption: caption ? `${BOT_EMOJI} ${caption}` : "",
           gifPlayback: true,
           ...optionalParams,
@@ -653,10 +670,13 @@ export function loadCommonFunctions({ socket, webMessage }) {
       optionalParams = { mentions };
     }
 
+    const mimetype = await detectMimetype(buffer, "video/mp4");
+
     return await socket.sendMessage(
       remoteJid,
       {
         video: buffer,
+        mimetype,
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         gifPlayback: true,
         ...optionalParams,
@@ -760,10 +780,13 @@ export function loadCommonFunctions({ socket, webMessage }) {
       optionalParams = { mentions };
     }
 
+    const mimetype = await detectMimetype(buffer, "video/mp4");
+
     return await socket.sendMessage(
       remoteJid,
       {
         video: buffer,
+        mimetype,
         caption: caption ? `${BOT_EMOJI} ${caption}` : "",
         ...optionalParams,
       },
