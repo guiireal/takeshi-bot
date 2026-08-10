@@ -83,7 +83,7 @@ _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafir
 pkg upgrade -y && pkg update -y && pkg install git nodejs-lts ffmpeg python make clang binutils -y
 ```
 
-> O bot usa `better-sqlite3` (módulo nativo) no store de autenticação do zapo. No Termux **não existe prebuild** para Android, então o `npm install` **compila** o pacote no aparelho. Por isso instalamos `python`, `make`, `clang` e `binutils` além do Node e do FFmpeg.
+> Alguns pacotes do bot (como o `better-sqlite3`, usado pra guardar a sessão do WhatsApp) precisam ser **preparados no próprio celular** no Termux. Por isso instalamos também `python`, `make`, `clang` e `binutils`, além do Node e do FFmpeg.
 
 2 - Habilite o acesso da pasta storage, no termux.
 
@@ -123,15 +123,13 @@ cd takeshi-bot
 chmod -R 755 ./*
 ```
 
-7 - Configure o `node-gyp` para o Termux (faça **antes** do `npm install`, em **toda** sessão nova do Termux, a menos que use a opção permanente abaixo).
-
-No Android o `node-gyp` exige a variável `android_ndk_path`. No Termux ela não vem definida e o build de pacotes nativos (como o `better-sqlite3`) falha. Defina um valor vazio:
+7 - Rode este comando **antes** do `npm install` (em toda sessão nova do Termux). Sem ele, a instalação do `better-sqlite3` costuma falhar no Android:
 
 ```sh
 export GYP_DEFINES="android_ndk_path=''"
 ```
 
-**Opcional (permanente):** para não precisar exportar a cada abertura do Termux:
+Se quiser não digitar isso toda vez que abrir o Termux, rode **uma vez**:
 
 ```sh
 mkdir -p ~/.gyp
@@ -146,7 +144,7 @@ EOF
 
 8 - Instale as dependências do projeto.
 
-A primeira instalação do `better-sqlite3` no Termux **compila no celular** e pode levar vários minutos. Não interrompa o processo.
+Na primeira vez, o Termux pode demorar **vários minutos** preparando o `better-sqlite3` no celular. Deixe terminar.
 
 Se você escolheu uma pasta de armazenamento compartilhado (como `/sdcard`, `~/storage/emulated/0` ou a pasta `Download`), use a flag `--no-bin-links`, pois esse tipo de armazenamento não suporta links simbólicos e o `npm install` normal vai falhar:
 
@@ -1042,38 +1040,32 @@ Para resolver, siga o [tutorial de instalação via git clone](#instalação-no-
 
 ![erro comum 1](./assets/images/erro-comum-1.jpg)
 
-### 🧱 `npm install` falha no Termux com `better-sqlite3` / `node-gyp` / `make`
+### 🧱 `npm install` falha no Termux (better-sqlite3 / make / gyp)
 
-Sintomas comuns:
+Se aparecer algo como `gyp ERR!`, `make failed`, `android_ndk_path` ou erro ao instalar `better-sqlite3`, siga o fluxo abaixo. Isso acontece no Termux/Android e **não é bug do Takeshi**.
 
-- `gyp ERR! build error` / ``make` failed with exit code: 2`
-- erros citando `android_ndk_path` ou `node-gyp`
-- falha ao instalar `better-sqlite3` (usado no store SQLite do zapo)
-
-Isso **não é bug do Takeshi**. No Termux o Android é detectado pelo `node-gyp`, que exige `android_ndk_path`, e o `better-sqlite3` **não tem prebuild** para Android, então precisa compilar no aparelho.
-
-1. Instale a toolchain de build:
+1. Instale o que falta no Termux:
 
 ```sh
 pkg install python make clang binutils -y
 ```
 
-2. Defina o workaround do `node-gyp` (na mesma sessão em que for rodar o `npm install`):
+2. Na **mesma** tela do Termux onde você vai rodar o `npm install`:
 
 ```sh
 export GYP_DEFINES="android_ndk_path=''"
 ```
 
-3. Limpe e reinstale:
+3. Limpe e instale de novo:
 
 ```sh
 rm -rf node_modules
 npm install
-# ou, em storage compartilhado:
+# se o bot estiver no /sdcard ou em Download, use:
 # npm install --no-bin-links
 ```
 
-A compilação pode demorar vários minutos. Referências: [better-sqlite3#857](https://github.com/WiseLibs/better-sqlite3/issues/857) e [termux-packages#20717](https://github.com/termux/termux-packages/issues/20717).
+Pode demorar vários minutos. Mais detalhes: [better-sqlite3#857](https://github.com/WiseLibs/better-sqlite3/issues/857) e [termux-packages#20717](https://github.com/termux/termux-packages/issues/20717).
 
 ### 🔄 Remoção dos arquivos de sessão e conectar novamente
 
