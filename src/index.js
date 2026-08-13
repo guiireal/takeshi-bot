@@ -58,8 +58,10 @@
  * Substitua a imagem "takeshi-bot.png" por outra de sua preferência!
  * Só não esqueça de manter o nome "takeshi-bot.png"
  *
- * Ou se preferir, digite <prefixo>set-menu-image mencionando
- * imagem que deseja definir como foto do menu.
+ * O menu também sorteia um GIF em "assets/videos/takeshi-bot.mp4".
+ * Substitua esse arquivo ou use os comandos:
+ * - <prefixo>set-menu-image (responda a uma imagem)
+ * - <prefixo>set-menu-gif (responda a um GIF ou MP4)
  *
  * ---------------- 🚀 IMPORTANTE 🚀 ----------------
  *
@@ -80,6 +82,7 @@ import {
   installConsoleNoiseFilter,
   warningLog,
 } from "./utils/logger.js";
+import { runFirstInstallSetup } from "./utils/setup.js";
 
 installConsoleNoiseFilter();
 
