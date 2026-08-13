@@ -161,7 +161,7 @@ describe("Logger Functions", () => {
       assert.ok(hasVersion, "Banner should include version information");
     });
 
-    it("should render inside a bordered box", () => {
+    it("should render without a bordered box", () => {
       logger.bannerLog();
 
       const calls = consoleLogMock.mock.calls;
@@ -170,7 +170,7 @@ describe("Logger Functions", () => {
         return typeof arg === "string" && /[╭╮╰╯│─]/.test(arg);
       });
 
-      assert.ok(hasBoxBorder, "Banner should be wrapped in a box border");
+      assert.ok(!hasBoxBorder, "Banner should not be wrapped in a box border");
     });
   });
 

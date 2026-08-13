@@ -1,5 +1,5 @@
 import { PREFIX } from "../../config.js";
-import { InvalidParameterError } from "../../errors/index.js";
+import { DangerError, InvalidParameterError } from "../../errors/index.js";
 import { deletePaymentMessageWithFallback } from "../../utils/deletePaymentMessage.js";
 import { getQuotedPaymentContext } from "../../utils/paymentMessage.js";
 
@@ -29,26 +29,32 @@ export default {
 
     const quotedPayment = getQuotedPaymentContext(webMessage);
 
-    if (quotedPayment?.stanzaId) {
-      await deletePaymentMessageWithFallback({
-        socket,
-        remoteJid,
-        messageKey: {
+    try {
+      if (quotedPayment?.stanzaId) {
+        await deletePaymentMessageWithFallback({
+          socket,
+          remoteJid,
+          messageKey: {
+            remoteJid,
+            fromMe: false,
+            id: quotedPayment.stanzaId,
+            participant: quotedPayment.participant || participant,
+          },
+        });
+      } else {
+        await deleteMessage({
           remoteJid,
           fromMe: false,
-          id: quotedPayment.stanzaId,
-          participant: quotedPayment.participant || participant,
-        },
-      });
-    } else {
-      await deleteMessage({
-        remoteJid,
-        fromMe: false,
-        id: stanzaId,
-        participant,
-      });
-    }
+          id: stanzaId,
+          participant,
+        });
+      }
 
-    await deleteMessage(webMessage.key);
+      await deleteMessage(webMessage.key);
+    } catch {
+      throw new DangerError(
+        "Não consegui apagar a mensagem. Verifique se sou administrador do grupo e tente novamente.",
+      );
+    }
   },
 };

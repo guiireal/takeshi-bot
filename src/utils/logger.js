@@ -3,7 +3,6 @@
  *
  * @author Dev Gui
  */
-import boxen from "boxen";
 import chalk from "chalk";
 import gradient from "gradient-string";
 import pkg from "../../package.json" with { type: "json" };
@@ -78,28 +77,18 @@ const BANNER_ART = [
   "░░▀░░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░░▀▀░░▀▀▀░░▀░",
 ];
 
-const BANNER_BOX_WIDTH = 61;
+const BANNER_MIN_WIDTH = 48;
 
 export function bannerLog() {
   const subtitle = chalk.gray("🤖 Bot de WhatsApp multifunções");
   const version = chalk.gray("Versão ") + chalk.white.bold(pkg.version);
 
-  if (getTerminalWidth() < BANNER_BOX_WIDTH) {
+  if (getTerminalWidth() < BANNER_MIN_WIDTH) {
     console.log(bannerGradient("🤖 TAKESHI BOT"));
     console.log(`${subtitle}\n${version}\n`);
     return;
   }
 
   const art = BANNER_ART.map((line) => bannerGradient(line)).join("\n");
-  const content = `${art}\n\n${subtitle}  ${chalk.gray("•")}  ${version}`;
-
-  console.log(
-    boxen(content, {
-      padding: 1,
-      margin: { top: 1, bottom: 1 },
-      borderStyle: "round",
-      borderColor: "blue",
-      textAlignment: "center",
-    }),
-  );
+  console.log(`${art}\n\n${subtitle}  ${chalk.gray("•")}  ${version}\n`);
 }
