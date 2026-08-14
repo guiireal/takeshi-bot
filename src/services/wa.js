@@ -72,6 +72,22 @@ function resolveSendOptions(content, options = {}) {
     sendOptions.id = options.messageId;
   }
 
+  const additionalAttributes = {
+    ...options.additionalAttributes,
+  };
+
+  // O Baileys enviava Rich Responses dentro de `botForwardedMessage` com o
+  // atributo externo `type="text"`. O zapo-js não reconhece esse envelope ao
+  // inferir o tipo e usa `media`, fazendo o WhatsApp ignorar a mensagem mesmo
+  // quando o protobuf é válido.
+  if (content?.botForwardedMessage?.message?.richResponseMessage) {
+    additionalAttributes.type = "text";
+  }
+
+  if (Object.keys(additionalAttributes).length) {
+    sendOptions.additionalAttributes = additionalAttributes;
+  }
+
   return sendOptions;
 }
 

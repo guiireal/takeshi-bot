@@ -9,8 +9,10 @@ const FORWARD_ORIGIN_META_AI = 4;
 const BOT_ENTRY_POINT_INVOKE_META_AI_1ON1 = 29;
 const BOT_ENTRY_POINT_INVOKE_META_AI_GROUP = 30;
 
+const PUBLIC_ASSET_BASE_URL =
+  "https://raw.githubusercontent.com/guiireal/takeshi-bot/main/assets";
 const PROFILE_PICTURE_URL =
-  "https://instagram.fcgh10-1.fna.fbcdn.net/v/t51.2885-19/464486680_539304252164138_1252595383282191812_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby41OTMuYzIifQ&_nc_ht=instagram.fcgh10-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2gGcRs5wB9-AAB9iBE4A08iA6KD0Z2wVcDChOw7HcSnmaBi3tHu_GqVgSjFIGHxDgV7xqY-xwhP8Ddx3K9KDyHe_&_nc_ohc=vdpr-JSrTN0Q7kNvwHSOaem&_nc_gid=w6e6L_a9oniiGi7A8VdO0Q&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_Af33Tcmvun3fOip9WOxL02NHkmh3GSwUBYd2SYLsf6eHdA&oe=69F41ABD&_nc_sid=7a9f4b";
+  `${PUBLIC_ASSET_BASE_URL}/images/default-user.png`;
 const MAIN_TEXT = "Reels no WhatsApp";
 
 const REEL_ITEMS = [
@@ -18,7 +20,7 @@ const REEL_ITEMS = [
     title: "Dev Gui",
     profileIconUrl: PROFILE_PICTURE_URL,
     thumbnailUrl:
-      "https://p77-sign-va.tiktokcdn.com/tos-maliva-p-0068/03fcbc862dbd4d97b857f7ca9d510d57_1728870269~tplv-tiktokx-origin.image?dr=14575&x-expires=1777388400&x-signature=WQNXZGzgRybLxYwsupPvGUXEFPc%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=my2",
+      `${PUBLIC_ASSET_BASE_URL}/images/takeshi-bot.png`,
     videoUrl: "https://www.tiktok.com/@guiireal/video/7425441211613220101",
     source: "TT",
   },
@@ -26,7 +28,7 @@ const REEL_ITEMS = [
     title: "Dev Gui",
     profileIconUrl: PROFILE_PICTURE_URL,
     thumbnailUrl:
-      "https://instagram.fcgh10-1.fna.fbcdn.net/v/t51.71878-15/491433614_1607589536600484_8415149229338072627_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=102&ig_cache_key=MzEwNzI3Mjk0NTcyNTIxMjgyNg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjQwOHg3MjYuc2RyLkMzIn0%3D&_nc_ohc=2QkaY__xINkQ7kNvwFuU7FX&_nc_oc=AdopX3oMUpmiuygjSMx0U2degM5KyX-jLMYqBrxVHQWbpLYZNmUbBVRF0WtwOq8agldYFYVNwg3T8zz0X_BPbWMm&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fcgh10-1.fna&_nc_gid=VbLCGFsddAL6Ne30ucdWzA&_nc_ss=7a22e&oh=00_Af1d1SVcvKf1QjKpqb8v4JJrrtnUi-nwk_w-ByErl9t2Pw&oe=69F3F2EA",
+      `${PUBLIC_ASSET_BASE_URL}/images/logger.png`,
     videoUrl: "https://www.instagram.com/reel/CsfQEf2Igia/",
     source: "IG",
   },
@@ -34,7 +36,7 @@ const REEL_ITEMS = [
     title: "Dev Gui",
     profileIconUrl: PROFILE_PICTURE_URL,
     thumbnailUrl:
-      "https://instagram.fcgh10-2.fna.fbcdn.net/v/t51.71878-15/491421181_1027633322797181_4564860355533563396_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=109&ig_cache_key=MzExMjc1MjExMDgzNDI5NjE1Mg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjQyOXgyMzYuc2RyLkMzIn0%3D&_nc_ohc=_Sg7tcZ3Tr4Q7kNvwGszckR&_nc_oc=AdpzVDjxC4ZWMqInTalABvxv_fLbrg7Ftaup65odMpFQ0l8c2FT4GVX6QVfk32nMs7gHICYHiYj7qV3zAupsIJPH&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fcgh10-2.fna&_nc_gid=VbLCGFsddAL6Ne30ucdWzA&_nc_ss=7a22e&oh=00_Af0zyLEKh-ZYVW3YtlyPbgutG9pcqMi5yxUGoyrZnunMLw&oe=69F3EDD0",
+      `${PUBLIC_ASSET_BASE_URL}/samples/sample-image.jpg`,
     videoUrl: "https://www.instagram.com/reel/DBQ9hdsyYfx/",
     source: "IG",
   },
@@ -180,7 +182,7 @@ async function sendRichResponseMessage(
   quoted,
 ) {
   const rich = applyForwardedMetaAiContext(richResponse, remoteJid, quoted);
-  const payload = proto.Message.fromObject({
+  const payload = new proto.Message({
     botForwardedMessage: {
       message: {
         richResponseMessage: rich,
@@ -191,7 +193,10 @@ async function sendRichResponseMessage(
       deviceListMetadataVersion: 2,
       messageSecret: randomBytes(32),
       botMetadata: buildBotMetadata(buildRichResponseSources(REEL_ITEMS), [
-        "RICH_RESPONSE_REELS",
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .RICH_RESPONSE_INLINE_REELS,
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .RICH_RESPONSE_UR_INLINE_REELS_ENABLED,
       ]),
     },
   });
@@ -201,11 +206,12 @@ async function sendRichResponseMessage(
 
 function buildRichResponseSources(items) {
   return items.map((item, index) => ({
-    provider: "UNKNOWN",
-    thumbnailCDNURL: item.thumbnailUrl,
-    sourceProviderURL: item.videoUrl,
+    provider:
+      proto.BotSourcesMetadata.BotSourceItem.SourceProvider.UNKNOWN,
+    thumbnailCdnUrl: item.thumbnailUrl,
+    sourceProviderUrl: item.videoUrl,
     sourceQuery: "",
-    faviconCDNURL: item.profileIconUrl,
+    faviconCdnUrl: item.profileIconUrl,
     citationNumber: index + 1,
     sourceTitle: item.title,
   }));
@@ -214,8 +220,9 @@ function buildRichResponseSources(items) {
 function buildBotMetadata(sources = [], extraCapabilities = []) {
   return {
     modelMetadata: {
-      modelType: "LLAMA_PROD",
-      premiumModelStatus: "AVAILABLE",
+      modelType: proto.BotModelMetadata.ModelType.LLAMA_PROD,
+      premiumModelStatus:
+        proto.BotModelMetadata.PremiumModelStatus.AVAILABLE,
     },
     botAgeCollectionMetadata: {},
     botResponseId: `takeshi-reels-${Date.now()}-${randomBytes(6).toString("hex")}`,
@@ -228,10 +235,14 @@ function buildBotMetadata(sources = [], extraCapabilities = []) {
     },
     capabilityMetadata: {
       capabilities: [
-        "RICH_RESPONSE_STRUCTURED_RESPONSE",
-        "RICH_RESPONSE_UNIFIED_RESPONSE",
-        "RICH_RESPONSE_UNIFIED_TEXT_COMPONENT",
-        "SESSION_TRANSPARENCY_SYSTEM_MESSAGE",
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .RICH_RESPONSE_STRUCTURED_RESPONSE,
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .RICH_RESPONSE_UNIFIED_RESPONSE,
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .RICH_RESPONSE_UNIFIED_TEXT_COMPONENT,
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .SESSION_TRANSPARENCY_SYSTEM_MESSAGE,
         ...extraCapabilities,
       ],
     },
@@ -274,5 +285,5 @@ function getReelSource(videoUrl) {
 }
 
 function encodeUnifiedResponseData(value) {
-  return Buffer.from(JSON.stringify(value)).toString("base64");
+  return Buffer.from(JSON.stringify(value));
 }

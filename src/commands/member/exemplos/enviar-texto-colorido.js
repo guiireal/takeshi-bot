@@ -93,7 +93,7 @@ async function sendRichResponseMessage(
   quoted,
 ) {
   const rich = applyForwardedMetaAiContext(richResponse, remoteJid, quoted);
-  const payload = proto.Message.fromObject({
+  const payload = new proto.Message({
     botForwardedMessage: {
       message: {
         richResponseMessage: rich,
@@ -101,7 +101,7 @@ async function sendRichResponseMessage(
     },
     messageContextInfo: {
       messageSecret: randomBytes(32),
-      botMetadata: buildBotMetadata(["RICH_RESPONSE_TEXT"]),
+      botMetadata: buildBotMetadata(),
     },
   });
 
@@ -111,8 +111,9 @@ async function sendRichResponseMessage(
 function buildBotMetadata(extraCapabilities = []) {
   return {
     modelMetadata: {
-      modelType: "LLAMA_PROD",
-      premiumModelStatus: "AVAILABLE",
+      modelType: proto.BotModelMetadata.ModelType.LLAMA_PROD,
+      premiumModelStatus:
+        proto.BotModelMetadata.PremiumModelStatus.AVAILABLE,
     },
     botAgeCollectionMetadata: {},
     botResponseId: `takeshi-color-text-${Date.now()}-${randomBytes(6).toString("hex")}`,
@@ -122,10 +123,14 @@ function buildBotMetadata(extraCapabilities = []) {
     botInfrastructureDiagnostics: {},
     capabilityMetadata: {
       capabilities: [
-        "RICH_RESPONSE_STRUCTURED_RESPONSE",
-        "RICH_RESPONSE_UNIFIED_RESPONSE",
-        "RICH_RESPONSE_UNIFIED_TEXT_COMPONENT",
-        "SESSION_TRANSPARENCY_SYSTEM_MESSAGE",
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .RICH_RESPONSE_STRUCTURED_RESPONSE,
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .RICH_RESPONSE_UNIFIED_RESPONSE,
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .RICH_RESPONSE_UNIFIED_TEXT_COMPONENT,
+        proto.BotCapabilityMetadata.BotCapabilityType
+          .SESSION_TRANSPARENCY_SYSTEM_MESSAGE,
         ...extraCapabilities,
       ],
     },
@@ -164,5 +169,5 @@ function applyForwardedMetaAiContext(richResponse, remoteJid, quoted) {
 }
 
 function encodeUnifiedResponseData(value) {
-  return Buffer.from(JSON.stringify(value)).toString("base64");
+  return Buffer.from(JSON.stringify(value));
 }
