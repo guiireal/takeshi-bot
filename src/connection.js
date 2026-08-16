@@ -46,6 +46,8 @@ if (!fs.existsSync(TEMP_DIR)) {
   fs.mkdirSync(TEMP_DIR, { recursive: true });
 }
 
+const minuteToMillisecond = (minute) => minute * 60 * 1000;
+
 const logger = pino(
   { timestamp: () => `,"time":"${new Date().toJSON()}"` },
   pino.destination(path.join(TEMP_DIR, "wa-logs.txt")),
@@ -121,7 +123,13 @@ export async function connect() {
       store,
       sessionId: "default",
       recoverFromClientTooOld: true,
-      markOnlineOnConnect: true,
+      markOnlineOnConnect: false,
+      messageAckTimeoutMs: 10_000,
+      messageMaxAttempts: 3,
+      messageRetryDelayMs: 5_000,
+      keepAliveIntervalMs: 30_000,
+      iqTimeoutMs: minuteToMillisecond(2),
+      history: { enabled: false },
     },
     logger,
   );
@@ -184,7 +192,7 @@ export async function connect() {
             padding: 1,
             margin: { top: 1, bottom: 1 },
             borderStyle: "round",
-            borderColor: "greenBright",
+            borderColor: "yellow",
             title: "🔑 Código de pareamento",
             titleAlignment: "center",
             textAlignment: "center",
