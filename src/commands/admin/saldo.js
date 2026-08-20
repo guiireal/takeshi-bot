@@ -22,12 +22,27 @@ export default {
       throw new DangerError(`Erro ao consultar saldo! ${response.message}`);
     }
 
-    const { plan, requests_left, end_date } = response.data;
+    const { plan, total_requests, requests_used, requests_left, end_date } =
+      response.data;
     const [year, month, day] = end_date.split("-");
+    const formattedTotal =
+      total_requests != null
+        ? Number(total_requests).toLocaleString("pt-BR")
+        : "0";
+    const formattedUsed =
+      requests_used != null
+        ? Number(requests_used).toLocaleString("pt-BR")
+        : "0";
+    const formattedLeft =
+      requests_left != null
+        ? Number(requests_left).toLocaleString("pt-BR")
+        : "0";
+
     await sendSuccessReply(`🤖 *Saldo da Spider X API*
       
 📦 *Plano:* ${plan}
-🔢 *Requests restantes:* ${requests_left}
+📊 *Resumo:* ${formattedUsed}/${formattedTotal}
+🔢 *Requests restantes:* ${formattedLeft}
 📅 *Validade do plano:* ${day}/${month}/${year}`);
   },
 };
