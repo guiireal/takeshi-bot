@@ -22,7 +22,7 @@ export default {
     args,
     sendWaitReply,
     sendReply,
-    sendStickerFromURL,
+    sendStickerFromFile,
     sendReact,
     webMessage,
   }) => {
@@ -40,7 +40,7 @@ export default {
 
     const pushName = webMessage?.pushName || "Usuário";
 
-    await sendStickerFromURL(
+    await sendStickerFromFile(
       path.resolve(ASSETS_DIR, "stickers", "dice", `${result}.webp`)
     );
 
