@@ -5,7 +5,7 @@ import { gpt56Luna } from "../../../services/spider-x-api.js";
 export default {
   name: "gpt56luna",
   description: "Use a inteligência artificial GPT-5.6 Luna! (4 requests)",
-  commands: ["gpt56luna", "gpt-5-6-luna"],
+  commands: ["gpt56luna", "gpt"],
   usage: `${PREFIX}gpt56luna Analise os benefícios de uma arquitetura modular`,
   /**
    * @param {CommandHandleProps} props

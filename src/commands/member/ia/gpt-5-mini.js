@@ -5,7 +5,7 @@ import { gpt5Mini } from "../../../services/spider-x-api.js";
 export default {
   name: "gpt-5-mini",
   description: "Use a inteligência artificial GPT-5 Mini!",
-  commands: ["gpt-5-mini", "gpt-5", "gpt"],
+  commands: ["gpt-5-mini", "gpt-5"],
   usage: `${PREFIX}gpt-5-mini qual o sentido da vida?`,
   /**
    * @param {CommandHandleProps} props
