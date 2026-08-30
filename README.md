@@ -674,6 +674,8 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | YT MP4 | Membro | ✅ |
 | YT search | Membro | ✅ |
 
+![Guia de comandos](./assets/images/guia-de-comandos.png)
+
 ## Auto responder
 
 O Takeshi Bot possui um auto-responder embutido, edite o arquivo em `./database/auto-responder.json`:
