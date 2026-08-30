@@ -84,6 +84,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}brat
 ▢ • ${prefix}bratvid
 ▢ • ${prefix}cep
+▢ • ${prefix}comandos
 ▢ • ${prefix}exemplosdemensagens
 ▢ • ${prefix}fakechat
 ▢ • ${prefix}gerarlink

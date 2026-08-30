@@ -655,6 +655,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Imagem preto/branco | Membro | ❌ |
 | Informações de um comando | Membro | ❌ |
 | Instagram download | Membro | ✅ |
+| Lista de comandos | Membro | ✅ |
 | Ping | Membro | ❌ |
 | Pinterest download (carrossel) | Membro | ✅ |
 | Play áudio | Membro | ✅ |
