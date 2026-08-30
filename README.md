@@ -91,13 +91,11 @@ pkg upgrade -y && pkg update -y && pkg install git nodejs-lts ffmpeg python make
 termux-setup-storage
 ```
 
-3 - Escolha uma pasta de sua preferência pra colocar os arquivos do bot.
+3 - Entre na pasta `~/storage`
 
-Pastas mais utilizadas:
-
-- /sdcard
-- ~/storage/emulated/0
-- ~/storage/emulated/0/Download (muito comum quando você baixa o bot pelo .zip)
+```sh
+cd ~/storage
+```
 
 No nosso exemplo, vamos para a `~/storage`
 
