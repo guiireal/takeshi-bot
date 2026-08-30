@@ -156,5 +156,20 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}pixel
 ▢ • ${prefix}rip
 ▢
-╰━━─「❇」─━━`;
+╰━━─「❇」─━━
+
+╭━━⪩ JOGOS ⪨━━
+▢
+▢ • ${prefix}breakout
+▢ • ${prefix}calculadora
+▢ • ${prefix}dino
+▢ • ${prefix}flappy
+▢ • ${prefix}pianorich
+▢ • ${prefix}rich2048
+▢ • ${prefix}richpong
+▢ • ${prefix}richslots
+▢ • ${prefix}richsnake
+▢ • ${prefix}richxo
+▢
+╰━━─「🎮」─━━`;
 }
