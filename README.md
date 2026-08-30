@@ -642,16 +642,14 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Fake chat | Membro | ❌ |
 | Figurinha animada para GIF | Membro | ✅ |
 | Figurinha de texto animada | Membro | ✅ |
-| Geração de imagens com IA | Membro | ✅ |
+| GPT-5 Mini | Membro | ✅ |
+| GPT-5.6 Luna | Membro | ✅ |
 | Gerar link | Membro | ❌ |
+| Geração de imagens com IA | Membro | ✅ |
 | Google Gemini | Membro | ✅ |
 | Google search | Membro | ✅ |
-| GPT-5 Mini | Membro | ✅ |
-| Qwen3.7 Flash (1 request) | Membro | ✅ |
-| Qwen3.8 Flash (2 requests) | Membro | ✅ |
-| GPT-5.6 Luna (4 requests) | Membro | ✅ |
-| Imagem com contraste | Membro | ❌ |
 | Imagem IA Flux | Membro | ✅ |
+| Imagem com contraste | Membro | ❌ |
 | Imagem pixelada | Membro | ❌ |
 | Imagem preto/branco | Membro | ❌ |
 | Informações de um comando | Membro | ❌ |
@@ -659,13 +657,15 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Lista de comandos | Membro | ✅ |
 | Ping | Membro | ❌ |
 | Pinterest download (carrossel) | Membro | ✅ |
-| Play áudio | Membro | ✅ |
 | Play vídeo | Membro | ✅ |
-| Renomear figurinha | Membro | ❌ |
+| Play áudio | Membro | ✅ |
+| Qwen3.7 Flash | Membro | ✅ |
+| Qwen3.8 Flash | Membro | ✅ |
 | Remover fundo de imagem | Membro | ✅ |
-| Sticker | Membro | ❌ |
+| Renomear figurinha | Membro | ❌ |
 | Sticker IA  | Membro | ✅ |
 | Sticker para imagem | Membro | ❌ |
+| Sticker | Membro | ❌ |
 | TikTok audio download | Membro | ✅ |
 | TikTok video download | Membro | ✅ |
 | Transcrever áudio | Membro | ✅ |
