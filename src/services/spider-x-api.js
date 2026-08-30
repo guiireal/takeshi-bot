@@ -144,6 +144,57 @@ export async function deepseekV4Flash(text) {
   return data.response;
 }
 
+export async function qwen37Flash(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  const spiderApiToken = requireSpiderApiToken();
+
+  const { data } = await axios.post(
+    `${SPIDER_API_BASE_URL}/ai/qwen3-7-flash?api_key=${spiderApiToken}`,
+    {
+      text,
+    },
+  );
+
+  return data.response;
+}
+
+export async function qwen38Flash(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  const spiderApiToken = requireSpiderApiToken();
+
+  const { data } = await axios.post(
+    `${SPIDER_API_BASE_URL}/ai/qwen3-8-flash?api_key=${spiderApiToken}`,
+    {
+      text,
+    },
+  );
+
+  return data.response;
+}
+
+export async function gpt56Luna(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  const spiderApiToken = requireSpiderApiToken();
+
+  const { data } = await axios.post(
+    `${SPIDER_API_BASE_URL}/ai/gpt-5-6-luna?api_key=${spiderApiToken}`,
+    {
+      text,
+    },
+  );
+
+  return data.response;
+}
+
 export async function transcribe(audioBuffer, mimeType, fileName) {
   if (!audioBuffer) {
     throw new Error("Você precisa informar o buffer do áudio!");

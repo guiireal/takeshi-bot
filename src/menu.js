@@ -138,6 +138,9 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}flux
 ▢ • ${prefix}gemini
 ▢ • ${prefix}gpt5mini
+▢ • ${prefix}qwen37
+▢ • ${prefix}qwen38
+▢ • ${prefix}gpt56luna
 ▢ • ${prefix}iasticker
 ▢ • ${prefix}transcrever
 ▢ • ${prefix}tts

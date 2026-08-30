@@ -649,6 +649,9 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Google Gemini | Membro | ✅ |
 | Google search | Membro | ✅ |
 | GPT-5 Mini | Membro | ✅ |
+| Qwen3.7 Flash (1 request) | Membro | ✅ |
+| Qwen3.8 Flash (2 requests) | Membro | ✅ |
+| GPT-5.6 Luna (4 requests) | Membro | ✅ |
 | Imagem com contraste | Membro | ❌ |
 | Imagem IA Flux | Membro | ✅ |
 | Imagem pixelada | Membro | ❌ |
