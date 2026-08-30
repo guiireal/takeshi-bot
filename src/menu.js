@@ -163,7 +163,6 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}breakout
 ▢ • ${prefix}calculadora
 ▢ • ${prefix}dino
-▢ • ${prefix}flappy
 ▢ • ${prefix}pianorich
 ▢ • ${prefix}rich2048
 ▢ • ${prefix}richpong
