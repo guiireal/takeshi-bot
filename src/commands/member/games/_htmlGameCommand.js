@@ -7,27 +7,36 @@ import { errorLog } from "../../../utils/logger.js";
 import { sendHtmlGame } from "../../../utils/htmlGame.js";
 
 export const ARCADE_BASE_CSS = `
+:root{
+  --accent-a:#8b6cf0;
+  --accent-b:#4fa8e0;
+  --ink:#f2f5f7;
+  --ink-dim:rgba(242,245,247,.55);
+  --ink-faint:rgba(242,245,247,.4);
+}
 *{-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;box-sizing:border-box}
-body{margin:0;background:transparent;font-family:Arial,sans-serif;color:#e8edf0;touch-action:manipulation}
+body{margin:0;background:transparent;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);touch-action:manipulation}
 .wrap{width:100%;max-width:620px;margin:auto;padding:16px}
-.card{background:rgba(29,40,47,.97);border:1px solid rgba(255,255,255,.13);border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.35)}
-.head{padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;gap:12px}
-.brand{font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,.42)}
-.title{font-size:15px;font-weight:bold;color:#fff}
-.stats{display:flex;gap:15px;text-align:right}
-.value{font:700 16px monospace;color:#fff}
-.label{font-size:8px;color:rgba(255,255,255,.38);letter-spacing:1px}
+.card{background:linear-gradient(180deg,rgba(34,45,53,.97),rgba(24,33,40,.97));border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,.4)}
+.head{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.15);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--accent-b);opacity:.85}
+.title{font-size:16px;font-weight:800;color:#fff;letter-spacing:.3px;margin-top:2px}
+.stats{display:flex;gap:16px;text-align:right}
+.value{font:800 17px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#fff;font-variant-numeric:tabular-nums}
+.label{font-size:8px;font-weight:700;color:var(--ink-faint);letter-spacing:1.2px;margin-bottom:3px}
 .main{padding:16px}
-.board{position:relative;background:rgba(4,9,12,.35);border:1px solid rgba(255,255,255,.09);border-radius:12px;overflow:hidden}
+.board{position:relative;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.05),rgba(0,0,0,0) 60%),rgba(4,9,12,.4);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;box-shadow:inset 0 0 24px rgba(0,0,0,.35)}
 .board canvas{display:block;width:100%;height:auto}
-.controls{display:flex;gap:8px;margin-top:10px;justify-content:center}
-.button{min-height:45px;border:1px solid rgba(255,255,255,.15);border-radius:9px;color:#fff;font-weight:bold;font-size:12px;background:rgba(255,255,255,.07);padding:0 16px}
-.primary{background:linear-gradient(135deg,rgba(124,84,227,.75),rgba(58,125,191,.7));border-color:rgba(158,133,255,.65)}
-.status{text-align:center;font:10px monospace;color:rgba(255,255,255,.45);margin-top:10px;min-height:12px}
-.overlay{position:absolute;inset:0;background:rgba(8,14,18,.82);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:5}
+.controls{display:flex;gap:8px;margin-top:12px;justify-content:center}
+.button{min-height:46px;border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-weight:700;font-size:12px;letter-spacing:.3px;background:rgba(255,255,255,.06);padding:0 16px;transition:transform .08s ease,filter .08s ease}
+.button:active{transform:scale(.94);filter:brightness(1.15)}
+.primary{background:linear-gradient(135deg,var(--accent-a),var(--accent-b));border-color:rgba(255,255,255,.25);box-shadow:0 4px 16px rgba(139,108,240,.35)}
+.status{text-align:center;font:10px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-faint);letter-spacing:.3px;margin-top:12px;min-height:12px}
+.overlay{position:absolute;inset:0;background:rgba(10,15,19,.88);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:5;animation:fade-in .18s ease}
 .overlay.hidden{display:none}
-.overlay-title{font-size:25px;font-weight:bold;letter-spacing:1px}
-.overlay-sub{font-size:11px;color:rgba(255,255,255,.52);margin-top:8px}
+.overlay-title{font-size:24px;font-weight:800;letter-spacing:.5px;background:linear-gradient(135deg,#fff,var(--accent-b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.overlay-sub{font-size:11px;color:var(--ink-dim);letter-spacing:.2px;margin-top:8px;max-width:280px}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
 `;
 
 /**

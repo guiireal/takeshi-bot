@@ -14,6 +14,8 @@ export default {
     "listadecomandos",
     "listcomando",
     "listcomandos",
+    "catalogo",
+    "catalog",
   ],
   usage: `${PREFIX}comandos`,
   /**
