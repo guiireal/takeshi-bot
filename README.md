@@ -8,7 +8,7 @@
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
 [![Node.js](https://img.shields.io/badge/Node.js-22-green?logo=node.js)](https://nodejs.org/en)
-[![Zapo](https://img.shields.io/badge/Zapo-1.7.0-green?logo=whatsapp)](https://zapo.to/)
+[![Zapo](https://img.shields.io/badge/Zapo-1.8.2-green?logo=whatsapp)](https://zapo.to/)
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
 
