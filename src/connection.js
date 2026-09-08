@@ -38,6 +38,7 @@ import {
   successLog,
   warningLog,
 } from "./utils/logger.js";
+import { installPresenceRefresh } from "./utils/presenceRefresh.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -133,6 +134,8 @@ export async function connect() {
     },
     logger,
   );
+
+  installPresenceRefresh(client, logger);
 
   client.ignoreKey((m) => {
     if (m.fromMe && m.kind === "message") {
