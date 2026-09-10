@@ -390,33 +390,12 @@ export function loadCommonFunctions({ socket, webMessage }) {
     });
   };
 
-  const sendAlbumFromURLs = async (urls, caption = "", mentions = null) => {
-    const albumUrls = (urls || [])
-      .filter((url) => typeof url === "string" && url.length)
-      .slice(0, 10);
-
-    if (!albumUrls.length) {
+  const sendAlbumFromImages = async (images, caption = "", mentions = null) => {
+    if (!images.length) {
       return null;
     }
 
     const optionalParams = mentions?.length ? { mentions } : {};
-
-    const images = await Promise.all(
-      albumUrls.map(async (url) => {
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch image from URL: ${response.statusText}`,
-          );
-        }
-
-        const imageBuffer = Buffer.from(await response.arrayBuffer());
-        const mimetype = await detectImageMimetype(imageBuffer, "image/jpeg");
-
-        return { imageBuffer, mimetype };
-      }),
-    );
 
     let album = null;
 
@@ -429,7 +408,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     }
 
     // Fallback: se o cliente não aceitar a mensagem-pai do álbum, entrega as
-    // imagens separadamente como antes.
+    // imagens separadamente.
     if (!album) {
       for (const image of images) {
         await withRetry(() =>
@@ -458,6 +437,76 @@ export function loadCommonFunctions({ socket, webMessage }) {
     }
 
     return album;
+  };
+
+  const sendAlbumFromURLs = async (urls, caption = "", mentions = null) => {
+    const albumUrls = (urls || [])
+      .filter((url) => typeof url === "string" && url.length)
+      .slice(0, 10);
+
+    if (!albumUrls.length) {
+      return null;
+    }
+
+    const images = await Promise.all(
+      albumUrls.map(async (url) => {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch image from URL: ${response.statusText}`,
+          );
+        }
+
+        const imageBuffer = Buffer.from(await response.arrayBuffer());
+        const mimetype = await detectImageMimetype(imageBuffer, "image/jpeg");
+
+        return { imageBuffer, mimetype };
+      }),
+    );
+
+    return await sendAlbumFromImages(images, caption, mentions);
+  };
+
+  const sendAlbumFromFiles = async (files, caption = "", mentions = null) => {
+    const albumFiles = (files || [])
+      .filter((file) => typeof file === "string" && file.length)
+      .slice(0, 10);
+
+    if (!albumFiles.length) {
+      return null;
+    }
+
+    const images = await Promise.all(
+      albumFiles.map(async (file) => {
+        const imageBuffer = fs.readFileSync(file);
+        const mimetype = await detectImageMimetype(imageBuffer, "image/jpeg");
+
+        return { imageBuffer, mimetype };
+      }),
+    );
+
+    return await sendAlbumFromImages(images, caption, mentions);
+  };
+
+  const sendAlbumFromBuffer = async (buffers, caption = "", mentions = null) => {
+    const albumBuffers = (Array.isArray(buffers) ? buffers : [buffers])
+      .filter((buffer) => Buffer.isBuffer(buffer))
+      .slice(0, 10);
+
+    if (!albumBuffers.length) {
+      return null;
+    }
+
+    const images = await Promise.all(
+      albumBuffers.map(async (buffer) => {
+        const mimetype = await detectImageMimetype(buffer, "image/jpeg");
+
+        return { imageBuffer: buffer, mimetype };
+      }),
+    );
+
+    return await sendAlbumFromImages(images, caption, mentions);
   };
 
   const sendVideoFromFile = async (
@@ -1004,6 +1053,8 @@ export function loadCommonFunctions({ socket, webMessage }) {
     getGroupName,
     getGroupOwner,
     getGroupParticipants,
+    sendAlbumFromBuffer,
+    sendAlbumFromFiles,
     sendAlbumFromURLs,
     sendAudioFromBuffer,
     sendAudioFromFile,

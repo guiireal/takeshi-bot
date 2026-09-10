@@ -552,6 +552,46 @@ declare global {
     ): Promise<SentMessageResult>;
 
     /**
+     * Envia várias imagens (buffers) agregadas em um álbum nativo do WhatsApp.
+     *
+     * Se o envio do álbum não for aceito, as imagens são enviadas
+     * separadamente como fallback.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendAlbumFromBuffer([buffer1, buffer2], "Meu álbum");
+     * ```
+     * @param buffers Buffers das imagens a serem enviadas (no máximo 10)
+     * @param caption Texto da mensagem (opcional, aplicado na primeira imagem)
+     * @param mentions Array opcional de JIDs de usuários para mencionar
+     */
+    sendAlbumFromBuffer(
+      buffers: Buffer[],
+      caption?: string,
+      mentions?: string[],
+    ): Promise<SentMessageResult | null>;
+
+    /**
+     * Envia várias imagens locais agregadas em um álbum nativo do WhatsApp.
+     *
+     * Se o envio do álbum não for aceito, as imagens são enviadas
+     * separadamente como fallback.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendAlbumFromFiles(["./assets/samples/sample-image.jpg"], "Meu álbum");
+     * ```
+     * @param files Caminhos das imagens a serem enviadas (no máximo 10)
+     * @param caption Texto da mensagem (opcional, aplicado na primeira imagem)
+     * @param mentions Array opcional de JIDs de usuários para mencionar
+     */
+    sendAlbumFromFiles(
+      files: string[],
+      caption?: string,
+      mentions?: string[],
+    ): Promise<SentMessageResult | null>;
+
+    /**
      * Envia várias imagens agregadas em um álbum nativo do WhatsApp.
      *
      * Se o envio do álbum não for aceito, as imagens são enviadas
