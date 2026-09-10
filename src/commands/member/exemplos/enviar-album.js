@@ -2,10 +2,10 @@ import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 export default {
-  name: "exemplo-album",
+  name: "enviar-album",
   description: "Exemplo de como enviar várias imagens em um álbum",
-  commands: ["exemplo-album"],
-  usage: `${PREFIX}exemplo-album`,
+  commands: ["enviar-album"],
+  usage: `${PREFIX}enviar-album`,
   /**
    * @param {CommandHandleProps} props
    */
