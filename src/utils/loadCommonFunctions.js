@@ -390,6 +390,76 @@ export function loadCommonFunctions({ socket, webMessage }) {
     });
   };
 
+  const sendAlbumFromURLs = async (urls, caption = "", mentions = null) => {
+    const albumUrls = (urls || [])
+      .filter((url) => typeof url === "string" && url.length)
+      .slice(0, 10);
+
+    if (!albumUrls.length) {
+      return null;
+    }
+
+    const optionalParams = mentions?.length ? { mentions } : {};
+
+    const images = await Promise.all(
+      albumUrls.map(async (url) => {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch image from URL: ${response.statusText}`,
+          );
+        }
+
+        const imageBuffer = Buffer.from(await response.arrayBuffer());
+        const mimetype = await detectImageMimetype(imageBuffer, "image/jpeg");
+
+        return { imageBuffer, mimetype };
+      }),
+    );
+
+    let album = null;
+
+    try {
+      album = await socket.sendMessage(remoteJid, {
+        album: { expectedImageCount: images.length },
+      });
+    } catch {
+      album = null;
+    }
+
+    // Fallback: se o cliente não aceitar a mensagem-pai do álbum, entrega as
+    // imagens separadamente como antes.
+    if (!album) {
+      for (const image of images) {
+        await withRetry(() =>
+          socket.sendMessage(remoteJid, {
+            image: image.imageBuffer,
+            mimetype: image.mimetype,
+            caption: caption ? `${BOT_EMOJI} ${caption}` : "",
+            ...optionalParams,
+          }),
+        );
+      }
+
+      return null;
+    }
+
+    for (const [index, image] of images.entries()) {
+      await withRetry(() =>
+        socket.sendMessage(remoteJid, {
+          image: image.imageBuffer,
+          mimetype: image.mimetype,
+          caption: index === 0 && caption ? `${BOT_EMOJI} ${caption}` : "",
+          albumParentKey: album.key,
+          ...optionalParams,
+        }),
+      );
+    }
+
+    return album;
+  };
+
   const sendVideoFromFile = async (
     file,
     caption = "",
@@ -934,6 +1004,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
     getGroupName,
     getGroupOwner,
     getGroupParticipants,
+    sendAlbumFromURLs,
     sendAudioFromBuffer,
     sendAudioFromFile,
     sendAudioFromURL,

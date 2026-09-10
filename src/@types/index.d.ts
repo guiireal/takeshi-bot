@@ -552,6 +552,26 @@ declare global {
     ): Promise<SentMessageResult>;
 
     /**
+     * Envia várias imagens agregadas em um álbum nativo do WhatsApp.
+     *
+     * Se o envio do álbum não for aceito, as imagens são enviadas
+     * separadamente como fallback.
+     *
+     * Exemplo:
+     * ```javascript
+     * await sendAlbumFromURLs(["https://exemplo.com/1.png", "https://exemplo.com/2.png"], "Meu álbum");
+     * ```
+     * @param urls URLs das imagens a serem enviadas (no máximo 10)
+     * @param caption Texto da mensagem (opcional, aplicado na primeira imagem)
+     * @param mentions Array opcional de JIDs de usuários para mencionar
+     */
+    sendAlbumFromURLs(
+      urls: string[],
+      caption?: string,
+      mentions?: string[],
+    ): Promise<SentMessageResult | null>;
+
+    /**
      * Envia uma localização geográfica.
      *
      * Exemplo:
