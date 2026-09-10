@@ -77,6 +77,7 @@ Não nos responsabilizamos por qualquer uso indevido deste bot. É de responsabi
 ## Instalação no Termux (novo vídeo tutorial: [https://youtu.be/-yjn1Xe3ltg](https://youtu.be/-yjn1Xe3ltg))
 
 1 - Abra o Termux e execute os comandos abaixo.
+
 _Não tem o Termux? [Clique aqui e baixe a última versão](https://www.mediafire.com/file/wxpygdb9bcb5npb/Termux_0.118.3_Dev_Gui.apk) ou [clique aqui e baixe versão da Play Store](https://play.google.com/store/apps/details?id=com.termux) caso a versão do MediaFire anterior não funcione._
 
 ```sh
@@ -97,16 +98,10 @@ termux-setup-storage
 cd ~/storage
 ```
 
-No nosso exemplo, vamos para a `~/storage`
-
-```sh
-cd ~/storage
-```
-
 4 - Clone o repositório.
 
 ```sh
-git clone https://github.com/guiireal/takeshi-bot.git
+git clone -b 9-beta https://github.com/guiireal/takeshi-bot.git
 ```
 
 5 - Entre na pasta que foi clonada.
@@ -121,13 +116,7 @@ cd takeshi-bot
 chmod -R 755 ./*
 ```
 
-7 - Rode este comando **antes** do `npm install` (em toda sessão nova do Termux). Sem ele, a instalação do `better-sqlite3` costuma falhar no Android:
-
-```sh
-export GYP_DEFINES="android_ndk_path=''"
-```
-
-Se quiser não digitar isso toda vez que abrir o Termux, rode **uma vez**:
+7 - Rode este comando **uma vez**:
 
 ```sh
 mkdir -p ~/.gyp
@@ -142,21 +131,11 @@ EOF
 
 8 - Instale as dependências do projeto.
 
-Na primeira vez, o Termux pode demorar **vários minutos** preparando o `better-sqlite3` no celular. Deixe terminar.
-
-Se você escolheu uma pasta de armazenamento compartilhado (como `/sdcard`, `~/storage/emulated/0` ou a pasta `Download`), use a flag `--no-bin-links`, pois esse tipo de armazenamento não suporta links simbólicos e o `npm install` normal vai falhar:
-
 ```sh
-export GYP_DEFINES="android_ndk_path=''"
-npm install --no-bin-links
-```
-
-Se você usou uma pasta interna do Termux (fora da `~/storage`), pode instalar normalmente:
-
-```sh
-export GYP_DEFINES="android_ndk_path=''"
 npm install
 ```
+
+Na primeira vez, o Termux pode demorar **vários minutos** preparando o `better-sqlite3` no celular. Aguarde até terminar.
 
 9 - Execute o bot.
 
@@ -266,7 +245,7 @@ cd $env:USERPROFILE\Desktop
 6 - Clone o repositório.
 
 ```sh
-git clone https://github.com/guiireal/takeshi-bot.git
+git clone -b 9-beta https://github.com/guiireal/takeshi-bot.git
 ```
 
 7 - Entre na pasta clonada.
@@ -373,7 +352,7 @@ npm install pm2 -g
 10 - Clone o repositório do bot onde você desejar.
 
 ```sh
-git clone https://github.com/guiireal/takeshi-bot.git
+git clone -b 9-beta https://github.com/guiireal/takeshi-bot.git
 ```
 
 11 - Entre na pasta clonada.
