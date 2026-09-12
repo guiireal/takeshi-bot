@@ -52,6 +52,10 @@ export default {
         `📌 Resultados para: ${fullArgs}`,
       );
     } catch (error) {
+      if (error instanceof InvalidParameterError) {
+        throw error;
+      }
+
       errorLog(JSON.stringify(error, null, 2));
       await sendErrorReply(JSON.stringify(error.message));
     }
