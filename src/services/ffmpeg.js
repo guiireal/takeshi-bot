@@ -4,7 +4,9 @@
  * @author MRX
  */
 import { exec } from "child_process";
+import fs from "node:fs";
 import path from "node:path";
+import webp from "node-webpmux";
 import { TEMP_DIR } from "../config.js";
 import { getRandomNumber, removeFileIfExists } from "../utils/index.js";
 import { errorLog } from "../utils/logger.js";
@@ -31,6 +33,25 @@ class Ffmpeg {
       this.tempDir,
       `${getRandomNumber(10_000, 99_999)}.${extension}`
     );
+  }
+
+  async _extractFirstAnimatedWebpFrame(inputPath) {
+    try {
+      const image = new webp.Image();
+      await image.load(inputPath);
+
+      if (!image.frames?.length) {
+        return null;
+      }
+
+      const [firstFrame] = await image.demux({ buffers: true, frame: 0 });
+      const framePath = await this._createTempFilePath("webp");
+
+      await fs.promises.writeFile(framePath, firstFrame);
+      return framePath;
+    } catch {
+      return null;
+    }
   }
 
   async applyBlur(inputPath, intensity = "7:5") {
@@ -70,9 +91,18 @@ class Ffmpeg {
 
   async convertStickerToImage(inputPath) {
     const outputPath = await this._createTempFilePath();
-    const command = `ffmpeg -y -i "${inputPath}" "${outputPath}"`;
-    await this._executeCommand(command);
-    return outputPath;
+    const extractedFramePath = await this._extractFirstAnimatedWebpFrame(inputPath);
+    const sourcePath = extractedFramePath || inputPath;
+
+    try {
+      const command = `ffmpeg -y -i "${sourcePath}" "${outputPath}"`;
+      await this._executeCommand(command);
+      return outputPath;
+    } finally {
+      if (extractedFramePath) {
+        removeFileIfExists(extractedFramePath);
+      }
+    }
   }
 
   async convertGifToMp4(inputPath) {
