@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { PREFIX } from "../../config.js";
+import { BOT_NAME, PREFIX } from "../../config.js";
 import { DangerError, InvalidParameterError } from "../../errors/index.js";
 import {
   addStickerMetadata,
@@ -12,7 +12,7 @@ import { getRandomName } from "../../utils/index.js";
 export default {
   name: "rename",
   description: "Adiciona novos meta-dados à figurinha.",
-  commands: ["rename", "renomear", "rn"],
+  commands: ["rename", "renomear", "rn", "take"],
   usage: `${PREFIX}rename pacote / autor (responda a uma figurinha)`,
   handle: async ({
     isSticker,
@@ -29,14 +29,14 @@ export default {
       );
     }
 
-    if (args.length !== 2) {
+    if (args.length > 2) {
       throw new InvalidParameterError(
         "Você precisa fornecer o pacote e o autor no formato: pacote / autor"
       );
     }
 
-    const pack = args[0];
-    const author = args[1];
+    const pack = args[0] || webMessage?.pushName || "Usuário";
+    const author = args[1] || BOT_NAME;
 
     if (!pack || !author) {
       throw new InvalidParameterError(
