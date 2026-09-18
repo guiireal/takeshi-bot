@@ -41,7 +41,7 @@ export default {
 
       await sendSuccessReact();
 
-      await sendImageFromURL(
+      const cover = sendImageFromURL(
         data.thumbnail,
         `*Título*: ${data.title}
         
@@ -50,7 +50,7 @@ export default {
 *Canal*: ${data.channel.name}`
       );
 
-      await sendAudioFromURL(data.url);
+      await sendAudioFromURL(data.url, false, true, cover);
     } catch (error) {
       errorLog(JSON.stringify(error, null, 2));
       await sendErrorReply(error.message);

@@ -368,11 +368,13 @@ declare global {
      * @param url URL do áudio a ser enviado
      * @param asVoice Se o áudio deve ser enviado como mensagem de voz (true ou false)
      * @param quoted Se a mensagem deve ser enviada mencionando outra mensagem (true ou false)
+     * @param beforeSend Etapa aguardada antes de enviar, em paralelo ao download do áudio
      */
     sendAudioFromURL(
       url: string,
       asVoice: boolean,
       quoted: boolean,
+      beforeSend?: Promise<unknown>,
     ): Promise<SentMessageResult>;
 
     /**

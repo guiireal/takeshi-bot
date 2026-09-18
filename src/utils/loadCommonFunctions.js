@@ -557,16 +557,15 @@ export function loadCommonFunctions({ socket, webMessage }) {
       audioPath,
       audioBuffer: processedBuffer,
       oldAudioPath,
+      mimetype,
     } = await ajustAudioByBuffer(audioBuffer, asVoice);
-
-    const mimetype = asVoice ? "audio/ogg; codecs=opus" : "audio/mpeg";
 
     if (asVoice) {
       await sendRecordState();
     }
 
-    removeFileWithTimeout(audioPath);
-    removeFileWithTimeout(oldAudioPath);
+    if (audioPath) removeFileWithTimeout(audioPath);
+    if (oldAudioPath) removeFileWithTimeout(oldAudioPath);
 
     return await socket.sendMessage(
       remoteJid,
@@ -594,16 +593,15 @@ export function loadCommonFunctions({ socket, webMessage }) {
       audioPath,
       audioBuffer: processedBuffer,
       oldAudioPath,
+      mimetype,
     } = await ajustAudioByBuffer(buffer, asVoice);
-
-    const mimetype = asVoice ? "audio/ogg; codecs=opus" : "audio/mpeg";
 
     if (asVoice) {
       await sendRecordState();
     }
 
-    removeFileWithTimeout(audioPath);
-    removeFileWithTimeout(oldAudioPath);
+    if (audioPath) removeFileWithTimeout(audioPath);
+    if (oldAudioPath) removeFileWithTimeout(oldAudioPath);
 
     return await socket.sendMessage(
       remoteJid,
@@ -618,30 +616,30 @@ export function loadCommonFunctions({ socket, webMessage }) {
     );
   };
 
-  const sendAudioFromURL = async (url, asVoice = false, quoted = true) => {
+  const sendAudioFromURL = async (url, asVoice = false, quoted = true, beforeSend) => {
     const quotedObject = quoted
       ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
       : {};
 
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch audio from URL: ${response.statusText}`);
-    }
-
-    const arrayBuffer = await response.arrayBuffer();
-    const audioBuffer = Buffer.from(arrayBuffer);
+    const [audioBuffer] = await Promise.all([
+      fetch(url).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch audio from URL: ${response.statusText}`);
+        }
+        return Buffer.from(await response.arrayBuffer());
+      }),
+      beforeSend,
+    ]);
 
     const {
       audioPath,
       audioBuffer: processedBuffer,
       oldAudioPath,
+      mimetype,
     } = await ajustAudioByBuffer(audioBuffer, asVoice);
 
-    const mimetype = asVoice ? "audio/ogg; codecs=opus" : "audio/mpeg";
-
-    removeFileWithTimeout(audioPath);
-    removeFileWithTimeout(oldAudioPath);
+    if (audioPath) removeFileWithTimeout(audioPath);
+    if (oldAudioPath) removeFileWithTimeout(oldAudioPath);
 
     if (asVoice) {
       await sendRecordState();

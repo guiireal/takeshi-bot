@@ -4,7 +4,8 @@
  * @author Dev Gui
  */
 import axios from "axios";
-import { exec } from "node:child_process";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
@@ -13,6 +14,9 @@ import { pathToFileURL } from "node:url";
 import { delay, downloadMediaMessage } from "zapo-js";
 import { COMMANDS_DIR, PREFIX, TEMP_DIR } from "../config.js";
 import { errorLog } from "./logger.js";
+import { detectMimetype } from "../services/imageOptimizer.js";
+
+const runFile = promisify(execFile);
 
 export function question(message) {
   const rl = readline.createInterface({
@@ -411,42 +415,44 @@ export function getUserName(webMessage, userLid, fallback = "usuario") {
 }
 
 export async function ajustAudioByBuffer(audioBuffer, isPtt = true) {
-  return new Promise((resolve, reject) => {
-    const tempPath = path.resolve(
-      TEMP_DIR,
-      getRandomName(isPtt ? "ogg" : "mp3"),
-    );
+  const mimetype = isPtt ? undefined : await detectMimetype(audioBuffer);
+  if (mimetype === "audio/mpeg") {
+    return { audioBuffer, mimetype };
+  }
 
-    fs.writeFileSync(tempPath, audioBuffer);
-
-    const outputPath = path.resolve(
-      TEMP_DIR,
-      getRandomName(isPtt ? "ogg" : "mp3"),
-    );
-
-    const command = isPtt
-      ? `ffmpeg -i "${tempPath}" -vn -c:a libopus -f ogg -b:a 48k -ac 1 -y "${outputPath}"`
-      : `ffmpeg -i "${tempPath}" -vn -c:a libmp3lame -f mp3 -ar 44100 -ac 2 -b:a 128k -y "${outputPath}"`;
-
-    exec(command, (error) => {
-      if (error) {
-        console.error(error);
-        reject(error);
-        return;
+  const tempPath = path.resolve(TEMP_DIR, getRandomName("bin"));
+  const outputPath = path.resolve(TEMP_DIR, getRandomName(isPtt ? "ogg" : "mp3"));
+  try {
+    await fs.promises.writeFile(tempPath, audioBuffer);
+    if (["audio/mp4", "audio/x-m4a", "video/mp4"].includes(mimetype)) {
+      const { stdout } = await runFile("ffprobe", [
+        "-v", "error", "-show_entries", "stream=codec_name,codec_type", "-of", "json", tempPath,
+      ], { timeout: 5000, windowsHide: true }).catch(() => ({ stdout: "{}" }));
+      const { streams = [] } = JSON.parse(stdout);
+      if (streams.length === 1 && streams[0].codec_type === "audio" && streams[0].codec_name === "aac") {
+        await fs.promises.rm(tempPath, { force: true });
+        return { audioBuffer, mimetype: "audio/mp4" };
       }
+    }
 
-      try {
-        const result = {
-          oldAudioPath: tempPath,
-          audioPath: outputPath,
-          audioBuffer: fs.readFileSync(outputPath),
-        };
-        resolve(result);
-      } catch (readError) {
-        reject(readError);
-      }
-    });
-  });
+    await runFile("ffmpeg", [
+      "-i", tempPath, "-vn",
+      ...(isPtt
+        ? ["-c:a", "libopus", "-f", "ogg", "-b:a", "48k", "-ac", "1"]
+        : ["-c:a", "libmp3lame", "-f", "mp3", "-ar", "44100", "-ac", "2", "-b:a", "128k"]),
+      "-y", outputPath,
+    ], { windowsHide: true });
+    return {
+      oldAudioPath: tempPath,
+      audioPath: outputPath,
+      audioBuffer: await fs.promises.readFile(outputPath),
+      mimetype: isPtt ? "audio/ogg; codecs=opus" : "audio/mpeg",
+    };
+  } catch (error) {
+    removeFileIfExists(tempPath);
+    removeFileIfExists(outputPath);
+    throw error;
+  }
 }
 
 export async function getImageBuffer(url, options = {}) {

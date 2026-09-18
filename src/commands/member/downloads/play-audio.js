@@ -50,7 +50,7 @@ export default {
       data.total_duration_in_seconds,
     );
 
-    await sendImageFromURL(
+    const cover = sendImageFromURL(
       data.thumbnail,
       `*Título*: ${data.title}
         
@@ -61,6 +61,6 @@ export default {
 > ılı.lıllılı.ıllı..ılı.lıllılı.ıllı`,
     );
 
-    await sendAudioFromURL(data.url);
+    await sendAudioFromURL(data.url, false, true, cover);
   },
 };
