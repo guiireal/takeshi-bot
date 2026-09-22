@@ -1,8 +1,7 @@
-import { ASSETS_DIR, PREFIX } from "../../config.js";
+import { PREFIX } from "../../config.js";
 import { InvalidParameterError } from "../../errors/index.js";
 import { getProfileImageData } from "../../services/profile.js";
 import { isGroup, onlyNumbers } from "../../utils/index.js";
-import { errorLog } from "../../utils/logger.js";
 import { detectImageMimetype } from "../../services/imageOptimizer.js";
 
 export default {
@@ -33,22 +32,8 @@ export default {
     await sendWaitReply("Carregando perfil...");
 
     try {
-      let profilePicUrl;
       let userRole = "Membro";
-
-      try {
-        const { profileImage } = await getProfileImageData(socket, targetLid);
-        profilePicUrl = profileImage || `${ASSETS_DIR}/images/default-user.png`;
-      } catch (error) {
-        errorLog(
-          `Erro ao tentar pegar dados do usuário ${targetLid}: ${JSON.stringify(
-            error,
-            null,
-            2
-          )}`
-        );
-        profilePicUrl = `${ASSETS_DIR}/images/default-user.png`;
-      }
+      const { buffer: imageBuffer } = await getProfileImageData(socket, targetLid);
 
       const groupMetadata = await socket.groupMetadata(remoteJid);
 
@@ -77,8 +62,6 @@ export default {
 
       await sendSuccessReact();
 
-      const response = await fetch(profilePicUrl);
-      const imageBuffer = Buffer.from(await response.arrayBuffer());
       const mimetype = await detectImageMimetype(imageBuffer, "image/jpeg");
 
       await socket.sendMessage(remoteJid, {
