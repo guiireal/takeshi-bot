@@ -80,6 +80,7 @@ export default {
 
         "*🔘 BOTÕES E LISTAS*\n" +
         `• \`${prefix}enviar-botoes\` - Enviar mensagens com botões simples, templates e interativos\n` +
+        `• \`${prefix}enviar-webview\` - Abrir a Spider API no navegador ou dentro do WhatsApp\n` +
         `• \`${prefix}enviar-lista\` - Enviar mensagem em formato de lista\n` +
         `• \`${prefix}exemplo-gatilho <parâmetro>\` - Receber o clique de botões e listas\n\n` +
 
