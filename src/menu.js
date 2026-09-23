@@ -173,6 +173,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}richslots
 ▢ • ${prefix}richsnake
 ▢ • ${prefix}richxo
+▢ • ${prefix}superpiano
 ▢
 ╰━━─「🎮」─━━`;
 }
