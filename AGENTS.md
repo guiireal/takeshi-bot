@@ -115,6 +115,7 @@ export default {
 Command authoring rules:
 
 - always use injected helpers from `handle()` before introducing new low-level logic
+- do not register aliases that differ only by hyphens (for example, `gpt6luna` and `gpt-6-luna`): `formatCommand()` removes punctuation, so they resolve to the same command; prefer the unhyphenated spelling
 - never manually enforce owner/admin/member permission inside the command if folder placement already defines it
 - use `src/errors/` custom errors for automatic user-facing responses
 - keep commands focused and readable
