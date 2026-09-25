@@ -623,11 +623,13 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Figurinha de texto animada | Membro | ✅ |
 | GPT-5 Mini | Membro | ✅ |
 | GPT-5.6 Luna | Membro | ✅ |
+| GPT-6 Luna | Membro | ✅ |
 | Gerar link | Membro | ❌ |
 | Geração de imagens com IA | Membro | ✅ |
 | Google Gemini | Membro | ✅ |
 | Google search | Membro | ✅ |
 | Imagem IA Flux | Membro | ✅ |
+| Imagem IA Recraft V4.1 Flash | Membro | ✅ |
 | Imagem com contraste | Membro | ❌ |
 | Imagem pixelada | Membro | ❌ |
 | Imagem preto/branco | Membro | ❌ |

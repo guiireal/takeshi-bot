@@ -266,6 +266,24 @@ export async function gpt56Luna(text) {
   return data.response;
 }
 
+export async function gpt6Luna(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  const normalizedText = validateLength(text, "O texto", 2);
+  const spiderApiToken = requireSpiderApiToken();
+
+  const { data } = await spiderApi.post(
+    `${SPIDER_API_BASE_URL}/ai/gpt-6-luna?api_key=${spiderApiToken}`,
+    {
+      text: normalizedText,
+    },
+  );
+
+  return data.response;
+}
+
 export async function transcribe(audioBuffer, mimeType, fileName) {
   if (!audioBuffer) {
     throw new Error("Você precisa informar o buffer do áudio!");
@@ -467,7 +485,7 @@ export function exit(title, description, imageURL) {
   )}&image_url=${encodeURIComponent(imageURL)}&api_key=${spiderApiToken}`;
 }
 
-export async function imageAI(description) {
+export async function imageAI(description, model = "flux") {
   if (!description) {
     throw new Error("Você precisa informar a descrição da imagem!");
   }
@@ -481,12 +499,16 @@ export async function imageAI(description) {
   const spiderApiToken = requireSpiderApiToken();
 
   const { data } = await spiderApi.get(
-    `${SPIDER_API_BASE_URL}/ai/flux?text=${encodeURIComponent(
+    `${SPIDER_API_BASE_URL}/ai/${model}?text=${encodeURIComponent(
       normalizedDescription,
     )}&api_key=${spiderApiToken}`,
   );
 
   return data;
+}
+
+export async function recraftV41Flash(description) {
+  return imageAI(description, "recraft-v4-1-flash");
 }
 
 export function canvas(type, imageURL) {

@@ -136,11 +136,13 @@ export function menuMessage(groupJid) {
 ▢
 ▢ • ${prefix}deepseek
 ▢ • ${prefix}flux
+▢ • ${prefix}recraft
 ▢ • ${prefix}gemini
 ▢ • ${prefix}gpt5mini
 ▢ • ${prefix}qwen37
 ▢ • ${prefix}qwen38
 ▢ • ${prefix}gpt56luna
+▢ • ${prefix}gpt6luna
 ▢ • ${prefix}iasticker
 ▢ • ${prefix}transcrever
 ▢ • ${prefix}tts
