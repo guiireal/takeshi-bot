@@ -10,10 +10,10 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ sendSuccessReply, sendWaitReply, args }) => {
+  handle: async ({ sendSuccessReply, sendWaitReply, args, replyText }) => {
     const text = args[0];
 
-    if (!text) {
+    if (!text && !replyText) {
       throw new InvalidParameterError(
         "Você precisa me dizer o que eu devo responder!",
       );
@@ -21,7 +21,10 @@ export default {
 
     await sendWaitReply();
 
-    const responseText = await gpt5Mini(text);
+    const prompt =
+      text && replyText ? `${text}\n\nComplemento: ${replyText}` : text || replyText;
+
+    const responseText = await gpt5Mini(prompt);
 
     await sendSuccessReply(responseText);
   },
