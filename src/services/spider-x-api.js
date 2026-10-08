@@ -284,6 +284,24 @@ export async function gpt6Luna(text) {
   return data.response;
 }
 
+export async function claudeHaiku55(text) {
+  if (!text) {
+    throw new Error("Você precisa informar o parâmetro de texto!");
+  }
+
+  const normalizedText = validateLength(text, "O texto", 2);
+  const spiderApiToken = requireSpiderApiToken();
+
+  const { data } = await spiderApi.post(
+    `${SPIDER_API_BASE_URL}/ai/claude-haiku-5-5?api_key=${spiderApiToken}`,
+    {
+      text: normalizedText,
+    },
+  );
+
+  return data.response;
+}
+
 export async function transcribe(audioBuffer, mimeType, fileName) {
   if (!audioBuffer) {
     throw new Error("Você precisa informar o buffer do áudio!");

@@ -134,6 +134,7 @@ export function menuMessage(groupJid) {
 
 ╭━━⪩ IA ⪨━━
 ▢
+▢ • ${prefix}claude
 ▢ • ${prefix}deepseek
 ▢ • ${prefix}flux
 ▢ • ${prefix}recraft
@@ -158,6 +159,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}espelhar
 ▢ • ${prefix}gray
 ▢ • ${prefix}inverter
+▢ • ${prefix}naodeagua
 ▢ • ${prefix}pixel
 ▢ • ${prefix}rip
 ▢

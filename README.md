@@ -611,7 +611,9 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Canvas Bolsonaro | Membro | ✅ |
 | Canvas cadeia | Membro | ✅ |
 | Canvas inverter | Membro | ✅ |
+| Canvas não dê nem água | Membro | ✅ |
 | Canvas RIP | Membro | ✅ |
+| Claude Haiku 5.5 | Membro | ✅ |
 | Comandos de diversão/brincadeiras | Membro |❌ |
 | Deepseek V4 Flash | Membro | ✅ |
 | Envio de botões | Membro | ✅ |
