@@ -1,3 +1,4 @@
+import { delay } from "zapo-js";
 import { PREFIX } from "../../../config.js";
 
 const SITE_URL = "https://games.devgui.dev/tubes";
@@ -10,7 +11,11 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ sendButtons, sendSuccessReact }) => {
+  handle: async ({ sendButtons, sendReact }) => {
+    await sendReact("🎮");
+
+    await delay(1000);
+
     await sendButtons({
       text: "🧪 *Tubes*\n\nOrganize as cores nos tubos! Toque em *Jogar no WhatsApp* para abrir o jogo.",
       footer: "Takeshi Bot • Games",
@@ -36,7 +41,5 @@ export default {
       ],
       viewOnce: true,
     });
-
-    await sendSuccessReact();
   },
 };
