@@ -134,7 +134,7 @@ export function menuMessage(groupJid) {
 
 ╭━━⪩ GAMES ⪨━━
 ▢
-▢ • ${prefix}tubegame
+▢ • ${prefix}tubes
 ▢
 ╰━━─「🎮」─━━
 

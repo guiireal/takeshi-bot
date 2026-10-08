@@ -3,10 +3,10 @@ import { PREFIX } from "../../../config.js";
 const SITE_URL = "https://games.devgui.dev/tubes";
 
 export default {
-  name: "tube-game",
+  name: "tubes",
   description: "Abre o jogo Tubes na Web View do WhatsApp.",
-  commands: ["tubegame"],
-  usage: `${PREFIX}tubegame`,
+  commands: ["tubes"],
+  usage: `${PREFIX}tubes`,
   /**
    * @param {CommandHandleProps} props
    */
