@@ -132,6 +132,12 @@ export function menuMessage(groupJid) {
 ▢
 ╰━━─「🎡」─━━
 
+╭━━⪩ GAMES ⪨━━
+▢
+▢ • ${prefix}tubegame
+▢
+╰━━─「🎮」─━━
+
 ╭━━⪩ IA ⪨━━
 ▢
 ▢ • ${prefix}claude
