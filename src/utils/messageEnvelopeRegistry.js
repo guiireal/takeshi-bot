@@ -94,6 +94,43 @@ export function recordMessageEnvelope(webMessage, isPayment) {
 }
 
 /**
+ * Registra o envelope de uma mensagem que o bot NÃO conseguiu decifrar (a
+ * "mensagem invisível" do anti-stealth). Ela nunca vira evento `message`, então
+ * só chega aqui pelo stanza cru.
+ *
+ * O estado gravado é `unreadable`: continua não corroborando marcação (o bot não
+ * leu o conteúdo), mas passa a permitir detectar forja quando a marcação aponta
+ * um autor diferente do que enviou a mensagem original.
+ */
+export function recordUnreadableMessageEnvelope({
+  groupJid,
+  messageId,
+  participantIds = [],
+}) {
+  const [participant, participantAlt] = participantIds;
+
+  if (!groupJid?.endsWith("@g.us") || !messageId || !participant) {
+    return;
+  }
+
+  let groupMap = registry.get(groupJid);
+
+  if (!groupMap) {
+    groupMap = new Map();
+    registry.set(groupJid, groupMap);
+  }
+
+  groupMap.set(messageId, {
+    participant,
+    participantAlt,
+    contentState: "unreadable",
+    ts: Date.now(),
+  });
+
+  pruneGroup(groupMap);
+}
+
+/**
  * Decide se uma marcação de pagamento é confiável o bastante para punir o autor.
  *
  * Só corroboramos o que o bot LEU: a mensagem original precisa ter sido recebida,

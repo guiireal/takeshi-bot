@@ -51,6 +51,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}antilottie-sticker (1/0)
 ▢ • ${prefix}antipayment (1/0)
 ▢ • ${prefix}antiproduct (1/0)
+▢ • ${prefix}antistealth (1/0)
 ▢ • ${prefix}antisticker (1/0)
 ▢ • ${prefix}antistatus-grupo (1/0)
 ▢ • ${prefix}antivideo (1/0)

@@ -11,8 +11,15 @@ import { onCall } from "./middlewares/onCall.js";
 import { onGroupParticipantsUpdate } from "./middlewares/onGroupParticipantsUpdate.js";
 import { onMessage } from "./middlewares/onMessage.js";
 import { createSocketAdapter } from "./services/wa.js";
+import { handleStealthDefense } from "./utils/antiStealthAction.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
 import { errorLog } from "./utils/logger.js";
+import { recordUnreadableMessageEnvelope } from "./utils/messageEnvelopeRegistry.js";
+import { subscribeStealthFailures } from "./utils/stealthMessage.js";
+import {
+  resolveStealthRetry,
+  waitForStealthRetry,
+} from "./utils/stealthRetry.js";
 
 export function load(client) {
   const socket = createSocketAdapter(client);
@@ -31,8 +38,30 @@ export function load(client) {
     }
   };
 
+  // Mensagem invisível: o stanza chega, mas o conteúdo não decifra, então ela
+  // nunca vira um evento "message" e nenhum anti-* baseado em conteúdo roda.
+  // A única pista é o stanza cru que o zapo não soube tratar.
+  subscribeStealthFailures(client, (detection) => {
+    recordUnreadableMessageEnvelope({
+      groupJid: detection.groupJid,
+      messageId: detection.messageId,
+      participantIds: detection.authorIds,
+    });
+
+    safeEventHandler(async () => {
+      // Espera a possível reentrega decifrada antes de tratar como ataque.
+      if (await waitForStealthRetry(detection)) {
+        return;
+      }
+
+      await handleStealthDefense({ socket, detection });
+    }, "stealth");
+  });
+
   client.on("message", async (event) => {
     const startProcess = Date.now();
+
+    resolveStealthRetry(event);
 
     safeEventHandler(
       () => onMessage({ socket, event, startProcess }),

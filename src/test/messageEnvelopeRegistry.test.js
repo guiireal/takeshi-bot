@@ -3,6 +3,7 @@ import { beforeEach, describe, it } from "node:test";
 import {
   __clearEnvelopeRegistry,
   recordMessageEnvelope,
+  recordUnreadableMessageEnvelope,
   verifyQuotedAuthor,
 } from "../utils/messageEnvelopeRegistry.js";
 
@@ -80,6 +81,25 @@ describe("message envelope registry", () => {
       true,
     );
 
+    assert.deepStrictEqual(
+      verifyQuotedAuthor({ groupJid, stanzaId, participant: "999@lid" }),
+      { corroborated: false, contradicted: true },
+    );
+  });
+
+  it("does not treat a stealth envelope as payment, and rejects a forged author", () => {
+    recordUnreadableMessageEnvelope({
+      groupJid,
+      messageId: stanzaId,
+      participantIds: [authorLid, authorAlt],
+    });
+
+    for (const participant of [authorLid, authorAlt]) {
+      assert.deepStrictEqual(
+        verifyQuotedAuthor({ groupJid, stanzaId, participant }),
+        { corroborated: false, contradicted: false },
+      );
+    }
     assert.deepStrictEqual(
       verifyQuotedAuthor({ groupJid, stanzaId, participant: "999@lid" }),
       { corroborated: false, contradicted: true },
