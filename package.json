@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "test": "node ./src/test.js",
-    "test:all": "node --test --test-concurrency=1"
+    "test:all": "node --experimental-test-module-mocks --test --test-concurrency=1"
   },
   "engines": {
     "node": ">=22.8.0"

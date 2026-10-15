@@ -63,6 +63,3 @@ export const ONLY_GROUP_ID = "";
 // mude o valor para ( true ) sem os parênteses
 // caso queira ver os logs de mensagens recebidas
 export const DEVELOPER_MODE = false;
-
-// Chave da OpenAI para o comando de suporte
-export const OPENAI_API_KEY = "";

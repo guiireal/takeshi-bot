@@ -302,6 +302,21 @@ export async function claudeHaiku55(text) {
   return data.response;
 }
 
+export async function takeshiSupport(text = null, replyText = null, image = null) {
+  const spiderApiToken = requireSpiderApiToken();
+
+  const { data } = await spiderApi.post(
+    `${SPIDER_API_BASE_URL}/ai/takeshi-support?api_key=${spiderApiToken}`,
+    {
+      text,
+      reply_text: replyText,
+      image,
+    },
+  );
+
+  return data.response;
+}
+
 export async function transcribe(audioBuffer, mimeType, fileName) {
   if (!audioBuffer) {
     throw new Error("Você precisa informar o buffer do áudio!");
