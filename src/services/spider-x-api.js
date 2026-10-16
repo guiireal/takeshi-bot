@@ -158,7 +158,7 @@ export async function xTwitter(url) {
   return download("x-twitter", url);
 }
 
-export async function gemini(text) {
+export async function gemini(text, image = null) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -170,6 +170,7 @@ export async function gemini(text) {
     `${SPIDER_API_BASE_URL}/ai/gemini?api_key=${spiderApiToken}`,
     {
       text: normalizedText,
+      ...(image ? { image } : {}),
     },
   );
 
@@ -212,7 +213,7 @@ export async function deepseekV4Flash(text) {
   return data.response;
 }
 
-export async function qwen37Flash(text) {
+export async function qwen37Flash(text, image = null) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -224,13 +225,14 @@ export async function qwen37Flash(text) {
     `${SPIDER_API_BASE_URL}/ai/qwen3-7-flash?api_key=${spiderApiToken}`,
     {
       text: normalizedText,
+      ...(image ? { image } : {}),
     },
   );
 
   return data.response;
 }
 
-export async function qwen38Flash(text) {
+export async function qwen38Flash(text, image = null) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -242,13 +244,14 @@ export async function qwen38Flash(text) {
     `${SPIDER_API_BASE_URL}/ai/qwen3-8-flash?api_key=${spiderApiToken}`,
     {
       text: normalizedText,
+      ...(image ? { image } : {}),
     },
   );
 
   return data.response;
 }
 
-export async function gpt56Luna(text) {
+export async function gpt56Luna(text, image = null) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -260,13 +263,14 @@ export async function gpt56Luna(text) {
     `${SPIDER_API_BASE_URL}/ai/gpt-5-6-luna?api_key=${spiderApiToken}`,
     {
       text: normalizedText,
+      ...(image ? { image } : {}),
     },
   );
 
   return data.response;
 }
 
-export async function gpt6Luna(text) {
+export async function gpt6Luna(text, image = null) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -278,13 +282,14 @@ export async function gpt6Luna(text) {
     `${SPIDER_API_BASE_URL}/ai/gpt-6-luna?api_key=${spiderApiToken}`,
     {
       text: normalizedText,
+      ...(image ? { image } : {}),
     },
   );
 
   return data.response;
 }
 
-export async function claudeHaiku55(text) {
+export async function claudeHaiku55(text, image = null) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
@@ -296,6 +301,7 @@ export async function claudeHaiku55(text) {
     `${SPIDER_API_BASE_URL}/ai/claude-haiku-5-5?api_key=${spiderApiToken}`,
     {
       text: normalizedText,
+      ...(image ? { image } : {}),
     },
   );
 
