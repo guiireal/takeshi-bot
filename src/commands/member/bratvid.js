@@ -1,37 +1,33 @@
 import fs from "node:fs";
 import path from "node:path";
 import { BOT_EMOJI, BOT_NAME, PREFIX, TEMP_DIR } from "../../config.js";
-import { InvalidParameterError } from "../../errors/index.js";
 import { abrat } from "../../services/spider-x-api.js";
 import { processAnimatedGifToSticker } from "../../services/sticker.js";
+import { parseBratArgs } from "../../utils/bratOptions.js";
 import { getRandomName } from "../../utils/index.js";
 
 export default {
   name: "bratvid",
   description: "Gera figurinha animada no estilo brat com o texto informado.",
   commands: ["bratvid", "abrat"],
-  usage: `${PREFIX}bratvid Nem judas mentiu tanto assim ☠️`,
+  usage: `${PREFIX}bratvid Nem judas mentiu tanto assim ☠️ / verde / centro / branco`,
   /**
    * @param {CommandHandleProps} props
    */
   handle: async ({
     sendWaitReact,
-    fullArgs,
+    args,
     sendStickerFromFile,
     sendSuccessReact,
     sendErrorReply,
     webMessage,
     userLid,
   }) => {
-    if (!fullArgs.length) {
-      throw new InvalidParameterError(
-        "Você precisa informar o texto que deseja transformar em figurinha animada.",
-      );
-    }
+    const { text, options } = parseBratArgs(args, PREFIX, "bratvid");
 
     await sendWaitReact();
 
-    const url = await abrat(fullArgs.trim());
+    const url = await abrat(text, options);
 
     const response = await fetch(url);
 

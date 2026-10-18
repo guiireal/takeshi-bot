@@ -1,37 +1,33 @@
 import fs from "node:fs";
 import path from "node:path";
 import { BOT_EMOJI, BOT_NAME, PREFIX, TEMP_DIR } from "../../config.js";
-import { InvalidParameterError } from "../../errors/index.js";
 import { brat } from "../../services/spider-x-api.js";
 import { processStaticSticker } from "../../services/sticker.js";
+import { parseBratArgs } from "../../utils/bratOptions.js";
 import { getRandomName } from "../../utils/index.js";
 
 export default {
   name: "brat",
   description: "Gera imagem no estilo brat com o texto informado.",
   commands: ["brat"],
-  usage: `${PREFIX}brat Nem judas mentiu tanto assim ☠️`,
+  usage: `${PREFIX}brat Nem judas mentiu tanto assim ☠️ / verde / centro / branco`,
   /**
    * @param {CommandHandleProps} props
    */
   handle: async ({
     sendWaitReact,
-    fullArgs,
+    args,
     sendStickerFromFile,
     sendSuccessReact,
     sendErrorReply,
     webMessage,
     userLid,
   }) => {
-    if (!fullArgs.length) {
-      throw new InvalidParameterError(
-        "Você precisa informar o texto que deseja transformar em imagem.",
-      );
-    }
+    const { text, options } = parseBratArgs(args, PREFIX, "brat");
 
     await sendWaitReact();
 
-    const url = await brat(fullArgs.trim());
+    const url = await brat(text, options);
 
     const response = await fetch(url);
 

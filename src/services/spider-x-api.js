@@ -418,30 +418,33 @@ export async function ttp(text) {
   )}&api_key=${spiderApiToken}`;
 }
 
-export async function brat(text) {
+/**
+ * @param {"brat" | "abrat"} endpoint
+ * @param {string} text
+ * @param {{ background?: string, align?: string, text_color?: string }} options
+ */
+function bratStickerUrl(endpoint, text, options) {
   if (!text) {
     throw new Error("Você precisa informar o parâmetro de texto!");
   }
 
   const normalizedText = validateLength(text, "O texto", 2, 255);
   const spiderApiToken = requireSpiderApiToken();
+  const query = new URLSearchParams({
+    text: normalizedText,
+    ...options,
+    api_key: spiderApiToken,
+  });
 
-  return `${SPIDER_API_BASE_URL}/stickers/brat?text=${encodeURIComponent(
-    normalizedText,
-  )}&api_key=${spiderApiToken}`;
+  return `${SPIDER_API_BASE_URL}/stickers/${endpoint}?${query}`;
 }
 
-export async function abrat(text) {
-  if (!text) {
-    throw new Error("Você precisa informar o parâmetro de texto!");
-  }
+export async function brat(text, options = {}) {
+  return bratStickerUrl("brat", text, options);
+}
 
-  const normalizedText = validateLength(text, "O texto", 2, 255);
-  const spiderApiToken = requireSpiderApiToken();
-
-  return `${SPIDER_API_BASE_URL}/stickers/abrat?text=${encodeURIComponent(
-    normalizedText,
-  )}&api_key=${spiderApiToken}`;
+export async function abrat(text, options = {}) {
+  return bratStickerUrl("abrat", text, options);
 }
 
 export async function pinterest(search) {
