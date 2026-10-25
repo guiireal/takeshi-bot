@@ -28,7 +28,6 @@ function buildSocket() {
       }
       return {};
     },
-    relayMessage: async () => ({}),
   };
 
   return { socket, settings, removals, revokes };
@@ -160,5 +159,22 @@ describe("payment defense", () => {
     );
     assert.deepStrictEqual(removals, []);
     assert.deepStrictEqual(settings, []);
+  });
+
+  it("reopens the group even when sending the cleanup text fails", async () => {
+    const { socket, settings, removals } = buildSocket();
+    __setGroupIncidentTtlForTests(20);
+    socket.sendMessage = async () => {
+      throw new Error("falha ao enviar limpeza");
+    };
+
+    assert.strictEqual(
+      await defendAgainstPayment({ socket, remoteJid, userLid: "cleanup@lid" }),
+      true,
+    );
+    assert.deepStrictEqual(removals, [["remove", "cleanup@lid"]]);
+
+    await sleep(120);
+    assert.strictEqual(reopens(settings), 1);
   });
 });

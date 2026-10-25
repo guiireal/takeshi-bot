@@ -3,7 +3,7 @@ import { beforeEach, describe, it } from "node:test";
 import antiPayment from "../commands/admin/anti-payment.js";
 import { messageHandler } from "../middlewares/messageHandler.js";
 import { useGroupRestrictionsCleanup } from "./helpers/groupRestrictions.js";
-import { buildCleanChatMessage } from "../utils/cleanChat.js";
+import { clearChat } from "../messages.js";
 import {
   __clearPaymentDefenseState,
   __setGroupIncidentTtlForTests,
@@ -39,9 +39,6 @@ function createSocket(calls, userLid) {
         },
       };
     },
-    relayMessage: async (...args) => {
-      calls.push(["relayMessage", ...args]);
-    },
   };
 }
 
@@ -71,15 +68,7 @@ const findCleanText = (calls) =>
   calls.find(
     (call) =>
       call[0] === "sendMessage" &&
-      typeof call[2]?.text === "string" &&
-      call[2].text.includes("🗑️"),
-  );
-
-const findRelay = (calls) =>
-  calls.find(
-    (call) =>
-      call[0] === "relayMessage" &&
-      JSON.stringify(call[2]) === JSON.stringify(buildCleanChatMessage()),
+      call[2]?.text === `\n\n${clearChat()}`,
   );
 
 // Asserções comuns ao incidente de pagamento: grupo fechado uma vez, autor
@@ -89,7 +78,6 @@ async function assertPaymentIncident({ calls, groupId, lid, messageId }) {
   assert.ok(findRemove(calls, lid), "deve remover o autor");
   assert.ok(findDelete(calls, messageId, lid), "deve apagar a mensagem");
   assert.ok(findCleanText(calls), "deve enviar a limpeza de chat");
-  assert.ok(findRelay(calls), "deve relayar a imagem de limpeza");
 
   // A reabertura é debounced (TTL curto nos testes): espera o timer disparar.
   await sleep(120);

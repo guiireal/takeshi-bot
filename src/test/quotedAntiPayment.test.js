@@ -73,9 +73,6 @@ function createSocket(calls, participants) {
     sendMessage: async (...args) => {
       calls.push(["sendMessage", ...args]);
     },
-    relayMessage: async (...args) => {
-      calls.push(["relayMessage", ...args]);
-    },
   };
 }
 

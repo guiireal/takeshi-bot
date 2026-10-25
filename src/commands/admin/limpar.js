@@ -1,6 +1,7 @@
+import { delay } from "zapo-js";
 import { PREFIX } from "../../config.js";
 import { WarningError } from "../../errors/index.js";
-import { sendCleanChat } from "../../utils/cleanChat.js";
+import { clearChat } from "../../messages.js";
 
 export default {
   name: "limpar-chat",
@@ -20,23 +21,15 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({
-    socket,
-    remoteJid,
-    isGroup,
-    sendSuccessReply,
-    sendText,
-  }) => {
+  handle: async ({ isGroup, sendText }) => {
     if (!isGroup) {
       throw new WarningError("Esse comando só pode ser usado em grupos.");
     }
 
-    await sendCleanChat({
-      socket,
-      remoteJid,
-      sendText,
-      sendSuccessReply,
-      successMessage: "Chat limpo com sucesso!",
-    });
+    await sendText(`\n\n${clearChat()}`);
+
+    await delay(2000);
+
+    await sendText("✅ Chat limpo com sucesso!");
   },
 };

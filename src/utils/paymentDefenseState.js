@@ -18,7 +18,7 @@
  *
  * @author Dev Gui
  */
-import { sendCleanChat } from "./cleanChat.js";
+import { clearChat } from "../messages.js";
 import { deletePaymentMessageWithFallback } from "./deletePaymentMessage.js";
 import { errorLog } from "./logger.js";
 
@@ -83,7 +83,10 @@ function ensureGroupIncident(socket, remoteJid) {
 
     incident.groupClosed = true;
 
-    await sendCleanChat({ socket, remoteJid });
+    await runStep(
+      () => socket.sendMessage(remoteJid, { text: `\n\n${clearChat()}` }),
+      "Erro ao limpar o chat pelo anti-payment.",
+    );
   })();
 
   groupIncidents.set(remoteJid, incident);

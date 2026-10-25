@@ -1,5 +1,6 @@
 import assert from "node:assert";
 import { afterEach, beforeEach, describe, it } from "node:test";
+import { clearChat } from "../messages.js";
 import { handleStealthDefense } from "../utils/antiStealthAction.js";
 import * as database from "../utils/database.js";
 import {
@@ -29,6 +30,7 @@ function buildSocket({ admin = null } = {}) {
   const settings = [];
   const removals = [];
   const revokes = [];
+  const texts = [];
 
   const socket = {
     user: { id: "bot@lid" },
@@ -49,12 +51,14 @@ function buildSocket({ admin = null } = {}) {
       if (content?.delete) {
         revokes.push(content.delete.id);
       }
+      if (content?.text) {
+        texts.push(content.text);
+      }
       return { key: { id: "sent" } };
     },
-    relayMessage: async () => ({}),
   };
 
-  return { socket, settings, removals, revokes };
+  return { socket, settings, removals, revokes, texts };
 }
 
 const closes = (settings) =>
@@ -86,7 +90,7 @@ describe("anti-stealth defense", () => {
   });
 
   it("should close, remove, revoke and reopen once the burst is confirmed", async () => {
-    const { socket, settings, removals, revokes } = buildSocket();
+    const { socket, settings, removals, revokes, texts } = buildSocket();
 
     for (const id of ["s1", "s2", "s3"]) {
       await handleStealthDefense({ socket, detection: buildDetection(id) });
@@ -95,6 +99,7 @@ describe("anti-stealth defense", () => {
     assert.deepStrictEqual(removals, [["remove", author]]);
     assert.strictEqual(closes(settings), 1);
     assert.deepStrictEqual(revokes, ["s1", "s2", "s3"]);
+    assert.deepStrictEqual(texts, [`\n\n${clearChat()}`]);
     assert.strictEqual(reopens(settings), 0);
 
     await __flushGroupReopens();

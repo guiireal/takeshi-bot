@@ -17,7 +17,7 @@
  * @author Dev Gui
  */
 import { BOT_LID, OWNER_LID } from "../config.js";
-import { sendCleanChat } from "./cleanChat.js";
+import { clearChat } from "../messages.js";
 import { isActiveGroupRestriction } from "./database.js";
 import { deletePaymentMessageWithFallback } from "./deletePaymentMessage.js";
 import { errorLog, warningLog } from "./logger.js";
@@ -251,7 +251,7 @@ export async function handleStealthDefense({ socket, detection }) {
   );
 
   try {
-    await sendCleanChat({ socket, remoteJid: groupJid });
+    await socket.sendMessage(groupJid, { text: `\n\n${clearChat()}` });
   } catch (error) {
     errorLog(
       `[anti-stealth] Não consegui limpar ${groupJid}. Detalhes: ${error.message}`,
