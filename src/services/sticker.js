@@ -193,7 +193,7 @@ export async function createSticker(paramsHandler) {
       }
 
       await new Promise((resolve, reject) => {
-        const cmd = `ffmpeg -i "${inputPath}" -vf "scale=512:512:force_original_aspect_ratio=decrease" -f webp -quality 90 "${outputTempPath}"`;
+        const cmd = `ffmpeg -i "${inputPath}" -vf "scale=512:512" -f webp -quality 90 "${outputTempPath}"`;
 
         exec(cmd, (error, _, stderr) => {
           if (error) {

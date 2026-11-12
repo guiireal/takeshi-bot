@@ -241,7 +241,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
 
   const sendStickerFromFile = async (file, quoted = true) => {
     const quotedObject = quoted
-      ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
+      ? { quoted: webMessage }
       : {};
     return await socket.sendMessage(
       remoteJid,
@@ -256,7 +256,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
 
   const sendStickerFromURL = async (url, quoted = true) => {
     const quotedObject = quoted
-      ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
+      ? { quoted: webMessage }
       : {};
 
     return await withRetry(async () => {
@@ -915,7 +915,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
 
   const sendStickerFromBuffer = async (buffer, quoted = true) => {
     const quotedObject = quoted
-      ? { quoted: JSON.parse(JSON.stringify(webMessage)) }
+      ? { quoted: webMessage }
       : {};
     return await socket.sendMessage(
       remoteJid,
