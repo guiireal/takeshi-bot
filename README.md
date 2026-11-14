@@ -2,7 +2,7 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-9.0.0--beta-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-9.0.0--rc1-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
@@ -12,9 +12,9 @@
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
 
-## 🧪 Testando a versão 9.0.0-beta (migração para Zapo)
+## 🧪 Testando a versão 9.0.0-rc1 (migração para Zapo)
 
-Estamos migrando a base do Baileys para o [Zapo](https://zapo.to/). Se quiser testar a versão beta antes do lançamento oficial, clone a branch `9-beta`:
+Estamos migrando a base do Baileys para o [Zapo](https://zapo.to/). Se quiser testar a versão release candidate (rc1) antes do lançamento oficial, clone a branch `9-beta`:
 
 ```sh
 git clone -b 9-beta https://github.com/guiireal/takeshi-bot.git
