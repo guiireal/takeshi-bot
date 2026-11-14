@@ -13,16 +13,54 @@ import { onMessage } from "./middlewares/onMessage.js";
 import { createSocketAdapter } from "./services/wa.js";
 import { handleStealthDefense } from "./utils/antiStealthAction.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
-import { errorLog } from "./utils/logger.js";
+import { errorLog, infoLog } from "./utils/logger.js";
 import { recordUnreadableMessageEnvelope } from "./utils/messageEnvelopeRegistry.js";
 import { subscribeStealthFailures } from "./utils/stealthMessage.js";
 import {
   resolveStealthRetry,
   waitForStealthRetry,
 } from "./utils/stealthRetry.js";
+import { rememberViewOnceMedia } from "./utils/viewOnceCache.js";
+
+// Diagnóstico: mostra se a visualização única chega com mídia (modo mobile)
+// ou só como placeholder (companion). Não loga conteúdo, só o chat.
+function logViewOnceProbe(event) {
+  const message = event.message;
+  const wrapped =
+    message?.viewOnceMessage?.message ||
+    message?.viewOnceMessageV2?.message ||
+    message?.viewOnceMessageV2Extension?.message;
+  const content = wrapped ?? message;
+  const type = ["imageMessage", "videoMessage", "audioMessage"].find(
+    (key) => content?.[key],
+  );
+
+  if (!type || !(wrapped || content[type].viewOnce)) {
+    return;
+  }
+
+  const media = content[type];
+  rememberViewOnceMedia({
+    chatJid: event.key?.remoteJid,
+    id: event.key?.id,
+    type,
+    media,
+  });
+  infoLog(
+    `[VISU-UNICA] recebida tipo=${type} mediaKey=${media.mediaKey ? "sim" : "nao"} directPath=${media.directPath ? "sim" : "nao"} chat=${event.key?.remoteJid}`,
+  );
+}
 
 export function load(client) {
   const socket = createSocketAdapter(client);
+
+  client.on("message_unavailable", (event) => {
+    if (event.kind === "view_once") {
+      infoLog(
+        `[VISU-UNICA] placeholder sem mídia kind=view_once chat=${event.key?.remoteJid}`,
+      );
+    }
+  });
 
   const safeEventHandler = async (callback, eventName) => {
     try {
@@ -62,6 +100,7 @@ export function load(client) {
     const startProcess = Date.now();
 
     resolveStealthRetry(event);
+    logViewOnceProbe(event);
 
     safeEventHandler(
       () => onMessage({ socket, event, startProcess }),

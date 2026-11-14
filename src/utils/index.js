@@ -12,6 +12,7 @@ import readline from "node:readline";
 import { pipeline } from "node:stream/promises";
 import { pathToFileURL } from "node:url";
 import { delay, downloadMediaMessage } from "zapo-js";
+import { getViewOnceMedia } from "./viewOnceCache.js";
 import { COMMANDS_DIR, PREFIX, TEMP_DIR } from "../config.js";
 import { errorLog } from "./logger.js";
 import { detectMimetype } from "../services/imageOptimizer.js";
@@ -220,7 +221,18 @@ export function getExtensionFromMimeType(mimeType, fallback = "bin") {
 }
 
 export async function download(webMessage, fileName, context, extension) {
-  const content = getContent(webMessage, context);
+  let content = getContent(webMessage, context);
+
+  // O quote de visualização única vem sem mediaKey; usa a referência guardada
+  // quando a mensagem original chegou.
+  if (!content?.mediaKey) {
+    content =
+      getViewOnceMedia({
+        chatJid: webMessage?.key?.remoteJid,
+        id: webMessage?.message?.extendedTextMessage?.contextInfo?.stanzaId,
+        type: `${context}Message`,
+      }) || content;
+  }
 
   if (!content) {
     return null;

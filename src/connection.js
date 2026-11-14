@@ -23,6 +23,7 @@ import { fileURLToPath } from "node:url";
 import pino from "pino";
 import {
   createStore,
+  fetchLatestWaMobileVersion,
   isBroadcastJid,
   isNewsletterJid,
   isStatusBroadcastJid,
@@ -35,6 +36,7 @@ import {
   bannerLog,
   errorLog,
   getTerminalWidth,
+  infoLog,
   successLog,
   warningLog,
 } from "./utils/logger.js";
@@ -114,26 +116,77 @@ function createWaStore() {
   });
 }
 
+const MOBILE_VERSION_FALLBACK = "2.26.27.70";
+
+async function buildWaClientOptions(store) {
+  const baseOptions = {
+    store,
+    sessionId: "default",
+    recoverFromClientTooOld: true,
+    markOnlineOnConnect: false,
+    messageAckTimeoutMs: 10_000,
+    messageMaxAttempts: 3,
+    messageRetryDelayMs: 5_000,
+    keepAliveIntervalMs: 30_000,
+    iqTimeoutMs: minuteToMillisecond(2),
+    history: { enabled: false },
+  };
+
+  try {
+    const credentials = await store.session("default").auth.load();
+    const hasRegisteredSession = Boolean(
+      credentials?.meJid || credentials?.meLid,
+    );
+
+    if (!hasRegisteredSession) {
+      infoLog("Modo de conexão: web/companion (sessão ainda não registrada).");
+      return baseOptions;
+    }
+
+    infoLog("Modo de conexão: mobile (Android).");
+
+    return {
+      ...baseOptions,
+      mobileTransport: {
+        deviceInfo: {
+          manufacturer: "Google",
+          device: "Pixel",
+          osVersion: "14",
+          osBuildNumber: "BP11.241121.010",
+          appVersion: "2.24.24.76",
+          mcc: "000",
+          mnc: "000",
+          localeLanguageIso6391: "pt",
+          localeCountryIso31661Alpha2: "BR",
+        },
+      },
+      // Versão fixa envelhece e vira failure_client_too_old; busca a atual a cada conexão.
+      version: async () => {
+        try {
+          const { version } = await fetchLatestWaMobileVersion({
+            timeoutMs: 10_000,
+          });
+          infoLog(`Versão mobile em uso: ${version}`);
+          return version;
+        } catch (error) {
+          warningLog(
+            `Não foi possível buscar a versão mobile atual: ${error.message}`,
+          );
+          return MOBILE_VERSION_FALLBACK;
+        }
+      },
+    };
+  } catch (error) {
+    warningLog(
+      `Não foi possível verificar a sessão persistida: ${error.message}`,
+    );
+    return baseOptions;
+  }
+}
+
 export async function connect() {
   const store = createWaStore();
-
-  // Sem @zapo-js/media-utils / sharp: mídia ainda envia, mas sem
-  // thumbnail/waveform/probe. mimetype fica explícito nos helpers.
-  const client = new WaClient(
-    {
-      store,
-      sessionId: "default",
-      recoverFromClientTooOld: true,
-      markOnlineOnConnect: false,
-      messageAckTimeoutMs: 10_000,
-      messageMaxAttempts: 3,
-      messageRetryDelayMs: 5_000,
-      keepAliveIntervalMs: 30_000,
-      iqTimeoutMs: minuteToMillisecond(2),
-      history: { enabled: false },
-    },
-    logger,
-  );
+  const client = new WaClient(await buildWaClientOptions(store), logger);
 
   installPresenceRefresh(client, logger);
 
