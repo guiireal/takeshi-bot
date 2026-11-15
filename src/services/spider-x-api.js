@@ -394,26 +394,20 @@ export async function tts(text, voice = "joao") {
 
 export async function specialTts(text, voice) {
   const spiderApiToken = requireSpiderApiToken();
-  const { data, headers } = await spiderApi.post(
+  const { data } = await spiderApi.post(
     `${SPIDER_API_BASE_URL}/ai/special-tts/${encodeURIComponent(voice)}`,
     { text },
     {
       headers: { "X-API-KEY": spiderApiToken },
-      responseType: "arraybuffer",
-      transformResponse: [(body, headers) =>
-        headers["content-type"]?.includes("application/json")
-          ? JSON.parse(Buffer.from(body).toString("utf8"))
-          : body,
-      ],
       timeout: 45000,
     },
   );
 
-  if (headers["content-type"]?.split(";")[0] !== "audio/mpeg" || !data?.length) {
-    throw new Error("A Spider X API não retornou um áudio válido.");
+  if (data?.success !== true || typeof data.url !== "string" || !/^https?:\/\/\S+$/.test(data.url)) {
+    throw new Error("A Spider X API não retornou uma URL de áudio válida.");
   }
 
-  return Buffer.from(data);
+  return data.url;
 }
 
 export async function attp(text) {

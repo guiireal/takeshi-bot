@@ -665,6 +665,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 ### Vozes especiais
 
 Os comandos geram uma mensagem de voz com IA via Spider X API e aceitam até 512 caracteres.
+A API retorna JSON com `success` e `url`; o bot baixa o MP3 pela URL temporária, com nome aleatório e remoção programada após 5 minutos.
 Use o prefixo configurado no seu grupo.
 
 | Exemplo | Aliases |

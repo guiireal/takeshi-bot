@@ -10,7 +10,7 @@ export default {
   /**
    * @param {CommandHandleProps} props
    */
-  handle: async ({ fullArgs, sendWaitReply, sendSuccessReact, sendAudioFromBuffer }) => {
+  handle: async ({ fullArgs, sendWaitReply, sendSuccessReact, sendAudioFromURL }) => {
     const text = fullArgs.trim();
 
     if (!text) {
@@ -18,8 +18,8 @@ export default {
     }
 
     await sendWaitReply("Gerando áudio...");
-    const audio = await specialTts(text, "bolsonaro");
-    await sendAudioFromBuffer(audio, true);
+    const audioUrl = await specialTts(text, "bolsonaro");
+    await sendAudioFromURL(audioUrl, true);
     await sendSuccessReact();
   },
 };
