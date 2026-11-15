@@ -1,6 +1,7 @@
 import assert from "node:assert";
-import { readFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { describe, it } from "node:test";
+import { TEMP_DIR } from "../config.js";
 import { createSocketAdapter } from "../services/wa.js";
 
 function createClientSpy() {
@@ -19,6 +20,8 @@ function createClientSpy() {
 
 describe("WhatsApp compatibility adapter", () => {
   it("sends the original MP4 dimensions for GIF playback", async () => {
+    await mkdir(TEMP_DIR, { recursive: true });
+
     const { client, calls } = createClientSpy();
     const socket = createSocketAdapter(client);
     const video = await readFile(
