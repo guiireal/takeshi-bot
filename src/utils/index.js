@@ -5,6 +5,7 @@
  */
 import axios from "axios";
 import { execFile } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import { promisify } from "node:util";
 import fs from "node:fs";
 import path from "node:path";
@@ -424,6 +425,34 @@ export function getUserName(webMessage, userLid, fallback = "usuario") {
     userLid?.replace(/@lid/, "") ||
     fallback
   );
+}
+
+export async function probeMp4Dimensions(video) {
+  const videoPath = path.resolve(TEMP_DIR, `${randomUUID()}.mp4`);
+
+  try {
+    await fs.promises.writeFile(videoPath, video);
+    const { stdout } = await runFile("ffprobe", [
+      "-v", "error",
+      "-f", "mov",
+      "-select_streams", "v:0",
+      "-show_entries", "stream=width,height",
+      "-of", "json",
+      videoPath,
+    ], { timeout: 5000, windowsHide: true });
+    const { width, height } = JSON.parse(stdout).streams?.[0] ?? {};
+
+    if (
+      Number.isInteger(width) && width > 0 &&
+      Number.isInteger(height) && height > 0
+    ) {
+      return { width, height };
+    }
+  } catch {
+    return undefined;
+  } finally {
+    removeFileIfExists(videoPath);
+  }
 }
 
 export async function ajustAudioByBuffer(audioBuffer, isPtt = true) {

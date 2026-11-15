@@ -8,6 +8,7 @@
  * @author Dev Gui
  */
 import { proto } from "zapo-js";
+import { probeMp4Dimensions } from "../utils/index.js";
 import { buildInteractiveContent } from "./interactiveMessages.js";
 
 /**
@@ -290,6 +291,13 @@ export function createSocketAdapter(client) {
           });
         }
 
+        const dimensions =
+          mediaType === "video" &&
+          content.gifPlayback &&
+          mediaSource instanceof Uint8Array
+            ? await probeMp4Dimensions(mediaSource)
+            : undefined;
+
         return send({
           type: mediaType,
           media: mediaSource,
@@ -298,6 +306,7 @@ export function createSocketAdapter(client) {
           fileName: content.fileName,
           ptt: content.ptt,
           gifPlayback: content.gifPlayback,
+          ...dimensions,
         });
       }
 

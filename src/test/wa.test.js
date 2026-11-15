@@ -1,4 +1,5 @@
 import assert from "node:assert";
+import { readFile } from "node:fs/promises";
 import { describe, it } from "node:test";
 import { createSocketAdapter } from "../services/wa.js";
 
@@ -17,6 +18,23 @@ function createClientSpy() {
 }
 
 describe("WhatsApp compatibility adapter", () => {
+  it("sends the original MP4 dimensions for GIF playback", async () => {
+    const { client, calls } = createClientSpy();
+    const socket = createSocketAdapter(client);
+    const video = await readFile(
+      new URL("../../assets/samples/sample-video.mp4", import.meta.url),
+    );
+
+    await socket.sendMessage("5511999999999@s.whatsapp.net", {
+      video,
+      mimetype: "video/mp4",
+      gifPlayback: true,
+    });
+
+    assert.strictEqual(calls[0][1].width, 640);
+    assert.strictEqual(calls[0][1].height, 360);
+  });
+
   it("envia Rich Response com stanza type text", async () => {
     const { client, calls } = createClientSpy();
     const socket = createSocketAdapter(client);
