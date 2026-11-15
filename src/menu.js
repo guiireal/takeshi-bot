@@ -108,7 +108,7 @@ export function menuMessage(groupJid) {
 
 ╭━━⪩ DIVERSOS ⪨━━
 ▢
-▢ • ${prefix}horoscopo
+▢ • ${prefix}horoscopo (signo)
 ▢
 ╰━━─「✨」─━━
 
