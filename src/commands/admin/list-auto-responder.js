@@ -21,7 +21,7 @@ export default {
     }
     let message = `*📋 Lista do auto-responder*\n\n${readMore()}`;
     items.forEach((item) => {
-      message += `${item.key}. ${item.match}\n`;
+      message += `${item.key} - ${item.match}\n`;
       message += `   ↳ "${item.answer}"\n\n`;
     });
     message += `_Total: ${items.length} termo(s) cadastrado(s)_`;
