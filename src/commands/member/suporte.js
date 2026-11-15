@@ -58,7 +58,12 @@ Faça sua pergunta sobre mim que eu te ajudarei!
 - ${PREFIX}suporte bot desliga sozinho
 - ${PREFIX}suporte como instalar no Termux?
 - ${PREFIX}suporte erro 401 API Spider X
-- Envie uma imagem com ${PREFIX}suporte para análise visual`,
+- Envie uma imagem com ${PREFIX}suporte para análise visual
+🎙️ *Vozes especiais*
+
+- ${PREFIX}vozlula Olá, tudo bem?
+- ${PREFIX}vozbolsonaro Bom dia, pessoal!
+- Use ${PREFIX}menu para ver os aliases.`,
       );
 
       return;

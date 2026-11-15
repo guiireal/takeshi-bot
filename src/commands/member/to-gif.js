@@ -5,7 +5,7 @@ import { toGif } from "../../services/spider-x-api.js";
 import { getRandomName } from "../../utils/index.js";
 
 export default {
-  name: "togif",
+  name: "to-gif",
   description: "Transformo figurinhas animadas em GIF",
   commands: ["togif", "gif"],
   usage: `${PREFIX}togif (marque a figurinha)`,

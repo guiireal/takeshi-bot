@@ -4,7 +4,7 @@ import { qwen38Flash } from "../../../services/spider-x-api.js";
 import { downloadAIImage } from "../../../utils/aiImage.js";
 
 export default {
-  name: "qwen38",
+  name: "qwen-3-8-flash",
   description: "Use a inteligência artificial Qwen3.8 Flash! (2 requests)",
   commands: ["qwen38", "qwen3-8-flash"],
   usage: `${PREFIX}qwen38 Explique como funciona uma API REST

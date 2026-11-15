@@ -6,7 +6,7 @@ import { canvas } from "../../../services/spider-x-api.js";
 import { getRandomNumber } from "../../../utils/index.js";
 
 export default {
-  name: "naodenemagua",
+  name: "nao-de-nem-agua",
   description:
     'Coloco a imagem que você enviar, redonda e com o símbolo de proibido, no cartaz do gato do meme "Não dê nem água"',
   commands: ["naodeagua", "naodenemagua"],

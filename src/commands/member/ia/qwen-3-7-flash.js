@@ -4,7 +4,7 @@ import { qwen37Flash } from "../../../services/spider-x-api.js";
 import { downloadAIImage } from "../../../utils/aiImage.js";
 
 export default {
-  name: "qwen37",
+  name: "qwen-3-7-flash",
   description: "Use a inteligência artificial Qwen3.7 Flash! (1 request)",
   commands: ["qwen37", "qwen3-7-flash"],
   usage: `${PREFIX}qwen37 Crie um resumo curto sobre inteligência artificial

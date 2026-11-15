@@ -4,7 +4,7 @@ import { gpt6Luna } from "../../../services/spider-x-api.js";
 import { downloadAIImage } from "../../../utils/aiImage.js";
 
 export default {
-  name: "gpt6luna",
+  name: "gpt-6-luna",
   description: "Use a inteligência artificial GPT-6 Luna! (1 request)",
   commands: ["gpt6luna", "gpt"],
   usage: `${PREFIX}gpt6luna Analise os benefícios de uma arquitetura modular

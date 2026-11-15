@@ -4,7 +4,7 @@ import { WarningError } from "../../errors/index.js";
 import { clearChat } from "../../messages.js";
 
 export default {
-  name: "limpar-chat",
+  name: "limpar",
   description: "Limpa o histórico de mensagens do grupo.",
   commands: [
     "limpar-chat",

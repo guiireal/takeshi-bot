@@ -654,12 +654,23 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | TikTok video download | Membro | ✅ |
 | Transcrever áudio | Membro | ✅ |
 | TTS (texto para áudio) | Membro | ✅ |
+| Vozes especiais (Lula e Bolsonaro) | Membro | ✅ |
 | X/Twitter download | Membro | ✅ |
 | YT MP3 | Membro | ✅ |
 | YT MP4 | Membro | ✅ |
 | YT search | Membro | ✅ |
 
 ![Guia de comandos](./assets/images/guia-de-comandos.png)
+
+### Vozes especiais
+
+Os comandos geram uma mensagem de voz com IA via Spider X API e aceitam até 512 caracteres.
+Use o prefixo configurado no seu grupo.
+
+| Exemplo | Aliases |
+| --- | --- |
+| `/vozlula Olá, tudo bem?` | `/lulavoz`, `/voicelula`, `/lulavoice` |
+| `/vozbolsonaro Bom dia, pessoal!` | `/bolsonarovoz`, `/voicebolsonaro`, `/bolsonarovoice` |
 
 ## Auto responder
 

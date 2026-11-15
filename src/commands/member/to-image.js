@@ -4,7 +4,7 @@ import { Ffmpeg } from "../../services/ffmpeg.js";
 import { getRandomName, removeFileIfExists } from "../../utils/index.js";
 
 export default {
-  name: "toimage",
+  name: "to-image",
   description: "Transformo figurinhas estáticas em imagem",
   commands: ["toimage", "toimg"],
   usage: `${PREFIX}toimage (marque a figurinha) ou ${PREFIX}toimage (responda a figurinha)`,
