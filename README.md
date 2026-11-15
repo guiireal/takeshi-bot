@@ -630,7 +630,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Geração de imagens com IA | Membro | ✅ |
 | Google Gemini | Membro | ✅ |
 | Google search | Membro | ✅ |
-| Horóscopo semanal (`horoscopo`) | Membro | ✅ |
+| Horóscopo semanal | Membro | ✅ |
 | Imagem IA Flux | Membro | ✅ |
 | Imagem IA Recraft V4.1 Flash | Membro | ✅ |
 | Imagem com contraste | Membro | ❌ |
@@ -655,8 +655,8 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | TikTok video download | Membro | ✅ |
 | Transcrever áudio | Membro | ✅ |
 | TTS (texto para áudio) | Membro | ✅ |
-| Voz do Bolsonaro (`vozbolsonaro`) | Membro | ✅ |
-| Voz do Lula (`vozlula`) | Membro | ✅ |
+| Voz do Bolsonaro | Membro | ✅ |
+| Voz do Lula | Membro | ✅ |
 | X/Twitter download | Membro | ✅ |
 | YT MP3 | Membro | ✅ |
 | YT MP4 | Membro | ✅ |
