@@ -482,6 +482,26 @@ export async function pinterest(search) {
   return data;
 }
 
+export async function horoscope(sign) {
+  const token = requireSpiderApiToken();
+  const { data } = await spiderApi.get(`${SPIDER_API_BASE_URL}/misc/horoscope`, {
+    params: { sign },
+    headers: { "X-API-KEY": token },
+    timeout: 15000,
+  });
+
+  if (
+    typeof data?.image !== "string" ||
+    !/^https?:\/\/\S+$/i.test(data.image) ||
+    typeof data.text !== "string" ||
+    !data.text.trim()
+  ) {
+    throw new Error("A Spider X API não retornou a imagem e o texto do horóscopo.");
+  }
+
+  return data;
+}
+
 export async function search(type, search) {
   if (!search) {
     throw new Error("Você precisa informar o parâmetro de pesquisa!");

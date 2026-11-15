@@ -630,6 +630,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Geração de imagens com IA | Membro | ✅ |
 | Google Gemini | Membro | ✅ |
 | Google search | Membro | ✅ |
+| Horóscopo semanal | Membro | ✅ |
 | Imagem IA Flux | Membro | ✅ |
 | Imagem IA Recraft V4.1 Flash | Membro | ✅ |
 | Imagem com contraste | Membro | ❌ |
@@ -661,6 +662,10 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | YT search | Membro | ✅ |
 
 ![Guia de comandos](./assets/images/guia-de-comandos.png)
+
+### Horóscopo
+
+Use `/horoscopo câncer` ou `/signo câncer` com o prefixo do seu grupo. O bot envia a imagem do signo com a previsão semanal na legenda. Cada consulta bem-sucedida custa 1 request da Spider X API. [Veja os signos e como usar o comando](./HELP.md#horóscopo).
 
 ### Vozes especiais
 
