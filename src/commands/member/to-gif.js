@@ -34,6 +34,6 @@ export default {
 
     await sendSuccessReact();
 
-    await sendGifFromURL(gifUrl);
+    await sendGifFromURL(gifUrl, "Aqui está seu GIF!");
   },
 };
