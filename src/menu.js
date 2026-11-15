@@ -160,8 +160,8 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}iasticker
 ▢ • ${prefix}transcrever
 ▢ • ${prefix}tts
-▢ • ${prefix}vozbolsonaro (bolsonarovoz, voicebolsonaro, bolsonarovoice)
-▢ • ${prefix}vozlula (lulavoz, voicelula, lulavoice)
+▢ • ${prefix}vozbolsonaro
+▢ • ${prefix}vozlula
 ▢
 ╰━━─「🚀」─━━
 
