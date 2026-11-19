@@ -487,7 +487,7 @@ export async function horoscope(sign) {
   const { data } = await spiderApi.get(`${SPIDER_API_BASE_URL}/misc/horoscope`, {
     params: { sign },
     headers: { "X-API-KEY": token },
-    timeout: 15000,
+    timeout: 40000,
   });
 
   if (

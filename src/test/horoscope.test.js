@@ -3,8 +3,13 @@ import { it, mock } from "node:test";
 
 const baseUrl = "https://spider.invalid/api";
 const image = "https://spider.invalid/assets/images/signs/cancer.png";
-const text = "♋ *CÂNCER* ♋\n\nPrevisão semanal";
-const get = mock.fn(async () => ({ data: { image, text } }));
+const text = "♋ *CÂNCER* ♋\n\nPrevisão do dia";
+const get = mock.fn(async (_url, { timeout }) => {
+  if (timeout < 20000) {
+    throw new Error(`timeout of ${timeout}ms exceeded`);
+  }
+  return { data: { image, text } };
+});
 
 mock.module("../config.js", {
   namedExports: { PREFIX: "/", SPIDER_API_BASE_URL: baseUrl },
@@ -18,7 +23,7 @@ mock.module("axios", {
 
 const { default: command } = await import("../commands/member/diversos/horoscopo.js");
 
-it("consulta o signo e envia a imagem com a previsão na legenda", async () => {
+it("aguarda a primeira consulta do dia e envia a imagem com a previsão na legenda", async () => {
   const sendImageFromURL = mock.fn();
   assert.deepEqual(command.commands, ["horoscopo", "signo"]);
 
