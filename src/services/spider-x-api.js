@@ -53,6 +53,12 @@ spiderApi.interceptors.response.use(undefined, (error) => {
     throw new InvalidParameterError(validationMessages.join(" "));
   }
 
+  // Show the API's own message instead of axios' generic "Request failed with status code N".
+  const apiMessage = error.response?.data?.message;
+  if (typeof apiMessage === "string" && apiMessage.trim()) {
+    error.message = apiMessage;
+  }
+
   return Promise.reject(error);
 });
 
