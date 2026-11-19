@@ -1,6 +1,9 @@
 import assert from "node:assert";
 import { describe, it } from "node:test";
-import { hasGroupStatusMessage } from "../utils/groupStatusMessage.js";
+import {
+  hasGroupStatusMessage,
+  toGroupStatusEvent,
+} from "../utils/groupStatusMessage.js";
 
 describe("Group Status Message Detection", () => {
   it("should detect groupStatusMentionMessage", () => {
@@ -130,5 +133,62 @@ describe("Group Status Message Detection", () => {
     message.self = message;
 
     assert.strictEqual(hasGroupStatusMessage({ message }), false);
+  });
+});
+
+// Formato real do stanza <status> recebido em 18/11/2026 (JIDs trocados).
+function statusStanzaEvent(overrides = {}, reason = "unhandled.status") {
+  return {
+    reason,
+    rawNode: {
+      tag: "status",
+      attrs: {
+        from: "120363000000000000@g.us",
+        type: "media",
+        id: "ACA9292EF1014E5B4A508703DD49A202",
+        participant: "111111111111111@lid",
+        participant_pn: "5511900000000@s.whatsapp.net",
+        t: "1795050273",
+        notify: "Fulano",
+        ...overrides,
+      },
+    },
+  };
+}
+
+describe("Group status stanza (<status>)", () => {
+  it("should convert a group <status> stanza into a group status event", () => {
+    const event = toGroupStatusEvent(statusStanzaEvent());
+
+    assert.deepStrictEqual(event.key, {
+      remoteJid: "120363000000000000@g.us",
+      id: "ACA9292EF1014E5B4A508703DD49A202",
+      fromMe: false,
+      participant: "111111111111111@lid",
+      participantAlt: "5511900000000@s.whatsapp.net",
+    });
+    assert.strictEqual(event.timestampSeconds, 1795050273);
+    assert.strictEqual(hasGroupStatusMessage(event), true);
+  });
+
+  it("should ignore other unhandled stanzas and non-group status", () => {
+    assert.strictEqual(
+      toGroupStatusEvent(statusStanzaEvent({}, "unhandled.message")),
+      null,
+    );
+    assert.strictEqual(
+      toGroupStatusEvent(statusStanzaEvent({ from: "status@broadcast" })),
+      null,
+    );
+    assert.strictEqual(
+      toGroupStatusEvent(statusStanzaEvent({ participant: "" })),
+      null,
+    );
+  });
+
+  it("should not treat status edit or deletion as a new status", () => {
+    for (const edit of ["1", "7", "8"]) {
+      assert.strictEqual(toGroupStatusEvent(statusStanzaEvent({ edit })), null);
+    }
   });
 });

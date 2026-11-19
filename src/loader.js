@@ -7,12 +7,14 @@
  * @author Dev Gui
  */
 import { customMiddleware } from "./middlewares/customMiddleware.js";
+import { messageHandler } from "./middlewares/messageHandler.js";
 import { onCall } from "./middlewares/onCall.js";
 import { onGroupParticipantsUpdate } from "./middlewares/onGroupParticipantsUpdate.js";
 import { onMessage } from "./middlewares/onMessage.js";
 import { createSocketAdapter } from "./services/wa.js";
 import { handleStealthDefense } from "./utils/antiStealthAction.js";
 import { badMacHandler } from "./utils/badMacHandler.js";
+import { toGroupStatusEvent } from "./utils/groupStatusMessage.js";
 import { errorLog, infoLog } from "./utils/logger.js";
 import { recordUnreadableMessageEnvelope } from "./utils/messageEnvelopeRegistry.js";
 import { subscribeStealthFailures } from "./utils/stealthMessage.js";
@@ -94,6 +96,23 @@ export function load(client) {
 
       await handleStealthDefense({ socket, detection });
     }, "stealth");
+  });
+
+  // Status postado no grupo não vira evento "message" na zapo (ver
+  // toGroupStatusEvent). Só o messageHandler (admin + anti-status-grupo): o
+  // resto do onMessage (ex.: apagar msg de silenciado) não serve pra status.
+  client.on("debug_unhandled_stanza", (event) => {
+    const statusEvent = toGroupStatusEvent(event);
+
+    if (!statusEvent) {
+      return;
+    }
+
+    infoLog(
+      `[STATUS-GP] status no grupo chat=${statusEvent.key.remoteJid} autor=${statusEvent.key.participant} id=${statusEvent.key.id}`,
+    );
+
+    safeEventHandler(() => messageHandler(socket, statusEvent), "status");
   });
 
   client.on("message", async (event) => {

@@ -142,3 +142,40 @@ export function hasGroupStatusMessage(webMessage) {
     (message) => hasGroupStatusFlag(message),
   );
 }
+
+/**
+ * Status postado no grupo chega como stanza `<status>` de topo (from=grupo,
+ * participant=autor, `<enc type="skmsg">`), que a zapo 1.12 não roteia nem
+ * decifra: vira `debug_unhandled_stanza` com `unhandled.status`. A chegada já
+ * basta para o anti-status-grupo, então vira um evento de mensagem com
+ * `groupStatusMessageV2` sem conteúdo. `edit` marca edição (1) e exclusão do
+ * status (7 autor, 8 admin): não é status novo e não pode banir quem apagou.
+ * shortcut: o conteúdo não é decifrado; se a zapo passar a emitir `<status>`
+ * como `message`, remover isto.
+ */
+export function toGroupStatusEvent(event) {
+  const attrs = event?.rawNode?.attrs ?? {};
+
+  if (
+    event?.reason !== "unhandled.status" ||
+    !attrs.from?.endsWith("@g.us") ||
+    !attrs.participant ||
+    !attrs.id ||
+    attrs.edit
+  ) {
+    return null;
+  }
+
+  return {
+    key: {
+      remoteJid: attrs.from,
+      id: attrs.id,
+      fromMe: false,
+      participant: attrs.participant,
+      participantAlt: attrs.participant_pn ?? attrs.participant_lid,
+    },
+    message: { groupStatusMessageV2: { message: {} } },
+    pushName: attrs.notify,
+    timestampSeconds: Number(attrs.t) || undefined,
+  };
+}

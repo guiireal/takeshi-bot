@@ -94,9 +94,13 @@ export async function messageHandler(socket, webMessage) {
       try {
         await socket.groupParticipantsUpdate(remoteJid, [userLid], "remove");
 
-        await socket.sendMessage(remoteJid, {
-          delete: webMessage.key,
-        });
+        // Status do grupo (stanza <status>) não some com revogação enviada pela
+        // zapo (testado em 18/11/2026): tentar apagar à toa parece abuso, só bane.
+        if (!webMessage.message?.groupStatusMessageV2) {
+          await socket.sendMessage(remoteJid, {
+            delete: webMessage.key,
+          });
+        }
       } catch (error) {
         errorLog(
           `Erro ao aplicar anti-status-grupo. Verifique se eu estou como admin do grupo! Detalhes: ${error.message}`,

@@ -53,4 +53,35 @@ describe("messageHandler anti-status-grupo", () => {
       ["sendMessage", remoteJid, { delete: webMessage.key }],
     ]);
   });
+
+  it("should remove sender of a group <status> without trying to delete it", async () => {
+    const calls = [];
+    const webMessage = {
+      key: {
+        remoteJid,
+        fromMe: false,
+        id: "status-id",
+        participant: userLid,
+      },
+      message: { groupStatusMessageV2: { message: {} } },
+    };
+    const socket = {
+      groupMetadata: async () => ({
+        owner: "owner@lid",
+        participants: [{ id: userLid, admin: null }],
+      }),
+      groupParticipantsUpdate: async (...args) => {
+        calls.push(["groupParticipantsUpdate", ...args]);
+      },
+      sendMessage: async (...args) => {
+        calls.push(["sendMessage", ...args]);
+      },
+    };
+
+    await messageHandler(socket, webMessage);
+
+    assert.deepStrictEqual(calls, [
+      ["groupParticipantsUpdate", remoteJid, [userLid], "remove"],
+    ]);
+  });
 });
