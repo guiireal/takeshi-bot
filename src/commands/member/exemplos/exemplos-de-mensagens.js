@@ -34,6 +34,11 @@ export default {
         `• \`${prefix}enviar-imagem-de-url\` - Enviar imagem de URL\n` +
         `• \`${prefix}enviar-imagem-de-buffer\` - Enviar imagem de buffer\n\n` +
 
+        "*📚 ÁLBUM*\n" +
+        `• \`${prefix}enviar-album-de-arquivo\` - Enviar álbum de imagens de arquivos locais\n` +
+        `• \`${prefix}enviar-album-de-url\` - Enviar álbum de imagens de URLs\n` +
+        `• \`${prefix}enviar-album-de-buffer\` - Enviar álbum de imagens de buffers\n\n` +
+
         "*🎬 VÍDEO*\n" +
         `• \`${prefix}enviar-video-de-arquivo\` - Enviar vídeo de arquivo local\n` +
         `• \`${prefix}enviar-video-de-url\` - Enviar vídeo de URL\n` +
