@@ -93,7 +93,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}meulid
 ▢ • ${prefix}perfil
 ▢ • ${prefix}ping
-▢ • ${prefix}raw-message
+▢ • ${prefix}rawmessage
 ▢ • ${prefix}rename
 ▢ • ${prefix}removebg
 ▢ • ${prefix}sticker
@@ -102,7 +102,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}toimage
 ▢ • ${prefix}tomp3
 ▢ • ${prefix}ttp
-▢ • ${prefix}yt-search
+▢ • ${prefix}ytsearch
 ▢
 ╰━━─「🚀」─━━
 
