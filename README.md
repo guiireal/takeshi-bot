@@ -603,7 +603,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Remover advertência | Admin | ❌ |
 | Revelar | Admin | ❌ |
 | Somente admins | Admin | ❌ |
-| Ver saldo da Spider X API | Admin | ❌ |
+| Ver saldo da Spider X API | Admin | ✅ |
 | Borrar imagem | Membro | ❌ |
 | Brat (imagem com texto) | Membro | ✅ |
 | Bratvid (Figurinha animada no estilo brat) | Membro | ✅ |
@@ -616,8 +616,8 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Claude Haiku 5.5 | Membro | ✅ |
 | Comandos de diversão/brincadeiras | Membro |❌ |
 | Deepseek V4 Flash | Membro | ✅ |
-| Envio de botões | Membro | ✅ |
-| Envio de listas | Membro | ✅ |
+| Envio de botões | Membro | ❌ |
+| Envio de listas | Membro | ❌ |
 | Espelhar imagem | Membro | ❌ |
 | Facebook download | Membro | ✅ |
 | Fake chat | Membro | ❌ |
@@ -626,10 +626,9 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | GPT-5 Mini | Membro | ✅ |
 | GPT-5.6 Luna | Membro | ✅ |
 | GPT-6 Luna | Membro | ✅ |
-| Gerar link | Membro | ❌ |
+| Gerar link | Membro | ❌* |
 | Geração de imagens com IA | Membro | ✅ |
 | Google Gemini | Membro | ✅ |
-| Google search | Membro | ✅ |
 | Horóscopo semanal | Membro | ✅ |
 | Imagem IA Flux | Membro | ✅ |
 | Imagem IA Recraft V4.1 Flash | Membro | ✅ |
@@ -639,7 +638,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Informações de um comando | Membro | ❌ |
 | Instagram download | Membro | ✅ |
 | Jogo Tubes (Web View) | Membro | ❌ |
-| Lista de comandos | Membro | ✅ |
+| Lista de comandos | Membro | ❌ |
 | Ping | Membro | ❌ |
 | Pinterest download (carrossel) | Membro | ✅ |
 | Play vídeo | Membro | ✅ |
@@ -661,6 +660,8 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | YT MP3 | Membro | ✅ |
 | YT MP4 | Membro | ✅ |
 | YT search | Membro | ✅ |
+
+*Para gerar links, é necessária uma chave do Linker ou um token da Spider X API.
 
 ![Guia de comandos](./assets/images/guia-de-comandos.png)
 
