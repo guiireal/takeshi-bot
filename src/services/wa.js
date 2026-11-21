@@ -11,19 +11,6 @@ import { proto } from "zapo-js";
 import { probeMp4Dimensions } from "../utils/index.js";
 import { buildInteractiveContent } from "./interactiveMessages.js";
 
-/**
- * Campo do protobuf `Message` correspondente a cada tipo de mídia enviável.
- * Usado no envio de álbum, que precisa montar o proto cru (o builder tipado
- * do zapo não expõe o `messageContextInfo` externo onde vive a associação).
- */
-const ALBUM_MEDIA_FIELD = {
-  image: "imageMessage",
-  video: "videoMessage",
-  audio: "audioMessage",
-  document: "documentMessage",
-  sticker: "stickerMessage",
-};
-
 const GROUP_PARTICIPANT_ACTIONS = {
   add: (client, jid, participants) =>
     client.group.addParticipants(jid, participants),
@@ -169,26 +156,6 @@ export function createSocketAdapter(client) {
         });
       }
 
-      if (content.album) {
-        // O zapo infere `type="media"` para o `albumMessage`, mas o WhatsApp
-        // (e o Baileys) esperam `type="text"` na mensagem-pai do álbum.
-        return send(
-          {
-            albumMessage: {
-              expectedImageCount: content.album.expectedImageCount,
-              expectedVideoCount: content.album.expectedVideoCount,
-            },
-          },
-          {
-            ...sendOptions,
-            additionalAttributes: {
-              ...sendOptions.additionalAttributes,
-              type: "text",
-            },
-          },
-        );
-      }
-
       if (content.contacts) {
         const { displayName, contacts = [] } = content.contacts;
 
@@ -252,45 +219,6 @@ export function createSocketAdapter(client) {
       if (mediaType) {
         const mediaSource = resolveMediaSource(content[mediaType]);
 
-        // Álbum (album_v2): cada mídia associada é enviada como proto cru com
-        // `messageAssociation` apontando para a mensagem-pai `albumMessage`.
-        // O upload é feito aqui porque o builder tipado não deixa injetar o
-        // `messageContextInfo` (externo), onde a associação é gravada.
-        if (content.albumParentKey) {
-          const uploaded = await client.message.upload(mediaSource, {
-            type: mediaType,
-            mimetype: content.mimetype,
-          });
-
-          return send({
-            [ALBUM_MEDIA_FIELD[mediaType]]: {
-              url: uploaded.url,
-              directPath: uploaded.directPath,
-              mediaKey: uploaded.mediaKey,
-              fileSha256: uploaded.fileSha256,
-              fileEncSha256: uploaded.fileEncSha256,
-              fileLength: uploaded.fileLength,
-              mediaKeyTimestamp: uploaded.mediaKeyTimestamp,
-              mimetype: uploaded.mimetype ?? content.mimetype,
-              caption: content.caption,
-              ...(content.fileName !== undefined
-                ? { fileName: content.fileName }
-                : {}),
-              ...(content.ptt !== undefined ? { ptt: content.ptt } : {}),
-              ...(content.gifPlayback !== undefined
-                ? { gifPlayback: content.gifPlayback }
-                : {}),
-            },
-            messageContextInfo: {
-              messageAssociation: {
-                associationType:
-                  proto.MessageAssociation.AssociationType.MEDIA_ALBUM,
-                parentMessageKey: content.albumParentKey,
-              },
-            },
-          });
-        }
-
         const dimensions =
           mediaType === "video" &&
           content.gifPlayback &&
@@ -307,6 +235,15 @@ export function createSocketAdapter(client) {
           ptt: content.ptt,
           gifPlayback: content.gifPlayback,
           ...dimensions,
+          ...(content.albumParentKey && {
+            messageContextInfo: {
+              messageAssociation: {
+                associationType:
+                  proto.MessageAssociation.AssociationType.MEDIA_ALBUM,
+                parentMessageKey: content.albumParentKey,
+              },
+            },
+          }),
         });
       }
 

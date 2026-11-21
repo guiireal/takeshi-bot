@@ -401,7 +401,7 @@ export function loadCommonFunctions({ socket, webMessage }) {
 
     try {
       album = await socket.sendMessage(remoteJid, {
-        album: { expectedImageCount: images.length },
+        albumMessage: { expectedImageCount: images.length },
       });
     } catch {
       album = null;

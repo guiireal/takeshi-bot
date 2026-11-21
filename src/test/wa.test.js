@@ -1,8 +1,10 @@
 import assert from "node:assert";
 import { mkdir, readFile } from "node:fs/promises";
 import { describe, it } from "node:test";
+import { proto } from "zapo-js";
 import { TEMP_DIR } from "../config.js";
 import { createSocketAdapter } from "../services/wa.js";
+import { loadCommonFunctions } from "../utils/loadCommonFunctions.js";
 
 function createClientSpy() {
   const calls = [];
@@ -19,6 +21,38 @@ function createClientSpy() {
 }
 
 describe("WhatsApp compatibility adapter", () => {
+  it("envia a mensagem-pai e associa as cinco imagens do álbum", async () => {
+    const { client, calls } = createClientSpy();
+    const socket = createSocketAdapter(client);
+    const jid = "123@g.us";
+    const image = Buffer.from("sample");
+    const { sendAlbumFromBuffer } = loadCommonFunctions({
+      socket,
+      webMessage: {
+        key: { remoteJid: jid },
+        message: { conversation: "/pin gatos" },
+      },
+    });
+    await sendAlbumFromBuffer(Array(5).fill(image), "Resultados do Pinterest");
+
+    assert.strictEqual(calls.length, 6);
+    assert.strictEqual(calls[0][1].albumMessage.expectedImageCount, 5);
+    assert.strictEqual(calls[0][2].additionalAttributes, undefined);
+    for (const [index, [destination, content]] of calls.slice(1).entries()) {
+      assert.strictEqual(destination, jid);
+      assert.strictEqual(content.type, "image");
+      assert.strictEqual(content.media, image);
+      assert.strictEqual(
+        content.caption.endsWith("Resultados do Pinterest"),
+        index === 0,
+      );
+      assert.deepStrictEqual(content.messageContextInfo.messageAssociation, {
+        associationType: proto.MessageAssociation.AssociationType.MEDIA_ALBUM,
+        parentMessageKey: { remoteJid: jid, fromMe: true, id: "message-id" },
+      });
+    }
+  });
+
   it("sends the original MP4 dimensions for GIF playback", async () => {
     await mkdir(TEMP_DIR, { recursive: true });
 
