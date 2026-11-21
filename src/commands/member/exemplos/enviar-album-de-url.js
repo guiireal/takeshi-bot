@@ -21,7 +21,7 @@ export default {
     await sendAlbumFromURLs(
       [
         "https://api.spiderx.com.br/storage/samples/sample-image.jpg",
-        "https://api.spiderx.com.br/assets/images/logo.png",
+        "https://api.spiderx.com.br/assets/images/spider-x-logo.png",
         "https://api.spiderx.com.br/storage/samples/sample-image.jpg",
       ],
       "Este é um álbum de URLs",
@@ -35,7 +35,7 @@ export default {
 
     await sendAlbumFromURLs([
       "https://api.spiderx.com.br/storage/samples/sample-image.jpg",
-      "https://api.spiderx.com.br/assets/images/logo.png",
+      "https://api.spiderx.com.br/assets/images/spider-x-logo.png",
     ]);
 
     await delay(3000);

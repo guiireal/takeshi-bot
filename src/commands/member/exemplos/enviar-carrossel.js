@@ -34,7 +34,7 @@ export default {
         {
           title: "📸 Card 2: Outra Imagem",
           image: {
-            url: "https://api.spiderx.com.br/assets/images/logo.png",
+            url: "https://api.spiderx.com.br/assets/images/spider-x-logo.png",
           },
           caption: "Segunda imagem com descrição diferente",
         },

@@ -39,7 +39,7 @@ export default {
       await getBuffer(
         "https://api.spiderx.com.br/storage/samples/sample-image.jpg"
       ),
-      await getBuffer("https://api.spiderx.com.br/assets/images/logo.png"),
+      await getBuffer("https://api.spiderx.com.br/assets/images/spider-x-logo.png"),
     ];
 
     await sendAlbumFromBuffer(urlBuffers, "Este é um álbum de buffers de URLs");
