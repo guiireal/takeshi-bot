@@ -78,15 +78,25 @@ export async function dynamicCommand(paramsHandler, startProcess) {
     }
   }
 
-  if (activeGroup && isActiveAutoStickerGroup(remoteJid)) {
-    const processed = await processAutoSticker(paramsHandler);
+  let resolvedCommand;
 
-    if (processed) {
+  if (activeGroup && isActiveAutoStickerGroup(remoteJid)) {
+    if (
+      (webMessage.message?.imageMessage || webMessage.message?.videoMessage) &&
+      verifyPrefix(prefix, remoteJid)
+    ) {
+      resolvedCommand = await findCommandImport(commandName);
+    }
+
+    if (
+      resolvedCommand?.command?.name !== "stickeraudio" &&
+      await processAutoSticker(paramsHandler)
+    ) {
       return;
     }
   }
 
-  const { type, command } = await findCommandImport(commandName);
+  const { type, command } = resolvedCommand ?? await findCommandImport(commandName);
 
   if (ONLY_GROUP_ID && ONLY_GROUP_ID !== remoteJid) {
     return;

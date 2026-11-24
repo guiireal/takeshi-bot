@@ -97,6 +97,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}rename
 ▢ • ${prefix}removebg
 ▢ • ${prefix}sticker
+▢ • ${prefix}stickeraudio
 ▢ • ${prefix}suporte
 ▢ • ${prefix}togif
 ▢ • ${prefix}toimage

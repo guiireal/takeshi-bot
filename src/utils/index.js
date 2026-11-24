@@ -13,7 +13,7 @@ import readline from "node:readline";
 import { pipeline } from "node:stream/promises";
 import { pathToFileURL } from "node:url";
 import { delay, downloadMediaMessage } from "zapo-js";
-import { getViewOnceMedia } from "./viewOnceCache.js";
+import { getViewOnceMessage } from "./viewOnceCache.js";
 import { COMMANDS_DIR, PREFIX, TEMP_DIR } from "../config.js";
 import { errorLog } from "./logger.js";
 import { detectMimetype } from "../services/imageOptimizer.js";
@@ -228,7 +228,7 @@ export async function download(webMessage, fileName, context, extension) {
   // quando a mensagem original chegou.
   if (!content?.mediaKey) {
     content =
-      getViewOnceMedia({
+      getViewOnceMessage({
         chatJid: webMessage?.key?.remoteJid,
         id: webMessage?.message?.extendedTextMessage?.contextInfo?.stanzaId,
         type: `${context}Message`,
@@ -455,8 +455,9 @@ export async function probeMp4Dimensions(video) {
   }
 }
 
-export async function ajustAudioByBuffer(audioBuffer, isPtt = true) {
-  const mimetype = isPtt ? undefined : await detectMimetype(audioBuffer);
+export async function ajustAudioByBuffer(audioBuffer, isPtt = true, maxSeconds) {
+  const mimetype =
+    isPtt || maxSeconds ? undefined : await detectMimetype(audioBuffer);
   if (mimetype === "audio/mpeg") {
     return { audioBuffer, mimetype };
   }
@@ -478,6 +479,7 @@ export async function ajustAudioByBuffer(audioBuffer, isPtt = true) {
 
     await runFile("ffmpeg", [
       "-i", tempPath, "-vn",
+      ...(maxSeconds ? ["-t", String(maxSeconds)] : []),
       ...(isPtt
         ? ["-c:a", "libopus", "-f", "ogg", "-b:a", "48k", "-ac", "1"]
         : ["-c:a", "libmp3lame", "-f", "mp3", "-ar", "44100", "-ac", "2", "-b:a", "128k"]),

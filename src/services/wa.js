@@ -259,6 +259,46 @@ export function createSocketAdapter(client) {
       );
     },
 
+    async sendAudioSticker(jid, sticker, audio) {
+      let audioMessage = audio;
+
+      if (audio instanceof Uint8Array) {
+        const uploadedAudio = await client.message.upload(audio, {
+          type: "ptt",
+          mimetype: "audio/ogg; codecs=opus",
+        });
+        audioMessage = { ...uploadedAudio, ptt: true };
+      }
+
+      const stickerMedia = typeof sticker === "string" || sticker instanceof Uint8Array
+        ? await client.message.upload(sticker, {
+            type: "sticker",
+            mimetype: "image/webp",
+          })
+        : sticker;
+
+      // shortcut: use unknown fields until Zapo exposes both audio-sticker fields.
+      const { Message } = proto;
+      const encodedAudio = Message.AudioMessage.encode(audioMessage).finish();
+      const stickerMessage = {
+        ...stickerMedia,
+        contextInfo: undefined,
+        $unknowns: [
+          Message.encode({}).uint32((26 << 3) | 2).bytes(encodedAudio).finish(),
+        ],
+      };
+      const wrapper = Message.FutureProofMessage.encode({
+        message: { stickerMessage },
+      }).finish();
+
+      return socket.relayMessage(jid, {
+        stickerMessage,
+        $unknowns: [
+          Message.encode({}).uint32((134 << 3) | 2).bytes(wrapper).finish(),
+        ],
+      });
+    },
+
     async groupMetadata(jid) {
       const metadata = await client.group.queryGroupMetadata(jid);
       return translateGroupMetadata(metadata);

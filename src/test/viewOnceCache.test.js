@@ -2,8 +2,8 @@ import assert from "node:assert";
 import { beforeEach, describe, it } from "node:test";
 import {
   __clearViewOnceCache,
-  getViewOnceMedia,
-  rememberViewOnceMedia,
+  getViewOnceMessage,
+  rememberViewOnceMessage,
 } from "../utils/viewOnceCache.js";
 
 const chatJid = "view-once-cache-test@g.us";
@@ -16,69 +16,86 @@ describe("view once cache", () => {
   });
 
   it("returns the media recorded for the same chat, id and type", () => {
-    rememberViewOnceMedia({ chatJid, id, type: "imageMessage", media });
+    rememberViewOnceMessage({ chatJid, id, type: "imageMessage", content: media });
 
     assert.strictEqual(
-      getViewOnceMedia({ chatJid, id, type: "imageMessage" }),
+      getViewOnceMessage({ chatJid, id, type: "imageMessage" }),
       media,
     );
   });
 
   it("does not leak media to another chat or another type", () => {
-    rememberViewOnceMedia({ chatJid, id, type: "imageMessage", media });
+    rememberViewOnceMessage({ chatJid, id, type: "imageMessage", content: media });
 
     assert.strictEqual(
-      getViewOnceMedia({ chatJid: "other@g.us", id, type: "imageMessage" }),
+      getViewOnceMessage({ chatJid: "other@g.us", id, type: "imageMessage" }),
       undefined,
     );
     assert.strictEqual(
-      getViewOnceMedia({ chatJid, id, type: "videoMessage" }),
+      getViewOnceMessage({ chatJid, id, type: "videoMessage" }),
       undefined,
     );
   });
 
   it("ignores media without a mediaKey", () => {
-    rememberViewOnceMedia({
+    rememberViewOnceMessage({
       chatJid,
       id,
       type: "imageMessage",
-      media: { viewOnce: true },
+      content: { viewOnce: true },
     });
 
     assert.strictEqual(
-      getViewOnceMedia({ chatJid, id, type: "imageMessage" }),
+      getViewOnceMessage({ chatJid, id, type: "imageMessage" }),
       undefined,
     );
   });
 
+  it("stores text without requiring a mediaKey and isolates it by chat and type", () => {
+    const content = { text: "Texto secreto", viewOnce: true };
+    rememberViewOnceMessage({ chatJid, id, type: "extendedTextMessage", content });
+
+    assert.strictEqual(getViewOnceMessage({ chatJid, id, type: "extendedTextMessage" }), content);
+    assert.strictEqual(getViewOnceMessage({ chatJid: "other@g.us", id, type: "extendedTextMessage" }), undefined);
+    assert.strictEqual(getViewOnceMessage({ chatJid, id, type: "imageMessage" }), undefined);
+  });
+
+  it("does not replace original text with an empty quoted placeholder", () => {
+    const content = { text: "Texto original", viewOnce: true };
+    rememberViewOnceMessage({ chatJid, id, type: "extendedTextMessage", content });
+    rememberViewOnceMessage({ chatJid, id, type: "extendedTextMessage", content: { viewOnce: true } });
+
+    assert.strictEqual(getViewOnceMessage({ chatJid, id, type: "extendedTextMessage" }), content);
+  });
+
   it("expires entries after the TTL", (t) => {
     t.mock.timers.enable({ apis: ["Date"], now: 0 });
-    rememberViewOnceMedia({ chatJid, id, type: "imageMessage", media });
+    rememberViewOnceMessage({ chatJid, id, type: "imageMessage", content: media });
 
     t.mock.timers.tick(31 * 60 * 1000);
 
     assert.strictEqual(
-      getViewOnceMedia({ chatJid, id, type: "imageMessage" }),
+      getViewOnceMessage({ chatJid, id, type: "imageMessage" }),
       undefined,
     );
   });
 
   it("keeps at most 300 entries, dropping the oldest", () => {
     for (let index = 0; index < 301; index++) {
-      rememberViewOnceMedia({
+      rememberViewOnceMessage({
         chatJid,
         id: `ID_${index}`,
         type: "imageMessage",
-        media,
+        content: media,
       });
     }
 
     assert.strictEqual(
-      getViewOnceMedia({ chatJid, id: "ID_0", type: "imageMessage" }),
+      getViewOnceMessage({ chatJid, id: "ID_0", type: "imageMessage" }),
       undefined,
     );
     assert.strictEqual(
-      getViewOnceMedia({ chatJid, id: "ID_300", type: "imageMessage" }),
+      getViewOnceMessage({ chatJid, id: "ID_300", type: "imageMessage" }),
       media,
     );
   });

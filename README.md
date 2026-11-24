@@ -2,19 +2,19 @@
 
 ![Takeshi Bot](./assets/images/takeshi-bot.png)
 
-[![Version](https://img.shields.io/badge/Vers%C3%A3o-9.0.0--rc2-blue)](https://github.com/guiireal/takeshi-bot)
+[![Version](https://img.shields.io/badge/Vers%C3%A3o-9.0.0--rc3-blue)](https://github.com/guiireal/takeshi-bot)
 [![Tests](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml/badge.svg)](https://github.com/guiireal/takeshi-bot-private/actions/workflows/test.yml)
 
 > Base para bots de WhatsApp multifuncional com diversos comandos prontos.
 
 [![Node.js](https://img.shields.io/badge/Node.js-22-green?logo=node.js)](https://nodejs.org/en)
-[![Zapo](https://img.shields.io/badge/Zapo-1.11.0-green?logo=whatsapp)](https://zapo.to/)
+[![Zapo](https://img.shields.io/badge/Zapo-1.12.0-green?logo=whatsapp)](https://zapo.to/)
 [![FFMPEG](https://img.shields.io/badge/FFMPEG-Latest-orange?logo=ffmpeg)](https://ffmpeg.org/)
 [![Spider X API](https://img.shields.io/badge/Spider_X-API-green?logo=api)](https://api.spiderx.com.br)
 
-## 🧪 Testando a versão 9.0.0-rc2 (migração para Zapo)
+## 🧪 Testando a versão 9.0.0-rc3 (migração para Zapo)
 
-Estamos migrando a base do Baileys para o [Zapo](https://zapo.to/). Se quiser testar a versão release candidate (rc2) antes do lançamento oficial, clone a branch `9-beta`:
+Estamos migrando a base do Baileys para o [Zapo](https://zapo.to/). Se quiser testar a versão release candidate (rc3) antes do lançamento oficial, clone a branch `9-beta`:
 
 ```sh
 git clone -b 9-beta https://github.com/guiireal/takeshi-bot.git
@@ -601,7 +601,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Obter o link do grupo | Admin | ❌ |
 | Reativar advertência | Admin | ❌ |
 | Remover advertência | Admin | ❌ |
-| Revelar | Admin | ❌ |
+| Revelar texto, imagem, vídeo e áudio | Admin | ❌ |
 | Somente admins | Admin | ❌ |
 | Ver saldo da Spider X API | Admin | ✅ |
 | Borrar imagem | Membro | ❌ |
@@ -650,6 +650,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Sticker IA  | Membro | ✅ |
 | Sticker para imagem | Membro | ❌ |
 | Sticker | Membro | ❌ |
+| Sticker com áudio | Membro | Somente músicas do YouTube |
 | TikTok audio download | Membro | ✅ |
 | TikTok video download | Membro | ✅ |
 | Transcrever áudio | Membro | ✅ |
@@ -664,6 +665,22 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 *Para gerar links, é necessária uma chave do Linker ou um token da Spider X API.
 
 ![Guia de comandos](./assets/images/guia-de-comandos.png)
+
+### Figurinha com áudio
+
+Use `/stickeraudio` ou `/audiosticker` com o prefixo do seu grupo:
+
+- Sem argumentos, envia a figurinha e o áudio padrão.
+- Responda a uma mensagem de voz comum para usar esse áudio com a figurinha padrão.
+- Envie uma imagem com `/stickeraudio` na legenda, respondendo a um áudio, para criar uma figurinha com esse som.
+- Responda a uma figurinha com `/stickeraudio nome da música` ou `/stickeraudio https://youtu.be/ID` para combinar a figurinha com até 30 segundos da música. Também funciona enviando uma imagem com o comando e a música na legenda.
+- Envie ou responda a um vídeo com som de até 10 segundos usando `/stickeraudio` para criar uma figurinha animada com o áudio do vídeo.
+
+Somente a busca ou o download de músicas do YouTube requer a Spider X API. Os demais modos não precisam da API. Áudios e vídeos de visualização única não são aceitos neste comando.
+
+### Revelar mensagens
+
+Admins podem responder a um texto, imagem, vídeo ou áudio com `/revelar` (aliases: `/rv` e `/reveal`) para reenviar o conteúdo, inclusive mensagens de visualização única que o bot recebeu. Para recuperar um texto omitido na resposta, o bot precisa ter recebido o original nos últimos 30 minutos e não pode ter reiniciado nesse intervalo. A recuperação é limitada ao mesmo chat; se o conteúdo não estiver disponível, o comando avisa.
 
 ### Horóscopo
 

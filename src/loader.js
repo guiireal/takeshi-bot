@@ -22,10 +22,10 @@ import {
   resolveStealthRetry,
   waitForStealthRetry,
 } from "./utils/stealthRetry.js";
-import { rememberViewOnceMedia } from "./utils/viewOnceCache.js";
+import { rememberViewOnceMessage } from "./utils/viewOnceCache.js";
 
-// Diagnóstico: mostra se a visualização única chega com mídia (modo mobile)
-// ou só como placeholder (companion). Não loga conteúdo, só o chat.
+// Guarda o conteúdo original antes que o WhatsApp o omita nas citações.
+// O diagnóstico não loga conteúdo, só a disponibilidade e o chat.
 function logViewOnceProbe(event) {
   const message = event.message;
   const wrapped =
@@ -33,23 +33,23 @@ function logViewOnceProbe(event) {
     message?.viewOnceMessageV2?.message ||
     message?.viewOnceMessageV2Extension?.message;
   const content = wrapped ?? message;
-  const type = ["imageMessage", "videoMessage", "audioMessage"].find(
-    (key) => content?.[key],
-  );
+  const type = [
+    "imageMessage", "videoMessage", "audioMessage", "extendedTextMessage",
+  ].find((key) => content?.[key]);
 
   if (!type || !(wrapped || content[type].viewOnce)) {
     return;
   }
 
-  const media = content[type];
-  rememberViewOnceMedia({
+  const originalContent = content[type];
+  rememberViewOnceMessage({
     chatJid: event.key?.remoteJid,
     id: event.key?.id,
     type,
-    media,
+    content: originalContent,
   });
   infoLog(
-    `[VISU-UNICA] recebida tipo=${type} mediaKey=${media.mediaKey ? "sim" : "nao"} directPath=${media.directPath ? "sim" : "nao"} chat=${event.key?.remoteJid}`,
+    `[VISU-UNICA] recebida tipo=${type} mediaKey=${originalContent.mediaKey ? "sim" : "nao"} directPath=${originalContent.directPath ? "sim" : "nao"} chat=${event.key?.remoteJid}`,
   );
 }
 

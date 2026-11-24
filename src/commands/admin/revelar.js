@@ -2,31 +2,69 @@ import { exec } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { PREFIX, TEMP_DIR } from "../../config.js";
-import { InvalidParameterError } from "../../errors/index.js";
+import {
+  DangerError,
+  InvalidParameterError,
+  WarningError,
+} from "../../errors/index.js";
 import { getRandomName } from "../../utils/index.js";
+import { getViewOnceMessage } from "../../utils/viewOnceCache.js";
 
 export default {
   name: "revelar",
-  description: "Revela uma imagem ou vídeo com visualização única",
+  description: "Revela texto, imagem, vídeo ou áudio com visualização única",
   commands: ["revelar", "rv", "reveal"],
-  usage: `${PREFIX}revelar (marque a imagem/vídeo) ou ${PREFIX}revelar (responda a imagem/vídeo).`,
+  usage: `${PREFIX}revelar (responda ao texto, imagem, vídeo ou áudio).`,
   /**
    * @param {CommandHandleProps} props
    */
   handle: async ({
     isImage,
     isVideo,
+    isAudio,
     downloadImage,
     downloadVideo,
+    downloadAudio,
     webMessage,
     sendSuccessReact,
     sendWaitReact,
     sendImageFromFile,
     sendVideoFromFile,
+    sendAudioFromFile,
+    sendReply,
   }) => {
-    if (!isImage && !isVideo) {
+    if (!isImage && !isVideo && !isAudio) {
+      const contextInfo = webMessage?.message?.extendedTextMessage?.contextInfo;
+      const quotedMessage = contextInfo?.quotedMessage;
+      const content =
+        quotedMessage?.viewOnceMessage?.message ||
+        quotedMessage?.viewOnceMessageV2?.message ||
+        quotedMessage?.viewOnceMessageV2Extension?.message ||
+        quotedMessage;
+      const text =
+        content?.conversation ||
+        content?.extendedTextMessage?.text ||
+        (content?.extendedTextMessage?.viewOnce &&
+          getViewOnceMessage({
+            chatJid: webMessage?.key?.remoteJid,
+            id: contextInfo?.stanzaId,
+            type: "extendedTextMessage",
+          })?.text);
+
+      if (text) {
+        await sendReply(text);
+        await sendSuccessReact();
+        return;
+      }
+
+      if (content?.extendedTextMessage?.viewOnce) {
+        throw new WarningError(
+          "O texto não está disponível. Só consigo revelar textos que recebi nos últimos 30 minutos, sem reiniciar o bot."
+        );
+      }
+
       throw new InvalidParameterError(
-        "Você precisa marcar uma imagem/vídeo ou responder a uma imagem/vídeo para revelá-la"
+        "Você precisa responder a um texto, imagem, vídeo ou áudio para revelar a mensagem"
       );
     }
 
@@ -36,15 +74,25 @@ export default {
       isImage ? "imagem" : "vídeo"
     } revelada!`;
 
-    const outputPath = path.resolve(
-      TEMP_DIR,
-      `${getRandomName()}.${isImage ? "jpg" : "mp4"}`
-    );
+    const outputPath = isAudio
+      ? undefined
+      : path.resolve(TEMP_DIR, `${getRandomName()}.${isImage ? "jpg" : "mp4"}`);
 
     let inputPath;
 
     try {
-      if (isImage) {
+      if (isAudio) {
+        inputPath = await downloadAudio(webMessage, getRandomName());
+
+        if (!inputPath) {
+          throw new WarningError(
+            "Não consegui obter o áudio. Responda diretamente à mensagem original e tente novamente."
+          );
+        }
+
+        await sendAudioFromFile(inputPath);
+        await sendSuccessReact();
+      } else if (isImage) {
         inputPath = await downloadImage(webMessage, "input");
 
         await new Promise((resolve, reject) => {
@@ -55,13 +103,13 @@ export default {
                 console.error("Erro FFmpeg:", error);
                 reject(error);
               } else {
-                sendImageFromFile(outputPath, mediaCaption).then(() => {
-                  sendSuccessReact().then(resolve);
-                });
+                resolve();
               }
             }
           );
         });
+        await sendImageFromFile(outputPath, mediaCaption);
+        await sendSuccessReact();
       } else if (isVideo) {
         inputPath = await downloadVideo(webMessage, "input");
 
@@ -73,17 +121,21 @@ export default {
                 console.error("Erro FFmpeg:", error);
                 reject(error);
               } else {
-                sendVideoFromFile(outputPath, mediaCaption).then(() => {
-                  sendSuccessReact().then(resolve);
-                });
+                resolve();
               }
             }
           );
         });
+        await sendVideoFromFile(outputPath, mediaCaption);
+        await sendSuccessReact();
       }
     } catch (error) {
+      if (error instanceof WarningError) {
+        throw error;
+      }
+
       console.error("Erro geral:", error);
-      throw new Error("Ocorreu um erro ao processar a mídia. Tente novamente.");
+      throw new DangerError("Ocorreu um erro ao processar a mídia. Tente novamente.");
     } finally {
       const cleanFile = (filePath) => {
         if (filePath && fs.existsSync(filePath)) {
