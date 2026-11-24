@@ -1,6 +1,5 @@
 import { readFile } from "node:fs/promises";
-import path from "node:path";
-import { ASSETS_DIR, BOT_EMOJI, BOT_NAME, PREFIX } from "../../config.js";
+import { BOT_EMOJI, BOT_NAME, PREFIX } from "../../config.js";
 import { InvalidParameterError, WarningError } from "../../errors/index.js";
 import { download, play } from "../../services/spider-x-api.js";
 import {
@@ -13,8 +12,6 @@ import {
   getUserName,
   removeFileIfExists,
 } from "../../utils/index.js";
-
-const stickerAudioDirectory = path.join(ASSETS_DIR, "stickeraudio");
 
 async function createVoiceBuffer(source, maxSeconds) {
   const { audioBuffer, audioPath, oldAudioPath } = await ajustAudioByBuffer(
@@ -129,7 +126,7 @@ export default {
       return;
     }
 
-    let sticker = path.join(stickerAudioDirectory, "leno_brega.webp");
+    let sticker = quoted?.stickerMessage;
     let source;
 
     if (search) {
@@ -169,18 +166,9 @@ export default {
       }
 
       source = Buffer.from(await response.arrayBuffer());
-    } else if (quoted) {
-      const audio = quoted.audioMessage;
-
-      if (!audio?.ptt || audio.viewOnce) {
-        throw new InvalidParameterError("Responda a uma mensagem de voz comum.");
-      }
-
-      await socket.sendAudioSticker(remoteJid, sticker, audio);
-      return;
     } else {
-      source = await readFile(
-        path.join(stickerAudioDirectory, "trepada_em_cuiaba.mp3"),
+      throw new InvalidParameterError(
+        "Envie uma imagem respondendo a um áudio ou envie/responda a um vídeo com som.",
       );
     }
 
@@ -197,15 +185,13 @@ export default {
         sticker = stickerPath;
       }
 
-      const audioBuffer = await createVoiceBuffer(source, search ? 30 : undefined);
+      const audioBuffer = await createVoiceBuffer(source, 30);
       await socket.sendAudioSticker(remoteJid, sticker, audioBuffer);
     } finally {
       removeFileIfExists(imagePath);
       removeFileIfExists(stickerPath);
     }
 
-    if (search) {
-      await sendSuccessReact();
-    }
+    await sendSuccessReact();
   },
 };

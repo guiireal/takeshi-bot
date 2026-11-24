@@ -138,17 +138,14 @@ test("remove vídeo e figurinha quando o envio falha", async () => {
   assert.equal(existsSync(stickerPath), false);
 });
 
-test("preserva o áudio respondido com a figurinha padrão", async () => {
-  const audio = { ptt: true };
-  const { props } = propsFor({
-    extendedTextMessage: { contextInfo: { quotedMessage: { audioMessage: audio } } },
-  });
-  await command.handle(props);
-  const [jid, sticker, source] = props.socket.sendAudioSticker.mock.calls[0].arguments;
-  assert.equal(jid, props.remoteJid);
-  assert.ok(sticker.endsWith("leno_brega.webp"));
-  assert.equal(source, audio);
-  assert.equal(props.downloadVideo.mock.callCount(), 0);
+test("rejeita comando sem mídia ou apenas com áudio respondido", async () => {
+  for (const message of [{}, {
+    extendedTextMessage: { contextInfo: { quotedMessage: { audioMessage: { ptt: true } } } },
+  }]) {
+    const { props } = propsFor(message);
+    await assert.rejects(command.handle(props), InvalidParameterError);
+    assert.equal(props.socket.sendAudioSticker.mock.callCount(), 0);
+  }
 });
 
 async function mockMusicFetch(t) {
