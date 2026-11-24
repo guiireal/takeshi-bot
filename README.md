@@ -650,7 +650,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Sticker IA  | Membro | ✅ |
 | Sticker para imagem | Membro | ❌ |
 | Sticker | Membro | ❌ |
-| Sticker com áudio | Membro | Somente músicas do YouTube |
+| Sticker com áudio | Membro | ✅ |
 | TikTok audio download | Membro | ✅ |
 | TikTok video download | Membro | ✅ |
 | Transcrever áudio | Membro | ✅ |
