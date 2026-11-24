@@ -670,7 +670,6 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 
 Use `/stickeraudio` ou `/audiosticker` com o prefixo do seu grupo:
 
-- Sem argumentos, envia a figurinha e o áudio padrão.
 - Envie uma imagem com `/stickeraudio` na legenda, respondendo a um áudio, para criar uma figurinha com esse som.
 - Responda a uma figurinha com `/stickeraudio nome da música` ou `/stickeraudio https://youtu.be/ID` para combinar a figurinha com até 30 segundos da música. Também funciona enviando uma imagem com o comando e a música na legenda.
 - Envie ou responda a um vídeo com som de até 10 segundos usando `/stickeraudio` para criar uma figurinha animada com o áudio do vídeo.
