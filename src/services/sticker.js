@@ -124,7 +124,7 @@ export async function processAnimatedGifToSticker(inputPath, metadata, compact =
     const tempOutputPath = path.resolve(TEMP_DIR, getRandomName("webp"));
 
     const filter = compact
-      ? "scale=216:216:force_original_aspect_ratio=decrease,fps=6,format=yuva420p,pad=512:512:-1:-1:color=black@0"
+      ? "fps=6,scale=216:216,scale=512:512"
       : "scale=350:350,fps=15";
     const cmd = `ffmpeg -y -i "${inputPath}" -vf "${filter}" -c:v libwebp -loop 0 -quality 8 -compression_level 6 -method 6 -preset picture -an -f webp "${tempOutputPath}"`;
 

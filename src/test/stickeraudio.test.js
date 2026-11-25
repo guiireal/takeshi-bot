@@ -26,7 +26,7 @@ before(async () => {
   directory = await mkdtemp(path.join(tmpdir(), "takeshi-stickeraudio-"));
   for (const sound of [true, false]) {
     await runFile("ffmpeg", [
-      "-f", "lavfi", "-i", "testsrc2=size=64x64:rate=15:duration=1",
+      "-f", "lavfi", "-i", "testsrc2=size=96x64:rate=15:duration=1",
       ...(sound ? ["-f", "lavfi", "-i", "sine=frequency=440:duration=1"] : []),
       "-c:v", "libx264", "-pix_fmt", "yuv420p",
       ...(sound ? ["-c:a", "aac", "-shortest"] : []),
@@ -118,6 +118,10 @@ test("reduz a mídia recusada com 413 e envia a figurinha uma única vez", async
           audios.push(source.length);
           if (audios.length === 1) throw new Error("media upload failed with status 413");
         } else {
+          const image = new webp.Image();
+          await image.load(source);
+          assert.equal(image.width, image.height);
+          assert.equal(image.hasAlpha, false);
           stickers.push({ path: source, size: (await stat(source)).size });
           if (stickers.length === 1) throw new Error("media upload failed with status 413");
         }
