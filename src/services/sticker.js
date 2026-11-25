@@ -119,13 +119,17 @@ export async function processAnimatedSticker(inputPath, metadata) {
   }
 }
 
-export async function processAnimatedGifToSticker(inputPath, metadata, compact = false) {
+export async function processAnimatedGifToSticker(
+  inputPath,
+  metadata,
+  { fps = 15, size = 350, outputSize = size } = {},
+) {
   return new Promise((resolve, reject) => {
     const tempOutputPath = path.resolve(TEMP_DIR, getRandomName("webp"));
 
-    const filter = compact
-      ? "fps=6,scale=216:216,scale=512:512"
-      : "scale=350:350,fps=15";
+    const filter = outputSize === size
+      ? `scale=${size}:${size},fps=${fps}`
+      : `fps=${fps},scale=${size}:${size},scale=${outputSize}:${outputSize}`;
     const cmd = `ffmpeg -y -i "${inputPath}" -vf "${filter}" -c:v libwebp -loop 0 -quality 8 -compression_level 6 -method 6 -preset picture -an -f webp "${tempOutputPath}"`;
 
     exec(cmd, async (error, _, stderr) => {

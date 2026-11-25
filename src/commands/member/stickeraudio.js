@@ -16,7 +16,8 @@ import {
 } from "../../utils/index.js";
 import stickerCommand from "./sticker.js";
 
-const ANIMATED_STICKER_MAX_BYTES = 499_000;
+const ANIMATED_STICKER_MAX_BYTES = 990_000;
+const ANIMATED_STICKER_RETRY_MAX_BYTES = 499_000;
 
 async function createVoiceBuffer(source, maxSeconds, bitrateKbps) {
   const { audioBuffer, audioPath, oldAudioPath } = await ajustAudioByBuffer(
@@ -48,7 +49,7 @@ Use só ${PREFIX}stickeraudio na legenda se a imagem responder a um áudio. Tamb
       throw new InvalidParameterError("Envie uma imagem sem visualização única.");
     }
 
-    const sendSticker = async (sticker, audio, encodeCompactSticker) => {
+    const sendSticker = async (sticker, audio, nextSticker) => {
       let compressedAudio = false;
       for (;;) {
         try {
@@ -57,9 +58,9 @@ Use só ${PREFIX}stickeraudio na legenda se a imagem responder a um áudio. Tamb
         } catch (error) {
           if (!(error instanceof AudioStickerUploadTooLargeError)) throw error;
 
-          if (error.media === "sticker" && encodeCompactSticker) {
-            sticker = await encodeCompactSticker();
-            encodeCompactSticker = undefined;
+          if (error.media === "sticker" && nextSticker) {
+            sticker = await nextSticker(ANIMATED_STICKER_RETRY_MAX_BYTES);
+            if (typeof sticker !== "string") nextSticker = undefined;
           } else if (error.media === "ptt" && audio instanceof Uint8Array && !compressedAudio) {
             audio = await createVoiceBuffer(audio, undefined, 24);
             compressedAudio = true;
@@ -128,8 +129,7 @@ Use só ${PREFIX}stickeraudio na legenda se a imagem responder a um áudio. Tamb
 
       await sendWaitReact();
       let videoPath;
-      let stickerPath;
-      let compactPath;
+      const stickerPaths = [];
 
       try {
         videoPath = await downloadVideo(webMessage, getRandomName());
@@ -155,24 +155,33 @@ Use só ${PREFIX}stickeraudio na legenda se a imagem responder a um áudio. Tamb
           username: getUserName(webMessage, userLid),
           botName: `${BOT_EMOJI} ${BOT_NAME}`,
         };
-        const encodeCompactSticker = async () => {
-          compactPath = await processAnimatedGifToSticker(videoPath, metadata, true);
-          if ((await stat(compactPath)).size > ANIMATED_STICKER_MAX_BYTES) {
-            throw new AudioStickerUploadTooLargeError("sticker");
+        const encodeSticker = async (profile) => {
+          const stickerPath = await processAnimatedGifToSticker(videoPath, metadata, profile);
+          stickerPaths.push(stickerPath);
+          return stickerPath;
+        };
+        const fallbackProfiles = [
+          { fps: 4 },
+          { fps: 1.8 },
+          { fps: 6, size: 216, outputSize: 512 },
+          { fps: 4, size: 128, outputSize: 512 },
+        ];
+        const nextSticker = async (maxBytes) => {
+          for (let profile = fallbackProfiles.shift(); profile; profile = fallbackProfiles.shift()) {
+            const candidate = await encodeSticker(profile);
+            if ((await stat(candidate)).size <= maxBytes) return candidate;
           }
-          return compactPath;
+          throw new AudioStickerUploadTooLargeError("sticker");
         };
 
-        stickerPath = await processAnimatedGifToSticker(videoPath, metadata);
+        let stickerPath = await encodeSticker();
         if ((await stat(stickerPath)).size > ANIMATED_STICKER_MAX_BYTES) {
-          await sendSticker(await encodeCompactSticker(), audioBuffer);
-        } else {
-          await sendSticker(stickerPath, audioBuffer, encodeCompactSticker);
+          stickerPath = await nextSticker(ANIMATED_STICKER_MAX_BYTES);
         }
+        await sendSticker(stickerPath, audioBuffer, nextSticker);
       } finally {
         removeFileIfExists(videoPath);
-        removeFileIfExists(stickerPath);
-        removeFileIfExists(compactPath);
+        for (const stickerPath of stickerPaths) removeFileIfExists(stickerPath);
       }
 
       await sendSuccessReact();

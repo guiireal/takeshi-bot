@@ -120,6 +120,35 @@ for (const quoted of [false, true]) {
   });
 }
 
+test("tenta até 990 KB e reduz os quadros se o upload recusar o tamanho", async () => {
+  const { props, videoPath } = propsFor({ videoMessage: { seconds: 2 } });
+  props.downloadVideo.mock.mockImplementation(async () => {
+    await runFile("ffmpeg", [
+      "-f", "lavfi", "-i", "life=size=320x320:rate=15:seed=123",
+      "-f", "lavfi", "-i", "sine=duration=2", "-t", "2",
+      "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", videoPath,
+    ], { windowsHide: true });
+    return videoPath;
+  });
+  const attempts = [];
+  props.socket.sendAudioSticker = async (jid, stickerPath, audio) => {
+    const image = new webp.Image();
+    await image.load(stickerPath);
+    const size = (await stat(stickerPath)).size;
+    attempts.push({ size, audio, width: image.width, delay: image.frames[0].delay });
+    if (size > 499_000) throw new AudioStickerUploadTooLargeError("sticker");
+  };
+
+  await command.handle(props);
+
+  assert.equal(attempts.length, 2);
+  assert.ok(attempts[0].size > 499_000 && attempts[0].size <= 990_000);
+  assert.ok(attempts[1].size <= 499_000);
+  assert.equal(attempts[1].audio, attempts[0].audio);
+  assert.equal(attempts[1].width, attempts[0].width);
+  assert.equal(attempts[1].delay, 250);
+});
+
 test("reduz a mídia recusada com 413 e envia a figurinha uma única vez", async () => {
   const { props, videoPath } = propsFor({ videoMessage: { seconds: 1 } });
   const stickers = [];
