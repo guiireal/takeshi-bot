@@ -4,6 +4,7 @@ import { AudioStickerUploadTooLargeError, InvalidParameterError, WarningError } 
 import { download, play } from "../../services/spider-x-api.js";
 import {
   processAnimatedGifToSticker,
+  processAnimatedSticker,
   processStaticSticker,
 } from "../../services/sticker.js";
 import {
@@ -37,7 +38,7 @@ export default {
   handle: async (params) => {
     const {
       socket, remoteJid, webMessage, userLid, fullArgs,
-      downloadAudio, downloadImage, downloadVideo, sendWaitReact, sendSuccessReact,
+      downloadAudio, downloadImage, downloadSticker, downloadVideo, sendWaitReact, sendSuccessReact,
     } = params;
     const search = fullArgs.trim();
     const image = webMessage.message?.imageMessage;
@@ -221,22 +222,41 @@ export default {
 
     let imagePath;
     let stickerPath;
+    let quotedStickerPath;
+    let encodeCompactSticker;
 
     try {
+      const metadata = {
+        username: getUserName(webMessage, userLid),
+        botName: `${BOT_EMOJI} ${BOT_NAME}`,
+      };
+
       if (search && image) {
         imagePath = await downloadImage(webMessage, getRandomName());
-        stickerPath = await processStaticSticker(imagePath, {
-          username: getUserName(webMessage, userLid),
-          botName: `${BOT_EMOJI} ${BOT_NAME}`,
-        });
+        stickerPath = await processStaticSticker(imagePath, metadata);
         sticker = stickerPath;
+      } else if (search && sticker) {
+        // Renomeia pack/autor da figurinha citada; se não der, segue com a original como antes.
+        const original = sticker;
+        try {
+          quotedStickerPath = await downloadSticker(webMessage, getRandomName());
+          if (quotedStickerPath) {
+            // Apesar do nome, só grava o EXIF sem recodificar: serve para figurinha estática e animada.
+            stickerPath = await processAnimatedSticker(quotedStickerPath, metadata);
+            sticker = stickerPath;
+            encodeCompactSticker = async () => original;
+          }
+        } catch {
+          sticker = original;
+        }
       }
 
       const audioBuffer = await createVoiceBuffer(source, 30);
-      await sendSticker(sticker, audioBuffer);
+      await sendSticker(sticker, audioBuffer, encodeCompactSticker);
     } finally {
       removeFileIfExists(imagePath);
       removeFileIfExists(stickerPath);
+      removeFileIfExists(quotedStickerPath);
     }
 
     await sendSuccessReact();

@@ -7,7 +7,7 @@ import path from "node:path";
 import { after, before, beforeEach, mock, test } from "node:test";
 import { promisify } from "node:util";
 import webp from "node-webpmux";
-import { InvalidParameterError, WarningError } from "../errors/index.js";
+import { AudioStickerUploadTooLargeError, InvalidParameterError, WarningError } from "../errors/index.js";
 import { createSocketAdapter } from "../services/wa.js";
 
 const mediaUrl = "https://media.invalid/audio.mp3";
@@ -40,6 +40,10 @@ before(async () => {
   await runFile("ffmpeg", [
     "-f", "lavfi", "-i", "color=blue:size=64x64", "-frames:v", "1",
     path.join(directory, "image.png"),
+  ], { windowsHide: true });
+  await runFile("ffmpeg", [
+    "-f", "lavfi", "-i", "color=blue:size=64x64", "-frames:v", "1",
+    path.join(directory, "sticker.webp"),
   ], { windowsHide: true });
 });
 
@@ -232,6 +236,17 @@ for (const search of [
       extendedTextMessage: { contextInfo: { quotedMessage: { stickerMessage: sticker } } },
     });
     props.fullArgs = search;
+    const quotedPath = path.join(directory, `quoted-${sequence++}.webp`);
+    props.downloadSticker = mock.fn(async () => {
+      await copyFile(path.join(directory, "sticker.webp"), quotedPath);
+      return quotedPath;
+    });
+    let packName;
+    props.socket.sendAudioSticker = mock.fn(async (_jid, sentSticker) => {
+      const image = new webp.Image();
+      await image.load(sentSticker);
+      packName = JSON.parse(image.exif.subarray(22).toString())["sticker-pack-name"];
+    });
 
     await command.handle(props);
 
@@ -243,11 +258,41 @@ for (const search of [
     ]);
     const [jid, sentSticker, audio] = props.socket.sendAudioSticker.mock.calls[0].arguments;
     assert.equal(jid, props.remoteJid);
-    assert.equal(sentSticker, sticker);
+    // A figurinha respondida sai renomeada com o nome de quem pediu.
+    assert.equal(packName, "Test");
+    assert.equal(existsSync(sentSticker), false);
+    assert.equal(existsSync(quotedPath), false);
     assert.equal(audio.subarray(0, 4).toString(), "OggS");
     assert.equal(props.sendSuccessReact.mock.callCount(), 1);
   });
 }
+
+test("usa a figurinha respondida original quando não dá para renomear", async (t) => {
+  await mockMusicFetch(t);
+  const sticker = { mimetype: "image/webp" };
+  const message = { extendedTextMessage: { contextInfo: { quotedMessage: { stickerMessage: sticker } } } };
+
+  const failedDownload = propsFor(message).props;
+  failedDownload.fullArgs = "Nome da música";
+  failedDownload.downloadSticker = mock.fn(async () => null);
+  await command.handle(failedDownload);
+  assert.equal(failedDownload.socket.sendAudioSticker.mock.calls[0].arguments[1], sticker);
+
+  const tooLarge = propsFor(message).props;
+  tooLarge.fullArgs = "Nome da música";
+  tooLarge.downloadSticker = mock.fn(async () => {
+    const quotedPath = path.join(directory, `quoted-${sequence++}.webp`);
+    await copyFile(path.join(directory, "sticker.webp"), quotedPath);
+    return quotedPath;
+  });
+  tooLarge.socket.sendAudioSticker = mock.fn(async (_jid, sentSticker) => {
+    if (typeof sentSticker === "string") throw new AudioStickerUploadTooLargeError("sticker");
+  });
+  await command.handle(tooLarge);
+  const [first, second] = tooLarge.socket.sendAudioSticker.mock.calls.map((call) => call.arguments[1]);
+  assert.equal(typeof first, "string");
+  assert.equal(second, sticker);
+});
 
 for (const quoted of [false, true]) {
   test(`usa YouTube na legenda da imagem ${quoted ? "ignorando o áudio respondido" : "sem resposta"}`, async (t) => {
