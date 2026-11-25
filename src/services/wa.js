@@ -9,6 +9,7 @@
  */
 import { proto } from "zapo-js";
 import { AudioStickerUploadTooLargeError } from "../errors/index.js";
+import { rememberAudioSticker } from "../utils/audioSticker.js";
 import { probeMp4Dimensions } from "../utils/index.js";
 import { buildInteractiveContent } from "./interactiveMessages.js";
 
@@ -296,12 +297,17 @@ export function createSocketAdapter(client) {
         message: { stickerMessage },
       }).finish();
 
-      return socket.relayMessage(jid, {
+      const message = {
         stickerMessage,
         $unknowns: [
           Message.encode({}).uint32((134 << 3) | 2).bytes(wrapper).finish(),
         ],
-      });
+      };
+      const sent = await socket.relayMessage(jid, message);
+      // O bot não recebe a própria mensagem, então guarda o áudio aqui para o rename funcionar nela.
+      rememberAudioSticker(jid, sent?.key?.id, message);
+
+      return sent;
     },
 
     async groupMetadata(jid) {

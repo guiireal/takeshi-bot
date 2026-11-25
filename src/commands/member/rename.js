@@ -7,6 +7,7 @@ import {
   processAnimatedSticker,
   processStaticSticker,
 } from "../../services/sticker.js";
+import { getQuotedAudioSticker } from "../../utils/audioSticker.js";
 import { getRandomName } from "../../utils/index.js";
 
 export default {
@@ -22,6 +23,8 @@ export default {
     sendSuccessReact,
     sendStickerFromFile,
     args,
+    socket,
+    remoteJid,
   }) => {
     if (!isSticker) {
       throw new InvalidParameterError(
@@ -63,6 +66,8 @@ export default {
 
     await sendWaitReact();
 
+    // Figurinha com áudio: mantém o som no reenvio.
+    const voice = getQuotedAudioSticker(webMessage, remoteJid);
     const inputPath = await downloadSticker(webMessage, getRandomName("webp"));
 
     try {
@@ -89,7 +94,11 @@ export default {
 
       await sendSuccessReact();
 
-      await sendStickerFromFile(finalStickerPath);
+      if (voice) {
+        await socket.sendAudioSticker(remoteJid, finalStickerPath, voice);
+      } else {
+        await sendStickerFromFile(finalStickerPath);
+      }
     } catch (error) {
       throw new Error(`Erro ao renomear a figurinha: ${error.message}`);
     } finally {

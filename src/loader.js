@@ -22,6 +22,7 @@ import {
   resolveStealthRetry,
   waitForStealthRetry,
 } from "./utils/stealthRetry.js";
+import { rememberAudioSticker } from "./utils/audioSticker.js";
 import { rememberViewOnceMessage } from "./utils/viewOnceCache.js";
 
 // Guarda o conteúdo original antes que o WhatsApp o omita nas citações.
@@ -120,6 +121,7 @@ export function load(client) {
 
     resolveStealthRetry(event);
     logViewOnceProbe(event);
+    rememberAudioSticker(event.key?.remoteJid, event.key?.id, event.message);
 
     safeEventHandler(
       () => onMessage({ socket, event, startProcess }),
