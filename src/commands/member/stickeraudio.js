@@ -34,7 +34,8 @@ export default {
   name: "stickeraudio",
   description: "Envia uma figurinha com áudio.",
   commands: ["stickeraudio", "audiosticker"],
-  usage: `${PREFIX}stickeraudio <música ou link do YouTube> (responda a uma figurinha ou envie uma imagem com a legenda) ou ${PREFIX}stickeraudio (envie ou responda a um vídeo de até 10 segundos)`,
+  usage: `Envie uma imagem com a legenda ${PREFIX}stickeraudio Evidências ou ${PREFIX}stickeraudio https://youtu.be/mW8o_WDL91o. Os mesmos comandos funcionam ao responder a uma figurinha.
+Use só ${PREFIX}stickeraudio na legenda se a imagem responder a um áudio. Também dá para enviar ou responder a um vídeo de até 10 segundos.`,
   handle: async (params) => {
     const {
       socket, remoteJid, webMessage, userLid, fullArgs,
@@ -42,6 +43,10 @@ export default {
     } = params;
     const search = fullArgs.trim();
     const image = webMessage.message?.imageMessage;
+
+    if (image?.viewOnce) {
+      throw new InvalidParameterError("Envie uma imagem sem visualização única.");
+    }
 
     const sendSticker = async (sticker, audio, encodeCompactSticker) => {
       let compressedAudio = false;
@@ -186,19 +191,26 @@ export default {
         );
       }
 
-      const isUrl = /https?:\/\//i.test(search);
-
-      if (
-        isUrl &&
-        (!URL.canParse(search) ||
-          !/(^|\.)youtube\.com$|^youtu\.be$/i.test(new URL(search).hostname))
-      ) {
-        throw new InvalidParameterError("Informe um link válido do YouTube.");
+      let videoId;
+      if (/https?:\/\//i.test(search)) {
+        const url = URL.parse(search);
+        if (url && /^https?:$/.test(url.protocol)) {
+          if (/^(www\.)?youtu\.be$/.test(url.hostname)) {
+            videoId = url.pathname.match(/^\/([\w-]{11})\/?$/)?.[1];
+          } else if (/(^|\.)youtube\.com$/.test(url.hostname)) {
+            videoId = url.pathname === "/watch"
+              ? url.searchParams.get("v")
+              : url.pathname.match(/^\/(?:shorts|embed|live|v)\/([\w-]{11})\/?$/)?.[1];
+          }
+        }
+        if (!videoId || !/^[\w-]{11}$/.test(videoId)) {
+          throw new InvalidParameterError("Informe um link válido do YouTube.");
+        }
       }
 
       await sendWaitReact();
-      const data = isUrl
-        ? await download("yt-mp3", search)
+      const data = videoId
+        ? await download("yt-mp3", `https://www.youtube.com/watch?v=${videoId}`)
         : await play("audio", search);
 
       if (!data?.url) {

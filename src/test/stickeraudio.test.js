@@ -7,8 +7,11 @@ import path from "node:path";
 import { after, before, beforeEach, mock, test } from "node:test";
 import { promisify } from "node:util";
 import webp from "node-webpmux";
+import { PREFIX } from "../config.js";
 import { AudioStickerUploadTooLargeError, InvalidParameterError, WarningError } from "../errors/index.js";
+import { processAutoSticker } from "../services/sticker.js";
 import { createSocketAdapter } from "../services/wa.js";
+import { extractDataFromMessage } from "../utils/index.js";
 
 const mediaUrl = "https://media.invalid/audio.mp3";
 const play = mock.fn(async () => ({ url: mediaUrl }));
@@ -58,12 +61,13 @@ after(async () => {
 
 function propsFor(message, sound = true) {
   const videoPath = path.join(directory, `download-${sequence++}.mp4`);
+  const webMessage = { message, pushName: "Test" };
   const props = {
     socket: { sendAudioSticker: mock.fn(async () => {}) },
     remoteJid: "stickeraudio-test@g.us",
     userLid: "123@lid",
-    webMessage: { message, pushName: "Test" },
-    fullArgs: "",
+    webMessage,
+    fullArgs: extractDataFromMessage(webMessage).fullArgs,
     sendWaitReact: mock.fn(async () => {}),
     sendSuccessReact: mock.fn(async () => {}),
     sendStickerFromFile: mock.fn(async (stickerPath) => {
@@ -205,13 +209,20 @@ test("remove vídeo e figurinha quando o envio falha", async () => {
 });
 
 test("rejeita comando sem mídia ou apenas com áudio respondido", async () => {
-  for (const message of [{}, {
+  for (const message of [{}, { imageMessage: { caption: `${PREFIX}stickeraudio` } }, {
     extendedTextMessage: { contextInfo: { quotedMessage: { audioMessage: { ptt: true } } } },
   }]) {
     const { props } = propsFor(message);
     await assert.rejects(command.handle(props), InvalidParameterError);
     assert.equal(props.socket.sendAudioSticker.mock.callCount(), 0);
   }
+});
+
+test("figurinha automática ignora áudio enviado sozinho", async () => {
+  const { props } = propsFor({ audioMessage: { ptt: true } });
+  assert.equal(await processAutoSticker(props), false);
+  assert.equal(props.sendStickerFromFile.mock.callCount(), 0);
+  assert.equal(props.socket.sendAudioSticker.mock.callCount(), 0);
 });
 
 async function mockMusicFetch(t) {
@@ -254,7 +265,8 @@ for (const search of [
     assert.equal(download.mock.callCount(), isUrl ? 1 : 0);
     assert.equal(play.mock.callCount(), isUrl ? 0 : 1);
     assert.deepEqual((isUrl ? download : play).mock.calls[0].arguments, [
-      isUrl ? "yt-mp3" : "audio", search,
+      isUrl ? "yt-mp3" : "audio",
+      isUrl ? "https://www.youtube.com/watch?v=mW8o_WDL91o" : search,
     ]);
     const [jid, sentSticker, audio] = props.socket.sendAudioSticker.mock.calls[0].arguments;
     assert.equal(jid, props.remoteJid);
@@ -294,13 +306,19 @@ test("usa a figurinha respondida original quando não dá para renomear", async 
   assert.equal(second, sticker);
 });
 
-for (const quoted of [false, true]) {
-  test(`usa YouTube na legenda da imagem ${quoted ? "ignorando o áudio respondido" : "sem resposta"}`, async (t) => {
-    await mockMusicFetch(t);
-    const { props } = propsFor({ imageMessage: quoted ? {
-      contextInfo: { quotedMessage: { audioMessage: { ptt: true } } },
-    } : {} });
-    props.fullArgs = "https://youtu.be/mW8o_WDL91o";
+for (const [search, quoted] of [
+  ["Nome da música", false],
+  ["https://youtu.be/mW8o_WDL91o?si=share", false],
+  ["https://music.youtube.com/watch?v=mW8o_WDL91o", true],
+  ["", true],
+]) {
+  test(`usa ${search || "o áudio respondido"} com a imagem na legenda`, async (t) => {
+    if (search) await mockMusicFetch(t);
+    const audioMessage = { ptt: true };
+    const { props } = propsFor({ imageMessage: {
+      caption: `${PREFIX}stickeraudio ${search}`.trimEnd(),
+      contextInfo: quoted ? { quotedMessage: { audioMessage } } : undefined,
+    } });
     props.downloadAudio = mock.fn(async () => { throw new Error("Não deve baixar a resposta"); });
     const imagePath = path.join(directory, `image-${quoted}.png`);
     props.downloadImage = async () => {
@@ -314,6 +332,10 @@ for (const quoted of [false, true]) {
       await image.load(sticker);
       assert.equal(image.width, 512);
       assert.equal(image.frames, undefined);
+      if (!search) {
+        assert.equal(audio, audioMessage);
+        return;
+      }
       const audioPath = path.join(directory, `music-${quoted}.ogg`);
       await writeFile(audioPath, audio);
       const { stdout } = await runFile("ffprobe", [
@@ -324,8 +346,15 @@ for (const quoted of [false, true]) {
 
     await command.handle(props);
 
-    assert.equal(download.mock.callCount(), 1);
-    assert.equal(play.mock.callCount(), 0);
+    if (search.startsWith("https:")) {
+      assert.deepEqual(download.mock.calls.map(({ arguments: args }) => args), [
+        ["yt-mp3", "https://www.youtube.com/watch?v=mW8o_WDL91o"],
+      ]);
+      assert.equal(play.mock.callCount(), 0);
+    } else {
+      assert.equal(download.mock.callCount(), 0);
+      assert.deepEqual(play.mock.calls.map(({ arguments: args }) => args), search ? [["audio", search]] : []);
+    }
     assert.equal(props.downloadAudio.mock.callCount(), 0);
     assert.equal(props.socket.sendAudioSticker.mock.callCount(), 1);
     assert.equal(existsSync(imagePath), false);
@@ -339,6 +368,10 @@ test("rejeita links inválidos ou de outro site antes de chamar a API", async ()
     "https://example.com/watch?youtube.com",
     "https://youtube.com.example.com/watch?v=123",
     "https://youtu.be.example.com/123",
+    "https://youtube.com/",
+    "https://youtube.com/watch?v=123",
+    "https://youtube.com/channel/mW8o_WDL91o",
+    "https://youtube.com/playlist?list=mW8o_WDL91o",
   ]) {
     const { props } = propsFor({
       extendedTextMessage: { contextInfo: { quotedMessage: { stickerMessage: {} } } },

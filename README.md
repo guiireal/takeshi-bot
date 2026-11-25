@@ -670,8 +670,8 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 
 Use `/stickeraudio` ou `/audiosticker` com o prefixo do seu grupo:
 
-- Envie uma imagem com `/stickeraudio` na legenda, respondendo a um áudio, para criar uma figurinha com esse som.
-- Responda a uma figurinha com `/stickeraudio nome da música` ou `/stickeraudio https://youtu.be/ID` para combinar a figurinha com até 30 segundos da música. Também funciona enviando uma imagem com o comando e a música na legenda.
+- Envie uma imagem com a legenda `/stickeraudio Evidências` para buscar pelo nome ou `/stickeraudio https://youtu.be/mW8o_WDL91o` para usar o áudio desse vídeo. Os mesmos comandos funcionam ao responder a uma figurinha e usam até 30 segundos da música.
+- Para usar um áudio já enviado no WhatsApp, responda a ele com a imagem e apenas `/stickeraudio` na legenda. Sem nome ou link, a imagem precisa responder a um áudio.
 - Envie ou responda a um vídeo com som de até 10 segundos usando `/stickeraudio` para criar uma figurinha animada com o áudio do vídeo.
 
 Somente a busca ou o download de músicas do YouTube requer a Spider X API. Os demais modos não precisam da API. Áudios e vídeos de visualização única não são aceitos neste comando.
