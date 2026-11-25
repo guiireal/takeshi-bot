@@ -8,7 +8,7 @@ import webp from "node-webpmux";
 import fs from "node:fs";
 import path from "node:path";
 import { BOT_EMOJI, BOT_NAME, TEMP_DIR } from "../config.js";
-import { getRandomName, getRandomNumber, getUserName } from "../utils/index.js";
+import { getRandomName, getRandomNumber, getUserName, removeFileIfExists } from "../utils/index.js";
 
 export async function addStickerMetadata(media, metadata) {
   const tmpFileIn = getRandomName("webp");
@@ -119,11 +119,14 @@ export async function processAnimatedSticker(inputPath, metadata) {
   }
 }
 
-export async function processAnimatedGifToSticker(inputPath, metadata) {
+export async function processAnimatedGifToSticker(inputPath, metadata, compact = false) {
   return new Promise((resolve, reject) => {
     const tempOutputPath = path.resolve(TEMP_DIR, getRandomName("webp"));
 
-    const cmd = `ffmpeg -y -i "${inputPath}" -vf "scale=350:350,fps=15" -c:v libwebp -loop 0 -quality 8 -compression_level 6 -method 6 -preset picture -an -f webp "${tempOutputPath}"`;
+    const filter = compact
+      ? "scale=216:216:force_original_aspect_ratio=decrease,fps=6,format=yuva420p,pad=512:512:-1:-1:color=black@0"
+      : "scale=350:350,fps=15";
+    const cmd = `ffmpeg -y -i "${inputPath}" -vf "${filter}" -c:v libwebp -loop 0 -quality 8 -compression_level 6 -method 6 -preset picture -an -f webp "${tempOutputPath}"`;
 
     exec(cmd, async (error, _, stderr) => {
       try {
@@ -136,16 +139,11 @@ export async function processAnimatedGifToSticker(inputPath, metadata) {
         const processedBuffer = await fs.promises.readFile(tempOutputPath);
         const finalPath = await addStickerMetadata(processedBuffer, metadata);
 
-        if (fs.existsSync(tempOutputPath)) {
-          fs.unlinkSync(tempOutputPath);
-        }
-
         resolve(finalPath);
       } catch (error) {
-        if (fs.existsSync(tempOutputPath)) {
-          fs.unlinkSync(tempOutputPath);
-        }
         reject(error);
+      } finally {
+        removeFileIfExists(tempOutputPath);
       }
     });
   });

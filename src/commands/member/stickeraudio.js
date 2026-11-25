@@ -1,6 +1,6 @@
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { BOT_EMOJI, BOT_NAME, PREFIX } from "../../config.js";
-import { InvalidParameterError, WarningError } from "../../errors/index.js";
+import { AudioStickerUploadTooLargeError, InvalidParameterError, WarningError } from "../../errors/index.js";
 import { download, play } from "../../services/spider-x-api.js";
 import {
   processAnimatedGifToSticker,
@@ -13,11 +13,14 @@ import {
   removeFileIfExists,
 } from "../../utils/index.js";
 
-async function createVoiceBuffer(source, maxSeconds) {
+const ANIMATED_STICKER_MAX_BYTES = 499_000;
+
+async function createVoiceBuffer(source, maxSeconds, bitrateKbps) {
   const { audioBuffer, audioPath, oldAudioPath } = await ajustAudioByBuffer(
     source,
     true,
     maxSeconds,
+    bitrateKbps,
   );
   removeFileIfExists(audioPath);
   removeFileIfExists(oldAudioPath);
@@ -43,6 +46,28 @@ export default {
   }) => {
     const search = fullArgs.trim();
     const image = webMessage.message?.imageMessage;
+
+    const sendSticker = async (sticker, audio, encodeCompactSticker) => {
+      let compressedAudio = false;
+      for (;;) {
+        try {
+          await socket.sendAudioSticker(remoteJid, sticker, audio);
+          return;
+        } catch (error) {
+          if (!(error instanceof AudioStickerUploadTooLargeError)) throw error;
+
+          if (error.media === "sticker" && encodeCompactSticker) {
+            sticker = await encodeCompactSticker();
+            encodeCompactSticker = undefined;
+          } else if (error.media === "ptt" && audio instanceof Uint8Array && !compressedAudio) {
+            audio = await createVoiceBuffer(audio, undefined, 24);
+            compressedAudio = true;
+          } else {
+            throw error;
+          }
+        }
+      }
+    };
 
     if (!search && image) {
       const quoted = image.contextInfo?.quotedMessage;
@@ -76,7 +101,7 @@ export default {
           stickerAudio = await createVoiceBuffer(await readFile(audioPath));
         }
 
-        await socket.sendAudioSticker(remoteJid, stickerPath, stickerAudio);
+        await sendSticker(stickerPath, stickerAudio);
       } finally {
         removeFileIfExists(imagePath);
         removeFileIfExists(audioPath);
@@ -103,6 +128,7 @@ export default {
       await sendWaitReact();
       let videoPath;
       let stickerPath;
+      let compactPath;
 
       try {
         videoPath = await downloadVideo(webMessage, getRandomName());
@@ -111,15 +137,28 @@ export default {
             "Não consegui extrair o áudio do vídeo. Verifique se ele tem som.",
           );
         });
-        stickerPath = await processAnimatedGifToSticker(videoPath, {
+        const metadata = {
           username: getUserName(webMessage, userLid),
           botName: `${BOT_EMOJI} ${BOT_NAME}`,
-        });
+        };
+        const encodeCompactSticker = async () => {
+          compactPath = await processAnimatedGifToSticker(videoPath, metadata, true);
+          if ((await stat(compactPath)).size > ANIMATED_STICKER_MAX_BYTES) {
+            throw new AudioStickerUploadTooLargeError("sticker");
+          }
+          return compactPath;
+        };
 
-        await socket.sendAudioSticker(remoteJid, stickerPath, audioBuffer);
+        stickerPath = await processAnimatedGifToSticker(videoPath, metadata);
+        if ((await stat(stickerPath)).size > ANIMATED_STICKER_MAX_BYTES) {
+          await sendSticker(await encodeCompactSticker(), audioBuffer);
+        } else {
+          await sendSticker(stickerPath, audioBuffer, encodeCompactSticker);
+        }
       } finally {
         removeFileIfExists(videoPath);
         removeFileIfExists(stickerPath);
+        removeFileIfExists(compactPath);
       }
 
       await sendSuccessReact();
@@ -186,7 +225,7 @@ export default {
       }
 
       const audioBuffer = await createVoiceBuffer(source, 30);
-      await socket.sendAudioSticker(remoteJid, sticker, audioBuffer);
+      await sendSticker(sticker, audioBuffer);
     } finally {
       removeFileIfExists(imagePath);
       removeFileIfExists(stickerPath);

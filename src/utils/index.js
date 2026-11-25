@@ -455,7 +455,7 @@ export async function probeMp4Dimensions(video) {
   }
 }
 
-export async function ajustAudioByBuffer(audioBuffer, isPtt = true, maxSeconds) {
+export async function ajustAudioByBuffer(audioBuffer, isPtt = true, maxSeconds, bitrateKbps = 48) {
   const mimetype =
     isPtt || maxSeconds ? undefined : await detectMimetype(audioBuffer);
   if (mimetype === "audio/mpeg") {
@@ -481,7 +481,7 @@ export async function ajustAudioByBuffer(audioBuffer, isPtt = true, maxSeconds) 
       "-i", tempPath, "-vn",
       ...(maxSeconds ? ["-t", String(maxSeconds)] : []),
       ...(isPtt
-        ? ["-c:a", "libopus", "-f", "ogg", "-b:a", "48k", "-ac", "1"]
+        ? ["-c:a", "libopus", "-f", "ogg", "-b:a", `${bitrateKbps}k`, "-ac", "1"]
         : ["-c:a", "libmp3lame", "-f", "mp3", "-ar", "44100", "-ac", "2", "-b:a", "128k"]),
       "-y", outputPath,
     ], { windowsHide: true });

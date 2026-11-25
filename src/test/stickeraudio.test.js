@@ -1,13 +1,14 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { existsSync } from "node:fs";
-import { copyFile, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, beforeEach, mock, test } from "node:test";
 import { promisify } from "node:util";
 import webp from "node-webpmux";
 import { InvalidParameterError, WarningError } from "../errors/index.js";
+import { createSocketAdapter } from "../services/wa.js";
 
 const mediaUrl = "https://media.invalid/audio.mp3";
 const play = mock.fn(async () => ({ url: mediaUrl }));
@@ -104,6 +105,39 @@ for (const quoted of [false, true]) {
     assert.equal(existsSync(stickerPath), false);
   });
 }
+
+test("reduz a mídia recusada com 413 e envia a figurinha uma única vez", async () => {
+  const { props, videoPath } = propsFor({ videoMessage: { seconds: 1 } });
+  const stickers = [];
+  const audios = [];
+  const send = mock.fn(async () => ({ id: "sent" }));
+  props.socket = createSocketAdapter({
+    message: {
+      upload: async (source, { type, mimetype }) => {
+        if (type === "ptt") {
+          audios.push(source.length);
+          if (audios.length === 1) throw new Error("media upload failed with status 413");
+        } else {
+          stickers.push({ path: source, size: (await stat(source)).size });
+          if (stickers.length === 1) throw new Error("media upload failed with status 413");
+        }
+        return { directPath: "/uploaded", mimetype };
+      },
+      send,
+    },
+  });
+
+  await command.handle(props);
+
+  assert.equal(send.mock.callCount(), 1);
+  assert.equal(props.sendSuccessReact.mock.callCount(), 1);
+  assert.equal(stickers.length, 2);
+  assert.ok(stickers[1].size < stickers[0].size);
+  assert.ok(audios[1] < audios[0]);
+  assert.equal(audios[2], audios[1]);
+  assert.ok(stickers.every(({ path }) => !existsSync(path)));
+  assert.equal(existsSync(videoPath), false);
+});
 
 test("avisa quando o vídeo não tem áudio e remove o download", async () => {
   const { props, videoPath } = propsFor({ videoMessage: { seconds: 1 } }, false);

@@ -8,6 +8,7 @@
  * @author Dev Gui
  */
 import { proto } from "zapo-js";
+import { AudioStickerUploadTooLargeError } from "../errors/index.js";
 import { probeMp4Dimensions } from "../utils/index.js";
 import { buildInteractiveContent } from "./interactiveMessages.js";
 
@@ -260,21 +261,25 @@ export function createSocketAdapter(client) {
     },
 
     async sendAudioSticker(jid, sticker, audio) {
+      const upload = async (source, type, mimetype) => {
+        try {
+          return await client.message.upload(source, { type, mimetype });
+        } catch (error) {
+          if (error instanceof Error && error.message === "media upload failed with status 413") {
+            throw new AudioStickerUploadTooLargeError(type);
+          }
+          throw error;
+        }
+      };
       let audioMessage = audio;
 
       if (audio instanceof Uint8Array) {
-        const uploadedAudio = await client.message.upload(audio, {
-          type: "ptt",
-          mimetype: "audio/ogg; codecs=opus",
-        });
+        const uploadedAudio = await upload(audio, "ptt", "audio/ogg; codecs=opus");
         audioMessage = { ...uploadedAudio, ptt: true };
       }
 
       const stickerMedia = typeof sticker === "string" || sticker instanceof Uint8Array
-        ? await client.message.upload(sticker, {
-            type: "sticker",
-            mimetype: "image/webp",
-          })
+        ? await upload(sticker, "sticker", "image/webp")
         : sticker;
 
       // shortcut: use unknown fields until Zapo exposes both audio-sticker fields.
