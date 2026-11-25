@@ -62,6 +62,12 @@ function propsFor(message, sound = true) {
     fullArgs: "",
     sendWaitReact: mock.fn(async () => {}),
     sendSuccessReact: mock.fn(async () => {}),
+    sendStickerFromFile: mock.fn(async (stickerPath) => {
+      const image = new webp.Image();
+      await image.load(stickerPath);
+      assert.ok(image.frames.length > 1);
+      await rm(stickerPath);
+    }),
     downloadVideo: mock.fn(async (message) => {
       assert.equal(message, props.webMessage);
       await copyFile(path.join(directory, `${sound}.mp4`), videoPath);
@@ -143,13 +149,31 @@ test("reduz a mídia recusada com 413 e envia a figurinha uma única vez", async
   assert.equal(existsSync(videoPath), false);
 });
 
-test("avisa quando o vídeo não tem áudio e remove o download", async () => {
-  const { props, videoPath } = propsFor({ videoMessage: { seconds: 1 } }, false);
-  await assert.rejects(command.handle(props), (error) => {
-    assert.ok(error instanceof WarningError);
-    assert.match(error.message, /Verifique se ele tem som/);
-    return true;
+for (const quoted of [false, true]) {
+  test(`envia figurinha comum do vídeo sem áudio ${quoted ? "respondido" : "anexado"}`, async () => {
+    const video = { seconds: 1 };
+    const message = quoted
+      ? { extendedTextMessage: { contextInfo: { quotedMessage: { videoMessage: video } } } }
+      : { videoMessage: video };
+    const { props, videoPath } = propsFor(message, false);
+    await command.handle(props);
+    assert.equal(props.downloadVideo.mock.callCount(), 1);
+    assert.equal(props.sendStickerFromFile.mock.callCount(), 1);
+    assert.equal(props.socket.sendAudioSticker.mock.callCount(), 0);
+    assert.equal(props.sendWaitReact.mock.callCount(), 1);
+    assert.equal(props.sendSuccessReact.mock.callCount(), 1);
+    assert.equal(existsSync(videoPath), false);
   });
+}
+
+test("mantém o aviso de extração de áudio quando o vídeo está inválido", async () => {
+  const { props, videoPath } = propsFor({ videoMessage: { seconds: 1 } });
+  props.downloadVideo.mock.mockImplementation(async () => {
+    await writeFile(videoPath, "invalid video");
+    return videoPath;
+  });
+  await assert.rejects(command.handle(props), WarningError);
+  assert.equal(props.sendStickerFromFile.mock.callCount(), 0);
   assert.equal(props.socket.sendAudioSticker.mock.callCount(), 0);
   assert.equal(props.sendSuccessReact.mock.callCount(), 0);
   assert.equal(existsSync(videoPath), false);

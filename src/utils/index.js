@@ -455,6 +455,14 @@ export async function probeMp4Dimensions(video) {
   }
 }
 
+export async function hasAudioStream(videoPath) {
+  const { stdout } = await runFile("ffprobe", [
+    "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=index",
+    "-of", "csv=p=0", videoPath,
+  ], { timeout: 5000, windowsHide: true });
+  return stdout.trim().length > 0;
+}
+
 export async function ajustAudioByBuffer(audioBuffer, isPtt = true, maxSeconds, bitrateKbps = 48) {
   const mimetype =
     isPtt || maxSeconds ? undefined : await detectMimetype(audioBuffer);

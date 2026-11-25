@@ -10,8 +10,10 @@ import {
   ajustAudioByBuffer,
   getRandomName,
   getUserName,
+  hasAudioStream,
   removeFileIfExists,
 } from "../../utils/index.js";
+import stickerCommand from "./sticker.js";
 
 const ANIMATED_STICKER_MAX_BYTES = 499_000;
 
@@ -32,18 +34,11 @@ export default {
   description: "Envia uma figurinha com áudio.",
   commands: ["stickeraudio", "audiosticker"],
   usage: `${PREFIX}stickeraudio <música ou link do YouTube> (responda a uma figurinha ou envie uma imagem com a legenda) ou ${PREFIX}stickeraudio (envie ou responda a um vídeo de até 10 segundos)`,
-  handle: async ({
-    socket,
-    remoteJid,
-    webMessage,
-    userLid,
-    fullArgs,
-    downloadAudio,
-    downloadImage,
-    downloadVideo,
-    sendWaitReact,
-    sendSuccessReact,
-  }) => {
+  handle: async (params) => {
+    const {
+      socket, remoteJid, webMessage, userLid, fullArgs,
+      downloadAudio, downloadImage, downloadVideo, sendWaitReact, sendSuccessReact,
+    } = params;
     const search = fullArgs.trim();
     const image = webMessage.message?.imageMessage;
 
@@ -132,11 +127,24 @@ export default {
 
       try {
         videoPath = await downloadVideo(webMessage, getRandomName());
-        const audioBuffer = await createVoiceBuffer(await readFile(videoPath)).catch(() => {
+        const videoBuffer = await readFile(videoPath);
+        let audioBuffer;
+        try {
+          audioBuffer = await createVoiceBuffer(videoBuffer);
+        } catch {
+          if (await hasAudioStream(videoPath).catch(() => undefined) === false) {
+            return await stickerCommand.handle({
+              ...params,
+              isImage: false,
+              isVideo: true,
+              sendWaitReact: async () => {},
+              downloadVideo: async () => videoPath,
+            });
+          }
           throw new WarningError(
             "Não consegui extrair o áudio do vídeo. Verifique se ele tem som.",
           );
-        });
+        }
         const metadata = {
           username: getUserName(webMessage, userLid),
           botName: `${BOT_EMOJI} ${BOT_NAME}`,
