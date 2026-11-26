@@ -509,7 +509,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Ver saldo da Spider X API | Admin | ❌ |
 | Borrar imagem | Membro | ❌ |
 | Brat (imagem com texto) | Membro | ✅ |
-| Bratvid (Figurinha animada no estilo brat) | Membro | ✅ |
+| Bratvid | Membro | ✅ |
 | Busca CEP | Membro | ❌ |
 | Canvas Bolsonaro | Membro | ✅ |
 | Canvas cadeia | Membro | ✅ |
@@ -536,7 +536,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | Informações de um comando | Membro | ❌ |
 | Instagram download | Membro | ✅ |
 | Ping | Membro | ❌ |
-| Pinterest download (carrossel) | Membro | ✅ |
+| Pinterest download | Membro | ✅ |
 | Play áudio | Membro | ✅ |
 | Play vídeo | Membro | ✅ |
 | Renomear figurinha | Membro | ❌ |
@@ -547,7 +547,7 @@ Obtenha sua API Key em: [https://linker.devgui.dev](https://linker.devgui.dev)
 | TikTok audio download | Membro | ✅ |
 | TikTok video download | Membro | ✅ |
 | Transcrever áudio | Membro | ✅ |
-| TTS (texto para áudio) | Membro | ✅ |
+| TTS | Membro | ✅ |
 | X/Twitter download | Membro | ✅ |
 | YT MP3 | Membro | ✅ |
 | YT MP4 | Membro | ✅ |
