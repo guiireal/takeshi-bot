@@ -9,7 +9,7 @@ import { isFalse, isTrue } from "../../utils/index.js";
 export default {
   name: "anti-sticker-audio",
   description:
-    "Ativa/desativa o anti-sticker-audio no grupo, apagando só as figurinhas com áudio.",
+    "Ativa/desativa o anti-sticker-audio no grupo, apagando figurinhas com áudio.",
   commands: [
     "anti-sticker-audio",
     "anti-stickeraudio",
