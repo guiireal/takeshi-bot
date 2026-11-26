@@ -641,7 +641,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Jogo Tubes (Web View) | Membro | ❌ |
 | Lista de comandos | Membro | ❌ |
 | Ping | Membro | ❌ |
-| Pinterest download (carrossel) | Membro | ✅ |
+| Pinterest download | Membro | ✅ |
 | Play vídeo | Membro | ✅ |
 | Play áudio | Membro | ✅ |
 | Qwen3.7 Flash | Membro | ✅ |
