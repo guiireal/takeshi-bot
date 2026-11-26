@@ -3,7 +3,9 @@
  *
  * @author Dev Gui
  */
+import { unwrapMessage } from "zapo-js";
 import { BOT_LID, OWNER_LID } from "../config.js";
+import { getAudioStickerAudio } from "../utils/audioSticker.js";
 import {
   applyAntiPaymentRestriction,
   handleQuotedPaymentRestriction,
@@ -109,17 +111,23 @@ export async function messageHandler(socket, webMessage) {
       return;
     }
 
+    // Figurinha com áudio chega sem stickerMessage (só o campo 134 desconhecido),
+    // então o hasDirectMedia abaixo não a enxerga: checa antes, pelo áudio.
+    const isAudioSticker =
+      !!antiGroups[remoteJid]?.["anti-sticker-audio"] &&
+      !!getAudioStickerAudio(
+        unwrapMessage(webMessage.message) || webMessage.message,
+      );
+
     const messageType = Object.keys(readRestrictedMessageTypes()).find((type) =>
       hasDirectMedia(webMessage, type)
     );
 
-    if (!messageType) {
+    if (!isAudioSticker && !messageType) {
       return;
     }
 
-    const isAntiActive = !!antiGroups[remoteJid]?.[`anti-${messageType}`];
-
-    if (!isAntiActive) {
+    if (!isAudioSticker && !antiGroups[remoteJid]?.[`anti-${messageType}`]) {
       return;
     }
 

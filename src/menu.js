@@ -53,6 +53,7 @@ export function menuMessage(groupJid) {
 ▢ • ${prefix}antiproduct (1/0)
 ▢ • ${prefix}antistealth (1/0)
 ▢ • ${prefix}antisticker (1/0)
+▢ • ${prefix}antistickeraudio (1/0)
 ▢ • ${prefix}antistatusgrupo (1/0)
 ▢ • ${prefix}antivideo (1/0)
 ▢ • ${prefix}autoresponder (1/0)

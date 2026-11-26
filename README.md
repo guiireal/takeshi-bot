@@ -582,6 +582,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Anti produto | Admin | ❌ |
 | Anti status grupo | Admin | ❌ |
 | Anti sticker | Admin | ❌ |
+| Anti sticker com áudio (apaga só figurinhas com áudio) | Admin | ❌ |
 | Anti video | Admin | ❌ |
 | Banir membros | Admin | ❌ |
 | Bloquear número no WhatsApp | Admin | ❌ |
