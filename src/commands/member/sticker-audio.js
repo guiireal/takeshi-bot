@@ -32,7 +32,7 @@ async function createVoiceBuffer(source, maxSeconds, bitrateKbps) {
 }
 
 export default {
-  name: "stickeraudio",
+  name: "sticker-audio",
   description: "Envia uma figurinha com áudio.",
   commands: ["stickeraudio", "audiosticker"],
   usage: `Envie uma imagem com a legenda ${PREFIX}stickeraudio Evidências ou ${PREFIX}stickeraudio https://youtu.be/mW8o_WDL91o. Os mesmos comandos funcionam ao responder a uma figurinha.

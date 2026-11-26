@@ -19,7 +19,7 @@ const download = mock.fn(async () => ({ url: mediaUrl }));
 mock.module("../services/spider-x-api.js", {
   namedExports: { play, download },
 });
-const { default: command } = await import("../commands/member/stickeraudio.js");
+const { default: command } = await import("../commands/member/sticker-audio.js");
 
 const runFile = promisify(execFile);
 let directory;

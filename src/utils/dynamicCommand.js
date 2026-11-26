@@ -89,7 +89,7 @@ export async function dynamicCommand(paramsHandler, startProcess) {
     }
 
     if (
-      resolvedCommand?.command?.name !== "stickeraudio" &&
+      resolvedCommand?.command?.name !== "sticker-audio" &&
       await processAutoSticker(paramsHandler)
     ) {
       return;
