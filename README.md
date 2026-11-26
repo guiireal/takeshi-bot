@@ -655,7 +655,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | TikTok audio download | Membro | ✅ |
 | TikTok video download | Membro | ✅ |
 | Transcrever áudio | Membro | ✅ |
-| TTS (texto para áudio) | Membro | ✅ |
+| TTS | Membro | ✅ |
 | Voz do Bolsonaro | Membro | ✅ |
 | Voz do Lula | Membro | ✅ |
 | X/Twitter download | Membro | ✅ |
