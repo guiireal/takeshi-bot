@@ -607,7 +607,7 @@ Prioridade de leitura: valor em `database/config.json` → fallback de `src/conf
 | Ver saldo da Spider X API | Admin | ✅ |
 | Borrar imagem | Membro | ❌ |
 | Brat (imagem com texto) | Membro | ✅ |
-| Bratvid (Figurinha animada no estilo brat) | Membro | ✅ |
+| Bratvid | Membro | ✅ |
 | Busca CEP | Membro | ❌ |
 | Canvas Bolsonaro | Membro | ✅ |
 | Canvas cadeia | Membro | ✅ |
