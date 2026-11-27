@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { BOT_NAME, PREFIX } from "../../config.js";
+import { BOT_EMOJI, BOT_NAME, PREFIX } from "../../config.js";
 import { DangerError, InvalidParameterError } from "../../errors/index.js";
 import {
   addStickerMetadata,
@@ -39,7 +39,7 @@ export default {
     }
 
     const pack = args[0] || webMessage?.pushName || "Usuário";
-    const author = args[1] || BOT_NAME;
+    const author = args[1] || `${BOT_EMOJI} ${BOT_NAME}`;
 
     if (!pack || !author) {
       throw new InvalidParameterError(
